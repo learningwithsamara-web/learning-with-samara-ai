@@ -1,4 +1,8 @@
-body{
+.logo{
+width:120px;
+margin-bottom:10px;
+  
+}body{
 font-family: Arial;
 background: linear-gradient(135deg,#ffb347,#6ec6ff);
 text-align:center;
