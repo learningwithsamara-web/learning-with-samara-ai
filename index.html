@@ -22,17 +22,28 @@
 <p id="result"></p>
 
 <script>
-  function checkAnswer() {
-    let answer = document.getElementById("answer").value;
-    if(answer == 8){
-      document.getElementById("result").innerHTML = "✅ Correct! Great job!";
-    } else {
-      document.getElementById("result").innerHTML = "❌ Try again!";
-    }
+let num1 = Math.floor(Math.random()*10);
+let num2 = Math.floor(Math.random()*10);
+
+document.querySelector("p").innerHTML =
+"What is " + num1 + " + " + num2 + "?";
+
+function checkAnswer(){
+
+  let answer = document.getElementById("answer").value;
+  let correct = num1 + num2;
+
+  if(answer == correct){
+    document.getElementById("result").innerHTML =
+    "🌟 Awesome job! That’s correct!";
   }
+  else{
+    document.getElementById("result").innerHTML =
+    "🙂 Almost! Try again.";
+  }
+
+}
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
   // Connect to Supabase
   const supabaseUrl = 'https://bfivpvlzehtmksnmgnzb.supabase.co';
   const supabaseKey = 'bfivpvlzehtmksnmgnzb';
