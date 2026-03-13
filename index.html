@@ -31,6 +31,39 @@
     }
   }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Connect to Supabase
+  const supabaseUrl = 'YOUR_SUPABASE_URL';
+  const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+  const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
+  async function saveScore(student, score, subject){
+    const { data, error } = await supabase
+      .from('scores')
+      .insert([{ student, score, subject }]);
+
+    if(error) console.log('Error saving score:', error);
+    else console.log('Score saved!', data);
+  }
+
+  function checkAnswer() {
+    let answer = document.getElementById("answer").value;
+    let resultText = '';
+    let score = 0;
+
+    if(answer == 8){
+      resultText = "✅ Correct! Great job!";
+      score = 1;
+    } else {
+      resultText = "❌ Try again!";
+    }
+
+    document.getElementById("result").innerHTML = resultText;
+
+    // Save to Supabase
+    saveScore('student1', score, 'math');
+  }
+</script>
 </body>
 </html>
