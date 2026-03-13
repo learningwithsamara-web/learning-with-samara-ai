@@ -1,14 +1,15 @@
-.logo{
-width:200px;
-margin-bottom:200px;
-  
-}body{
+body{
 font-family: Arial;
 background: linear-gradient(135deg,#ffb347,#6ec6ff);
 text-align:center;
 margin:0;
 }
 
+/* LOGO STYLE */
+.logo{
+width:250px;
+margin-bottom:20px;
+}
 .container{
 background:white;
 width:80%;
