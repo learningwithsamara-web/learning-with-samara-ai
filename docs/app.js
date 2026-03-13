@@ -1,46 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Learning With Samara AI</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+let world = 1
+let num1
+let num2
+let score = 0
 
-<body>
+function startWorld(w){
 
-<div class="container">
+world = w
 
-<h1>🌟 Learning With Samara AI</h1>
-<p class="intro">Hi! I'm Samara AI. Let's learn something fun today!</p>
+document.getElementById("gameArea").style.display="block"
 
-<h2>Choose a Subject</h2>
+generateQuestion()
 
-<div class="subjects">
+}
 
-<button onclick="startMath()">🧮 Math</button>
+function generateQuestion(){
 
-<button onclick="comingSoon()">📚 Reading</button>
+num1 = Math.floor(Math.random()*10)
+num2 = Math.floor(Math.random()*10)
 
-<button onclick="comingSoon()">🔬 Science</button>
+document.getElementById("question").innerHTML =
+"What is " + num1 + " + " + num2 + " ?"
 
-<button onclick="comingSoon()">🌎 Social Studies</button>
+}
 
-</div>
+function checkAnswer(){
 
-<div id="mathArea" class="math-area" style="display:none">
+let answer = document.getElementById("answer").value
+let correct = num1 + num2
 
-<h2 id="question"></h2>
+if(answer == correct){
 
-<input type="number" id="answer" placeholder="?" />
+score++
 
-<button onclick="checkAnswer()">Submit</button>
+document.getElementById("result").innerHTML =
+"🌟 Correct! Score: " + score
 
-<p id="result"></p>
+generateQuestion()
 
-</div>
+}
 
-</div>
+else{
 
-<script src="app.js"></script>
+document.getElementById("result").innerHTML =
+"🙂 Try again!"
 
-</body>
-</html>
+}
+
+}
+
+function locked(){
+
+alert("Complete the previous world first!")
+
+}
