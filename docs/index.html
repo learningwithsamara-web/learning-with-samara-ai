@@ -150,6 +150,15 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .bubble-avatar{font-size:2rem;flex-shrink:0;background:linear-gradient(135deg,#7928CA,#FF0080);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.3);overflow:hidden;}
 .bubble-content{background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.2);border-radius:16px 16px 16px 4px;padding:12px 16px;color:rgba(255,255,255,0.9);font-size:0.92rem;font-weight:600;flex:1;line-height:1.6;}
 .bubble-name{font-size:0.72rem;color:var(--sun);font-weight:800;margin-bottom:4px;}
+/* Avatar popup overlay when 2 wrong answers */
+.avatar-popup-overlay{position:fixed;inset:0;z-index:9500;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);animation:fade-in 0.3s ease;}
+.avatar-popup-box{background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:32px;padding:32px 36px;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:2px solid rgba(199,125,255,0.4);animation:pop-in 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.avatar-popup-img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid var(--sun);box-shadow:0 0 24px rgba(255,217,61,0.6);margin-bottom:14px;animation:avatar-bounce 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.avatar-popup-name{font-family:'Fredoka One',cursive;color:var(--sun);font-size:1rem;margin-bottom:10px;}
+.avatar-popup-msg{font-family:'Fredoka One',cursive;color:#fff;font-size:1.35rem;line-height:1.4;margin-bottom:8px;}
+.avatar-popup-hint{background:rgba(255,255,255,0.1);border-radius:14px;padding:10px 14px;color:rgba(255,255,255,0.85);font-size:0.9rem;font-weight:700;margin-bottom:18px;border:1px solid rgba(255,255,255,0.15);}
+.avatar-popup-btn{background:linear-gradient(135deg,var(--sun),var(--orange));color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:12px 32px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(255,155,63,0.5);}
+@keyframes avatar-bounce{0%{transform:scale(0.5) translateY(30px);opacity:0}60%{transform:scale(1.15) translateY(-8px)}100%{transform:scale(1) translateY(0);opacity:1}}
 /* RESULT */
 .result-wrap{max-width:500px;margin:0 auto;padding:36px 24px;text-align:center;}
 .result-star{font-size:5rem;display:block;margin-bottom:10px;animation:pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both;}
@@ -970,24 +979,79 @@ const AITutor = {
   },
   trackCorrect() { this.wrongStreak = 0; },
 
-  showHint(q, ag) {
-    const msg = this.generateHint(q, ag);
-    const el = document.getElementById('ai-speech-bubble');
-    const tx = document.getElementById('bubble-text');
-    if (el && tx) { tx.innerHTML = msg; el.classList.remove('hidden'); }
-  },
-  hideHint() { document.getElementById('ai-speech-bubble')?.classList.add('hidden'); },
+  // ★ AI-powered popup with the student's chosen avatar
+  async showHint(q, ag) {
+    // Get avatar info
+    const av = Avatars.current || 'samara';
+    const avFile = Avatars.files[av] || 'samara.png.jpeg';
+    const avName = Avatars.names[av] || 'Samara';
+    const avEmoji = Avatars.emojis[av] || '👧';
 
-  generateHint(q, ag) {
-    const hint = q?.hint || 'Think carefully!';
-    const opens = {'0-3':"Let's try! 🌈",'4-6':"Let me help! 😊",'7-10':"Let's think 🤔",'11-14':"Here's a clue 💡",'15-17':"Consider this 🔬"};
+    // Build a local hint immediately so it shows fast
+    const localHint = this._localHint(q, ag);
+
+    // Show the popup right away with local hint
+    this._showAvatarPopup(avFile, avName, avEmoji, localHint, q?.hint || '');
+
+    // Then try to get a better AI hint in the background and update
+    try {
+      const ageDesc = {'0-3':'a 2-year-old','4-6':'a 5-year-old','7-10':'a 9-year-old','11-14':'a 12-year-old','15-17':'a 16-year-old'}[ag]||'a student';
+      const prompt = `A student got this question wrong twice: "${q?.text}". The hint is: "${q?.hint}". Give a short, encouraging 1-sentence tip to help ${ageDesc} understand it. Be warm, simple and fun. No more than 20 words.`;
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:80,
+          system:`You are ${avName}, a friendly tutor. Be warm, encouraging and age-appropriate.`,
+          messages:[{role:'user',content:prompt}] })
+      });
+      const data = await res.json();
+      const aiHint = data.content?.[0]?.text?.trim();
+      if (aiHint) {
+        // Update the popup hint text with the AI response
+        const hintEl = document.getElementById('avatar-popup-hint-text');
+        if (hintEl) { hintEl.textContent = aiHint; SoundSystem.speakHint(aiHint); }
+      }
+    } catch(e) { /* keep local hint */ }
+  },
+
+  _localHint(q, ag) {
+    const opens = {'0-3':"Let's try together! 🌈",'4-6':"I can help you! 😊",'7-10':"Let me give you a clue! 🤔",'11-14':"Here is a hint! 💡",'15-17':"Consider this! 🔬"};
     const open = opens[ag] || opens['7-10'];
     const txt = q?.text || '';
-    if (txt.includes('+')) { const m=txt.match(/(\d+)\s*\+\s*(\d+)/); if(m) return `${open}<br>Start at <b>${m[1]}</b> and count up <b>${m[2]}</b>.<br>💡 ${hint}`; }
-    if (txt.includes('−')||txt.includes('-')) { const m=txt.match(/(\d+)\s*[−-]\s*(\d+)/); if(m) return `${open}<br>Start at <b>${m[1]}</b>, count back <b>${m[2]}</b>.<br>💡 ${hint}`; }
-    if (txt.includes('×')) return `${open}<br>Multiplication = adding groups!<br>💡 ${hint}`;
-    if (txt.includes('÷')) return `${open}<br>Division = sharing equally.<br>💡 ${hint}`;
-    return `${open}<br>💡 Clue: <b>${hint}</b><br>You can do it! 💪`;
+    const hint = q?.hint || 'Think carefully!';
+    if (txt.includes('+')) { const m=txt.match(/(\d+)\s*\+\s*(\d+)/); if(m) return `${open} Start at ${m[1]} and count up ${m[2]}. ${hint}`; }
+    if (txt.includes('−')||txt.includes('-')) { const m=txt.match(/(\d+)\s*[−-]\s*(\d+)/); if(m) return `${open} Start at ${m[1]} and count back ${m[2]}. ${hint}`; }
+    if (txt.includes('×')) return `${open} Multiplication means adding groups! ${hint}`;
+    if (txt.includes('÷')) return `${open} Division means sharing equally. ${hint}`;
+    return `${open} ${hint} You can do it! 💪`;
+  },
+
+  _showAvatarPopup(avFile, avName, avEmoji, hintMsg, rawHint) {
+    // Remove any existing popup
+    document.getElementById('avatar-popup-overlay')?.remove();
+    const encouragements = ['Oops! Let me help! 💛','You got this! Try again! 💪','Don\'t give up! 🌟','Almost there! Let me explain! 🤗'];
+    const enc = encouragements[Math.floor(Math.random()*encouragements.length)];
+    const div = document.createElement('div');
+    div.className = 'avatar-popup-overlay';
+    div.id = 'avatar-popup-overlay';
+    div.innerHTML = `
+      <div class="avatar-popup-box">
+        <img class="avatar-popup-img" src="${avFile}" alt="${avName}"
+          onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div style=\"font-size:4rem;margin-bottom:14px;\">${avEmoji}</div>')" />
+        <div class="avatar-popup-name">${avName} AI ✨</div>
+        <div class="avatar-popup-msg">${enc}</div>
+        <div class="avatar-popup-hint" id="avatar-popup-hint-text">${hintMsg}</div>
+        <button class="avatar-popup-btn" onclick="document.getElementById('avatar-popup-overlay').remove()">Got it! Let me try! 🚀</button>
+      </div>`;
+    document.body.appendChild(div);
+    // Speak the encouragement
+    SoundSystem.speakHint(enc + ' ' + hintMsg.replace(/<[^>]+>/g,''));
+    // Auto close after 8 seconds
+    setTimeout(() => document.getElementById('avatar-popup-overlay')?.remove(), 8000);
+  },
+
+  hideHint() {
+    document.getElementById('ai-speech-bubble')?.classList.add('hidden');
+    document.getElementById('avatar-popup-overlay')?.remove();
   },
 
   toggleChat() {
@@ -1012,30 +1076,43 @@ const AITutor = {
   },
   hideTyping() { document.getElementById('ai-typing')?.remove(); },
 
-  // ★ FREE AI — calls Anthropic API directly, no Netlify needed
+  // ★ ALWAYS calls Claude AI — knows the answer to anything!
   async sendMessage() {
     const inp = document.getElementById('ai-chat-input');
     const txt = inp?.value.trim(); if (!txt) return;
     inp.value = ''; this.addMsg(txt, 'user'); this.showTyping();
-    // Try free Anthropic API first
-    const aiReply = await callClaudeAI(txt, S.ageGroup);
-    this.hideTyping();
-    if (aiReply) {
-      this.addMsg(aiReply, 'ai');
-    } else {
-      // Fallback to built-in responses if API unavailable
-      this.addMsg(this.fallbackResponse(txt), 'ai');
-    }
-  },
 
-  fallbackResponse(t) {
-    const l = t.toLowerCase();
-    if (l.includes('hello')||l.includes('hi')) return 'Hello! 👋 Great to see you! What are we learning today?';
-    if (l.includes('help')) return 'Of course! 💛 Tell me what you are struggling with!';
-    if (l.includes('math')||l.includes('add')||l.includes('subtract')) return 'Math is awesome! 🔢 Take it one step at a time!';
-    if (l.includes('hard')||l.includes('stuck')) return 'It\'s okay to find things hard — your brain is GROWING! 💪';
-    if (l.includes('thanks')) return 'You are so welcome! 🌟 Keep learning!';
-    return 'Great question! 🤔 Break big problems into small steps and never give up! 💪✨';
+    const avName = Avatars.names[Avatars.current] || 'Samara';
+    const ageDescriptions = {'0-3':'a 2-year-old baby','4-6':'a 5-year-old child','7-10':'a 9-year-old student','11-14':'a 12-year-old student','15-17':'a 16-year-old student'};
+    const ageDesc = ageDescriptions[S.ageGroup] || ageDescriptions['7-10'];
+    const currentSubject = S.subject ? `The student is currently studying: ${S.subject}.` : '';
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 300,
+          system: `You are ${avName} AI, an expert tutor who can answer ANY question a student asks — science, math, history, geography, animals, space, coding, sports, pop culture, anything! You are talking to ${ageDesc}. Always answer their question directly and fully. Use simple fun language. Add 1-2 emojis. Keep it under 4 sentences. ${currentSubject} Never say you don't know — always give the best answer you can.`,
+          messages: [{ role: 'user', content: txt }]
+        })
+      });
+      const data = await res.json();
+      const reply = data.content?.[0]?.text;
+      this.hideTyping();
+      if (reply) {
+        this.addMsg(reply, 'ai');
+        // Speak the response
+        const spoken = reply.replace(/[🎉⭐🌈🥳🌟🎊🚀💛🤗💪🔍🎯🧠🔬💡⚡🎓🤔🌸]/g,'').trim();
+        SoundSystem.speak(spoken, 0.88, 1.15);
+      } else {
+        this.addMsg('Hmm, let me think about that! Try asking again in a different way! 🤔', 'ai');
+      }
+    } catch(e) {
+      this.hideTyping();
+      this.addMsg('Oops! I had a little trouble connecting! Please try again in a moment! 💛', 'ai');
+    }
   },
 
   tutorMsg(type, hint) {
