@@ -315,6 +315,8 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     <button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 My Progress</button>
     <button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
     <button id="btn-pep" class="btn btn-primary" style="background:linear-gradient(135deg,#C77DFF,#7928CA);" onclick="App.showScreen('screen-pep')">🇯🇲 PEP</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="App.showScreen('screen-research')">🔭 Research</button>
+    <button id="btn-studyplan" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="PersonalAlgo.openPlan()">🧠 My Plan</button>
     <button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
   </div>
 </header>
@@ -624,6 +626,130 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
   </button>
 </div>
 
+<!-- RESEARCH SCREEN -->
+<div id="screen-research" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🔭 Research Anything</h2>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:24px;">
+    <div style="background:rgba(255,255,255,0.08);border-radius:24px;padding:24px;border:1.5px solid rgba(255,255,255,0.15);margin-bottom:20px;">
+      <p style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:#fff;margin-bottom:14px;text-align:center;">What do you want to learn about? 🤔</p>
+      <div style="display:flex;gap:10px;">
+        <input id="research-input" class="topic-input" type="text" placeholder="e.g. black holes, dinosaurs, volcanoes..." onkeydown="if(event.key==='Enter')Research.search()" style="flex:1;" />
+        <button class="btn btn-primary" onclick="Research.search()">Ask Samara! 🚀</button>
+      </div>
+      <div id="research-quick-topics" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center;"></div>
+    </div>
+    <div id="research-result" style="display:none;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="width:48px;height:48px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#7928CA,#FF0080);flex-shrink:0;">
+          <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'" />
+        </div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:var(--sun);font-size:0.85rem;">Samara AI ✨</div>
+          <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;" id="research-topic-label">Explaining: ...</div>
+        </div>
+      </div>
+      <div id="research-answer" style="background:rgba(255,255,255,0.1);border-radius:20px;padding:20px 24px;color:rgba(255,255,255,0.92);font-size:1rem;font-weight:600;line-height:1.8;border:1.5px solid rgba(255,255,255,0.15);min-height:80px;"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="Research.askFollowUp('Tell me more about this topic!')">Tell me more 📖</button>
+        <button class="btn btn-outline" onclick="Research.askFollowUp('Give me a fun fact about this!')">Fun fact! 🎉</button>
+        <button class="btn btn-outline" onclick="Research.askFollowUp('Can you give me a quiz question about this?')">Quiz me! 🧠</button>
+      </div>
+    </div>
+    <div id="research-loading" style="display:none;text-align:center;padding:32px;">
+      <div style="font-size:3rem;animation:bounce 1s ease-in-out infinite;">🤔</div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin-top:12px;">Samara is thinking...</div>
+    </div>
+    <div id="research-history" style="margin-top:24px;"></div>
+  </div>
+</div>
+
+<!-- STUDY PLAN SCREEN -->
+<div id="screen-studyplan" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🧠 My Study Plan</h2>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:24px;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:#fff;margin-bottom:6px;">Your Personal Learning Path 🗺️</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.95rem;">Based on your quiz performance, Samara recommends:</div>
+    </div>
+    <div id="studyplan-content"></div>
+    <div style="margin-top:24px;background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;border:1.5px solid rgba(255,255,255,0.15);">
+      <div style="font-family:'Fredoka One',cursive;color:var(--sun);font-size:1.1rem;margin-bottom:14px;">📊 Your Topic Strengths</div>
+      <div id="studyplan-heatmap"></div>
+    </div>
+    <div style="margin-top:16px;text-align:center;">
+      <button class="btn btn-primary big" onclick="PersonalAlgo.refresh()">🔄 Refresh My Plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH SCREEN -->
+<div id="screen-research" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🔭 Research Anything</h2>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:24px;">
+    <div style="background:rgba(255,255,255,0.08);border-radius:24px;padding:24px;border:1.5px solid rgba(255,255,255,0.15);margin-bottom:20px;">
+      <p style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:#fff;margin-bottom:14px;text-align:center;">What do you want to learn about? 🤔</p>
+      <div style="display:flex;gap:10px;">
+        <input id="research-input" class="topic-input" type="text" placeholder="e.g. black holes, dinosaurs, volcanoes..." onkeydown="if(event.key==='Enter')Research.search()" style="flex:1;" />
+        <button class="btn btn-primary" onclick="Research.search()">Ask Samara! 🚀</button>
+      </div>
+      <div id="research-quick-topics" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center;"></div>
+    </div>
+    <div id="research-loading" style="display:none;text-align:center;padding:32px;">
+      <div style="font-size:3rem;animation:bounce 1s ease-in-out infinite;">🤔</div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin-top:12px;">Samara is thinking...</div>
+    </div>
+    <div id="research-result" style="display:none;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="width:48px;height:48px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#7928CA,#FF0080);flex-shrink:0;">
+          <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'" />
+        </div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:var(--sun);font-size:0.85rem;">Samara AI ✨</div>
+          <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;" id="research-topic-label">Explaining: ...</div>
+        </div>
+      </div>
+      <div id="research-answer" style="background:rgba(255,255,255,0.1);border-radius:20px;padding:20px 24px;color:rgba(255,255,255,0.92);font-size:1rem;font-weight:600;line-height:1.8;border:1.5px solid rgba(255,255,255,0.15);min-height:80px;"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="Research.askFollowUp('Tell me more about this topic!')">Tell me more 📖</button>
+        <button class="btn btn-outline" onclick="Research.askFollowUp('Give me a fun fact about this!')">Fun fact! 🎉</button>
+        <button class="btn btn-outline" onclick="Research.askFollowUp('Give me a quiz question about this topic.')">Quiz me! 🧠</button>
+      </div>
+    </div>
+    <div id="research-history" style="margin-top:24px;"></div>
+  </div>
+</div>
+
+<!-- STUDY PLAN SCREEN -->
+<div id="screen-studyplan" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🧠 My Study Plan</h2>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:24px;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:#fff;margin-bottom:6px;">Your Personal Learning Path 🗺️</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.95rem;">Based on your quiz performance, Samara recommends:</div>
+    </div>
+    <div id="studyplan-content"></div>
+    <div style="margin-top:24px;background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;border:1.5px solid rgba(255,255,255,0.15);">
+      <div style="font-family:'Fredoka One',cursive;color:var(--sun);font-size:1.1rem;margin-bottom:14px;">📊 Your Topic Strengths</div>
+      <div id="studyplan-heatmap"></div>
+    </div>
+    <div style="margin-top:16px;text-align:center;">
+      <button class="btn btn-primary big" onclick="PersonalAlgo.refresh()">🔄 Refresh My Plan</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
 
@@ -715,27 +841,68 @@ const Adaptive = {
 const SoundSystem = {
   enabled: true,
   voices: [],
+  selectedVoice: null,
+
+  // Priority list — best warm American girl voices across all browsers/devices
+  VOICE_PRIORITY: [
+    'Samantha',             // macOS/iOS — warm natural American female
+    'Google US English',    // Chrome — clear American female
+    'Ava',                  // macOS American female
+    'Zira',                 // Windows American female
+    'Google UK English Female',
+    'Karen','Moira','Victoria','Allison','Susan','Kathy'
+  ],
+
   init() {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => { this.voices = window.speechSynthesis.getVoices(); };
+    if (!('speechSynthesis' in window)) return;
+    const load = () => {
       this.voices = window.speechSynthesis.getVoices();
-    }
+      this.selectedVoice = this._pickBestVoice();
+    };
+    window.speechSynthesis.onvoiceschanged = load;
+    load();
+    setTimeout(load, 500);
   },
+
+  _pickBestVoice() {
+    if (!this.voices.length) return null;
+    for (const name of this.VOICE_PRIORITY) {
+      const v = this.voices.find(v => v.name === name);
+      if (v) return v;
+    }
+    for (const name of this.VOICE_PRIORITY) {
+      const v = this.voices.find(v => v.name.includes(name));
+      if (v) return v;
+    }
+    const enUS = this.voices.filter(v => v.lang === 'en-US');
+    const femaleHints = ['female','Female','Samantha','Ava','Zira','Karen','Susan','Lisa','Amy','Emma','Aria','Jenny','Ana'];
+    for (const hint of femaleHints) {
+      const v = enUS.find(v => v.name.includes(hint));
+      if (v) return v;
+    }
+    if (enUS.length) return enUS[0];
+    return this.voices.find(v => v.lang.startsWith('en')) || null;
+  },
+
   toggle() {
     this.enabled = !this.enabled;
     const btn = document.getElementById('sound-toggle-btn');
     if (btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
-  speak(text, rate=0.9, pitch=1.1) {
+
+  speak(text, rate=0.88, pitch=1.15) {
     if (!this.enabled || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
-    utt.rate = rate; utt.pitch = pitch; utt.volume = 0.9;
-    const preferred = this.voices.find(v => v.name.includes('Google') || v.lang.startsWith('en'));
-    if (preferred) utt.voice = preferred;
+    utt.rate = rate; utt.pitch = pitch; utt.volume = 1.0;
+    if (!this.selectedVoice) this.selectedVoice = this._pickBestVoice();
+    if (this.selectedVoice) utt.voice = this.selectedVoice;
     window.speechSynthesis.speak(utt);
   },
-  speakBaby(text) { this.speak(text, 0.7, 1.3); },
+
+  speakBaby(text) { this.speak(text, 0.72, 1.35); },
+  speakPraise(text) { this.speak(text, 0.95, 1.25); },
+  speakHint(text) { this.speak(text, 0.80, 1.05); },
   playTone(type) {
     if (!this.enabled) return;
     try {
@@ -873,15 +1040,35 @@ const AITutor = {
 
   tutorMsg(type, hint) {
     const m = {
-      '0-3':  {correct:['Yay!! 🎉','WOW!! ⭐'],wrong:['Oopsie! 🌸','Almost! 💛']},
-      '4-6':  {correct:['Awesome!! 🌟','Woohoo!! 🎊'],wrong:[`Hmm! 💛 Hint: ${hint}`,'Good try! 🤔']},
-      '7-10': {correct:['Brilliant! 🚀','Right! ⭐'],wrong:[`Not quite! 💪 Think: ${hint}`,'Close! 🔍']},
-      '11-14':{correct:['Correct! 🎯','Spot on! 🚀'],wrong:[`Not this time. Think: ${hint}`,'Good effort! 🧠']},
-      '15-17':{correct:['Excellent! ⚡','Correct! 🎓'],wrong:[`Analyse: ${hint}`,'Key insight: 🔬']}
+      '0-3':  {
+        correct:['Yay!! You did it! 🎉','WOW!! So smart! ⭐','Yes yes yes!! 🌈','You are amazing!! 🥳'],
+        wrong:['Oopsie! Try again! 🌸','Almost there! 💛','Let us try one more time! 🤗']
+      },
+      '4-6':  {
+        correct:['Awesome job!! You got it! 🌟','Woohoo!! That is correct! 🎊','Yes!! You are so smart! ⭐','Way to go!! 🚀'],
+        wrong:[`Good try! Here is a hint: ${hint} 💛`,'Keep going, you can do it! 🤔','So close! Try again! 💪']
+      },
+      '7-10': {
+        correct:['Brilliant!! That is exactly right! 🚀','Correct! You are on fire! ⭐','Yes!! Great thinking! 🎯','Nailed it!! 🌟'],
+        wrong:[`Not quite! Remember: ${hint} 💪`,'Good attempt! Think it through! 🔍',`Almost! Hint: ${hint} 🤔`]
+      },
+      '11-14':{
+        correct:['Correct!! Excellent work! 🎯','Spot on! You really know this! 🚀','Perfect answer! 🌟','That is exactly right! 💡'],
+        wrong:[`Not this time. Key idea: ${hint} 🧠`,'Good effort! Try a different approach! 💪',`Think about it: ${hint} 🔍`]
+      },
+      '15-17':{
+        correct:['Excellent!! Outstanding answer! ⚡','Correct! Impressive thinking! 🎓','Perfect! You really understand this! 🌟','Brilliant analysis! 💡'],
+        wrong:[`Reconsider: ${hint} 🔬`,'Good attempt! Analyse it further! 🧠',`Key insight to remember: ${hint} 💪`]
+      }
     };
     const g = m[S.ageGroup] || m['7-10'];
     const pool = g[type] || g.correct;
-    return pool[Math.floor(Math.random()*pool.length)];
+    const msg = pool[Math.floor(Math.random()*pool.length)];
+    // Speak the feedback with the right voice style
+    const textOnly = msg.replace(/[🎉⭐🌈🥳🌟🎊🚀💛🤗💪🔍🎯🧠🔬💡⚡🎓🤔🌸]/g,'').trim();
+    if (type === 'correct') setTimeout(()=>SoundSystem.speakPraise(textOnly), 100);
+    else setTimeout(()=>SoundSystem.speakHint(textOnly), 100);
+    return msg;
   },
 
   showFloat() { document.getElementById('ai-tutor-float')?.classList.remove('hidden'); },
@@ -1125,6 +1312,8 @@ const App = {
     if (id==='screen-dashboard') App.renderDash();
     if (id==='screen-parent') App.renderParent();
     if (id==='screen-quiz') AITutor.showFloat(); else AITutor.hideFloat();
+    if (id==='screen-research') setTimeout(()=>Research.init(),100);
+    if (id==='screen-studyplan') setTimeout(()=>PersonalAlgo.openPlan(),100);
   },
 
   updateAuth() {
@@ -1142,7 +1331,7 @@ const App = {
     document.querySelectorAll('.age-card').forEach(c => c.classList.toggle('selected', c.dataset.age===g));
     if (g === '0-3') {
       App.showScreen('screen-baby');
-      SoundSystem.speakBaby('Welcome to Baby World! Tap what you want to learn!');
+      SoundSystem.speakBaby('Welcome to Baby World! I am so excited to learn with you today! Tap what you want to learn!');
       return;
     }
     App.renderSubjects();
@@ -1256,12 +1445,14 @@ const App = {
       btn.classList.add('correct'); S.correct++; S.score+=10;
       AITutor.trackCorrect();
       SoundSystem.playTone('correct'); // ★ Sound now works!
+      PersonalAlgo.trackAnswer(S.subject, true);
       App.feedback(true, AITutor.tutorMsg('correct',''));
     } else {
       btn.classList.add('wrong');
       document.querySelectorAll('.answer-btn').forEach(b => { if(b.textContent===String(q.answers.find(a=>a.isCorrect)?.label)) b.classList.add('correct'); });
       AITutor.trackWrong(q, S.ageGroup);
       SoundSystem.playTone('wrong'); // ★ Sound now works!
+      PersonalAlgo.trackAnswer(S.subject, false);
       App.feedback(false, AITutor.tutorMsg('wrong', q.hint));
     }
     App.updateScores(); setTimeout(() => App.nextQ(), 2200);
@@ -1279,7 +1470,7 @@ const App = {
     const pts=S.correct*10; const world=S.currentWorld;
     const adaptive=Adaptive.update(S.subject,acc);
     // ★ Sound on finish
-    if (acc>=0.8) { SoundSystem.playTone('celebrate'); SoundSystem.speak('Stage complete! Amazing work!'); }
+    if (acc>=0.8) { SoundSystem.playTone('celebrate'); SoundSystem.speakPraise('Stage complete! Amazing work! You are a superstar!'); }
     if (S.user) {
       const name=S.user.user_metadata?.full_name||S.user.email;
       await DB.saveScore({student:name,subject:S.subject,world:world.id,stage:S.stageIndex+1,score:pts,total:total*10,accuracy:acc});
@@ -1621,12 +1812,172 @@ const PEP = {
   }
 };
 
+
+// ── RESEARCH MODULE ──────────────────────────────────────────
+const Research = {
+  lastTopic: '',
+  history: [],
+  quickTopics: {
+    '0-3':['dogs','cats','colours','numbers'],
+    '4-6':['dinosaurs','butterflies','rainbows','volcanoes'],
+    '7-10':['black holes','sharks','ancient Egypt','robots'],
+    '11-14':['DNA','artificial intelligence','climate change','quantum computers'],
+    '15-17':['cryptocurrency','neural networks','CRISPR','dark matter']
+  },
+  init() {
+    const wrap = document.getElementById('research-quick-topics');
+    if (!wrap) return;
+    const topics = this.quickTopics[S.ageGroup] || this.quickTopics['7-10'];
+    wrap.innerHTML = topics.map(t =>
+      `<span onclick="document.getElementById('research-input').value='${t}';Research.search();" style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 16px;font-size:0.85rem;font-weight:700;cursor:pointer;">${t}</span>`
+    ).join('');
+  },
+  async search() {
+    const input = document.getElementById('research-input');
+    const topic = input?.value.trim();
+    if (!topic) { App.toast('Type something to research! 🔍'); return; }
+    this.lastTopic = topic;
+    document.getElementById('research-loading').style.display = 'block';
+    document.getElementById('research-result').style.display = 'none';
+    const ageDesc = {'0-3':'a 2-year-old','4-6':'a 5-year-old','7-10':'a 9-year-old','11-14':'a 12-year-old','15-17':'a 16-year-old'}[S.ageGroup]||'a student';
+    const prompt = `Explain "${topic}" to ${ageDesc} in a fun, engaging way. Use simple language, 1 relatable example, 2-3 short paragraphs. Add 2-3 emojis. End with one "Did you know?" fact.`;
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:350,
+          system:'You are Samara AI, a friendly educational tutor. Always be encouraging, clear and age-appropriate.',
+          messages:[{role:'user',content:prompt}] })
+      });
+      const data = await response.json();
+      this.showAnswer(topic, data.content?.[0]?.text || 'Try a different topic!');
+      PersonalAlgo.trackResearch(topic);
+    } catch(e) {
+      this.showAnswer(topic, `Great topic! 🌟 Ask your teacher or search in a book to learn more about ${topic}!`);
+    }
+    document.getElementById('research-loading').style.display = 'none';
+  },
+  async askFollowUp(prompt) {
+    if (!this.lastTopic) return;
+    document.getElementById('research-result').style.display = 'none';
+    document.getElementById('research-loading').style.display = 'block';
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:250,
+          system:'You are Samara AI, a fun friendly tutor. Keep answers short, exciting and age-appropriate.',
+          messages:[{role:'user',content:`About "${this.lastTopic}" for a ${S.ageGroup} year old: ${prompt}`}] })
+      });
+      const data = await response.json();
+      this.showAnswer(this.lastTopic, data.content?.[0]?.text || 'Try again!');
+    } catch(e) { this.showAnswer(this.lastTopic,'Oops! Try again! 💛'); }
+    document.getElementById('research-loading').style.display = 'none';
+  },
+  showAnswer(topic, answer) {
+    document.getElementById('research-result').style.display = 'block';
+    document.getElementById('research-topic-label').textContent = `Explaining: ${topic}`;
+    document.getElementById('research-answer').innerHTML = answer.replace(/\n/g,'<br>');
+    this.history.unshift({topic, time:new Date().toLocaleTimeString()});
+    if (this.history.length > 5) this.history.pop();
+    this.renderHistory();
+    SoundSystem.speak(`Here is what I know about ${topic}!`);
+  },
+  renderHistory() {
+    const wrap = document.getElementById('research-history');
+    if (!wrap || this.history.length < 2) return;
+    wrap.innerHTML = `<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:1rem;margin-bottom:10px;">📚 Recent Searches</div>` +
+      this.history.slice(1).map(h =>
+        `<div onclick="document.getElementById('research-input').value='${h.topic}';Research.search();" style="background:rgba(255,255,255,0.07);border-radius:12px;padding:10px 16px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,0.1);">
+          <span style="font-size:1.2rem;">🔍</span>
+          <span style="color:rgba(255,255,255,0.85);font-weight:700;font-size:0.9rem;">${h.topic}</span>
+          <span style="margin-left:auto;color:rgba(255,255,255,0.4);font-size:0.78rem;">${h.time}</span>
+        </div>`
+      ).join('');
+  }
+};
+
+// ── PERSONAL ALGORITHM ────────────────────────────────────────
+const PersonalAlgo = {
+  data: {},
+  load() { try { this.data = JSON.parse(localStorage.getItem('samara_algo')||'{}'); } catch(e){ this.data={}; } },
+  save() { try { localStorage.setItem('samara_algo', JSON.stringify(this.data)); } catch(e){} },
+  trackAnswer(subject, correct) {
+    this.load();
+    if (!this.data[subject]) this.data[subject] = {correct:0,wrong:0,streak:0,lastSeen:null};
+    if (correct) { this.data[subject].correct++; this.data[subject].streak=(this.data[subject].streak||0)+1; }
+    else { this.data[subject].wrong++; this.data[subject].streak=0; }
+    this.data[subject].lastSeen = new Date().toISOString().slice(0,10);
+    this.save();
+    const total = Object.values(this.data).reduce((s,d)=>s+(d.correct||0)+(d.wrong||0),0);
+    if (total >= 5) document.getElementById('btn-studyplan')?.classList.remove('hidden');
+  },
+  trackResearch(topic) {
+    this.load();
+    const key = `research_${topic.toLowerCase().replace(/\s+/g,'_').slice(0,30)}`;
+    if (!this.data[key]) this.data[key] = {correct:0,wrong:0,researched:0,lastSeen:null};
+    this.data[key].researched = (this.data[key].researched||0)+1;
+    this.data[key].lastSeen = new Date().toISOString().slice(0,10);
+    this.save();
+  },
+  getAccuracy(key) {
+    const d = this.data[key]; if (!d) return null;
+    const total = (d.correct||0)+(d.wrong||0); if (total===0) return null;
+    return Math.round((d.correct/total)*100);
+  },
+  openPlan() { this.load(); App.showScreen('screen-studyplan'); this.render(); },
+  refresh() { this.load(); this.render(); App.toast('Study plan updated! 🔄'); },
+  render() {
+    const subs = SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
+    const content = document.getElementById('studyplan-content');
+    const heatmap = document.getElementById('studyplan-heatmap');
+    if (!content||!heatmap) return;
+    const priorities = subs.map(s => ({...s, acc:this.getAccuracy(s.id), total:(this.data[s.id]?.correct||0)+(this.data[s.id]?.wrong||0), streak:this.data[s.id]?.streak||0}));
+    const untouched = priorities.filter(p=>p.acc===null);
+    const weak      = priorities.filter(p=>p.acc!==null&&p.acc<50).sort((a,b)=>a.acc-b.acc);
+    const medium    = priorities.filter(p=>p.acc!==null&&p.acc>=50&&p.acc<80).sort((a,b)=>a.acc-b.acc);
+    const strong    = priorities.filter(p=>p.acc!==null&&p.acc>=80).sort((a,b)=>b.acc-a.acc);
+    let html = '';
+    if (weak.length) {
+      html += `<div style="margin-bottom:20px;"><div style="font-family:'Fredoka One',cursive;color:#FF6B6B;font-size:1.1rem;margin-bottom:10px;">🆘 Focus on These First</div>`;
+      weak.forEach(s=>{ html+=`<div style="background:rgba(255,107,107,0.15);border-radius:16px;padding:16px 20px;margin-bottom:10px;border:1.5px solid rgba(255,107,107,0.3);display:flex;align-items:center;gap:14px;"><div style="font-size:2rem;">${s.icon}</div><div style="flex:1;"><div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${s.name}</div><div style="font-size:0.82rem;color:rgba(255,255,255,0.6);margin-top:2px;">Accuracy: ${s.acc}% · ${s.total} questions</div><div style="font-size:0.8rem;color:#FF9B3F;margin-top:4px;">💡 Practice daily for 10 minutes!</div></div><button class="btn btn-danger" style="font-size:0.85rem;padding:8px 16px;" onclick="App.openSubject('${s.id}')">Practice Now</button></div>`; });
+      html += '</div>';
+    }
+    if (medium.length) {
+      html += `<div style="margin-bottom:20px;"><div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:10px;">📈 Keep Improving</div>`;
+      medium.forEach(s=>{ html+=`<div style="background:rgba(255,217,61,0.12);border-radius:16px;padding:16px 20px;margin-bottom:10px;border:1.5px solid rgba(255,217,61,0.25);display:flex;align-items:center;gap:14px;"><div style="font-size:2rem;">${s.icon}</div><div style="flex:1;"><div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${s.name}</div><div style="font-size:0.82rem;color:rgba(255,255,255,0.6);margin-top:2px;">Accuracy: ${s.acc}% ${s.streak>2?'🔥 '+s.streak+' streak!':''}</div></div><button class="btn btn-primary" style="font-size:0.85rem;padding:8px 16px;" onclick="App.openSubject('${s.id}')">Continue</button></div>`; });
+      html += '</div>';
+    }
+    if (untouched.length) {
+      html += `<div style="margin-bottom:20px;"><div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:1.1rem;margin-bottom:10px;">🆕 Not Started Yet</div>`;
+      untouched.forEach(s=>{ html+=`<div style="background:rgba(255,255,255,0.07);border-radius:16px;padding:14px 20px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:14px;"><div style="font-size:2rem;">${s.icon}</div><div style="flex:1;font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:1rem;">${s.name}</div><button class="btn btn-outline" style="font-size:0.85rem;padding:8px 16px;" onclick="App.openSubject('${s.id}')">Start!</button></div>`; });
+      html += '</div>';
+    }
+    if (strong.length) {
+      html += `<div style="margin-bottom:20px;"><div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.1rem;margin-bottom:10px;">🌟 Crushing It!</div>`;
+      strong.forEach(s=>{ html+=`<div style="background:rgba(107,203,119,0.12);border-radius:16px;padding:14px 20px;margin-bottom:8px;border:1px solid rgba(107,203,119,0.2);display:flex;align-items:center;gap:14px;"><div style="font-size:2rem;">${s.icon}</div><div style="flex:1;"><div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${s.name}</div><div style="font-size:0.82rem;color:rgba(255,255,255,0.6);">Accuracy: ${s.acc}% ⭐</div></div><span style="font-size:1.5rem;">🏆</span></div>`; });
+      html += '</div>';
+    }
+    if (!html) html = `<div style="text-align:center;padding:40px 20px;color:rgba(255,255,255,0.6);"><div style="font-size:3rem;margin-bottom:12px;">🚀</div><div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px;">No data yet!</div><div>Complete some quizzes and Samara will build your personal plan!</div><button class="btn btn-primary big" style="margin-top:20px;" onclick="App.showScreen('screen-home')">Start Learning!</button></div>`;
+    content.innerHTML = html;
+    heatmap.innerHTML = priorities.filter(p=>p.acc!==null).map(p=>{
+      const color=p.acc>=80?'#6BCB77':p.acc>=50?'#FFD93D':'#FF6B6B';
+      return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="width:28px;text-align:center;font-size:1.3rem;">${p.icon}</div><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-weight:800;color:#fff;font-size:0.85rem;">${p.name}</span><span style="font-weight:800;color:${color};font-size:0.85rem;">${p.acc}%</span></div><div style="height:8px;background:rgba(255,255,255,0.1);border-radius:50px;overflow:hidden;"><div style="height:100%;width:${p.acc}%;background:${color};border-radius:50px;transition:width 0.8s;"></div></div></div></div>`;
+    }).join('')||'<div style="color:rgba(255,255,255,0.5);font-size:0.9rem;">Complete quizzes to see your heatmap! 📊</div>';
+  }
+};
+
+
 // ── BOOT ──────────────────────────────────────────────────────
 window.App=App; window.AITutor=AITutor; window.Avatars=Avatars;
 window.BabyMode=BabyMode; window.PEP=PEP; window.SoundSystem=SoundSystem;
+window.Research=Research; window.PersonalAlgo=PersonalAlgo;
 
 document.addEventListener('DOMContentLoaded', () => {
-  try { App.init(); } catch(e) { console.error('Boot error:',e); }
+  try {
+    App.init();
+    PersonalAlgo.load();
+    const total = Object.values(PersonalAlgo.data).reduce((s,d)=>s+(d.correct||0)+(d.wrong||0),0);
+    if (total >= 5) document.getElementById('btn-studyplan')?.classList.remove('hidden');
+  } catch(e) { console.error('Boot error:',e); }
 });
 </script>
 </body>
