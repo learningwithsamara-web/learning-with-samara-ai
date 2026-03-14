@@ -525,7 +525,7 @@ opacity:0; transition:opacity 0.3s, transform 0.3s; pointer-events:none;
 
 <!-- Supabase -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 // ============================================================
@@ -996,288 +996,304 @@ const container = document.getElementById('worlds-list');
 container.innerHTML = '';
 worlds.forEach((world,idx)=>{
 const unlocked = idx===0 || App._worldUnlocked(State.subject, idx, worlds);
-const stagesDone = App._stagesDone(State.subject,
+const stagesDone = App._stagesDone(State.subject, world.id);
 const pct = Math.round((stagesDone/STAGES_PER_WORLD)*100);
-      const card = document.createElement('div');
-      card.className = `world-card ${unlocked?'':'locked'}`;
-      card.innerHTML = `
-        <div class="world-num c${idx%5}">${world.icon||world.id}</div>
-        <div class="world-info">
-          <div class="world-name">World ${world.id}: ${world.name}</div>
-          <div class="world-meta">${STAGES_PER_WORLD} stages · ${stagesDone}/${STAGES_PER_WORLD} done</div>
-        </div>
-        <div class="world-lock-icon">${unlocked?(stagesDone===STAGES_PER_WORLD?'✅':'▶️'):'🔒'}</div>
-        <div class="world-progress-bar" style="width:${pct}%"></div>`;
-      card.onclick = unlocked ? ()=>App.openWorld(idx,worlds) : ()=>App.showToast('Complete the previous world first! 🔒');
-      container.appendChild(card);
-    });
-  },
+const card = document.createElement('div');
+card.className = `world-card ${unlocked?'':'locked'}`;
+card.innerHTML = `
+<div class="world-num c${idx%5}">${world.icon||world.id}</div>
+<div class="world-info">
+<div class="world-name">World ${world.id}: ${world.name}</div>
+<div class="world-meta">${STAGES_PER_WORLD} stages · ${stagesDone}/${STAGES_PER_WORLD} done</div>
+</div>
+<div class="world-lock-icon">${unlocked?(stagesDone===STAGES_PER_WORLD?'✅':'▶️'):'🔒'}</div>
+<div class="world-progress-bar" style="width:${pct}%"></div>`;
+card.onclick = unlocked ? ()=>App.openWorld(idx,worlds) : ()=>App.showToast('Complete the previous world first! 🔒');
+container.appendChild(card);
+});
+},
 
-  openWorld(worldIdx, worlds) {
-    State.worldIndex = worldIdx;
-    const world = (worlds||WORLDS[State.subject])[worldIdx];
-    document.getElementById('stages-title').textContent = `World ${world.id}: ${world.name}`;
-    App._updateScoreDisplays();
-    App.renderStages(world);
-    App.showScreen('screen-stages');
-  },
+openWorld(worldIdx, worlds) {
+State.worldIndex = worldIdx;
+const world = (worlds||WORLDS[State.subject])[worldIdx];
+document.getElementById('stages-title').textContent = `World ${world.id}: ${world.name}`;
+App._updateScoreDisplays();
+App.renderStages(world);
+App.showScreen('screen-stages');
+},
 
-  renderStages(world) {
-    const container = document.getElementById('stages-list');
-    container.innerHTML = '';
-    for(let i=0;i<STAGES_PER_WORLD;i++){
-      const stageId  = i+1;
-      const record   = State.progress.find(p=>p.subject===State.subject&&p.world===world.id&&p.stage===stageId);
-      const prevDone = i===0||State.progress.find(p=>p.subject===State.subject&&p.world===world.id&&p.stage===stageId-1&&p.completed);
-      const unlocked = !!prevDone;
-      const done     = !!(record&&record.completed);
-      const stars    = done?(record.stars||1):0;
-      const diff     = i===0?'Easy':i===1?'Medium':'Hard';
-      const card     = document.createElement('div');
-      card.className = `stage-card ${unlocked?'':'locked'}`;
-      card.innerHTML = `
-        <div class="stage-icon">${done?'🌟':unlocked?'▶️':'🔒'}</div>
-        <div>
-          <div class="stage-name">Stage ${stageId}: ${diff}</div>
-          <div class="stage-meta">5 questions</div>
-        </div>
-        <div class="stage-stars">${done?'⭐'.repeat(stars):''}</div>`;
-      card.onclick = unlocked ? ()=>App.startStage(i,world) : ()=>App.showToast('Complete the previous stage first! 🔒');
-      container.appendChild(card);
-    }
-  },
+renderStages(world) {
+const container = document.getElementById('stages-list');
+container.innerHTML = '';
+for(let i=0;i<STAGES_PER_WORLD;i++){
+const stageId = i+1;
+const record = State.progress.find(p=>p.subject===State.subject&&p.world===world.id&&p.stage===stageId);
+const prevDone = i===0||State.progress.find(p=>p.subject===State.subject&&p.world===world.id&&p.stage===stageId-1&&p.completed);
+const unlocked = !!prevDone;
+const done = !!(record&&record.completed);
+const stars = done?(record.stars||1):0;
+const diff = i===0?'Easy':i===1?'Medium':'Hard';
+const card = document.createElement('div');
+card.className = `stage-card ${unlocked?'':'locked'}`;
+card.innerHTML = `
+<div class="stage-icon">${done?'🌟':unlocked?'▶️':'🔒'}</div>
+<div>
+<div class="stage-name">Stage ${stageId}: ${diff}</div>
+<div class="stage-meta">5 questions</div>
+</div>
+<div class="stage-stars">${done?'⭐'.repeat(stars):''}</div>`;
+card.onclick = unlocked ? ()=>App.startStage(i,world) : ()=>App.showToast('Complete the previous stage first! 🔒');
+container.appendChild(card);
+}
+},
 
-  startStage(stageIdx, world) {
-    State.stageIndex = stageIdx;
-    State.questions  = QGen.generate(State.subject, world.id, stageIdx+1, State.ageGroup, 5);
-    State.qIndex     = 0;
-    State.correct    = 0;
-    State.answered   = false;
-    State._currentWorld = world;
-    document.getElementById('quiz-subject-badge').textContent = `${State.subject} · World ${world.id} · Stage ${stageIdx+1}`;
-    document.getElementById('quiz-q-total').textContent = State.questions.length;
-    App._updateScoreDisplays();
-    App.showScreen('screen-quiz');
-    App.renderQuestion();
-  },
+startStage(stageIdx, world) {
+State.stageIndex = stageIdx;
+State.questions = QGen.generate(State.subject, world.id, stageIdx+1, State.ageGroup, 5);
+State.qIndex = 0;
+State.correct = 0;
+State.answered = false;
+State._currentWorld = world;
+document.getElementById('quiz-subject-badge').textContent = `${State.subject} · World ${world.id} · Stage ${stageIdx+1}`;
+document.getElementById('quiz-q-total').textContent = State.questions.length;
+App._updateScoreDisplays();
+App.showScreen('screen-quiz');
+App.renderQuestion();
+},
 
-  renderQuestion() {
-    const q = State.questions[State.qIndex];
-    State.answered = false;
-    document.getElementById('quiz-q-num').textContent = `Q${State.qIndex+1}`;
-    document.getElementById('quiz-progress-bar').style.width = `${(State.qIndex/State.questions.length)*100}%`;
-    document.getElementById('quiz-question').textContent = q.text;
-    const answersEl = document.getElementById('quiz-answers');
-    answersEl.innerHTML = '';
-    q.answers.forEach(ans=>{
-      const btn = document.createElement('button');
-      btn.className  = 'answer-btn';
-      btn.textContent = ans.label;
-      btn.onclick    = ()=>App.selectAnswer(ans,q,btn);
-      answersEl.appendChild(btn);
-    });
-    document.getElementById('quiz-feedback').className = 'quiz-feedback hidden';
-    document.getElementById('ai-tutor-hint').classList.add('hidden');
-  },
+renderQuestion() {
+const q = State.questions[State.qIndex];
+State.answered = false;
+document.getElementById('quiz-q-num').textContent = `Q${State.qIndex+1}`;
+document.getElementById('quiz-progress-bar').style.width = `${(State.qIndex/State.questions.length)*100}%`;
+document.getElementById('quiz-question').textContent = q.text;
+const answersEl = document.getElementById('quiz-answers');
+answersEl.innerHTML = '';
+q.answers.forEach(ans=>{
+const btn = document.createElement('button');
+btn.className = 'answer-btn';
+btn.textContent = ans.label;
+btn.onclick = ()=>App.selectAnswer(ans,q,btn);
+answersEl.appendChild(btn);
+});
+document.getElementById('quiz-feedback').className = 'quiz-feedback hidden';
+document.getElementById('ai-tutor-hint').classList.add('hidden');
+},
 
-  selectAnswer(ans, q, btnEl) {
-    if(State.answered) return;
-    State.answered = true;
-    document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
-    if(ans.isCorrect){
-      btnEl.classList.add('correct');
-      State.correct++;
-      State.score += 10;
-      App._showFeedback(true, TUTOR.getMessage(State.ageGroup,'correct',''));
-      App._updateScoreDisplays();
-    } else {
-      btnEl.classList.add('wrong');
-      document.querySelectorAll('.answer-btn').forEach(b=>{ if(b.textContent===String(q.answers.find(a=>a.isCorrect)?.label)) b.classList.add('correct'); });
-      App._showFeedback(false, TUTOR.getMessage(State.ageGroup,'wrong',q.hint||''));
-      App._showTutorHint(q.hint);
-      App._updateScoreDisplays();
-    }
-    setTimeout(()=>App.nextQuestion(), 2000);
-  },
+selectAnswer(ans, q, btnEl) {
+if(State.answered) return;
+State.answered = true;
+document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+if(ans.isCorrect){
+btnEl.classList.add('correct');
+State.correct++;
+State.score += 10;
+App._showFeedback(true, TUTOR.getMessage(State.ageGroup,'correct',''));
+App._updateScoreDisplays();
+} else {
+btnEl.classList.add('wrong');
+document.querySelectorAll('.answer-btn').forEach(b=>{ if(b.textContent===String(q.answers.find(a=>a.isCorrect)?.label)) b.classList.add('correct'); });
+App._showFeedback(false, TUTOR.getMessage(State.ageGroup,'wrong',q.hint||''));
+App._showTutorHint(q.hint);
+App._updateScoreDisplays();
+}
+setTimeout(()=>App.nextQuestion(), 2000);
+},
 
-  _showFeedback(correct, msg) {
-    const fb = document.getElementById('quiz-feedback');
-    fb.textContent = msg;
-    fb.className   = `quiz-feedback ${correct?'correct-fb':'wrong-fb'}`;
-  },
+_showFeedback(correct, msg) {
+const fb = document.getElementById('quiz-feedback');
+fb.textContent = msg;
+fb.className = `quiz-feedback ${correct?'correct-fb':'wrong-fb'}`;
+},
 
-  _showTutorHint(hint) {
-    if(!hint) return;
-    document.getElementById('tutor-bubble-text').textContent = TUTOR.getMessage(State.ageGroup,'hint',hint);
-    document.getElementById('ai-tutor-hint').classList.remove('hidden');
-  },
+_showTutorHint(hint) {
+if(!hint) return;
+document.getElementById('tutor-bubble-text').textContent = TUTOR.getMessage(State.ageGroup,'hint',hint);
+document.getElementById('ai-tutor-hint').classList.remove('hidden');
+},
 
-  nextQuestion() {
-    State.qIndex++;
-    if(State.qIndex>=State.questions.length) App.finishStage();
-    else App.renderQuestion();
-  },
+nextQuestion() {
+State.qIndex++;
+if(State.qIndex>=State.questions.length) App.finishStage();
+else App.renderQuestion();
+},
 
-  async finishStage() {
-    const total    = State.questions.length;
-    const accuracy = State.correct/total;
-    const pct      = Math.round(accuracy*100);
-    const points   = State.correct*10;
-    const world    = State._currentWorld;
-    if(State.user){
-      await SB.saveScore({ student:State.user.user_metadata?.full_name||State.user.email, subject:State.subject, world:world.id, stage:State.stageIndex+1, score:points, total:total*10, accuracy });
-      await SB.saveProgress(State.subject, world.id, State.stageIndex+1, accuracy);
-      State.progress = await SB.loadProgress();
-    }
-    const passed = accuracy>=0.8;
-    document.getElementById('result-star').textContent    = pct>=90?'🌟':pct>=70?'⭐':'💪';
-    document.getElementById('result-title').textContent   = passed?'Stage Complete! 🎉':'Keep Practicing! 💪';
-    document.getElementById('result-score').textContent   = `${pct}%`;
-    document.getElementById('result-points').textContent  = `+${points} pts earned!`;
-    const msgs = {
-      100:'Perfect score!! You are INCREDIBLE! 🌟',
-      90:'Amazing!! Almost perfect! 🚀',
-      80:'Great job! You passed! Next stage unlocked 🔓',
-      60:'Good effort! Try again to unlock the next stage 💪',
-      0:'Keep going — every mistake is learning! You\'ve got this 💛'
-    };
-    const key = pct===100?100:pct>=90?90:pct>=80?80:pct>=60?60:0;
-    document.getElementById('result-msg').textContent = msgs[key];
-    const worlds = WORLDS[State.subject]||[];
-    const isLastStage = State.stageIndex>=STAGES_PER_WORLD-1;
-    const isLastWorld = State.worldIndex>=worlds.length-1;
-    const nextBtn = document.getElementById('result-next-btn');
-    if(isLastStage&&isLastWorld){ nextBtn.textContent='🏆 Subject Complete!'; nextBtn._action='done'; }
-    else if(isLastStage){ nextBtn.textContent='Next World 🗺️'; nextBtn._action='next-world'; }
-    else { nextBtn.textContent='Next Stage 🚀'; nextBtn._action='next-stage'; }
-    App.showScreen('screen-result');
-  },
+async finishStage() {
+const total = State.questions.length;
+const accuracy = State.correct/total;
+const pct = Math.round(accuracy*100);
+const points = State.correct*10;
+const world = State._currentWorld;
+if(State.user){
+await SB.saveScore({ student:State.user.user_metadata?.full_name||State.user.email, subject:State.subject, world:world.id, stage:State.stageIndex+1, score:points, total:total*10, accuracy });
+await SB.saveProgress(State.subject, world.id, State.stageIndex+1, accuracy);
+State.progress = await SB.loadProgress();
+}
+const passed = accuracy>=0.8;
+document.getElementById('result-star').textContent = pct>=90?'🌟':pct>=70?'⭐':'💪';
+document.getElementById('result-title').textContent = passed?'Stage Complete! 🎉':'Keep Practicing! 💪';
+document.getElementById('result-score').textContent = `${pct}%`;
+document.getElementById('result-points').textContent = `+${points} pts earned!`;
+const msgs = {
+100:'Perfect score!! You are INCREDIBLE! 🌟',
+90:'Amazing!! Almost perfect! 🚀',
+80:'Great job! You passed! Next stage unlocked 🔓',
+60:'Good effort! Try again to unlock the next stage 💪',
+0:'Keep going — every mistake is learning! You\'ve got this 💛'
+};
+const key = pct===100?100:pct>=90?90:pct>=80?80:pct>=60?60:0;
+document.getElementById('result-msg').textContent = msgs[key];
+const worlds = WORLDS[State.subject]||[];
+const isLastStage = State.stageIndex>=STAGES_PER_WORLD-1;
+const isLastWorld = State.worldIndex>=worlds.length-1;
+const nextBtn = document.getElementById('result-next-btn');
+if(isLastStage&&isLastWorld){ nextBtn.textContent='🏆 Subject Complete!'; nextBtn._action='done'; }
+else if(isLastStage){ nextBtn.textContent='Next World 🗺️'; nextBtn._action='next-world'; }
+else { nextBtn.textContent='Next Stage 🚀'; nextBtn._action='next-stage'; }
+App.showScreen('screen-result');
+},
 
-  resultNext() {
-    const action = document.getElementById('result-next-btn')._action;
-    const worlds = WORLDS[State.subject]||[];
-    if(action==='next-stage') App.startStage(State.stageIndex+1, State._currentWorld);
-    else if(action==='next-world') App.openWorld(State.worldIndex+1, worlds);
-    else { App.showToast('🏆 Subject complete! Amazing work!'); App.showScreen('screen-home'); }
-  },
+resultNext() {
+const action = document.getElementById('result-next-btn')._action;
+const worlds = WORLDS[State.subject]||[];
+if(action==='next-stage') App.startStage(State.stageIndex+1, State._currentWorld);
+else if(action==='next-world') App.openWorld(State.worldIndex+1, worlds);
+else { App.showToast('🏆 Subject complete! Amazing work!'); App.showScreen('screen-home'); }
+},
 
-  confirmQuit() {
-    const overlay = document.getElementById('modal-overlay');
-    overlay.classList.remove('hidden');
-    document.getElementById('modal-confirm').onclick = ()=>{ overlay.classList.add('hidden'); App.showScreen('screen-worlds'); };
-    document.getElementById('modal-cancel').onclick  = ()=>overlay.classList.add('hidden');
-  },
+confirmQuit() {
+const overlay = document.getElementById('modal-overlay');
+overlay.classList.remove('hidden');
+document.getElementById('modal-confirm').onclick = ()=>{ overlay.classList.add('hidden'); App.showScreen('screen-worlds'); };
+document.getElementById('modal-cancel').onclick = ()=>overlay.classList.add('hidden');
+},
 
-  switchTab(tab) {
-    const isLogin = tab==='login';
-    document.getElementById('tab-login').classList.toggle('active',isLogin);
-    document.getElementById('tab-signup').classList.toggle('active',!isLogin);
-    document.getElementById('auth-title').textContent = isLogin?'Welcome Back!':'Join the Adventure!';
-    document.getElementById('auth-name').classList.toggle('hidden',isLogin);
-    App._currentTab = tab;
-  },
-  _currentTab:'login',
+switchTab(tab) {
+const isLogin = tab==='login';
+document.getElementById('tab-login').classList.toggle('active',isLogin);
+document.getElementById('tab-signup').classList.toggle('active',!isLogin);
+document.getElementById('auth-title').textContent = isLogin?'Welcome Back!':'Join the Adventure!';
+document.getElementById('auth-name').classList.toggle('hidden',isLogin);
+App._currentTab = tab;
+},
+_currentTab:'login',
 
-  async handleAuth() {
-    const email    = document.getElementById('auth-email').value.trim();
-    const password = document.getElementById('auth-password').value;
-    const name     = document.getElementById('auth-name').value.trim();
-    const msgEl    = document.getElementById('auth-msg');
-    msgEl.className='auth-msg';
-    if(!email||!password){ msgEl.textContent='Please fill in email and password.'; msgEl.classList.add('error'); return; }
-    if(App._currentTab==='signup'){
-      if(!name){ msgEl.textContent='Please enter your name!'; msgEl.classList.add('error'); return; }
-      const { error } = await SB.signUp(email, password, name, State.ageGroup);
-      if(error){ msgEl.textContent=error.message; msgEl.classList.add('error'); }
-      else { msgEl.textContent='🎉 Account created! Check your email then log in.'; msgEl.classList.add('success'); }
-    } else {
-      const { data, error } = await SB.login(email, password);
-      if(error){ msgEl.textContent=error.message; msgEl.classList.add('error'); }
-      else {
-        State.user = data.user;
-        State.progress = await SB.loadProgress();
-        App._updateAuthUI();
-        App.showToast('Welcome back! 🌟');
-        App.showScreen('screen-home');
-      }
-    }
-  },
+async handleAuth() {
+const email = document.getElementById('auth-email').value.trim();
+const password = document.getElementById('auth-password').value;
+const name = document.getElementById('auth-name').value.trim();
+const msgEl = document.getElementById('auth-msg');
+msgEl.className='auth-msg';
+if(!email||!password){ msgEl.textContent='Please fill in email and password.'; msgEl.classList.add('error'); return; }
+if(App._currentTab==='signup'){
+if(!name){ msgEl.textContent='Please enter your name!'; msgEl.classList.add('error'); return; }
+const { error } = await SB.signUp(email, password, name, State.ageGroup);
+if(error){ msgEl.textContent=error.message; msgEl.classList.add('error'); }
+else { msgEl.textContent='🎉 Account created! Check your email then log in.'; msgEl.classList.add('success'); }
+} else {
+const { data, error } = await SB.login(email, password);
+if(error){ msgEl.textContent=error.message; msgEl.classList.add('error'); }
+else {
+State.user = data.user;
+State.progress = await SB.loadProgress();
+App._updateAuthUI();
+App.showToast('Welcome back! 🌟');
+App.showScreen('screen-home');
+}
+}
+},
 
-  async logout() {
-    await SB.logout();
-    State.user=null; State.score=0; State.progress=[];
-    App._updateAuthUI();
-    App.showToast('See you soon! 👋');
-    App.showScreen('screen-home');
-  },
+async logout() {
+await SB.logout();
+State.user=null; State.score=0; State.progress=[];
+App._updateAuthUI();
+App.showToast('See you soon! 👋');
+App.showScreen('screen-home');
+},
 
-  async renderDashboard() {
-    if(!State.user){ App.showToast('Please log in first! 🔐'); App.showScreen('screen-auth'); return; }
-    const name = State.user.user_metadata?.full_name||State.user.email.split('@')[0];
-    document.getElementById('dash-name').textContent = name;
-    const ageLbl = {'0-3':'Samara Baby · Ages 0–3','4-6':'Junior · Ages 4–6','7-10':'Explorer · Ages 7–10','11-14':'Pro · Ages 11–14','15-17':'Senior · Ages 15–17'};
-    document.getElementById('dash-age-badge').textContent = ageLbl[State.ageGroup]||'Explorer';
-    State.progress = await SB.loadProgress();
-    const recent   = await SB.loadRecentScores(8);
-    const totalPts = recent.reduce((s,r)=>s+r.score,0);
-    const stagesDone = State.progress.filter(p=>p.completed).length;
-    const worldsDone = new Set(State.progress.filter(p=>p.completed).map(p=>`${p.subject}-${p.world}`)).size;
-    document.getElementById('dash-total-score').textContent = totalPts;
-    document.getElementById('dash-worlds-done').textContent = worldsDone;
-    document.getElementById('dash-stages-done').textContent = stagesDone;
-    const subjects = SUBJECT_MAP[State.ageGroup]||SUBJECT_MAP['7-10'];
-    const list = document.getElementById('dash-progress-list');
-    list.innerHTML = subjects.map(s=>{
-      const worlds = WORLDS[s.id]||[];
-      const total  = worlds.length*STAGES_PER_WORLD;
-      const done   = State.progress.filter(p=>p.subject===s.id&&p.completed).length;
-      const pct    = total>0?Math.round((done/total)*100):0;
-      return `<div class="dash-subject-row">
-        <div class="dash-subject-icon">${s.icon}</div>
-        <div class="dash-subject-info">
-          <div class="dash-subject-name">${s.name}</div>
-          <div class="dash-subject-progress">${done}/${total} stages done</div>
-        </div>
-        <div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%"></div></div>
-      </div>`;
-    }).join('');
-    const act = document.getElementById('dash-activity');
-    act.innerHTML = recent.length===0
-      ? '<p class="empty-msg">No activity yet. Start learning! 🚀</p>'
-      : recent.map(r=>`<div class="activity-row"><span>${r.subject} · W${r.world} S${r.stage}</span><span>${Math.round((r.accuracy||0)*100)}%</span><span class="activity-pts">+${r.score} pts</span></div>`).join('');
-  },
+async renderDashboard() {
+if(!State.user){ App.showToast('Please log in first! 🔐'); App.showScreen('screen-auth'); return; }
+const name = State.user.user_metadata?.full_name||State.user.email.split('@')[0];
+document.getElementById('dash-name').textContent = name;
+const ageLbl = {'0-3':'Samara Baby · Ages 0–3','4-6':'Junior · Ages 4–6','7-10':'Explorer · Ages 7–10','11-14':'Pro · Ages 11–14','15-17':'Senior · Ages 15–17'};
+document.getElementById('dash-age-badge').textContent = ageLbl[State.ageGroup]||'Explorer';
+State.progress = await SB.loadProgress();
+const recent = await SB.loadRecentScores(8);
+const totalPts = recent.reduce((s,r)=>s+r.score,0);
+const stagesDone = State.progress.filter(p=>p.completed).length;
+const worldsDone = new Set(State.progress.filter(p=>p.completed).map(p=>`${p.subject}-${p.world}`)).size;
+document.getElementById('dash-total-score').textContent = totalPts;
+document.getElementById('dash-worlds-done').textContent = worldsDone;
+document.getElementById('dash-stages-done').textContent = stagesDone;
+const subjects = SUBJECT_MAP[State.ageGroup]||SUBJECT_MAP['7-10'];
+const list = document.getElementById('dash-progress-list');
+list.innerHTML = subjects.map(s=>{
+const worlds = WORLDS[s.id]||[];
+const total = worlds.length*STAGES_PER_WORLD;
+const done = State.progress.filter(p=>p.subject===s.id&&p.completed).length;
+const pct = total>0?Math.round((done/total)*100):0;
+return `<div class="dash-subject-row">
+<div class="dash-subject-icon">${s.icon}</div>
+<div class="dash-subject-info">
+<div class="dash-subject-name">${s.name}</div>
+<div class="dash-subject-progress">${done}/${total} stages done</div>
+</div>
+<div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%"></div></div>
+</div>`;
+}).join('');
+const act = document.getElementById('dash-activity');
+act.innerHTML = recent.length===0
+? '<p class="empty-msg">No activity yet. Start learning! 🚀</p>'
+: recent.map(r=>`<div class="activity-row"><span>${r.subject} · W${r.world} S${r.stage}</span><span>${Math.round((r.accuracy||0)*100)}%</span><span class="activity-pts">+${r.score} pts</span></div>`).join('');
+},
 
-  _worldUnlocked(subjectId, worldIdx, worlds) {
-    if(worldIdx===0) return true;
-    const prev = worlds[worldIdx-1];
-    for(let s=1;s<=STAGES_PER_WORLD;s++){
-      const rec = State.progress.find(p=>p.subject===subjectId&&p.world===prev.id&&p.stage===s);
-      if(!rec||!rec.completed||rec.accuracy<0.8) return false;
-    }
-    return true;
-  },
+_worldUnlocked(subjectId, worldIdx, worlds) {
+if(worldIdx===0) return true;
+const prev = worlds[worldIdx-1];
+for(let s=1;s<=STAGES_PER_WORLD;s++){
+const rec = State.progress.find(p=>p.subject===subjectId&&p.world===prev.id&&p.stage===s);
+if(!rec||!rec.completed||rec.accuracy<0.8) return false;
+}
+return true;
+},
 
-  _stagesDone(subjectId, worldId) {
-    let count=0;
-    for(let s=1;s<=STAGES_PER_WORLD;s++){
-      if(State.progress.find(p=>p.subject===subjectId&&p.world===worldId&&p.stage===s&&p.completed)) count++;
-    }
-    return count;
-  },
+_stagesDone(subjectId, worldId) {
+let count=0;
+for(let s=1;s<=STAGES_PER_WORLD;s++){
+if(State.progress.find(p=>p.subject===subjectId&&p.world===worldId&&p.stage===s&&p.completed)) count++;
+}
+return count;
+},
 
-  _updateScoreDisplays() {
-    ['worlds-score','stages-score','quiz-score'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=State.score; });
-  },
+_updateScoreDisplays() {
+['worlds-score','stages-score','quiz-score'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=State.score; });
+},
 
-  showToast(msg, dur=2800) {
-    const t = document.getElementById('toast');
-    t.textContent=msg; t.classList.remove('hidden'); t.classList.add('show');
-    clearTimeout(App._tt);
-    App._tt = setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.classList.add('hidden'),300); }, dur);
-  }
+showToast(msg, dur=2800) {
+const t = document.getElementById('toast');
+t.textContent=msg; t.classList.remove('hidden'); t.classList.add('show');
+clearTimeout(App._tt);
+App._tt = setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.classList.add('hidden'),300); }, dur);
+}
 };
 
-document.addEventListener('DOMContentLoaded', ()=>{ window.App=App; App.init(); });
+// Initialize the app
+try {
+window.App = App;
+document.addEventListener('DOMContentLoaded', () => {
+console.log('DOM loaded — starting Samara AI...');
+try {
+App.init();
+console.log('App initialized successfully!');
+} catch(e) {
+console.error('App init error:', e);
+}
+});
+console.log('App registered on window successfully');
+} catch(e) {
+console.error('Critical error:', e);
+}
 </script>
+
 </body>
 </html>
