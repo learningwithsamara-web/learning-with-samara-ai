@@ -647,15 +647,30 @@ opacity:0; transition:opacity 0.3s, transform 0.3s; pointer-events:none;
 <div class="quiz-answers" id="quiz-answers"></div>
 <div class="quiz-feedback hidden" id="quiz-feedback"></div>
 </div>
-<div class="ai-tutor-hint hidden" id="ai-tutor-hint">
-<div class="tutor-avatar">🤖</div>
-<div class="tutor-bubble">
-<div class="tutor-name">Samara AI ✨</div>
-<div id="tutor-bubble-text">Let me help you with this!</div>
-</div>
-</div>
-</div>
+<div class="samara-tutor-wrap hidden" id="samara-tutor-wrap">
+  <div class="samara-tutor-card">
+    <div class="samara-tutor-header">
+      <div class="samara-avatar" id="samara-avatar">👧</div>
+      <div class="samara-name-wrap">
+        <div class="samara-name">Samara AI ✨</div>
+        <div class="samara-status" id="samara-status">thinking...</div>
+      </div>
+      <button class="samara-close-btn" onclick="AITutor.hide()">✕</button>
+    </div>
 
+    <!-- Typing animation -->
+    <div class="samara-typing" id="samara-typing">
+      <span></span><span></span><span></span>
+    </div>
+
+    <!-- Message appears after typing -->
+    <div class="samara-message" id="samara-message">
+      <div class="samara-encourage" id="samara-encourage"></div>
+      <div id="samara-explanation"></div>
+      <div class="samara-hint-box" id="samara-hint-box"></div>
+    </div>
+  </div>
+</div>
 <!-- ===== RESULT ===== -->
 
 <div id="screen-result" class="screen">
@@ -1483,7 +1498,434 @@ console.log('App registered on window successfully');
 } catch(e) {
 console.error('Critical error:', e);
 }
-</script>
+// ============================================================
+// AI TUTOR MODULE
+// ============================================================
+const AITutor = {
+
+  consecutiveWrong: 0,
+  isVisible: false,
+
+  // Called when student answers wrong
+  onWrongAnswer(question, studentAnswer, ageGroup) {
+    this.consecutiveWrong++;
+    console.log(`Wrong answers in a row: ${this.consecutiveWrong}`);
+    if (this.consecutiveWrong >= 2) {
+      this.show(question, studentAnswer, ageGroup);
+    }
+  },
+
+  // Called when student answers correctly
+  onCorrectAnswer() {
+    this.consecutiveWrong = 0;
+    if (this.isVisible) this.hide();
+  },
+
+  // Show Samara with typing animation then message
+  show(question, studentAnswer, ageGroup) {
+    this.isVisible = true;
+    const wrap = document.getElementById('samara-tutor-wrap');
+    const typing = document.getElementById('samara-typing');
+    const message = document.getElementById('samara-message');
+    const status = document.getElementById('samara-status');
+
+    // Show the card
+    wrap.classList.remove('hidden');
+    typing.style.display = 'flex';
+    message.classList.remove('visible');
+    status.textContent = 'thinking...';
+
+    // Generate the response
+    const response = this.generateResponse(question, studentAnswer, ageGroup);
+
+    // Show typing for 2 seconds then reveal message
+    setTimeout(() => {
+      typing.style.display = 'none';
+      status.textContent = 'here to help! 💛';
+
+      // Fill in the message
+      document.getElementById('samara-encourage').textContent = response.encouragement;
+      document.getElementById('samara-explanation').innerHTML = response.steps
+        .map((step, i) => `
+          <div class="samara-message-step">
+            <div class="samara-step-num">${i + 1}</div>
+            <div>${step}</div>
+          </div>`).join('');
+      document.getElementById('samara-hint-box').textContent = '💡 ' + response.hint;
+
+      message.classList.add('visible');
+    }, 2000);
+  },
+
+  hide() {
+    this.isVisible = false;
+    document.getElementById('samara-tutor-wrap').classList.add('hidden');
+  },
+
+  reset() {
+    this.consecutiveWrong = 0;
+    this.hide();
+  },
+
+  // ── RESPONSE GENERATOR ──────────────────────────────────────
+  // This function will later connect to the Claude API
+  // For now it uses smart pre-written responses
+  // ──────────────────────────────────────────────────────────────
+  generateResponse(question, studentAnswer, ageGroup) {
+
+    // Detect question type
+    const q = question.toLowerCase();
+    let response = null;
+
+    // MATH — Addition
+    if (q.includes('+')) {
+      const nums = question.match(/\d+/g);
+      if (nums && nums.length >= 2) {
+        const a = parseInt(nums[0]), b = parseInt(nums[1]);
+        const answer = a + b;
+        response = {
+          encouragement: this._encourage(ageGroup),
+          steps: [
+            `We are adding ${a} and ${b} together.`,
+            `Start at ${a} and count up ${b} more times.`,
+            `${a}... ${Array.from({length:b},(_,i)=>a+i+1).join(', ')}`,
+            `So ${a} + ${b} = ${answer} 🎉`
+          ],
+          hint: `Try using your fingers! Hold up ${a} fingers, then count ${b} more.`
+        };
+      }
+    }
+
+    // MATH — Subtraction
+    else if (q.includes('−') || q.includes('-')) {
+      const nums = question.match(/\d+/g);
+      if (nums && nums.length >= 2) {
+        const a = parseInt(nums[0]), b = parseInt(nums[1]);
+        const answer = a - b;
+        response = {
+          encouragement: this._encourage(ageGroup),
+          steps: [
+            `We are taking ${b} away from ${a}.`,
+            `Start at ${a} and count backwards ${b} times.`,
+            `${a}... ${Array.from({length:b},(_,i)=>a-i-1).join(', ')}`,
+            `So ${a} − ${b} = ${answer} ✅`
+          ],
+          hint: `Imagine you have ${a} cookies and give away ${b}. How many are left?`
+        };
+      }
+    }
+
+    // MATH — Multiplication
+    else if (q.includes('×') || q.includes('*')) {
+      const nums = question.match(/\d+/g);
+      if (nums && nums.length >= 2) {
+        const a = parseInt(nums[0]), b = parseInt(nums[1]);
+        const answer = a * b;
+        response = {
+          encouragement: this._encourage(ageGroup),
+          steps: [
+            `Multiplication means adding the same number ${b} times.`,
+            `${a} × ${b} means ${a} groups of ${b}.`,
+            `${Array.from({length:a},()=>b).join(' + ')} = ${answer}`,
+            `So ${a} × ${b} = ${answer} 🌟`
+          ],
+          hint: `Think of ${a} bags each holding ${b} sweets. Count all the sweets!`
+        };
+      }
+    }
+
+    // MATH — Division
+    else if (q.includes('÷')) {
+      const nums = question.match(/\d+/g);
+      if (nums && nums.length >= 2) {
+        const a = parseInt(nums[0]), b = parseInt(nums[1]);
+        const answer = a / b;
+        response = {
+          encouragement: this._encourage(ageGroup),
+          steps: [
+            `Division means sharing equally.`,
+            `We are sharing ${a} into groups of ${b}.`,
+            `Count how many groups of ${b} fit into ${a}.`,
+            `${a} ÷ ${b} = ${answer} ✅`
+          ],
+          hint: `Imagine sharing ${a} sweets equally between ${b} friends.`
+        };
+      }
+    }
+
+    // SCIENCE question
+    else if (q.includes('plant') || q.includes('animal') || q.includes('earth') || q.includes('space')) {
+      response = {
+        encouragement: this._encourage(ageGroup),
+        steps: [
+          `Let us think about this science question carefully.`,
+          `Read each answer choice slowly.`,
+          `Think about what you have learned in class.`,
+          `Eliminate answers you know are wrong first.`
+        ],
+        hint: `Science questions often give clues in the question itself. Re-read it!`
+      };
+    }
+
+    // READING question
+    else if (q.includes('word') || q.includes('sound') || q.includes('sentence') || q.includes('vowel')) {
+      response = {
+        encouragement: this._encourage(ageGroup),
+        steps: [
+          `Let us sound this out together.`,
+          `Look at each answer choice carefully.`,
+          `Say each word out loud in your head.`,
+          `Which one sounds right?`
+        ],
+        hint: `Try saying each answer out loud. Your ears will help you find the right one!`
+      };
+    }
+
+    // DEFAULT response for any other question
+    if (!response) {
+      response = {
+        encouragement: this._encourage(ageGroup),
+        steps: [
+          `Let us look at this question together.`,
+          `Read the question again slowly.`,
+          `Think about what you know about this topic.`,
+          `Eliminate the answers that cannot be right.`
+        ],
+        hint: `Take your time! There is no rush. You can do this! 💪`
+      };
+    }
+
+    return response;
+  },
+
+  // Age-appropriate encouragement messages
+  _encourage(ageGroup) {
+    const msgs = {
+      '0-3':  ['Oopsie! Let us try together! 🌈', 'You can do it! 🌟', 'Let me help you! 💛'],
+      '4-6':  ['That was tricky! Let me explain! 🌟', 'Good try! Let us figure it out! 🤔', 'Almost there! Let me show you! 💪'],
+      '7-10': ['Great attempt! Let me break it down! 🚀', 'You are learning! Here is how to think about it! 🧠', 'Nice try! Let us work through it together! 🔍'],
+      '11-14':['Good effort! Let me explain the concept! 💡', 'Interesting attempt! Here is the reasoning! 🎯', 'Let us analyse this together! 🔬'],
+      '15-17':['Let us work through the logic! ⚡', 'Here is a deeper look at this concept! 🎓', 'Let me break down the key principle! 💎']
+    };
+    const group = msgs[ageGroup] || msgs['7-10'];
+    return group[Math.floor(Math.random() * group.length)];
+  },
+
+  // ── FUTURE AI API HOOK ──────────────────────────────────────
+  // When you get your Anthropic API key, replace generateResponse()
+  // with this function:
+  //
+  // async generateAIResponse(question, studentAnswer, ageGroup) {
+  //   const response = await fetch('https://api.anthropic.com/v1/messages', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'x-api-key': 'YOUR_ANTHROPIC_KEY',
+  //       'anthropic-version': '2023-06-01'
+  //     },
+  //     body: JSON.stringify({
+  //       model: 'claude-sonnet-4-20250514',
+  //       max_tokens: 300,
+  //       messages: [{
+  //         role: 'user',
+  //         content: `You are Samara AI, a friendly tutor for kids.
+  //           The student is age group: ${ageGroup}
+  //           Question: ${question}
+  //           Student answered: ${studentAnswer}
+  //           Explain the correct answer in a fun, simple, encouraging way.
+  //           Keep it short and kid-friendly.`
+  //       }]
+  //     })
+  //   });
+  //   const data = await response.json();
+  //   return data.content[0].text;
+  // }
+  // ────────────────────────────────────────────────────────────
+};
+
+
+// ============================================================
+// ADAPTIVE LEARNING MODULE
+// ============================================================
+const AdaptiveLearning = {
+
+  // Difficulty levels
+  LEVELS: { 1: 'Basic', 2: 'Intermediate', 3: 'Advanced' },
+
+  // Get current difficulty for a subject
+  getDifficulty(subjectId) {
+    const key = `difficulty_${subjectId}`;
+    return parseInt(localStorage.getItem(key)) || 1;
+  },
+
+  // Update difficulty based on accuracy
+  updateDifficulty(subjectId, accuracy) {
+    let current = this.getDifficulty(subjectId);
+    let newLevel = current;
+    let message = '';
+
+    if (accuracy > 0.8 && current < 3) {
+      newLevel = current + 1;
+      message = `Great work! Moving to ${this.LEVELS[newLevel]} level! 🚀`;
+    } else if (accuracy < 0.5 && current > 1) {
+      newLevel = current - 1;
+      message = `Let us practice more at ${this.LEVELS[newLevel]} level! 💪`;
+    } else if (accuracy < 0.5) {
+      message = `Keep practicing! Samara is here to help! 💛`;
+    } else {
+      message = `Good work! Staying at ${this.LEVELS[current]} level! ⭐`;
+    }
+
+    localStorage.setItem(`difficulty_${subjectId}`, newLevel);
+    console.log(`Adaptive Learning: ${subjectId} → Level ${newLevel} (accuracy: ${Math.round(accuracy*100)}%)`);
+    return { level: newLevel, levelName: this.LEVELS[newLevel], message, changed: newLevel !== current };
+  },
+
+  // Get difficulty badge HTML
+  getBadgeHTML(subjectId) {
+    const level = this.getDifficulty(subjectId);
+    const names  = { 1: 'Basic', 2: 'Intermediate', 3: 'Advanced' };
+    const classes = { 1: 'basic', 2: 'intermediate', 3: 'advanced' };
+    const icons   = { 1: '🌱', 2: '⭐', 3: '🚀' };
+    return `<span class="difficulty-badge ${classes[level]}">${icons[level]} ${names[level]}</span>`;
+  },
+
+  // Save performance to Supabase
+  async savePerformance(userId, subjectId, correct, total, accuracy) {
+    try {
+      const difficulty = this.getDifficulty(subjectId);
+      await window.DB.from('progress').upsert({
+        user_id: userId,
+        subject: subjectId,
+        difficulty,
+        correct_answers: correct,
+        total_questions: total,
+        accuracy,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,subject' });
+      console.log(`Performance saved: ${subjectId} ${correct}/${total}`);
+    } catch(e) {
+      console.error('Save performance error:', e);
+    }
+  }
+};
+
+
+// ============================================================
+// FUTURE AI MODULES — Placeholders ready for API connection
+// ============================================================
+const AIModules = {
+
+  // 1. AI Homework Helper
+  // Connect to Claude API to help with homework questions
+  async homeworkHelper(question, subject, ageGroup) {
+    console.log('AI Homework Helper — API not connected yet');
+    return `I would love to help with that! Once the AI is connected I can explain any homework question. For now ask your teacher! 📚`;
+  },
+
+  // 2. AI Explanation Engine
+  // Deep explanations of any concept
+  async explainConcept(concept, ageGroup) {
+    console.log('AI Explanation Engine — API not connected yet');
+    return `Great question about ${concept}! Full AI explanations coming soon! 🌟`;
+  },
+
+  // 3. AI Story Generator
+  // Generate educational stories based on topic
+  async generateStory(topic, ageGroup) {
+    console.log('AI Story Generator — API not connected yet');
+    return `Once upon a time there was a curious student who wanted to learn about ${topic}... Full stories coming soon! 📖`;
+  },
+
+  // 4. AI Practice Generator
+  // Generate custom practice questions
+  async generatePractice(subject, difficulty, count) {
+    console.log('AI Practice Generator — API not connected yet');
+    return `Custom ${subject} practice questions at ${difficulty} level coming soon! 🎯`;
+  },
+
+  // 5. AI Progress Analyser
+  // Analyse student performance and suggest improvements
+  async analyseProgress(progressData) {
+    console.log('AI Progress Analyser — API not connected yet');
+    return `Full AI progress analysis coming soon! Keep learning! 🚀`;
+  }
+};
+
+
+// ============================================================
+// PATCH THE EXISTING APP — Wire AI Tutor into quiz
+// Add this after the existing App object
+// This patches selectAnswer to use the AI tutor
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Wait for App to initialize then patch it
+  setTimeout(() => {
+    if (typeof App === 'undefined') {
+      console.error('App not found — make sure this script loads after the main script');
+      return;
+    }
+
+    // Store reference to original selectAnswer
+    const originalSelectAnswer = App.selectAnswer.bind(App);
+
+    // Patch selectAnswer to include AI tutor
+    App.selectAnswer = function(ans, q, btnEl) {
+
+      // Track consecutive wrong answers for AI tutor
+      if (!ans.isCorrect) {
+        AITutor.onWrongAnswer(q.text, ans.label, State.ageGroup);
+      } else {
+        AITutor.onCorrectAnswer();
+      }
+
+      // Call original function
+      originalSelectAnswer(ans, q, btnEl);
+    };
+
+    // Patch renderQuestion to reset tutor on new question
+    const originalRenderQuestion = App.renderQuestion.bind(App);
+    App.renderQuestion = function() {
+      // Don't hide tutor between questions — only reset counter on correct
+      originalRenderQuestion();
+    };
+
+    // Patch finishStage to use adaptive learning
+    const originalFinishStage = App.finishStage.bind(App);
+    App.finishStage = async function() {
+      const accuracy = State.correct / State.questions.length;
+
+      // Update adaptive difficulty
+      const adaptation = AdaptiveLearning.updateDifficulty(State.subject, accuracy);
+      if (adaptation.changed) {
+        setTimeout(() => App.showToast(adaptation.message, 3500), 1000);
+      }
+
+      // Save performance
+      if (State.user) {
+        await AdaptiveLearning.savePerformance(
+          State.user.id,
+          State.subject,
+          State.correct,
+          State.questions.length,
+          accuracy
+        );
+      }
+
+      // Reset AI tutor
+      AITutor.reset();
+
+      // Call original finish
+      await originalFinishStage();
+    };
+
+    console.log('AI Tutor and Adaptive Learning patched successfully! 🚀');
+
+  }, 500);
+
+});
+  </script>
 
 </body>
 </html>
