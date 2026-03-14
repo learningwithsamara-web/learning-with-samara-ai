@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -15,7 +14,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .screen{display:none;min-height:100vh;padding:0 0 80px;position:relative;z-index:1;}
 .screen.active{display:block;}
 .hidden{display:none!important;}
-.home-header{display:flex;justify-content:space-between;align-items:center;padding:24px 32px;position:relative;z-index:2;}
+.home-header{display:flex;justify-content:space-between;align-items:center;padding:24px 32px;position:relative;z-index:2;flex-wrap:wrap;gap:12px;}
 .logo-wrap{display:flex;align-items:center;gap:12px;}
 .logo-star{font-size:2.2rem;animation:spin-star 6s linear infinite;}
 @keyframes spin-star{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
@@ -129,13 +128,13 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .ai-tutor-float{position:fixed;bottom:90px;right:20px;z-index:8000;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
 .ai-avatar-btn{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#7928CA,#FF0080);border:3px solid #fff;cursor:pointer;font-size:1.8rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(121,40,202,0.5);animation:pulse-av 2s ease-in-out infinite;}
 @keyframes pulse-av{0%,100%{box-shadow:0 6px 20px rgba(121,40,202,0.5)}50%{box-shadow:0 6px 30px rgba(255,0,128,0.7)}}
-.ai-chat-window{background:rgba(20,20,50,0.97);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,0.15);border-radius:20px;width:300px;max-height:420px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-pop);animation:slide-up 0.3s ease;}
+.ai-chat-window{background:rgba(20,20,50,0.97);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,0.15);border-radius:20px;width:320px;max-height:440px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-pop);animation:slide-up 0.3s ease;}
 .ai-chat-header{padding:14px 16px;background:linear-gradient(135deg,#7928CA,#FF0080);border-radius:20px 20px 0 0;display:flex;align-items:center;gap:10px;}
-.ai-chat-avatar{font-size:1.5rem;}
+.ai-chat-avatar{font-size:1.5rem;width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;}
 .ai-chat-name{font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;}
 .ai-chat-status{font-size:0.72rem;color:rgba(255,255,255,0.8);margin-top:2px;}
 .ai-chat-close{margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:1rem;}
-.ai-chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-height:280px;}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-height:300px;}
 .ai-msg{background:rgba(255,255,255,0.1);border-radius:14px 14px 14px 4px;padding:10px 14px;color:rgba(255,255,255,0.9);font-size:0.88rem;font-weight:600;line-height:1.5;border:1px solid rgba(255,255,255,0.1);}
 .ai-msg.user-msg{background:rgba(121,40,202,0.4);border-radius:14px 14px 4px 14px;text-align:right;}
 .ai-typing{display:flex;gap:4px;align-items:center;padding:8px 14px;}
@@ -146,9 +145,9 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .ai-chat-input-row{padding:10px;display:flex;gap:8px;border-top:1px solid rgba(255,255,255,0.1);}
 .ai-chat-input{flex:1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:8px 14px;color:#fff;font-family:'Nunito',sans-serif;font-size:0.85rem;outline:none;}
 .ai-chat-input::placeholder{color:rgba(255,255,255,0.4);}
-.ai-send-btn{background:linear-gradient(135deg,#7928CA,#FF0080);border:none;border-radius:50%;width:34px;height:34px;color:#fff;cursor:pointer;font-size:1rem;}
+.ai-send-btn{background:linear-gradient(135deg,#7928CA,#FF0080);border:none;border-radius:50%;width:34px;height:34px;color:#fff;cursor:pointer;font-size:1rem;flex-shrink:0;}
 .ai-speech-bubble{max-width:640px;margin:16px auto 0;padding:0 24px;display:flex;align-items:flex-start;gap:12px;animation:slide-up 0.4s ease;}
-.bubble-avatar{font-size:2rem;flex-shrink:0;background:linear-gradient(135deg,#7928CA,#FF0080);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.3);}
+.bubble-avatar{font-size:2rem;flex-shrink:0;background:linear-gradient(135deg,#7928CA,#FF0080);width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.3);overflow:hidden;}
 .bubble-content{background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.2);border-radius:16px 16px 16px 4px;padding:12px 16px;color:rgba(255,255,255,0.9);font-size:0.92rem;font-weight:600;flex:1;line-height:1.6;}
 .bubble-name{font-size:0.72rem;color:var(--sun);font-weight:800;margin-bottom:4px;}
 /* RESULT */
@@ -228,6 +227,64 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .modal-btns{display:flex;gap:12px;justify-content:center;}
 @keyframes pop-in{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes slide-up{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* SOUND TOGGLE */
+.sound-toggle{position:fixed;top:16px;right:16px;z-index:8500;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);border-radius:50px;padding:7px 14px;color:#fff;font-weight:800;font-size:0.8rem;cursor:pointer;backdrop-filter:blur(8px);}
+/* VOICE INPUT */
+.voice-input-btn{background:linear-gradient(135deg,#7928CA,#FF0080);border:none;border-radius:50%;width:34px;height:34px;color:#fff;font-size:1rem;cursor:pointer;flex-shrink:0;}
+.voice-input-btn.listening{animation:pulse-voice 1s ease-in-out infinite;}
+@keyframes pulse-voice{0%,100%{box-shadow:0 0 0 rgba(255,0,128,0.4)}50%{box-shadow:0 0 14px rgba(255,0,128,0.8);transform:scale(1.1)}}
+/* BABY MODE */
+.baby-screen{min-height:calc(100vh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1;}
+.baby-title{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;text-align:center;margin-bottom:20px;text-shadow:0 3px 12px rgba(0,0,0,0.3);}
+.baby-category-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:500px;width:100%;margin-bottom:24px;}
+.baby-category-btn{background:rgba(255,255,255,0.97);border-radius:24px;padding:28px 16px;text-align:center;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(0,0,0,0.15);border:none;position:relative;overflow:hidden;}
+.baby-category-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;border-radius:24px 24px 0 0;}
+.baby-category-btn:nth-child(1)::before{background:linear-gradient(90deg,#FF9B3F,#FFD93D);}
+.baby-category-btn:nth-child(2)::before{background:linear-gradient(90deg,#FF6B6B,#C77DFF);}
+.baby-category-btn:nth-child(3)::before{background:linear-gradient(90deg,#6BCB77,#7EC8E3);}
+.baby-category-btn:nth-child(4)::before{background:linear-gradient(90deg,#7EC8E3,#C77DFF);}
+.baby-category-btn:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 14px 40px rgba(0,0,0,0.2);}
+.baby-category-icon{font-size:3.5rem;margin-bottom:10px;display:block;}
+.baby-category-name{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#1A1A2E;}
+.baby-activity-wrap{max-width:600px;width:100%;margin:0 auto;text-align:center;padding:20px;}
+.baby-question-text{font-family:'Fredoka One',cursive;font-size:2.2rem;color:#fff;margin-bottom:24px;text-shadow:0 3px 12px rgba(0,0,0,0.3);animation:bounce-text 0.5s ease;}
+@keyframes bounce-text{0%{transform:scale(0.8);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.baby-items-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px;}
+.baby-item-btn{background:rgba(255,255,255,0.97);border-radius:24px;padding:20px 16px;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;box-shadow:0 8px 24px rgba(0,0,0,0.12);border:4px solid transparent;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.baby-item-btn:hover{transform:scale(1.05);}
+.baby-item-btn.correct-baby{border-color:#6BCB77;background:linear-gradient(135deg,#6BCB77,#3DAA45);animation:baby-pop 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.baby-item-btn.wrong-baby{border-color:#FF6B6B;animation:baby-shake 0.4s ease;}
+@keyframes baby-pop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1.05)}}
+@keyframes baby-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.baby-item-emoji{font-size:4rem;line-height:1;}
+.baby-item-word{font-family:'Fredoka One',cursive;font-size:1.4rem;color:#1A1A2E;}
+.baby-item-btn.correct-baby .baby-item-word{color:#fff;}
+.baby-celebrate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);animation:fade-in 0.3s ease;}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+.baby-celebrate-inner{background:linear-gradient(135deg,#FFD93D,#FF9B3F);border-radius:32px;padding:40px;text-align:center;animation:pop-in 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.baby-celebrate-emoji{font-size:5rem;display:block;margin-bottom:10px;}
+.baby-celebrate-text{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;text-shadow:0 3px 10px rgba(0,0,0,0.2);}
+/* PEP */
+.pep-header{background:linear-gradient(135deg,#1a1a3e,#2d1b69);padding:24px;text-align:center;border-bottom:2px solid rgba(199,125,255,0.3);position:relative;}
+.pep-badge{display:inline-block;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:4px 16px;border-radius:50px;margin-bottom:10px;}
+.pep-title{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;text-shadow:0 3px 12px rgba(0,0,0,0.3);}
+.pep-subtitle{color:rgba(255,255,255,0.7);font-size:0.95rem;margin-top:6px;}
+.pep-subjects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;max-width:900px;margin:24px auto;padding:0 24px;}
+.pep-subject-card{background:rgba(255,255,255,0.97);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 6px 24px rgba(0,0,0,0.12);position:relative;overflow:hidden;}
+.pep-subject-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;border-radius:20px 20px 0 0;}
+.pep-subject-card[data-pep="math"]::before{background:linear-gradient(90deg,#FFD93D,#FF9B3F);}
+.pep-subject-card[data-pep="language"]::before{background:linear-gradient(90deg,#7EC8E3,#C77DFF);}
+.pep-subject-card[data-pep="science"]::before{background:linear-gradient(90deg,#6BCB77,#7EC8E3);}
+.pep-subject-card[data-pep="social"]::before{background:linear-gradient(90deg,#FF6B6B,#C77DFF);}
+.pep-subject-card[data-pep="general"]::before{background:linear-gradient(90deg,#FF9B3F,#FFD93D);}
+.pep-subject-card[data-pep="practice"]::before{background:linear-gradient(90deg,#C77DFF,#7928CA);}
+.pep-subject-card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(0,0,0,0.18);}
+.pep-subject-icon{font-size:2.5rem;margin-bottom:8px;}
+.pep-subject-name{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#1A1A2E;}
+.pep-subject-count{font-size:0.78rem;color:#7A7A9D;margin-top:4px;}
+.pep-info-box{max-width:860px;margin:0 auto 20px;padding:16px 20px;background:rgba(255,255,255,0.08);border-radius:16px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:14px;backdrop-filter:blur(8px);}
+.pep-info-icon{font-size:2rem;flex-shrink:0;}
+.pep-info-text{color:rgba(255,255,255,0.85);font-size:0.9rem;font-weight:600;line-height:1.5;}
 @media(max-width:600px){
 .home-header{flex-direction:column;gap:14px;align-items:flex-start;}
 .title{font-size:1.5rem;}
@@ -236,409 +293,121 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .answer-btn{font-size:1.1rem;padding:14px 8px;}
 .age-grid{grid-template-columns:repeat(3,1fr);}
 .parent-stats{grid-template-columns:repeat(2,1fr);}
+.ai-chat-window{width:calc(100vw - 40px);}
 }
-<style id="upgrade-3-styles">
-
-/* ── BABY MODE (0-3) ── */
-.baby-screen {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.baby-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: 2rem;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.3);
-}
-
-.baby-category-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  max-width: 500px;
-  width: 100%;
-  margin-bottom: 24px;
-}
-
-.baby-category-btn {
-  background: rgba(255,255,255,0.97);
-  border-radius: 24px;
-  padding: 28px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-.baby-category-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 6px;
-  border-radius: 24px 24px 0 0;
-}
-.baby-category-btn:nth-child(1)::before { background: linear-gradient(90deg,#FF9B3F,#FFD93D); }
-.baby-category-btn:nth-child(2)::before { background: linear-gradient(90deg,#FF6B6B,#C77DFF); }
-.baby-category-btn:nth-child(3)::before { background: linear-gradient(90deg,#6BCB77,#7EC8E3); }
-.baby-category-btn:nth-child(4)::before { background: linear-gradient(90deg,#7EC8E3,#C77DFF); }
-.baby-category-btn:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 14px 40px rgba(0,0,0,0.2); }
-.baby-category-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
-.baby-category-name {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.3rem;
-  color: #1A1A2E;
-}
-
-/* Baby Activity Screen */
-.baby-activity-wrap {
-  max-width: 600px;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding: 20px;
-}
-
-.baby-question-text {
-  font-family: 'Fredoka One', cursive;
-  font-size: 2.2rem;
-  color: #fff;
-  margin-bottom: 24px;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.3);
-  animation: bounce-text 0.5s ease;
-}
-@keyframes bounce-text {
-  0% { transform: scale(0.8); opacity: 0; }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.baby-items-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.baby-item-btn {
-  background: rgba(255,255,255,0.97);
-  border-radius: 24px;
-  padding: 20px 16px;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  border: 4px solid transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.baby-item-btn:hover { transform: scale(1.05); }
-.baby-item-btn.correct-baby {
-  border-color: #6BCB77;
-  background: linear-gradient(135deg, #6BCB77, #3DAA45);
-  animation: baby-pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-.baby-item-btn.wrong-baby {
-  border-color: #FF6B6B;
-  animation: baby-shake 0.4s ease;
-}
-@keyframes baby-pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1.05); }
-}
-@keyframes baby-shake {
-  0%,100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
-}
-
-.baby-item-emoji { font-size: 4rem; line-height: 1; }
-.baby-item-word {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.4rem;
-  color: #1A1A2E;
-}
-.baby-item-btn.correct-baby .baby-item-word { color: #fff; }
-
-/* Baby celebration */
-.baby-celebrate {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.5);
-  animation: fade-in 0.3s ease;
-}
-@keyframes fade-in { from{opacity:0} to{opacity:1} }
-.baby-celebrate-inner {
-  background: linear-gradient(135deg, #FFD93D, #FF9B3F);
-  border-radius: 32px;
-  padding: 40px;
-  text-align: center;
-  animation: pop-in 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-.baby-celebrate-emoji { font-size: 5rem; display: block; margin-bottom: 10px; }
-.baby-celebrate-text {
-  font-family: 'Fredoka One', cursive;
-  font-size: 2rem;
-  color: #fff;
-  text-shadow: 0 3px 10px rgba(0,0,0,0.2);
-}
-
-/* ── SOUND BUTTON ── */
-.sound-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 8500;
-  background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 50px;
-  padding: 8px 16px;
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.85rem;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: background 0.2s;
-}
-.sound-toggle:hover { background: rgba(255,255,255,0.25); }
-
-/* ── VOICE INPUT BUTTON ── */
-.voice-input-btn {
-  background: linear-gradient(135deg, #7928CA, #FF0080);
-  border: none;
-  border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(121,40,202,0.4);
-  transition: transform 0.15s;
-  flex-shrink: 0;
-}
-.voice-input-btn:hover { transform: scale(1.1); }
-.voice-input-btn.listening {
-  animation: pulse-voice 1s ease-in-out infinite;
-  background: linear-gradient(135deg, #FF0080, #FF416C);
-}
-@keyframes pulse-voice {
-  0%,100% { box-shadow: 0 6px 20px rgba(255,0,128,0.4); }
-  50% { box-shadow: 0 6px 30px rgba(255,0,128,0.8); transform: scale(1.1); }
-}
-
-/* ── PEP SECTION ── */
-.pep-header {
-  background: linear-gradient(135deg, #1a1a3e, #2d1b69);
-  padding: 24px;
-  text-align: center;
-  border-bottom: 2px solid rgba(199,125,255,0.3);
-}
-.pep-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #FFD93D, #FF9B3F);
-  color: #fff;
-  font-family: 'Fredoka One', cursive;
-  font-size: 0.85rem;
-  padding: 4px 16px;
-  border-radius: 50px;
-  margin-bottom: 10px;
-}
-.pep-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: 2rem;
-  color: #fff;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.3);
-}
-.pep-subtitle {
-  color: rgba(255,255,255,0.7);
-  font-size: 0.95rem;
-  margin-top: 6px;
-}
-
-.pep-subjects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-  max-width: 900px;
-  margin: 24px auto;
-  padding: 0 24px;
-}
-
-.pep-subject-card {
-  background: rgba(255,255,255,0.97);
-  border-radius: 20px;
-  padding: 24px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
-  position: relative;
-  overflow: hidden;
-}
-.pep-subject-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 5px;
-  border-radius: 20px 20px 0 0;
-}
-.pep-subject-card[data-pep="math"]::before     { background: linear-gradient(90deg,#FFD93D,#FF9B3F); }
-.pep-subject-card[data-pep="language"]::before { background: linear-gradient(90deg,#7EC8E3,#C77DFF); }
-.pep-subject-card[data-pep="science"]::before  { background: linear-gradient(90deg,#6BCB77,#7EC8E3); }
-.pep-subject-card[data-pep="social"]::before   { background: linear-gradient(90deg,#FF6B6B,#C77DFF); }
-.pep-subject-card[data-pep="general"]::before  { background: linear-gradient(90deg,#FF9B3F,#FFD93D); }
-.pep-subject-card[data-pep="practice"]::before { background: linear-gradient(90deg,#C77DFF,#7928CA); }
-.pep-subject-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(0,0,0,0.18); }
-.pep-subject-icon { font-size: 2.5rem; margin-bottom: 8px; }
-.pep-subject-name { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: #1A1A2E; }
-.pep-subject-count { font-size: 0.78rem; color: #7A7A9D; margin-top: 4px; }
-
-.pep-info-box {
-  max-width: 860px;
-  margin: 0 auto 20px;
-  padding: 0 24px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.15);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 20px;
-  backdrop-filter: blur(8px);
-}
-.pep-info-icon { font-size: 2rem; flex-shrink: 0; }
-.pep-info-text { color: rgba(255,255,255,0.85); font-size: 0.9rem; font-weight: 600; line-height: 1.5; }
 </style>
 </head>
 <body>
+<div class="stars"></div>
+<button class="sound-toggle" id="sound-toggle-btn" onclick="SoundSystem.toggle()">🔊 Sound ON</button>
 
 <!-- HOME -->
-
 <div id="screen-home" class="screen active">
-<div class="stars"></div>
 <header class="home-header">
-<div class="logo-wrap">
-<div class="logo-star">⭐</div>
-<img src="logolearningwithsam.br.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'" />
-<h1 class="title">Learning With<br><span class="title-accent">Samara AI</span></h1>
-</div>
-<div class="header-btns">
-<button id="btn-login" class="btn btn-outline" onclick="App.showScreen('screen-auth')">Log In</button>
-<button id="btn-signup" class="btn btn-outline" onclick="App.showScreen('screen-auth','signup')">Sign Up</button>
-<button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 My Progress</button>
-<button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
-<button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
-</div>
+  <div class="logo-wrap">
+    <div class="logo-star">⭐</div>
+    <img src="logolearningwithsam.br.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'" />
+    <h1 class="title">Learning With<br><span class="title-accent">Samara AI</span></h1>
+  </div>
+  <div class="header-btns">
+    <button id="btn-login" class="btn btn-outline" onclick="App.showScreen('screen-auth')">Log In</button>
+    <button id="btn-signup" class="btn btn-outline" onclick="App.showScreen('screen-auth','signup')">Sign Up</button>
+    <button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 My Progress</button>
+    <button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
+    <button id="btn-pep" class="btn btn-primary" style="background:linear-gradient(135deg,#C77DFF,#7928CA);" onclick="App.showScreen('screen-pep')">🇯🇲 PEP</button>
+    <button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
+  </div>
 </header>
 <div class="hero">
-<p class="hero-subtitle">Explore magical learning worlds 🌍✨ — with your AI tutor Samara!</p>
+  <p class="hero-subtitle">Explore magical learning worlds 🌍✨ — with your AI tutor Samara!</p>
 </div>
 <div class="age-select-wrap">
-<p class="age-select-title">👋 Who is learning today?</p>
-<div class="age-grid">
-<div class="age-card" data-age="0-3" onclick="App.selectAge('0-3')"> <div class="age-icon">🍼</div><div class="age-label">Baby</div> <div class="age-range">Ages 0–3</div></div>
-<div class="age-card" data-age="4-6" onclick="App.selectAge('4-6')"> <div class="age-icon">🌱</div><div class="age-label">Junior</div> <div class="age-range">Ages 4–6</div></div>
-<div class="age-card" data-age="7-10" onclick="App.selectAge('7-10')"> <div class="age-icon">⭐</div><div class="age-label">Explorer</div><div class="age-range">Ages 7–10</div></div>
-<div class="age-card" data-age="11-14" onclick="App.selectAge('11-14')"><div class="age-icon">🚀</div><div class="age-label">Pro</div> <div class="age-range">Ages 11–14</div></div>
-<div class="age-card" data-age="15-17" onclick="App.selectAge('15-17')"><div class="age-icon">🎓</div><div class="age-label">Senior</div> <div class="age-range">Ages 15–17</div></div>
-</div>
+  <p class="age-select-title">👋 Who is learning today?</p>
+  <div class="age-grid">
+    <div class="age-card" data-age="0-3" onclick="App.selectAge('0-3')"><div class="age-icon">🍼</div><div class="age-label">Baby</div><div class="age-range">Ages 0–3</div></div>
+    <div class="age-card" data-age="4-6" onclick="App.selectAge('4-6')"><div class="age-icon">🌱</div><div class="age-label">Junior</div><div class="age-range">Ages 4–6</div></div>
+    <div class="age-card" data-age="7-10" onclick="App.selectAge('7-10')"><div class="age-icon">⭐</div><div class="age-label">Explorer</div><div class="age-range">Ages 7–10</div></div>
+    <div class="age-card" data-age="11-14" onclick="App.selectAge('11-14')"><div class="age-icon">🚀</div><div class="age-label">Pro</div><div class="age-range">Ages 11–14</div></div>
+    <div class="age-card" data-age="15-17" onclick="App.selectAge('15-17')"><div class="age-icon">🎓</div><div class="age-label">Senior</div><div class="age-range">Ages 15–17</div></div>
+  </div>
 </div>
 <div class="topic-search-wrap">
-<p class="topic-search-label">🔍 Type a topic you want to learn:</p>
-<div class="topic-search-row">
-<input class="topic-input" id="topic-input" type="text" placeholder="e.g. volcanoes, fractions, history..." onkeydown="if(event.key==='Enter')App.searchTopic()" />
-<button class="btn btn-primary" onclick="App.searchTopic()">Go! 🚀</button>
-</div>
-<div id="search-suggestions" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center;"></div>
-<div id="search-result-card" style="margin-top:12px;"></div>
+  <p class="topic-search-label">🔍 Type a topic you want to learn:</p>
+  <div class="topic-search-row">
+    <input class="topic-input" id="topic-input" type="text" placeholder="e.g. volcanoes, fractions, history..." onkeydown="if(event.key==='Enter')App.searchTopic()" />
+    <button class="btn btn-primary" onclick="App.searchTopic()">Go! 🚀</button>
+  </div>
+  <div id="search-suggestions" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center;"></div>
+  <div id="search-result-card" style="margin-top:12px;"></div>
 </div>
 <!-- AVATAR SELECTOR -->
 <div style="max-width:900px;margin:16px auto 0;padding:0 24px;position:relative;z-index:2;">
-<p style="font-family:'Fredoka One',cursive;font-size:1rem;color:rgba(255,255,255,0.85);text-align:center;margin-bottom:10px;">👧 Pick your tutor:</p>
-<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" id="avatar-selector">
-<div onclick="App.selectAvatar('samara')" data-av="samara" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
-<div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid var(--sun);box-shadow:0 0 14px rgba(255,217,61,0.5);">
-<img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'" />
-</div>
-<span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Samara</span>
-</div>
-<div onclick="App.selectAvatar('littlejr')" data-av="littlejr" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
-<div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.2);">
-<img src="littlejr.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='🧒'" />
-</div>
-<span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Little Jr</span>
-</div>
-<div onclick="App.selectAvatar('mommytutor')" data-av="mommytutor" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
-<div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.2);">
-<img src="tutormommy.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👩'" />
-</div>
-<span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Mommy Tutor</span>
-</div>
-<div onclick="App.selectAvatar('star')" data-av="star" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
-<div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.2);">
-<img src="starmascot.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='⭐'" />
-</div>
-<span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Star</span>
-</div>
-</div>
+  <p style="font-family:'Fredoka One',cursive;font-size:1rem;color:rgba(255,255,255,0.85);text-align:center;margin-bottom:10px;">👧 Pick your tutor:</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" id="avatar-selector">
+    <div onclick="App.selectAvatar('samara')" data-av="samara" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+      <div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid var(--sun);box-shadow:0 0 14px rgba(255,217,61,0.5);">
+        <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'" />
+      </div>
+      <span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Samara</span>
+    </div>
+    <div onclick="App.selectAvatar('littlejr')" data-av="littlejr" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+      <div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.2);">
+        <img src="littlejr.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='🧒'" />
+      </div>
+      <span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Little Jr</span>
+    </div>
+    <div onclick="App.selectAvatar('mommytutor')" data-av="mommytutor" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+      <div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.2);">
+        <img src="tutormommy.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👩'" />
+      </div>
+      <span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Mommy Tutor</span>
+    </div>
+    <div onclick="App.selectAvatar('star')" data-av="star" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;">
+      <div style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.2);">
+        <img src="starmascot.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='⭐'" />
+      </div>
+      <span style="font-family:'Fredoka One',cursive;font-size:0.8rem;color:#fff;">Star</span>
+    </div>
+  </div>
 </div>
 <div class="subjects-section" style="margin-top:28px;">
-<p class="subjects-title" id="subjects-title">✨ Pick a subject:</p>
-<div class="subjects-grid" id="subjects-grid"></div>
+  <p class="subjects-title" id="subjects-title">✨ Pick a subject:</p>
+  <div class="subjects-grid" id="subjects-grid"></div>
 </div>
 <div class="home-characters">
-<div class="character bounce-slow">🦄</div>
-<div class="character bounce-mid">🤖</div>
-<div class="character bounce-fast">🌟</div>
+  <div class="character bounce-slow">🦄</div>
+  <div class="character bounce-mid">🤖</div>
+  <div class="character bounce-fast">🌟</div>
 </div>
 </div>
 
 <!-- AUTH -->
-
 <div id="screen-auth" class="screen">
 <div class="auth-wrap">
-<button class="back-btn" style="margin-bottom:16px;" onclick="App.showScreen('screen-home')">← Back</button>
-<div class="auth-card">
-<div class="auth-icon">🌟</div>
-<h2 id="auth-title">Welcome Back!</h2>
-<div class="tab-row">
-<button class="tab active" id="tab-login" onclick="App.switchTab('login')">Log In</button>
-<button class="tab" id="tab-signup" onclick="App.switchTab('signup')">Sign Up</button>
+  <button class="back-btn" style="margin-bottom:16px;" onclick="App.showScreen('screen-home')">← Back</button>
+  <div class="auth-card">
+    <div class="auth-icon">🌟</div>
+    <h2 id="auth-title">Welcome Back!</h2>
+    <div class="tab-row">
+      <button class="tab active" id="tab-login" onclick="App.switchTab('login')">Log In</button>
+      <button class="tab" id="tab-signup" onclick="App.switchTab('signup')">Sign Up</button>
+    </div>
+    <div class="auth-fields">
+      <input class="field" type="email" id="auth-email" placeholder="Your email" />
+      <input class="field" type="password" id="auth-password" placeholder="Password (min 6 chars)" />
+      <input class="field hidden" type="text" id="auth-name" placeholder="Your name" />
+    </div>
+    <button class="btn btn-primary big" onclick="App.handleAuth()">Let's Go! 🚀</button>
+    <p id="auth-msg" class="auth-msg"></p>
+  </div>
 </div>
-<div class="auth-fields">
-<input class="field" type="email" id="auth-email" placeholder="Your email" />
-<input class="field" type="password" id="auth-password" placeholder="Password (min 6 chars)" />
-<input class="field hidden" type="text" id="auth-name" placeholder="Your name" />
 </div>
-<button class="btn btn-primary big" onclick="App.handleAuth()">Let's Go! 🚀</button>
-<p id="auth-msg" class="auth-msg"></p>
-</div>
-</div>
-</div>
-  
+
 <!-- WORLDS -->
-  <button class="btn" onclick="App.showScreen('screen-home')">⬅ Back</button>
-</div>
 <div id="screen-worlds" class="screen">
 <div class="top-bar">
-<button class="back-btn" onclick="App.showScreen('screen-home')">← Back</button>
-<div class="score-pill">⭐ <span id="worlds-score">0</span> pts</div>
+  <button class="back-btn" onclick="App.showScreen('screen-home')">← Back</button>
+  <div class="score-pill">⭐ <span id="worlds-score">0</span> pts</div>
 </div>
 <h2 class="screen-title" id="worlds-title">Worlds</h2>
 <p class="screen-sub">Complete a world to unlock the next! 🔓</p>
@@ -646,11 +415,10 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 </div>
 
 <!-- STAGES -->
-
 <div id="screen-stages" class="screen">
 <div class="top-bar">
-<button class="back-btn" onclick="App.showScreen('screen-worlds')">← Worlds</button>
-<div class="score-pill">⭐ <span id="stages-score">0</span> pts</div>
+  <button class="back-btn" onclick="App.showScreen('screen-worlds')">← Worlds</button>
+  <div class="score-pill">⭐ <span id="stages-score">0</span> pts</div>
 </div>
 <h2 class="screen-title" id="stages-title">Stages</h2>
 <p class="screen-sub">Earn 80% to unlock the next world! 🎯</p>
@@ -658,133 +426,103 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 </div>
 
 <!-- QUIZ -->
-
 <div id="screen-quiz" class="screen">
 <div class="top-bar">
-<button class="back-btn" onclick="App.confirmQuit()">✕ Quit</button>
-<div class="quiz-progress">
-<span id="quiz-q-num">Q1</span>/<span id="quiz-q-total">5</span>
-<div class="progress-bar-wrap"><div class="progress-bar-fill" id="quiz-progress-bar"></div></div>
-</div>
-<div class="score-pill">⭐ <span id="quiz-score">0</span></div>
+  <button class="back-btn" onclick="App.confirmQuit()">✕ Quit</button>
+  <div class="quiz-progress">
+    <span id="quiz-q-num">Q1</span>/<span id="quiz-q-total">5</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="quiz-progress-bar"></div></div>
+  </div>
+  <div class="score-pill">⭐ <span id="quiz-score">0</span></div>
 </div>
 <div class="quiz-card">
-<div class="quiz-subject-badge" id="quiz-subject-badge">Math · World 1</div>
-<div class="quiz-question" id="quiz-question">Loading...</div>
-<div class="quiz-answers" id="quiz-answers"></div>
-<div class="quiz-feedback hidden" id="quiz-feedback"></div>
+  <div class="quiz-subject-badge" id="quiz-subject-badge">Math · World 1</div>
+  <div class="quiz-question" id="quiz-question">Loading...</div>
+  <div class="quiz-answers" id="quiz-answers"></div>
+  <div class="quiz-feedback hidden" id="quiz-feedback"></div>
 </div>
 <div class="ai-speech-bubble hidden" id="ai-speech-bubble">
-<div class="bubble-avatar" style="overflow:hidden;padding:0;">
-<img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" />
-</div>
-<div class="bubble-content">
-<div class="bubble-name">Samara AI ✨</div>
-<div id="bubble-text"></div>
-</div>
+  <div class="bubble-avatar" style="overflow:hidden;padding:0;">
+    <img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" />
+  </div>
+  <div class="bubble-content">
+    <div class="bubble-name">Samara AI ✨</div>
+    <div id="bubble-text"></div>
+  </div>
 </div>
 </div>
 
 <!-- RESULT -->
-
 <div id="screen-result" class="screen">
 <div class="result-wrap">
-<div class="result-star" id="result-star">⭐</div>
-<h2 class="result-title" id="result-title">Stage Complete!</h2>
-<div class="result-score-box">
-<div class="result-score" id="result-score">80%</div>
-<div class="result-score-label">Accuracy</div>
-</div>
-<div class="result-points" id="result-points">+50 pts!</div>
-<div class="result-adaptive-msg" id="result-adaptive-msg"></div>
-<div class="result-msg" id="result-msg">Great job!</div>
-<div class="result-btns">
-<button class="btn btn-primary big" id="result-next-btn" onclick="App.resultNext()">Next Stage 🚀</button>
-<button class="btn btn-outline big" onclick="App.showScreen('screen-worlds')">World Map 🗺️</button>
-</div>
+  <div class="result-star" id="result-star">⭐</div>
+  <h2 class="result-title" id="result-title">Stage Complete!</h2>
+  <div class="result-score-box">
+    <div class="result-score" id="result-score">80%</div>
+    <div class="result-score-label">Accuracy</div>
+  </div>
+  <div class="result-points" id="result-points">+50 pts!</div>
+  <div class="result-adaptive-msg" id="result-adaptive-msg"></div>
+  <div class="result-msg" id="result-msg">Great job!</div>
+  <div class="result-btns">
+    <button class="btn btn-primary big" id="result-next-btn" onclick="App.resultNext()">Next Stage 🚀</button>
+    <button class="btn btn-outline big" onclick="App.showScreen('screen-worlds')">World Map 🗺️</button>
+  </div>
 </div>
 </div>
 
 <!-- STUDENT DASHBOARD -->
-
 <div id="screen-dashboard" class="screen">
 <div class="top-bar">
-<button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
-<h2 class="screen-title small">My Dashboard</h2>
+  <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+  <h2 class="screen-title small">My Dashboard</h2>
 </div>
 <div class="dashboard-wrap">
-<div class="dash-welcome">Welcome back, <span id="dash-name">Learner</span>! 🌟</div>
-<div class="dash-age-badge"><span class="age-badge-pill" id="dash-age-badge">Explorer</span></div>
-<div class="dash-stats">
-<div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-val" id="dash-total-score">0</div><div class="stat-lbl">Total Points</div></div>
-<div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="dash-worlds-done">0</div><div class="stat-lbl">Worlds Done</div></div>
-<div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-val" id="dash-stages-done">0</div><div class="stat-lbl">Stages Done</div></div>
-</div>
-<h3 class="dash-section-title">Subject Progress</h3>
-<div class="dash-progress-list" id="dash-progress-list"></div>
-<h3 class="dash-section-title">Recent Activity</h3>
-<div class="dash-activity" id="dash-activity"><p class="empty-msg">No activity yet. Start learning! 🚀</p></div>
+  <div class="dash-welcome">Welcome back, <span id="dash-name">Learner</span>! 🌟</div>
+  <div class="dash-age-badge"><span class="age-badge-pill" id="dash-age-badge">Explorer</span></div>
+  <div class="dash-stats">
+    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-val" id="dash-total-score">0</div><div class="stat-lbl">Total Points</div></div>
+    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="dash-worlds-done">0</div><div class="stat-lbl">Worlds Done</div></div>
+    <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-val" id="dash-stages-done">0</div><div class="stat-lbl">Stages Done</div></div>
+  </div>
+  <h3 class="dash-section-title">Subject Progress</h3>
+  <div class="dash-progress-list" id="dash-progress-list"></div>
+  <h3 class="dash-section-title">Recent Activity</h3>
+  <div class="dash-activity" id="dash-activity"><p class="empty-msg">No activity yet. Start learning! 🚀</p></div>
 </div>
 </div>
 
 <!-- PARENT DASHBOARD -->
-
 <div id="screen-parent" class="screen">
 <div class="top-bar">
-<button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
-<h2 class="screen-title small">👨‍👩‍👧 Parent Dashboard</h2>
+  <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+  <h2 class="screen-title small">👨‍👩‍👧 Parent Dashboard</h2>
 </div>
 <div class="parent-dash-wrap">
-<h2 class="parent-title">Learning Report</h2>
-<p class="parent-sub" id="parent-sub">Tracking your child's progress</p>
-<div class="parent-stats">
-<div class="parent-stat"><div class="stat-icon">📝</div><div class="parent-stat-val" id="parent-total-quizzes">0</div><div class="parent-stat-lbl">Quizzes Taken</div></div>
-<div class="parent-stat"><div class="stat-icon">⭐</div><div class="parent-stat-val" id="parent-total-pts">0</div><div class="parent-stat-lbl">Total Points</div></div>
-<div class="parent-stat"><div class="stat-icon">🎯</div><div class="parent-stat-val" id="parent-avg-accuracy">0%</div><div class="parent-stat-lbl">Avg Accuracy</div></div>
-<div class="parent-stat"><div class="stat-icon">🔥</div><div class="parent-stat-val" id="parent-streak">0</div><div class="parent-stat-lbl">Day Streak</div></div>
-</div>
-<h3 class="dash-section-title">📊 Subject Performance</h3>
-<div id="parent-subject-list"></div>
-<div class="suggestions-box">
-<div class="suggestions-title">💡 Study Suggestions</div>
-<div id="parent-suggestions"></div>
-</div>
+  <h2 class="parent-title">Learning Report</h2>
+  <p class="parent-sub" id="parent-sub">Tracking your child's progress</p>
+  <div class="parent-stats">
+    <div class="parent-stat"><div class="stat-icon">📝</div><div class="parent-stat-val" id="parent-total-quizzes">0</div><div class="parent-stat-lbl">Quizzes Taken</div></div>
+    <div class="parent-stat"><div class="stat-icon">⭐</div><div class="parent-stat-val" id="parent-total-pts">0</div><div class="parent-stat-lbl">Total Points</div></div>
+    <div class="parent-stat"><div class="stat-icon">🎯</div><div class="parent-stat-val" id="parent-avg-accuracy">0%</div><div class="parent-stat-lbl">Avg Accuracy</div></div>
+    <div class="parent-stat"><div class="stat-icon">🔥</div><div class="parent-stat-val" id="parent-streak">0</div><div class="parent-stat-lbl">Day Streak</div></div>
+  </div>
+  <h3 class="dash-section-title">📊 Subject Performance</h3>
+  <div id="parent-subject-list"></div>
+  <div class="suggestions-box">
+    <div class="suggestions-title">💡 Study Suggestions</div>
+    <div id="parent-suggestions"></div>
+  </div>
 </div>
 </div>
 
-<!-- FLOATING AI TUTOR -->
-
-<div class="ai-tutor-float hidden" id="ai-tutor-float">
-<div class="ai-chat-window hidden" id="ai-chat-window">
-<div class="ai-chat-header">
-<div class="ai-chat-avatar" style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">
-<img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" />
-</div>
-<div><div class="ai-chat-name">Samara AI</div><div class="ai-chat-status">Your learning buddy ✨</div></div>
-<button class="ai-chat-close" onclick="AITutor.toggleChat()">✕</button>
-</div>
-<div class="ai-chat-messages" id="ai-chat-messages"></div>
-<div class="ai-chat-input-row">
-<input class="ai-chat-input" id="ai-chat-input" placeholder="Ask Samara anything..." onkeydown="if(event.key==='Enter')AITutor.sendMessage()" />
-<button class="ai-send-btn" onclick="AITutor.sendMessage()">➤</button>
-</div>
-</div>
-<button class="ai-avatar-btn" onclick="AITutor.toggleChat()" title="Chat with Samara!" style="overflow:hidden;padding:0;">
-<img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" />
-</button>
-</div>
-
-  <!-- BABY SCREEN (Ages 0-3) -->
-  
+<!-- BABY SCREEN (Ages 0-3) — FIXED -->
 <div id="screen-baby" class="screen">
   <div class="stars"></div>
   <div class="top-bar">
     <button class="back-btn" onclick="App.showScreen('screen-home')">← Back</button>
     <h2 class="screen-title small" id="baby-screen-title">🍼 Baby World</h2>
   </div>
-
-  <!-- Category Selection -->
-  
   <div id="baby-categories" class="baby-screen">
     <p class="baby-title">What do you want to learn? 🌟</p>
     <div class="baby-category-grid">
@@ -806,35 +544,29 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
       </button>
     </div>
   </div>
-
-  <!-- Activity Area -->
-  
   <div id="baby-activity" class="baby-screen hidden">
     <div class="baby-activity-wrap">
       <p class="baby-question-text" id="baby-question">Tap the DOG! 🐕</p>
       <div class="baby-items-grid" id="baby-items-grid"></div>
       <div style="margin-top:16px;">
         <div class="score-pill" style="display:inline-block;">⭐ <span id="baby-score">0</span></div>
+        <button class="btn btn-outline" style="margin-left:12px;" onclick="BabyMode.backToCategories()">← Back</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PEP SCREEN -->
-  
+<!-- PEP SCREEN — FIXED -->
 <div id="screen-pep" class="screen">
   <div class="pep-header">
-    <button class="back-btn" style="position:absolute;left:24px;top:24px;" onclick="App.showScreen('screen-home')">← Back</button>
+    <button class="back-btn" style="position:absolute;left:24px;top:50%;transform:translateY(-50%);" onclick="App.showScreen('screen-home')">← Back</button>
     <div class="pep-badge">🇯🇲 Caribbean · PEP Preparation</div>
     <h2 class="pep-title">PEP Practice Zone</h2>
     <p class="pep-subtitle">Primary Exit Profile · Grades 4–6</p>
   </div>
   <div class="pep-info-box" style="margin-top:20px;">
     <div class="pep-info-icon">💡</div>
-    <div class="pep-info-text">
-      Practice PEP style questions covering all subjects tested in the Primary Exit Profile examination.
-      Samara AI will help explain every answer! 🌟
-    </div>
+    <div class="pep-info-text">Practice PEP style questions covering all subjects. Samara AI will help explain every answer! 🌟</div>
   </div>
   <div class="pep-subjects-grid">
     <div class="pep-subject-card" data-pep="math" onclick="PEP.openSubject('math')">
@@ -869,25 +601,44 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     </div>
   </div>
 </div>
-  
-<!-- TOAST -->
 
+<!-- FLOATING AI TUTOR -->
+<div class="ai-tutor-float hidden" id="ai-tutor-float">
+  <div class="ai-chat-window hidden" id="ai-chat-window">
+    <div class="ai-chat-header">
+      <div class="ai-chat-avatar">
+        <img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" />
+      </div>
+      <div><div class="ai-chat-name" id="ai-chat-name-label">Samara AI</div><div class="ai-chat-status">Your learning buddy ✨</div></div>
+      <button class="ai-chat-close" onclick="AITutor.toggleChat()">✕</button>
+    </div>
+    <div class="ai-chat-messages" id="ai-chat-messages"></div>
+    <div class="ai-chat-input-row">
+      <input class="ai-chat-input" id="ai-chat-input" placeholder="Ask Samara anything..." onkeydown="if(event.key==='Enter')AITutor.sendMessage()" />
+      <button class="voice-input-btn" id="voice-input-btn" onclick="SoundSystem.startVoiceInput()" title="Speak">🎤</button>
+      <button class="ai-send-btn" onclick="AITutor.sendMessage()">➤</button>
+    </div>
+  </div>
+  <button class="ai-avatar-btn" onclick="AITutor.toggleChat()" title="Chat with Samara!" style="overflow:hidden;padding:0;">
+    <img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" />
+  </button>
+</div>
+
+<!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
 
 <!-- MODAL -->
-
 <div id="modal-overlay" class="modal-overlay hidden">
 <div class="modal-box">
-<p id="modal-msg">Are you sure you want to quit?</p>
-<div class="modal-btns">
-<button class="btn btn-danger" id="modal-confirm">Yes, Quit</button>
-<button class="btn btn-outline" id="modal-cancel">Keep Going!</button>
-</div>
+  <p id="modal-msg">Are you sure you want to quit?</p>
+  <div class="modal-btns">
+    <button class="btn btn-danger" id="modal-confirm">Yes, Quit</button>
+    <button class="btn btn-outline" id="modal-cancel">Keep Going!</button>
+  </div>
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
-
 <script>
 'use strict';
 
@@ -895,960 +646,857 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 const SUPABASE_URL = 'https://bfivpvlzehtmksnmgnzb.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDEzODgsImV4cCI6MjA4ODkxNzM4OH0.HJ2iITuM4y0fxdIeMM23wW-AkkUg16oKT9CkLBHl3dk';
 
+// ── FREE AI: Anthropic API via Claude.ai artifact system ────
+// Uses the built-in fetch — no Netlify, no API key needed in prod
+async function callClaudeAI(userMessage, ageGroup) {
+  const systemPrompt = `You are Samara AI, an encouraging, friendly tutor for a ${ageGroup}-year-old child. 
+Keep responses SHORT (2-4 sentences max), age-appropriate, warm and fun. Use simple words. 
+Add 1-2 emojis. Never be scary or complicated. Always end with encouragement.`;
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 150,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMessage }]
+      })
+    });
+    const data = await response.json();
+    if (data.content && data.content[0]) return data.content[0].text;
+    return null;
+  } catch(e) {
+    return null;
+  }
+}
+
 // ── DATABASE SERVICE ────────────────────────────────────────
 const DB = {
-client: null,
-init() {
-try { this.client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON); console.log('DB connected'); }
-catch(e) { console.error('DB init failed:', e); }
-},
-async signUp(email,pw,name,age){ return await this.client.auth.signUp({email,password:pw,options:{data:{full_name:name,age_group:age}}}); },
-async login(email,pw){ return await this.client.auth.signInWithPassword({email,password:pw}); },
-async logout(){ return await this.client.auth.signOut(); },
-async getUser(){ try{ const {data:{user}}=await this.client.auth.getUser(); return user; }catch(e){ return null; } },
-async saveScore(r){
-const user=await this.getUser(); if(!user) return;
-try{ await this.client.from('scores').insert({user_id:user.id,student:r.student,subject:r.subject,world:r.world,stage:r.stage,score:r.score,total:r.total,accuracy:r.accuracy,created_at:new Date().toISOString()}); }catch(e){ console.error('saveScore:',e); }
-},
-async saveProgress(subject,world,stage,accuracy){
-const user=await this.getUser(); if(!user) return;
-const stars=accuracy>=0.9?3:accuracy>=0.7?2:1;
-try{ await this.client.from('progress').upsert({user_id:user.id,subject,world,stage,completed:true,stars,accuracy,created_at:new Date().toISOString()},{onConflict:'user_id,subject,world,stage'}); }catch(e){ console.error('saveProgress:',e); }
-},
-async loadProgress(){ const user=await this.getUser(); if(!user) return []; try{ const {data}=await this.client.from('progress').select('*').eq('user_id',user.id); return data||[]; }catch(e){ return []; } },
-async loadScores(n=20){ const user=await this.getUser(); if(!user) return []; try{ const {data}=await this.client.from('scores').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(n); return data||[]; }catch(e){ return []; } }
+  client: null,
+  init() {
+    try { this.client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON); }
+    catch(e) { console.error('DB init failed:', e); }
+  },
+  async signUp(email,pw,name,age){ return await this.client.auth.signUp({email,password:pw,options:{data:{full_name:name,age_group:age}}}); },
+  async login(email,pw){ return await this.client.auth.signInWithPassword({email,password:pw}); },
+  async logout(){ return await this.client.auth.signOut(); },
+  async getUser(){ try{ const {data:{user}}=await this.client.auth.getUser(); return user; }catch(e){ return null; } },
+  async saveScore(r){
+    const user=await this.getUser(); if(!user) return;
+    try{ await this.client.from('scores').insert({user_id:user.id,student:r.student,subject:r.subject,world:r.world,stage:r.stage,score:r.score,total:r.total,accuracy:r.accuracy,created_at:new Date().toISOString()}); }catch(e){}
+  },
+  async saveProgress(subject,world,stage,accuracy){
+    const user=await this.getUser(); if(!user) return;
+    const stars=accuracy>=0.9?3:accuracy>=0.7?2:1;
+    try{ await this.client.from('progress').upsert({user_id:user.id,subject,world,stage,completed:true,stars,accuracy,created_at:new Date().toISOString()},{onConflict:'user_id,subject,world,stage'}); }catch(e){}
+  },
+  async loadProgress(){ const user=await this.getUser(); if(!user) return []; try{ const {data}=await this.client.from('progress').select('*').eq('user_id',user.id); return data||[]; }catch(e){ return []; } },
+  async loadScores(n=20){ const user=await this.getUser(); if(!user) return []; try{ const {data}=await this.client.from('scores').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(n); return data||[]; }catch(e){ return []; } }
 };
 
 // ── ADAPTIVE LEARNING ───────────────────────────────────────
 const Adaptive = {
-diff: {},
-get(subject){ return this.diff[subject]||1; },
-label(n){ return n===1?'Basic':n===2?'Intermediate':'Advanced'; },
-update(subject, accuracy){
-const cur=this.get(subject); let nd=cur, msg='';
-if(accuracy>0.8&&cur<3){ nd=cur+1; msg='🚀 Amazing! Ready for a harder challenge!'; }
-else if(accuracy<0.5&&cur>1){ nd=cur-1; msg='💛 Let\'s practice more at this level.'; }
-else if(accuracy<0.5){ msg='💪 Keep practicing — Samara AI will help you!'; }
-else{ msg='⭐ Good work! Keep going at this level.'; }
-this.diff[subject]=nd;
-return { newDifficulty:nd, message:msg };
-}
+  diff: {},
+  get(subject){ return this.diff[subject]||1; },
+  label(n){ return n===1?'Basic':n===2?'Intermediate':'Advanced'; },
+  update(subject, accuracy){
+    const cur=this.get(subject); let nd=cur, msg='';
+    if(accuracy>0.8&&cur<3){ nd=cur+1; msg='🚀 Amazing! Ready for a harder challenge!'; }
+    else if(accuracy<0.5&&cur>1){ nd=cur-1; msg='💛 Let\'s practice more at this level.'; }
+    else if(accuracy<0.5){ msg='💪 Keep practicing — Samara AI will help you!'; }
+    else{ msg='⭐ Good work! Keep going at this level.'; }
+    this.diff[subject]=nd;
+    return { newDifficulty:nd, message:msg };
+  }
 };
 
-// ── AI TUTOR ────────────────────────────────────────────────
-const AITutor = {
-wrongStreak:0, isOpen:false, ageGroup:'7-10',
-
-trackWrong(question, ageGroup){
-this.wrongStreak++; this.ageGroup=ageGroup;
-if(this.wrongStreak>=2){ this.showHint(question,ageGroup); this.wrongStreak=0; }
-},
-trackCorrect(){ this.wrongStreak=0; },
-
-showHint(q, ag){
-const msg=this.generateResponse(q,ag);
-const el=document.getElementById('ai-speech-bubble');
-const tx=document.getElementById('bubble-text');
-if(el&&tx){ tx.innerHTML=msg; el.classList.remove('hidden'); }
-},
-hideHint(){ document.getElementById('ai-speech-bubble')?.classList.add('hidden'); },
-
-// FUTURE: Replace with Claude API call
-// async generateResponse(q, ag) {
-// const res = await fetch('https://api.anthropic.com/v1/messages', {
-// method:'POST', headers:{'x-api-key':API_KEY,'Content-Type':'application/json','anthropic-version':'2023-06-01'},
-// body: JSON.stringify({ model:'claude-opus-4-6', max_tokens:200,
-// system: `You are Samara AI, a friendly tutor for a ${ag} year old child. Be encouraging and explain simply.`,
-// messages:[{role:'user',content:`Help with: ${q.text}. Hint: ${q.hint}`}]
-// })
-// });
-// const data = await res.json();
-// return data.content[0].text;
-// },
-generateResponse(q, ag){
-const hint=q?.hint||'Think carefully!';
-const opens={'0-3':'Let\'s try together! 🌈','4-6':'Let me help you! 😊','7-10':'Great try! Let\'s think together 🤔','11-14':'Good attempt! Here\'s how to think about it 💡','15-17':'Let\'s analyse this carefully 🔬'};
-const open=opens[ag]||opens['7-10'];
-const txt=q?.text||'';
-if(txt.includes('+')){const m=txt.match(/(\d+)\s*\+\s*(\d+)/);if(m){const a=+m[1],b=+m[2];return `${open}<br>Start at <b>${a}</b> and count up <b>${b}</b> more.<br>💡 ${hint}`;}}
-if(txt.includes('−')||txt.includes('-')){const m=txt.match(/(\d+)\s*[−-]\s*(\d+)/);if(m){const a=+m[1],b=+m[2];return `${open}<br>Start at <b>${a}</b> and count back <b>${b}</b>.<br>💡 ${hint}`;}}
-if(txt.includes('×')) return `${open}<br>Multiplication means adding groups!<br>💡 ${hint}`;
-if(txt.includes('÷')) return `${open}<br>Division means sharing into equal groups.<br>💡 ${hint}`;
-return `${open}<br>💡 Clue: <b>${hint}</b><br>You can do it! 💪`;
-},
-
-// Placeholder future AI modules
-async AIHomeworkHelper(q){ console.log('Homework helper:',q); return 'AI homework help coming soon! 🚀'; },
-async AIExplanationEngine(c){ console.log('Explanation engine:',c); return `AI explanations for ${c} coming soon! 🌟`; },
-async AIStoryGenerator(t,ag){ console.log('Story generator:',t,ag); return `Once upon a time...`; },
-async AIPracticeGenerator(s,d){ console.log('Practice generator:',s,d); return null; },
-
-toggleChat(){
-const win=document.getElementById('ai-chat-window');
-this.isOpen=!this.isOpen;
-win?.classList.toggle('hidden',!this.isOpen);
-if(this.isOpen&&document.getElementById('ai-chat-messages')?.children.length===0){
-this.addMsg(this.greeting(),'ai');
-}
-},
-greeting(){ return ['Hi! 👋 I\'m Samara AI, your learning buddy! Ask me anything!','Hello! 🌟 Ready to learn together?','Hey! 🤖 I\'m Samara! What are we learning today?'][Math.floor(Math.random()*3)]; },
-addMsg(text,type){
-const msgs=document.getElementById('ai-chat-messages'); if(!msgs) return;
-const d=document.createElement('div'); d.className=`ai-msg${type==='user'?' user-msg':''}`; d.innerHTML=text;
-msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
-},
-showTyping(){
-const msgs=document.getElementById('ai-chat-messages'); if(!msgs) return;
-const d=document.createElement('div'); d.className='ai-typing'; d.id='ai-typing'; d.innerHTML='<span></span><span></span><span></span>';
-msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
-},
-hideTyping(){ document.getElementById('ai-typing')?.remove(); },
-async sendMessage(){
-const inp=document.getElementById('ai-chat-input'); const txt=inp?.value.trim(); if(!txt) return;
-inp.value=''; this.addMsg(txt,'user'); this.showTyping();
-await new Promise(r=>setTimeout(r,1100));
-this.hideTyping();
-try {
-  const res = await fetch('/.netlify/functions/claude', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({message:txt, ageGroup:S.ageGroup})
-  });
-  const data = await res.json();
-  this.addMsg(data.response,'ai');
-} catch(e) {
-  this.addMsg(this.chatResponse(txt),'ai');
-}
-},
-chatResponse(t){
-const l=t.toLowerCase();
-if(l.includes('hello')||l.includes('hi')) return 'Hello! 👋 Great to see you! What are we learning today?';
-if(l.includes('help')) return 'Of course! 💛 Tell me what you are struggling with!';
-if(l.includes('math')||l.includes('add')||l.includes('subtract')) return 'Math is awesome! 🔢 Take it one step at a time. What problem do you need help with?';
-if(l.includes('hard')||l.includes('stuck')) return 'It is okay to find things hard — that means your brain is GROWING! 💪 Tell me what is giving you trouble!';
-if(l.includes('thanks')||l.includes('thank')) return 'You are so welcome! 🌟 Keep learning!';
-return 'Great question! 🤔 Always break big problems into small steps and never give up! You can do anything! 💪✨';
-},
-showFloat(){ document.getElementById('ai-tutor-float')?.classList.remove('hidden'); },
-hideFloat(){ document.getElementById('ai-tutor-float')?.classList.add('hidden'); }
-};
-
-// ── SMART SEARCH DATABASE ───────────────────────────────────
-const SearchDB = [
-{k:['add','adding','addition','plus','sum'],s:'math',w:1,label:'Addition',icon:'➕'},
-{k:['subtract','subtraction','minus','take away','difference'],s:'math',w:2,label:'Subtraction',icon:'➖'},
-{k:['multiply','multiplication','times','groups of'],s:'math',w:3,label:'Multiplication',icon:'✖️'},
-{k:['divide','division','share','split','equal groups'],s:'math',w:4,label:'Division',icon:'➗'},
-{k:['fraction','fractions','half','quarter','numerator'],s:'math',w:5,label:'Fractions',icon:'½'},
-{k:['number','numbers','count','counting','math','maths'],s:'math',w:1,label:'Math',icon:'🔢'},
-{k:['plant','plants','flower','tree','leaf','photosynthesis','grow'],s:'science',w:1,label:'Plants',icon:'🌿'},
-{k:['animal','animals','mammal','reptile','amphibian','wildlife'],s:'science',w:1,label:'Animals',icon:'🐾'},
-{k:['butterfly','caterpillar','tadpole','lifecycle','life cycle','metamorphosis'],s:'science',w:1,label:'Life Cycles',icon:'🦋'},
-{k:['earth','land','ocean','sea','river','lake','continent','island','mountain'],s:'science',w:2,label:'Our Earth',icon:'🌍'},
-{k:['rock','rocks','soil','fossil','mineral','geology'],s:'science',w:2,label:'Rocks & Soil',icon:'🪨'},
-{k:['volcano','volcanoes','earthquake','tsunami','flood','tornado','eruption','lava'],s:'science',w:2,label:'Volcanoes & Disasters',icon:'🌋'},
-{k:['weather','rain','snow','cloud','thunder','lightning','wind','storm'],s:'science',w:3,label:'Weather',icon:'⛅'},
-{k:['season','seasons','spring','summer','autumn','fall','winter'],s:'science',w:3,label:'Seasons',icon:'🍂'},
-{k:['water cycle','evaporation','condensation','precipitation'],s:'science',w:3,label:'Water Cycle',icon:'💧'},
-{k:['space','planet','planets','star','moon','sun','solar system','galaxy','universe','astronaut'],s:'science',w:4,label:'Space',icon:'🚀'},
-{k:['mars','jupiter','saturn','neptune','mercury','venus','uranus','asteroid','orbit'],s:'science',w:4,label:'Planets',icon:'🪐'},
-{k:['nasa','apollo','neil armstrong','satellite','telescope','spacewalk'],s:'science',w:4,label:'Space Exploration',icon:'👨‍🚀'},
-{k:['body','human body','heart','lungs','brain','bones','skeleton','muscle','blood'],s:'science',w:5,label:'Human Body',icon:'🫀'},
-{k:['senses','sight','hearing','smell','taste','touch','eyes','ears','nose'],s:'science',w:5,label:'The Senses',icon:'👁️'},
-{k:['healthy','health','exercise','nutrition','food','diet','sleep','vitamins','germs'],s:'science',w:5,label:'Staying Healthy',icon:'💪'},
-{k:['phonics','letters','alphabet','sounds','vowels','blends'],s:'reading',w:1,label:'Phonics',icon:'🔤'},
-{k:['sight words','common words','high frequency'],s:'reading',w:2,label:'Sight Words',icon:'👀'},
-{k:['vocabulary','word meaning','definition','dictionary'],s:'reading',w:3,label:'Vocabulary',icon:'📖'},
-{k:['synonym','synonyms','same meaning'],s:'reading',w:3,label:'Synonyms',icon:'🔄'},
-{k:['antonym','antonyms','opposite','opposites'],s:'reading',w:3,label:'Antonyms',icon:'↔️'},
-{k:['grammar','noun','verb','adjective','sentence','punctuation'],s:'reading',w:4,label:'Grammar',icon:'✏️'},
-{k:['comprehension','main idea','inference','passage','story'],s:'reading',w:5,label:'Comprehension',icon:'🧠'},
-{k:['community','neighborhood','helper','police','firefighter','rules','laws'],s:'social',w:1,label:'Community',icon:'🏘️'},
-{k:['history','historical','ancient','past','civilization','medieval','revolution','war'],s:'social',w:2,label:'History',icon:'🏛️'},
-{k:['president','george washington','abraham lincoln','martin luther king','rosa parks','leader'],s:'social',w:2,label:'Famous Leaders',icon:'👑'},
-{k:['geography','continent','continents','country','countries','capital','map'],s:'social',w:3,label:'Geography',icon:'🗺️'},
-{k:['africa','asia','europe','north america','south america','australia','antarctica'],s:'social',w:3,label:'Continents',icon:'🌍'},
-{k:['eiffel tower','pyramid','great wall','statue of liberty','landmark'],s:'social',w:3,label:'Landmarks',icon:'🗼'},
-{k:['government','democracy','vote','election','constitution','rights','freedom'],s:'social',w:4,label:'Government',icon:'⚖️'},
-{k:['culture','tradition','celebration','festival','holiday','diwali','christmas','hanukkah'],s:'social',w:5,label:'Cultures',icon:'🎭'},
-{k:['algebra','equation','variable','solve','linear','quadratic'],s:'algebra',w:1,label:'Algebra',icon:'📐'},
-{k:['geometry','shape','angle','triangle','circle','area','perimeter','volume'],s:'algebra',w:4,label:'Geometry',icon:'📏'},
-{k:['cell','cells','dna','chromosome','biology','organism','bacteria'],s:'biology',w:1,label:'Cells & Biology',icon:'🔬'},
-{k:['genetics','gene','heredity','evolution','darwin','natural selection'],s:'biology',w:2,label:'Genetics',icon:'🧬'},
-{k:['ecosystem','habitat','food chain','biodiversity','rainforest','biome'],s:'biology',w:3,label:'Ecosystems',icon:'🌿'},
-{k:['chemistry','element','atom','molecule','periodic table','reaction','acid','base'],s:'biology',w:4,label:'Chemistry',icon:'⚗️'},
-{k:['coding','code','program','programming','algorithm','computer','html','css','javascript','python'],s:'compsci',w:1,label:'Coding',icon:'💻'},
-{k:['binary','loop','variable','function','debugging','logic','data'],s:'compsci',w:2,label:'Algorithms',icon:'🔁'},
-{k:['artificial intelligence','ai','machine learning','robot','neural network'],s:'compsci',w:5,label:'AI & Machine Learning',icon:'🤖'},
-{k:['money','finance','budget','save','saving','invest','bank','interest','loan'],s:'finance',w:1,label:'Finance',icon:'💰'},
-{k:['stock','stocks','market','economy','inflation','tax','income'],s:'finance',w:3,label:'Investing',icon:'📈'},
-{k:['quantum','quantum physics','superposition','entanglement','uncertainty','qubit'],s:'quantum',w:1,label:'Quantum Physics',icon:'⚛️'},
-];
-
-function smartSearch(query){
-if(!query||query.trim().length<2) return null;
-const q=query.toLowerCase().trim();
-let best=null, bestScore=0;
-for(const entry of SearchDB){
-for(const kw of entry.k){
-if(q.includes(kw)||kw.includes(q)){
-const score=kw.length;
-if(score>bestScore){ bestScore=score; best=entry; }
-}
-}
-}
-return best;
-}
-
-function getSearchSuggestions(ageGroup){
-const byAge={
-'0-3':['colors','animals','shapes','counting'],
-'4-6':['adding','animals','plants','community'],
-'7-10':['volcano','fractions','planets','history','grammar'],
-'11-14':['algebra','genetics','coding','democracy','chemistry'],
-'15-17':['quantum','investing','artificial intelligence','evolution','statistics']
-};
-return byAge[ageGroup]||byAge['7-10'];
-}
-
-// ── AVATAR SYSTEM ───────────────────────────────────────────
-const Avatars = {
-current: 'samara',
-files: {
-samara: 'samara.png.jpeg',
-littlejr: 'littlejr.png.jpeg',
-mommytutor: 'tutormommy.png.jpeg',
-star: 'starmascot.png.jpeg'
-},
-emojis: { samara:'👧', littlejr:'🧒', mommytutor:'👩', star:'⭐' },
-names: { samara:'Samara', littlejr:'Little Jr', mommytutor:'Mommy Tutor', star:'Star' },
-
-select(id){
-this.current=id;
-// Update all avatar images on page
-const file=this.files[id]||'samara.png.jpeg';
-const emoji=this.emojis[id]||'👧';
-const name=this.names[id]||'Samara';
-// Update floating button
-const btn=document.querySelector('.ai-avatar-btn');
-if(btn) btn.innerHTML=`<img src="${file}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.parentElement.innerHTML='${emoji}';" />`;
-// Update bubble avatar
-const bav=document.querySelector('.bubble-avatar');
-if(bav) bav.innerHTML=`<img src="${file}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.parentElement.innerHTML='${emoji}';" />`;
-// Update chat header
-const chav=document.querySelector('.ai-chat-avatar');
-if(chav) chav.innerHTML=`<img src="${file}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='${emoji}';" />`;
-// Update chat name
-const cn=document.querySelector('.ai-chat-name');
-if(cn) cn.textContent=`${name} AI`;
-// Update bubble name
-const bn=document.querySelector('.bubble-name');
-if(bn) bn.textContent=`${name} AI ✨`;
-// Update selected state
-document.querySelectorAll('[data-av]').forEach(el=>{
-el.querySelector('div').style.border=el.dataset.av===id?'3px solid var(--sun)':'3px solid rgba(255,255,255,0.2)';
-});
-localStorage.setItem('selectedAvatar',id);
-},
-loadSaved(){ const s=localStorage.getItem('selectedAvatar'); if(s) this.select(s); }
-};
-const QGen = {
-generate(sid,wid,stid,ag,count=5){ return Array.from({length:count},()=>this._make(sid,wid,stid,ag)); },
-_make(sid,wid,stid,ag){
-if(sid==='math'||sid==='numbers') return this._math(wid,stid,ag);
-if(sid==='shapes') return this._pick([{q:'Which shape has 3 sides?',c:'Triangle',w:['Circle','Square','Rectangle']},{q:'Which shape is round?',c:'Circle',w:['Triangle','Square','Oval']},{q:'Which has 4 equal sides?',c:'Square',w:['Circle','Triangle','Oval']}],'Look at the number of sides!');
-if(sid==='colors') return this._pick([{q:'What color is the sky?',c:'Blue',w:['Red','Green','Yellow']},{q:'What color is grass?',c:'Green',w:['Blue','Red','Orange']},{q:'What color is the sun?',c:'Yellow',w:['Blue','Green','Purple']}],'Think about what you see every day!');
-if(sid==='animals') return this._pick([{q:'Which animal says moo?',c:'Cow',w:['Dog','Cat','Duck']},{q:'Which animal has a trunk?',c:'Elephant',w:['Lion','Tiger','Giraffe']},{q:'Which animal lives in water and has fins?',c:'Fish',w:['Cat','Dog','Bird']}],'Think about each animal!');
-if(sid==='phonics'||sid==='reading') return this._pick([{q:'Which word has a short a sound?',c:'cat',w:['cake','boat','tree'],h:'"cat" sounds like aah'},{q:'Synonym for happy?',c:'joyful',w:['sad','angry','tired'],h:'Synonyms mean the same'},{q:'Opposite of hot?',c:'cold',w:['warm','cool','mild'],h:'Antonyms are opposites'},{q:'Which word is a NOUN?',c:'dog',w:['run','happy','quickly'],h:'Nouns are people, places, things'}],'');
-if(sid==='science'||sid==='biology') return this._pick([{q:'What do plants need to make food?',c:'Sunlight, water & air',w:['Only water','Only soil','Sunlight only'],h:'Photosynthesis needs sun, water and CO2'},{q:'Which animal is a mammal?',c:'Dog',w:['Eagle','Frog','Salmon'],h:'Mammals have fur and feed babies milk'},{q:'How many planets in our solar system?',c:'8',w:['7','9','10'],h:'Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune'},{q:'What does the heart do?',c:'Pumps blood',w:['Helps breathe','Digests food','Controls movement'],h:'Your heart beats 100000 times a day'}],'');
-if(sid==='social'||sid==='history') return this._pick([{q:'Who was the first US President?',c:'George Washington',w:['Abraham Lincoln','Thomas Jefferson','Benjamin Franklin'],h:'He led the Continental Army'},{q:'What is democracy?',c:'Citizens vote for leaders',w:['One ruler controls all','Military rules','Richest people rule'],h:'Democracy means rule by the people'},{q:'How many continents?',c:'7',w:['5','6','8'],h:'Africa Antarctica Asia Australia Europe North America South America'}],'');
-if(sid==='algebra') return this._algebra(stid);
-if(sid==='literature') return this._pick([{q:'What is the theme of a story?',c:'The central message or lesson',w:['The main character','The setting','The plot twist'],h:'Theme is the big idea'},{q:'What is a metaphor?',c:'Saying something IS something else',w:['Comparing using like/as','A type of rhyme','Story structure'],h:'No like or as needed'},{q:'What is the protagonist?',c:'The main character',w:['The villain','The narrator','A side character'],h:'Protagonist = the hero'}],'');
-if(sid==='compsci') return this._pick([{q:'What does algorithm mean?',c:'Step by step instructions to solve a problem',w:['A type of computer','A programming language','A data type'],h:'Like a recipe'},{q:'What does a loop do?',c:'Repeats code multiple times',w:['Stops the program','Creates a variable','Connects to internet'],h:'Loops run until a condition is met'},{q:'What is binary?',c:'A number system using only 0s and 1s',w:['A type of file','A programming language','A virus'],h:'Everything in computers is 0 or 1'}],'');
-if(sid==='finance') return this._pick([{q:'What is interest on a loan?',c:'Extra money paid back on top of borrowed amount',w:['A monthly fee','A type of investment','A bank account'],h:'Banks charge interest for lending'},{q:'What is a budget?',c:'A plan for how to spend money',w:['A bank account','A tax form','A credit card'],h:'Budgets track income vs spending'},{q:'What is inflation?',c:'When prices rise and money buys less',w:['When money gains value','A type of loan','A stock term'],h:'5% inflation means $100 becomes $105'}],'');
-if(sid==='quantum') return this._pick([{q:'What is superposition?',c:'A particle existing in multiple states at once',w:['Two particles in same place','A particle moving fast','A type of wave'],h:'Like Schrodingers cat'},{q:'What is quantum entanglement?',c:'Two particles linked so measuring one affects the other',w:['Two particles colliding','A particle splitting','A type of radiation'],h:'Spooky action at a distance'},{q:'What is a qubit?',c:'A quantum bit that can be 0, 1, or both at once',w:['A regular bit','A quantum particle','A type of wave'],h:'Qubits use superposition'}],'');
-return this._math(wid,stid,ag);
-},
-_pick(arr,defaultHint){
-const x=arr[rand(0,arr.length-1)];
-return{text:x.q,answers:makeA(x.c,x.w),correctValue:x.c,hint:x.h||defaultHint};
-},
-_math(wid,stid,ag){
-const easy=ag==='0-3'||ag==='4-6';
-const max=easy?5:stid===1?10:stid===2?25:50;
-const ops=wid===1?['+']: wid===2?['-']: wid===3?['×']: wid===4?['÷']:['+','-','×'];
-const op=ops[Math.floor(Math.random()*ops.length)];
-let a,b,correct,text;
-if(op==='+'){a=rand(1,max);b=rand(1,max);correct=a+b;text=`${a} + ${b} = ?`;}
-else if(op==='-'){b=rand(1,max);a=rand(b,max);correct=a-b;text=`${a} − ${b} = ?`;}
-else if(op==='×'){a=rand(2,easy?3:10);b=rand(2,easy?3:10);correct=a*b;text=`${a} × ${b} = ?`;}
-else{b=rand(2,easy?3:10);correct=rand(2,easy?3:10);a=b*correct;text=`${a} ÷ ${b} = ?`;}
-const hint=op==='+'?`Count up from ${a} by ${b}`:op==='-'?`Start at ${a}, count back ${b}`:op==='×'?`Think of ${a} groups of ${b}`:`How many groups of ${b} fit in ${a}?`;
-return{text,answers:makeAnswers(correct,3,max*2),correctValue:String(correct),hint};
-},
-_algebra(stid){
-if(stid===1){const x=rand(1,10),a=rand(1,10),r=x+a;return{text:`If x + ${a} = ${r}, find x`,answers:makeAnswers(x,3,15),correctValue:String(x),hint:`Subtract ${a} from both sides`};}
-const a=rand(2,5),b=rand(1,10),x=rand(1,8);
-return{text:`Solve: ${a}x + ${b} = ${a*x+b}`,answers:makeAnswers(x,3,15),correctValue:String(x),hint:`Subtract ${b} first, then divide by ${a}`};
-}
-};
-
-// ── DATA ────────────────────────────────────────────────────
-const SUBJECT_MAP = {
-'0-3': [{id:'shapes',name:'Shapes',icon:'🔷',desc:'Circles & squares'},{id:'colors',name:'Colors',icon:'🎨',desc:'Red, blue, yellow!'},{id:'animals',name:'Animals',icon:'🐾',desc:'Cat, dog, lion...'},{id:'numbers',name:'Numbers',icon:'🔢',desc:'Count to 5!'}],
-'4-6': [{id:'phonics',name:'Phonics',icon:'🔤',desc:'Letters & sounds'},{id:'math',name:'Math',icon:'🔢',desc:'Numbers & counting'},{id:'science',name:'Science',icon:'🔬',desc:'Explore & discover'},{id:'social',name:'My World',icon:'🌍',desc:'People & places'}],
-'7-10':[{id:'math',name:'Math',icon:'🔢',desc:'Numbers & puzzles'},{id:'reading',name:'Reading',icon:'📚',desc:'Stories & words'},{id:'science',name:'Science',icon:'🔬',desc:'Explore & discover'},{id:'social',name:'Social Studies',icon:'🌎',desc:'People & history'}],
-'11-14':[{id:'algebra',name:'Algebra',icon:'📐',desc:'Equations & geometry'},{id:'biology',name:'Biology',icon:'🧬',desc:'Life & chemistry'},{id:'history',name:'World History',icon:'🏛️',desc:'Events that shaped us'},{id:'literature',name:'Literature',icon:'📖',desc:'Stories & meaning'},{id:'compsci',name:'Computer Sci',icon:'💻',desc:'Code & logic'},{id:'finance',name:'Finance',icon:'💰',desc:'Money & economics'}],
-'15-17':[{id:'algebra',name:'Algebra',icon:'📐',desc:'Advanced equations'},{id:'biology',name:'Biology',icon:'🧬',desc:'Advanced life science'},{id:'history',name:'World History',icon:'🏛️',desc:'Deep world history'},{id:'literature',name:'Literature',icon:'📖',desc:'Analysis & essays'},{id:'compsci',name:'Computer Sci',icon:'💻',desc:'Algorithms & systems'},{id:'finance',name:'Finance',icon:'💰',desc:'Investment & markets'},{id:'quantum',name:'Quantum Physics',icon:'⚛️',desc:'The quantum world'}]
-};
-const WORLDS = {
-math:[{id:1,name:'Addition',icon:'➕'},{id:2,name:'Subtraction',icon:'➖'},{id:3,name:'Multiplication',icon:'✖️'},{id:4,name:'Division',icon:'➗'},{id:5,name:'Fractions',icon:'½'}],
-reading:[{id:1,name:'Phonics',icon:'🔤'},{id:2,name:'Sight Words',icon:'👀'},{id:3,name:'Vocabulary',icon:'📖'},{id:4,name:'Grammar',icon:'✏️'},{id:5,name:'Comprehension',icon:'🧠'}],
-science:[{id:1,name:'Living Things',icon:'🌿'},{id:2,name:'Our Earth',icon:'🌍'},{id:3,name:'Weather',icon:'⛅'},{id:4,name:'Space',icon:'🚀'},{id:5,name:'Human Body',icon:'🫀'}],
-social:[{id:1,name:'Community',icon:'🏘️'},{id:2,name:'History',icon:'🏛️'},{id:3,name:'Geography',icon:'🗺️'},{id:4,name:'Government',icon:'⚖️'},{id:5,name:'Cultures',icon:'🎭'}],
-phonics:[{id:1,name:'Short Vowels',icon:'🔤'},{id:2,name:'Long Vowels',icon:'📣'},{id:3,name:'Blends',icon:'🔗'}],
-numbers:[{id:1,name:'Count to 3',icon:'1️⃣'},{id:2,name:'Count to 5',icon:'5️⃣'},{id:3,name:'More & Less',icon:'⚖️'}],
-shapes:[{id:1,name:'Basic Shapes',icon:'🔷'},{id:2,name:'Find the Shape',icon:'🔍'},{id:3,name:'Shape Colours',icon:'🎨'}],
-colors:[{id:1,name:'Basic Colors',icon:'🎨'},{id:2,name:'Mix Colors',icon:'🖌️'},{id:3,name:'Color Match',icon:'✅'}],
-animals:[{id:1,name:'Farm Animals',icon:'🐄'},{id:2,name:'Wild Animals',icon:'🦁'},{id:3,name:'Sea Animals',icon:'🐠'}],
-algebra:[{id:1,name:'Equations',icon:'🔢'},{id:2,name:'Linear',icon:'📈'},{id:3,name:'Quadratics',icon:'📉'},{id:4,name:'Geometry',icon:'📐'},{id:5,name:'Statistics',icon:'📊'}],
-biology:[{id:1,name:'Cells',icon:'🔬'},{id:2,name:'Genetics',icon:'🧬'},{id:3,name:'Ecosystems',icon:'🌿'},{id:4,name:'Chemistry',icon:'⚗️'},{id:5,name:'The Body',icon:'🫀'}],
-history:[{id:1,name:'Ancient World',icon:'🏛️'},{id:2,name:'Middle Ages',icon:'🏰'},{id:3,name:'Revolutions',icon:'✊'},{id:4,name:'World Wars',icon:'🌍'},{id:5,name:'Modern Era',icon:'🚀'}],
-literature:[{id:1,name:'Story Elements',icon:'📖'},{id:2,name:'Poetry',icon:'🎭'},{id:3,name:'Literary Devices',icon:'✍️'},{id:4,name:'Genres',icon:'📚'},{id:5,name:'Analysis',icon:'🧠'}],
-compsci:[{id:1,name:'Basics',icon:'💻'},{id:2,name:'Algorithms',icon:'🔁'},{id:3,name:'Data Structures',icon:'🗂️'},{id:4,name:'Web Dev',icon:'🌐'},{id:5,name:'AI & ML',icon:'🤖'}],
-finance:[{id:1,name:'Budgeting',icon:'💰'},{id:2,name:'Saving',icon:'🏦'},{id:3,name:'Investing',icon:'📈'},{id:4,name:'Taxes',icon:'📋'},{id:5,name:'Markets',icon:'💹'}],
-quantum:[{id:1,name:'Wave-Particle',icon:'⚛️'},{id:2,name:'Superposition',icon:'🌀'},{id:3,name:'Entanglement',icon:'🔗'},{id:4,name:'Uncertainty',icon:'❓'},{id:5,name:'Quantum Computing',icon:'💻'}]
-};
-const SPW = 3; // stages per world
-
-// ── HELPERS ─────────────────────────────────────────────────
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-function makeAnswers(correct,count,max){
-const w=new Set(); let i=0;
-while(w.size<count&&i++<60){const c=correct+rand(-5,5);if(c!==correct&&c>=0)w.add(String(c));}
-while(w.size<count)w.add(String(correct+w.size+1));
-return makeA(String(correct),Array.from(w));
-}
-function makeA(correct,wrongs){
-const all=[{label:correct,isCorrect:true},...wrongs.slice(0,3).map(w=>({label:String(w),isCorrect:false}))];
-for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
-return all;
-}
-function el(id){return document.getElementById(id);}
-function setText(id,val){const e=el(id);if(e)e.textContent=val;}
-
-// ── STATE ────────────────────────────────────────────────────
-const S = {
-user:null, score:0, progress:[], ageGroup:'7-10',
-subject:null, worldIndex:null, stageIndex:null,
-questions:[], qIndex:0, correct:0, answered:false, currentWorld:null
-};
-
-// ── APP CONTROLLER ───────────────────────────────────────────
-const App = {
-
-async init(){
-console.log('Booting Samara AI...');
-DB.init();
-DB.client.auth.onAuthStateChange(async(ev,sess)=>{
-S.user=sess?.user||null; App.updateAuth();
-if(S.user){ S.progress=await DB.loadProgress(); const ag=S.user.user_metadata?.age_group; if(ag) App.selectAge(ag,false); }
-});
-try{
-S.user=await DB.getUser(); App.updateAuth();
-if(S.user){ S.progress=await DB.loadProgress(); const ag=S.user.user_metadata?.age_group; if(ag) App.selectAge(ag,false); }
-}catch(e){console.error('init:',e);}
-App.renderSubjects();
-console.log('Samara AI ready ✅');
-},
-
-showScreen(id,param){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-const sc=el(id); if(!sc){console.error('No screen:',id);return;}
-sc.classList.add('active'); window.scrollTo(0,0);
-if(id==='screen-auth'&&param) App.switchTab(param);
-if(id==='screen-dashboard') App.renderDash();
-if(id==='screen-parent') App.renderParent();
-if(id==='screen-quiz') AITutor.showFloat(); else AITutor.hideFloat();
-},
-
-updateAuth(){
-const in_=!!S.user;
-el('btn-login')?.classList.toggle('hidden',in_);
-el('btn-signup')?.classList.toggle('hidden',in_);
-el('btn-dashboard')?.classList.toggle('hidden',!in_);
-el('btn-parent')?.classList.toggle('hidden',!in_);
-el('btn-logout')?.classList.toggle('hidden',!in_);
-},
-
-selectAge(g,toast=true){
-S.ageGroup=g;
-document.querySelectorAll('.age-card').forEach(c=>c.classList.toggle('selected',c.dataset.age===g));
-App.renderSubjects();
-App.updateSearchSuggestions();
-if(toast) App.toast(`Switched to ${g} group! 🎉`);
-},
-
-renderSubjects(){
-const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
-const grid=el('subjects-grid'); const title=el('subjects-title');
-if(!grid||!title) return;
-const labels={'0-3':'🍼 Baby World!','4-6':'🌱 Junior World!','7-10':'⭐ Explorer World!','11-14':'🚀 Pro World!','15-17':'🎓 Senior World!'};
-title.textContent=labels[S.ageGroup]||'✨ Pick a subject:';
-grid.innerHTML=subs.map(s=>`<div class="subject-card" data-subject="${s.id}" onclick="App.openSubject('${s.id}')"><div class="subject-icon">${s.icon}</div><div class="subject-name">${s.name}</div><div class="subject-desc">${s.desc}</div></div>`).join('');
-},
-
-selectAvatar(id){ Avatars.select(id); App.toast(`${Avatars.names[id]} is your tutor! ${Avatars.emojis[id]}`); },
-
-searchTopic(){
-const v=el('topic-input')?.value.trim(); if(!v){App.toast('Type a topic first! 🔍');return;}
-const result=smartSearch(v);
-const card=el('search-result-card'); if(!card) return;
-if(result){
-card.innerHTML=`<div style="background:rgba(255,255,255,0.97);border-radius:20px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1);">
-<div style="font-size:2.2rem;">${result.icon}</div>
-<div style="flex:1;"><div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#1A1A2E;">${result.label}</div><div style="font-size:0.82rem;color:#7A7A9D;margin-top:2px;">Tap to start learning!</div></div>
-<button class="btn btn-primary" onclick="App.openSubject('${result.s}');el('search-result-card').innerHTML=''">Go! 🚀</button>
-</div>`;
-App.toast(`Found: ${result.label}! 🎉`);
-} else {
-card.innerHTML=`<div style="text-align:center;color:rgba(255,255,255,0.7);padding:12px;"><div style="font-size:1.8rem;margin-bottom:6px;">🤔</div><div style="font-weight:700;">Hmm, Samara doesn't know that topic yet!</div><div style="font-size:0.85rem;margin-top:4px;opacity:0.7;">Try: volcano, fractions, planets, coding, history...</div></div>`;
-}
-},
-
-updateSearchSuggestions(){
-const wrap=el('search-suggestions'); if(!wrap) return;
-const suggs=getSearchSuggestions(S.ageGroup);
-wrap.innerHTML=suggs.map(s=>`<span onclick="el('topic-input').value='${s}';App.searchTopic();" style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;">${s}</span>`).join('');
-},
-
-openSubject(sid){
-S.subject=sid;
-const worlds=WORLDS[sid]||WORLDS['math'];
-const def=(SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10']).find(s=>s.id===sid);
-setText('worlds-title',`${def?.icon||'📚'} ${def?.name||sid} Worlds`);
-App.updateScores(); App.renderWorlds(worlds); App.showScreen('screen-worlds');
-},
-
-renderWorlds(worlds){
-const c=el('worlds-list'); if(!c) return; c.innerHTML='';
-worlds.forEach((w,i)=>{
-const unlocked=i===0||App.worldUnlocked(S.subject,i,worlds);
-const done=App.stagesDone(S.subject,w.id);
-const pct=Math.round((done/SPW)*100);
-const d=document.createElement('div'); d.className=`world-card ${unlocked?'':'locked'}`;
-d.innerHTML=`<div class="world-num c${i%5}">${w.icon||w.id}</div><div class="world-info"><div class="world-name">World ${w.id}: ${w.name}</div><div class="world-meta">${SPW} stages · ${done}/${SPW} done</div></div><div class="world-lock-icon">${unlocked?(done===SPW?'✅':'▶️'):'🔒'}</div><div class="world-progress-bar" style="width:${pct}%"></div>`;
-d.onclick=unlocked?()=>App.openWorld(i,worlds):()=>App.toast('Complete the previous world first! 🔒');
-c.appendChild(d);
-});
-},
-
-openWorld(idx,worlds){
-S.worldIndex=idx; const w=worlds[idx];
-setText('stages-title',`World ${w.id}: ${w.name}`);
-App.updateScores(); App.renderStages(w); App.showScreen('screen-stages');
-},
-
-renderStages(world){
-const c=el('stages-list'); if(!c) return; c.innerHTML='';
-for(let i=0;i<SPW;i++){
-const sid=i+1;
-const rec=S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid);
-const prev=i===0||S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid-1&&p.completed);
-const unlocked=!!prev; const done=!!(rec&&rec.completed); const stars=done?(rec.stars||1):0;
-const diff=i===0?'Easy':i===1?'Medium':'Hard'; const dc=i===0?'diff-1':i===1?'diff-2':'diff-3';
-const d=document.createElement('div'); d.className=`stage-card ${unlocked?'':'locked'}`;
-d.innerHTML=`<div class="stage-icon">${done?'🌟':unlocked?'▶️':'🔒'}</div><div><div class="stage-name">Stage ${sid}: ${diff} <span class="difficulty-badge ${dc}">${Adaptive.label(Adaptive.get(S.subject))}</span></div><div class="stage-meta">5 questions</div></div><div class="stage-stars">${done?'⭐'.repeat(stars):''}</div>`;
-d.onclick=unlocked?()=>App.startStage(i,world):()=>App.toast('Complete the previous stage first! 🔒');
-c.appendChild(d);
-}
-},
-
-startStage(idx,world){
-S.stageIndex=idx; S.questions=QGen.generate(S.subject,world.id,idx+1,S.ageGroup,5);
-S.qIndex=0; S.correct=0; S.answered=false; S.currentWorld=world;
-AITutor.wrongStreak=0; AITutor.ageGroup=S.ageGroup;
-setText('quiz-subject-badge',`${S.subject} · World ${world.id} · Stage ${idx+1}`);
-setText('quiz-q-total',S.questions.length);
-App.updateScores(); App.showScreen('screen-quiz'); App.renderQ();
-},
-
-renderQ(){
-const q=S.questions[S.qIndex]; S.answered=false; AITutor.hideHint();
-setText('quiz-q-num',`Q${S.qIndex+1}`);
-const pbar=el('quiz-progress-bar'); if(pbar) pbar.style.width=`${(S.qIndex/S.questions.length)*100}%`;
-setText('quiz-question',q.text);
-const ae=el('quiz-answers'); if(!ae) return; ae.innerHTML='';
-q.answers.forEach(a=>{
-const b=document.createElement('button'); b.className='answer-btn'; b.textContent=a.label;
-b.onclick=()=>App.answer(a,q,b); ae.appendChild(b);
-});
-const fb=el('quiz-feedback'); if(fb) fb.className='quiz-feedback hidden';
-},
-
-answer(ans,q,btn){
-if(S.answered) return; S.answered=true;
-document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
-if(ans.isCorrect){
-btn.classList.add('correct'); S.correct++; S.score+=10; AITutor.trackCorrect();
-App.feedback(true,App.tutorMsg('correct',''));
-} else {
-btn.classList.add('wrong');
-document.querySelectorAll('.answer-btn').forEach(b=>{if(b.textContent===String(q.answers.find(a=>a.isCorrect)?.label))b.classList.add('correct');});
-AITutor.trackWrong(q,S.ageGroup);
-App.feedback(false,App.tutorMsg('wrong',q.hint));
-}
-App.updateScores(); setTimeout(()=>App.nextQ(),2200);
-},
-
-tutorMsg(type,hint){
-const m={
-'0-3':{correct:['Yay!! 🎉 You did it!','WOW!! ⭐ So clever!'],wrong:['Oopsie! 🌸 Try again!','Almost! 💛 Once more!']},
-'4-6':{correct:['Awesome!! 🌟 So smart!','Woohoo!! 🎊 Correct!'],wrong:[`Hmm! 💛 Hint: ${hint}`,'Good try! 🤔']},
-'7-10':{correct:['Brilliant! 🚀','That is right! ⭐'],wrong:[`Not quite! 💪 Think: ${hint}`,'Close! 🔍']},
-'11-14':{correct:['Correct! 🎯','Spot on! 🚀'],wrong:[`Not this time. Think: ${hint}`,'Good effort! 🧠']},
-'15-17':{correct:['Excellent! ⚡','Correct! 🎓'],wrong:[`Analyse: ${hint}`,'Key insight: 🔬']}
-};
-const g=m[S.ageGroup]||m['7-10']; const pool=g[type]||g.correct;
-return pool[Math.floor(Math.random()*pool.length)];
-},
-
-feedback(ok,msg){
-const fb=el('quiz-feedback'); if(!fb) return;
-fb.textContent=msg; fb.className=`quiz-feedback ${ok?'correct-fb':'wrong-fb'}`;
-},
-
-nextQ(){ S.qIndex++; if(S.qIndex>=S.questions.length) App.finishStage(); else App.renderQ(); },
-
-async finishStage(){
-const total=S.questions.length; const acc=S.correct/total; const pct=Math.round(acc*100);
-const pts=S.correct*10; const world=S.currentWorld;
-const adaptive=Adaptive.update(S.subject,acc);
-if(S.user){
-const name=S.user.user_metadata?.full_name||S.user.email;
-await DB.saveScore({student:name,subject:S.subject,world:world.id,stage:S.stageIndex+1,score:pts,total:total*10,accuracy:acc});
-await DB.saveProgress(S.subject,world.id,S.stageIndex+1,acc);
-S.progress=await DB.loadProgress();
-}
-setText('result-star',pct>=90?'🌟':pct>=70?'⭐':'💪');
-setText('result-title',acc>=0.8?'Stage Complete! 🎉':'Keep Practicing! 💪');
-setText('result-score',`${pct}%`);
-setText('result-points',`+${pts} pts earned!`);
-setText('result-adaptive-msg',adaptive.message);
-const msgs={100:'Perfect score!! INCREDIBLE! 🌟',90:'Amazing!! Almost perfect! 🚀',80:'Great job! You passed! 🔓',60:'Good effort! Try again 💪',0:'Keep going — every mistake is learning! 💛'};
-setText('result-msg',msgs[pct===100?100:pct>=90?90:pct>=80?80:pct>=60?60:0]);
-const worlds=WORLDS[S.subject]||[];
-const lastStage=S.stageIndex>=SPW-1; const lastWorld=S.worldIndex>=worlds.length-1;
-const nb=el('result-next-btn');
-if(lastStage&&lastWorld){if(nb){nb.textContent='🏆 Subject Complete!';nb._action='done';}}
-else if(lastStage){if(nb){nb.textContent='Next World 🗺️';nb._action='next-world';}}
-else{if(nb){nb.textContent='Next Stage 🚀';nb._action='next-stage';}}
-App.showScreen('screen-result');
-},
-
-resultNext(){
-const action=el('result-next-btn')?._action;
-const worlds=WORLDS[S.subject]||[];
-if(action==='next-stage') App.startStage(S.stageIndex+1,S.currentWorld);
-else if(action==='next-world') App.openWorld(S.worldIndex+1,worlds);
-else{App.toast('🏆 Subject complete!');App.showScreen('screen-home');}
-},
-
-confirmQuit(){
-const ov=el('modal-overlay'); if(!ov) return; ov.classList.remove('hidden');
-el('modal-confirm').onclick=()=>{ov.classList.add('hidden');App.showScreen('screen-worlds');};
-el('modal-cancel').onclick=()=>ov.classList.add('hidden');
-},
-
-switchTab(tab){
-const isL=tab==='login';
-el('tab-login')?.classList.toggle('active',isL);
-el('tab-signup')?.classList.toggle('active',!isL);
-setText('auth-title',isL?'Welcome Back!':'Join the Adventure!');
-el('auth-name')?.classList.toggle('hidden',isL);
-App._tab=tab;
-},
-_tab:'login',
-
-async handleAuth(){
-const email=el('auth-email')?.value.trim();
-const pw=el('auth-password')?.value;
-const name=el('auth-name')?.value.trim();
-const msg=el('auth-msg'); if(!msg) return;
-msg.className='auth-msg';
-if(!email||!pw){msg.textContent='Please fill in email and password.';msg.classList.add('error');return;}
-if(App._tab==='signup'){
-if(!name){msg.textContent='Please enter your name!';msg.classList.add('error');return;}
-msg.textContent='Creating account...';
-const{error}=await DB.signUp(email,pw,name,S.ageGroup);
-if(error){msg.textContent=error.message;msg.classList.add('error');}
-else{msg.textContent='🎉 Account created! You can now log in.';msg.classList.add('success');App.switchTab('login');}
-} else {
-msg.textContent='Logging in...';
-const{data,error}=await DB.login(email,pw);
-if(error){msg.textContent=error.message;msg.classList.add('error');}
-else{S.user=data.user;S.progress=await DB.loadProgress();App.updateAuth();App.toast('Welcome back! 🌟');App.showScreen('screen-home');}
-}
-},
-
-async logout(){
-await DB.logout(); S.user=null;S.score=0;S.progress=[];
-App.updateAuth(); App.toast('See you soon! 👋'); App.showScreen('screen-home');
-},
-
-async renderDash(){
-const user=await DB.getUser(); if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
-const name=user.user_metadata?.full_name||user.email.split('@')[0];
-setText('dash-name',name);
-const ageLbl={'0-3':'Baby · Ages 0–3','4-6':'Junior · Ages 4–6','7-10':'Explorer · Ages 7–10','11-14':'Pro · Ages 11–14','15-17':'Senior · Ages 15–17'};
-setText('dash-age-badge',ageLbl[S.ageGroup]||'Explorer');
-const progress=await DB.loadProgress(); const recent=await DB.loadScores(10);
-setText('dash-total-score',recent.reduce((s,r)=>s+r.score,0));
-setText('dash-worlds-done',new Set(progress.filter(p=>p.completed).map(p=>`${p.subject}-${p.world}`)).size);
-setText('dash-stages-done',progress.filter(p=>p.completed).length);
-const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
-el('dash-progress-list').innerHTML=subs.map(s=>{
-const worlds=WORLDS[s.id]||[]; const total=worlds.length*SPW;
-const done=progress.filter(p=>p.subject===s.id&&p.completed).length;
-const pct=total>0?Math.round((done/total)*100):0;
-return `<div class="dash-subject-row"><div class="dash-subject-icon">${s.icon}</div><div class="dash-subject-info"><div class="dash-subject-name">${s.name}</div><div class="dash-subject-progress">${done}/${total} stages · ${Adaptive.label(Adaptive.get(s.id))}</div></div><div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%"></div></div></div>`;
-}).join('');
-el('dash-activity').innerHTML=recent.length===0
-?'<p class="empty-msg">No activity yet. Start learning! 🚀</p>'
-:recent.map(r=>`<div class="activity-row"><span>${r.subject} · W${r.world} S${r.stage}</span><span>${Math.round((r.accuracy||0)*100)}%</span><span class="activity-pts">+${r.score} pts</span></div>`).join('');
-},
-
-async renderParent(){
-const user=await DB.getUser(); if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
-const name=user.user_metadata?.full_name||user.email.split('@')[0];
-setText('parent-sub',`Tracking progress for ${name}`);
-const recent=await DB.loadScores(50);
-const totalPts=recent.reduce((s,r)=>s+r.score,0);
-const avgAcc=recent.length>0?Math.round(recent.reduce((s,r)=>s+(r.accuracy||0),0)/recent.length*100):0;
-setText('parent-total-quizzes',recent.length);
-setText('parent-total-pts',totalPts);
-setText('parent-avg-accuracy',`${avgAcc}%`);
-setText('parent-streak',App.calcStreak(recent));
-const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
-el('parent-subject-list').innerHTML=subs.map(s=>{
-const sr=recent.filter(r=>r.subject===s.id);
-const acc=sr.length>0?Math.round(sr.reduce((sum,r)=>sum+(r.accuracy||0),0)/sr.length*100):0;
-const cls=acc>=75?'strong':acc>=50?'medium':'weak';
-const lbl=acc>=75?'Strong 💪':acc>=50?'Developing 📈':'Needs help 💛';
-return `<div class="subject-progress-card"><div class="subject-progress-header"><div class="subject-progress-icon">${s.icon}</div><div class="subject-progress-name">${s.name}</div><div class="subject-progress-pct" style="color:${acc>=75?'#6BCB77':acc>=50?'#FFD93D':'#FF6B6B'}">${acc}%</div></div><div class="subject-bar-wrap"><div class="subject-bar-fill ${cls}" style="width:${acc}%"></div></div><div class="subject-label-row"><span>${sr.length} quizzes</span><span>${lbl}</span></div></div>`;
-}).join('');
-const subMap={}; subs.forEach(s=>{const sr=recent.filter(r=>r.subject===s.id);subMap[s.id]={name:s.name,icon:s.icon,acc:sr.length>0?Math.round(sr.reduce((sum,r)=>sum+(r.accuracy||0),0)/sr.length*100):0,q:sr.length};});
-const weak=Object.values(subMap).filter(s=>s.acc<50&&s.q>0);
-const med=Object.values(subMap).filter(s=>s.acc>=50&&s.acc<75);
-const str=Object.values(subMap).filter(s=>s.acc>=75);
-let sug='';
-weak.forEach(s=>{sug+=`<div class="suggestion-item"><div class="suggestion-icon">🆘</div><div><b>${s.name}</b> needs extra practice (${s.acc}%). Daily 10-min sessions recommended.</div></div>`;});
-med.forEach(s=>{sug+=`<div class="suggestion-item"><div class="suggestion-icon">📈</div><div><b>${s.name}</b> is developing (${s.acc}%). Consistent practice to push above 75%.</div></div>`;});
-str.forEach(s=>{sug+=`<div class="suggestion-item"><div class="suggestion-icon">🌟</div><div><b>${s.name}</b> is excellent (${s.acc}%)! Challenge them with harder worlds.</div></div>`;});
-if(!sug) sug='<div class="suggestion-item"><div class="suggestion-icon">🚀</div><div>Start some quizzes to get personalised study suggestions!</div></div>';
-el('parent-suggestions').innerHTML=sug;
-},
-
-calcStreak(scores){
-if(!scores.length) return 0;
-const days=new Set(scores.map(s=>s.created_at?.slice(0,10)));
-let streak=0; const d=new Date();
-while(days.has(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1);}
-return streak;
-},
-
-worldUnlocked(sid,idx,worlds){
-if(idx===0) return true;
-const prev=worlds[idx-1];
-for(let s=1;s<=SPW;s++){const r=S.progress.find(p=>p.subject===sid&&p.world===prev.id&&p.stage===s);if(!r||!r.completed||r.accuracy<0.8)return false;}
-return true;
-},
-
-stagesDone(sid,wid){
-let c=0;
-for(let s=1;s<=SPW;s++){if(S.progress.find(p=>p.subject===sid&&p.world===wid&&p.stage===s&&p.completed))c++;}
-return c;
-},
-
-updateScores(){
-['worlds-score','stages-score','quiz-score'].forEach(id=>{const e=el(id);if(e)e.textContent=S.score;});
-},
-
-toast(msg,dur=2800){
-const t=el('toast'); if(!t) return;
-t.textContent=msg; t.classList.remove('hidden'); t.classList.add('show');
-clearTimeout(App._tt);
-App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);
-}
-};
-
-// ── BOOT ──────────────────────────────────────────────────────
-window.App=App; window.AITutor=AITutor; window.Avatars=Avatars;
-document.addEventListener('DOMContentLoaded',()=>{
-console.log('DOM ready');
-try{
-App.init();
-// Load saved avatar
-Avatars.loadSaved();
-// Show search suggestions
-setTimeout(()=>App.updateSearchSuggestions(), 500);
-}catch(e){console.error('Boot error:',e);}
-});
-</script>
-  
-<script>
-// ============================================================
-// SOUND & VOICE SYSTEM
-// ============================================================
+// ── SOUND SYSTEM ────────────────────────────────────────────
 const SoundSystem = {
   enabled: true,
-  speechEnabled: true,
   voices: [],
-
   init() {
-    // Load available voices
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        this.voices = window.speechSynthesis.getVoices();
-      };
+      window.speechSynthesis.onvoiceschanged = () => { this.voices = window.speechSynthesis.getVoices(); };
       this.voices = window.speechSynthesis.getVoices();
     }
-    // Add sound toggle button
-    const btn = document.createElement('button');
-    btn.className = 'sound-toggle';
-    btn.id = 'sound-toggle-btn';
-    btn.textContent = '🔊 Sound ON';
-    btn.onclick = () => this.toggle();
-    document.body.appendChild(btn);
-    // Add voice input button to chat
-    this.addVoiceInput();
   },
-
   toggle() {
     this.enabled = !this.enabled;
     const btn = document.getElementById('sound-toggle-btn');
     if (btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
-
-  // Speak text aloud
-  speak(text, rate = 0.9, pitch = 1.1) {
-    if (!this.speechEnabled || !this.enabled) return;
-    if (!('speechSynthesis' in window)) return;
+  speak(text, rate=0.9, pitch=1.1) {
+    if (!this.enabled || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
-    utt.rate = rate;
-    utt.pitch = pitch;
-    utt.volume = 0.9;
-    // Try to find a good voice
-    const preferred = this.voices.find(v =>
-      v.name.includes('Google') || v.name.includes('Female') || v.lang.startsWith('en')
-    );
+    utt.rate = rate; utt.pitch = pitch; utt.volume = 0.9;
+    const preferred = this.voices.find(v => v.name.includes('Google') || v.lang.startsWith('en'));
     if (preferred) utt.voice = preferred;
     window.speechSynthesis.speak(utt);
   },
-
-  // Speak for babies — slower and higher pitch
-  speakBaby(text) {
-    this.speak(text, 0.7, 1.3);
-  },
-
-  // Play sound effects using Web Audio API
+  speakBaby(text) { this.speak(text, 0.7, 1.3); },
   playTone(type) {
     if (!this.enabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
+      osc.connect(gain); gain.connect(ctx.destination);
       if (type === 'correct') {
-        // Happy ascending tones
         osc.frequency.setValueAtTime(523, ctx.currentTime);
-        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
-        osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+        osc.frequency.setValueAtTime(659, ctx.currentTime+0.1);
+        osc.frequency.setValueAtTime(784, ctx.currentTime+0.2);
         gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.5);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.5);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.5);
       } else if (type === 'wrong') {
-        // Low sad tone
         osc.frequency.setValueAtTime(200, ctx.currentTime);
-        osc.frequency.setValueAtTime(150, ctx.currentTime + 0.2);
+        osc.frequency.setValueAtTime(150, ctx.currentTime+0.2);
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.4);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.4);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.4);
       } else if (type === 'celebrate') {
-        // Celebration fanfare
-        const notes = [523, 659, 784, 1047];
-        notes.forEach((freq, i) => {
-          const o = ctx.createOscillator();
-          const g = ctx.createGain();
+        [523,659,784,1047].forEach((freq,i) => {
+          const o=ctx.createOscillator(); const g=ctx.createGain();
           o.connect(g); g.connect(ctx.destination);
-          o.frequency.value = freq;
-          g.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.12);
-          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.3);
-          o.start(ctx.currentTime + i * 0.12);
-          o.stop(ctx.currentTime + i * 0.12 + 0.3);
+          o.frequency.value=freq;
+          g.gain.setValueAtTime(0.25,ctx.currentTime+i*0.12);
+          g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.12+0.3);
+          o.start(ctx.currentTime+i*0.12); o.stop(ctx.currentTime+i*0.12+0.3);
         });
       } else if (type === 'tap') {
-        // Soft tap for baby
         osc.frequency.setValueAtTime(800, ctx.currentTime);
         gain.gain.setValueAtTime(0.15, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.15);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.15);
       }
-    } catch(e) { /* Audio not supported */ }
+    } catch(e) {}
   },
-
-  // Add voice input button to chat
-  addVoiceInput() {
-    setTimeout(() => {
-      const inputRow = document.querySelector('.ai-chat-input-row');
-      if (inputRow && !document.getElementById('voice-input-btn')) {
-        const btn = document.createElement('button');
-        btn.className = 'voice-input-btn';
-        btn.id = 'voice-input-btn';
-        btn.innerHTML = '🎤';
-        btn.title = 'Speak your answer';
-        btn.onclick = () => this.startVoiceInput();
-        inputRow.insertBefore(btn, inputRow.querySelector('.ai-send-btn'));
-      }
-    }, 1000);
-  },
-
-  // Voice input using Web Speech API
   startVoiceInput() {
     if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      if (typeof App !== 'undefined') App.toast('Voice input not supported on this browser 😔');
-      return;
+      App.toast('Voice input not supported on this browser 😔'); return;
     }
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const r = new SR(); r.lang='en-US'; r.interimResults=false;
     const btn = document.getElementById('voice-input-btn');
     if (btn) btn.classList.add('listening');
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      const input = document.getElementById('ai-chat-input');
-      if (input) { input.value = transcript; }
+    r.onresult = (e) => {
+      const txt = e.results[0][0].transcript;
+      const inp = document.getElementById('ai-chat-input');
+      if (inp) inp.value = txt;
       if (btn) btn.classList.remove('listening');
-      if (typeof AITutor !== 'undefined') AITutor.sendMessage();
+      AITutor.sendMessage();
     };
-
-    recognition.onerror = () => {
-      if (btn) btn.classList.remove('listening');
-    };
-
-    recognition.onend = () => {
-      if (btn) btn.classList.remove('listening');
-    };
-
-    recognition.start();
+    r.onerror = r.onend = () => { if (btn) btn.classList.remove('listening'); };
+    r.start();
   }
 };
 
+// ── AI TUTOR ─────────────────────────────────────────────────
+const AITutor = {
+  wrongStreak: 0, isOpen: false, ageGroup: '7-10',
 
-// ============================================================
-// BABY MODE (Ages 0-3)
-// ============================================================
+  trackWrong(question, ageGroup) {
+    this.wrongStreak++; this.ageGroup = ageGroup;
+    if (this.wrongStreak >= 2) { this.showHint(question, ageGroup); this.wrongStreak = 0; }
+  },
+  trackCorrect() { this.wrongStreak = 0; },
+
+  showHint(q, ag) {
+    const msg = this.generateHint(q, ag);
+    const el = document.getElementById('ai-speech-bubble');
+    const tx = document.getElementById('bubble-text');
+    if (el && tx) { tx.innerHTML = msg; el.classList.remove('hidden'); }
+  },
+  hideHint() { document.getElementById('ai-speech-bubble')?.classList.add('hidden'); },
+
+  generateHint(q, ag) {
+    const hint = q?.hint || 'Think carefully!';
+    const opens = {'0-3':"Let's try! 🌈",'4-6':"Let me help! 😊",'7-10':"Let's think 🤔",'11-14':"Here's a clue 💡",'15-17':"Consider this 🔬"};
+    const open = opens[ag] || opens['7-10'];
+    const txt = q?.text || '';
+    if (txt.includes('+')) { const m=txt.match(/(\d+)\s*\+\s*(\d+)/); if(m) return `${open}<br>Start at <b>${m[1]}</b> and count up <b>${m[2]}</b>.<br>💡 ${hint}`; }
+    if (txt.includes('−')||txt.includes('-')) { const m=txt.match(/(\d+)\s*[−-]\s*(\d+)/); if(m) return `${open}<br>Start at <b>${m[1]}</b>, count back <b>${m[2]}</b>.<br>💡 ${hint}`; }
+    if (txt.includes('×')) return `${open}<br>Multiplication = adding groups!<br>💡 ${hint}`;
+    if (txt.includes('÷')) return `${open}<br>Division = sharing equally.<br>💡 ${hint}`;
+    return `${open}<br>💡 Clue: <b>${hint}</b><br>You can do it! 💪`;
+  },
+
+  toggleChat() {
+    const win = document.getElementById('ai-chat-window');
+    this.isOpen = !this.isOpen;
+    win?.classList.toggle('hidden', !this.isOpen);
+    if (this.isOpen && document.getElementById('ai-chat-messages')?.children.length === 0) {
+      this.addMsg(this.greeting(), 'ai');
+    }
+  },
+  greeting() { return ['Hi! 👋 I\'m Samara AI! Ask me anything!','Hello! 🌟 Ready to learn?','Hey! 🤖 What are we learning today?'][Math.floor(Math.random()*3)]; },
+  addMsg(text, type) {
+    const msgs = document.getElementById('ai-chat-messages'); if (!msgs) return;
+    const d = document.createElement('div'); d.className=`ai-msg${type==='user'?' user-msg':''}`; d.innerHTML=text;
+    msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+  },
+  showTyping() {
+    const msgs = document.getElementById('ai-chat-messages'); if (!msgs) return;
+    const d = document.createElement('div'); d.className='ai-typing'; d.id='ai-typing';
+    d.innerHTML='<span></span><span></span><span></span>';
+    msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+  },
+  hideTyping() { document.getElementById('ai-typing')?.remove(); },
+
+  // ★ FREE AI — calls Anthropic API directly, no Netlify needed
+  async sendMessage() {
+    const inp = document.getElementById('ai-chat-input');
+    const txt = inp?.value.trim(); if (!txt) return;
+    inp.value = ''; this.addMsg(txt, 'user'); this.showTyping();
+    // Try free Anthropic API first
+    const aiReply = await callClaudeAI(txt, S.ageGroup);
+    this.hideTyping();
+    if (aiReply) {
+      this.addMsg(aiReply, 'ai');
+    } else {
+      // Fallback to built-in responses if API unavailable
+      this.addMsg(this.fallbackResponse(txt), 'ai');
+    }
+  },
+
+  fallbackResponse(t) {
+    const l = t.toLowerCase();
+    if (l.includes('hello')||l.includes('hi')) return 'Hello! 👋 Great to see you! What are we learning today?';
+    if (l.includes('help')) return 'Of course! 💛 Tell me what you are struggling with!';
+    if (l.includes('math')||l.includes('add')||l.includes('subtract')) return 'Math is awesome! 🔢 Take it one step at a time!';
+    if (l.includes('hard')||l.includes('stuck')) return 'It\'s okay to find things hard — your brain is GROWING! 💪';
+    if (l.includes('thanks')) return 'You are so welcome! 🌟 Keep learning!';
+    return 'Great question! 🤔 Break big problems into small steps and never give up! 💪✨';
+  },
+
+  tutorMsg(type, hint) {
+    const m = {
+      '0-3':  {correct:['Yay!! 🎉','WOW!! ⭐'],wrong:['Oopsie! 🌸','Almost! 💛']},
+      '4-6':  {correct:['Awesome!! 🌟','Woohoo!! 🎊'],wrong:[`Hmm! 💛 Hint: ${hint}`,'Good try! 🤔']},
+      '7-10': {correct:['Brilliant! 🚀','Right! ⭐'],wrong:[`Not quite! 💪 Think: ${hint}`,'Close! 🔍']},
+      '11-14':{correct:['Correct! 🎯','Spot on! 🚀'],wrong:[`Not this time. Think: ${hint}`,'Good effort! 🧠']},
+      '15-17':{correct:['Excellent! ⚡','Correct! 🎓'],wrong:[`Analyse: ${hint}`,'Key insight: 🔬']}
+    };
+    const g = m[S.ageGroup] || m['7-10'];
+    const pool = g[type] || g.correct;
+    return pool[Math.floor(Math.random()*pool.length)];
+  },
+
+  showFloat() { document.getElementById('ai-tutor-float')?.classList.remove('hidden'); },
+  hideFloat() { document.getElementById('ai-tutor-float')?.classList.add('hidden'); }
+};
+
+// ── SEARCH DB ───────────────────────────────────────────────
+const SearchDB = [
+  {k:['add','adding','addition','plus','sum'],s:'math',w:1,label:'Addition',icon:'➕'},
+  {k:['subtract','subtraction','minus','take away'],s:'math',w:2,label:'Subtraction',icon:'➖'},
+  {k:['multiply','multiplication','times','groups of'],s:'math',w:3,label:'Multiplication',icon:'✖️'},
+  {k:['divide','division','share','split'],s:'math',w:4,label:'Division',icon:'➗'},
+  {k:['fraction','fractions','half','quarter'],s:'math',w:5,label:'Fractions',icon:'½'},
+  {k:['number','numbers','count','counting','math','maths'],s:'math',w:1,label:'Math',icon:'🔢'},
+  {k:['plant','plants','flower','tree','photosynthesis'],s:'science',w:1,label:'Plants',icon:'🌿'},
+  {k:['animal','animals','mammal','reptile'],s:'science',w:1,label:'Animals',icon:'🐾'},
+  {k:['volcano','volcanoes','earthquake','lava'],s:'science',w:2,label:'Volcanoes',icon:'🌋'},
+  {k:['space','planet','planets','star','moon','solar system'],s:'science',w:4,label:'Space',icon:'🚀'},
+  {k:['body','human body','heart','brain','bones'],s:'science',w:5,label:'Human Body',icon:'🫀'},
+  {k:['phonics','letters','alphabet','sounds','vowels'],s:'reading',w:1,label:'Phonics',icon:'🔤'},
+  {k:['grammar','noun','verb','adjective','sentence'],s:'reading',w:4,label:'Grammar',icon:'✏️'},
+  {k:['history','historical','ancient','past','civilization'],s:'social',w:2,label:'History',icon:'🏛️'},
+  {k:['geography','continent','country','map'],s:'social',w:3,label:'Geography',icon:'🗺️'},
+  {k:['algebra','equation','variable','solve'],s:'algebra',w:1,label:'Algebra',icon:'📐'},
+  {k:['cell','cells','dna','biology','organism'],s:'biology',w:1,label:'Biology',icon:'🔬'},
+  {k:['coding','code','program','programming','algorithm'],s:'compsci',w:1,label:'Coding',icon:'💻'},
+  {k:['money','finance','budget','save','invest'],s:'finance',w:1,label:'Finance',icon:'💰'},
+  {k:['quantum','quantum physics','superposition'],s:'quantum',w:1,label:'Quantum Physics',icon:'⚛️'},
+  {k:['pep','primary exit','exit profile','jamaican exam'],s:'pep',label:'PEP Prep',icon:'🇯🇲'},
+  {k:['baby','toddler','0-3','infant'],s:'baby',label:'Baby World',icon:'🍼'},
+];
+
+function smartSearch(query) {
+  if (!query || query.trim().length < 2) return null;
+  const q = query.toLowerCase().trim();
+  let best = null, bestScore = 0;
+  for (const entry of SearchDB) {
+    for (const kw of entry.k) {
+      if (q.includes(kw) || kw.includes(q)) {
+        const score = kw.length;
+        if (score > bestScore) { bestScore = score; best = entry; }
+      }
+    }
+  }
+  return best;
+}
+
+function getSearchSuggestions(ageGroup) {
+  const byAge = {
+    '0-3':  ['colors','animals','shapes','counting'],
+    '4-6':  ['adding','animals','plants','community'],
+    '7-10': ['volcano','fractions','planets','history'],
+    '11-14':['algebra','genetics','coding','chemistry'],
+    '15-17':['quantum','investing','artificial intelligence','evolution']
+  };
+  return byAge[ageGroup] || byAge['7-10'];
+}
+
+// ── AVATARS ─────────────────────────────────────────────────
+const Avatars = {
+  current: 'samara',
+  files:  { samara:'samara.png.jpeg', littlejr:'littlejr.png.jpeg', mommytutor:'tutormommy.png.jpeg', star:'starmascot.png.jpeg' },
+  emojis: { samara:'👧', littlejr:'🧒', mommytutor:'👩', star:'⭐' },
+  names:  { samara:'Samara', littlejr:'Little Jr', mommytutor:'Mommy Tutor', star:'Star' },
+  select(id) {
+    this.current = id;
+    const file = this.files[id]||'samara.png.jpeg';
+    const emoji = this.emojis[id]||'👧';
+    const name = this.names[id]||'Samara';
+    const makeImg = (cls='') => `<img src="${file}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;${cls}" onerror="this.style.display='none';this.parentElement.innerHTML='${emoji}';" />`;
+    document.querySelector('.ai-avatar-btn')?.setAttribute('innerHTML', makeImg());
+    const bav = document.querySelector('.bubble-avatar'); if(bav) bav.innerHTML = makeImg();
+    const chav = document.querySelector('.ai-chat-avatar'); if(chav) chav.innerHTML = makeImg();
+    const cn = document.getElementById('ai-chat-name-label'); if(cn) cn.textContent = `${name} AI`;
+    const bn = document.querySelector('.bubble-name'); if(bn) bn.textContent = `${name} AI ✨`;
+    document.querySelectorAll('[data-av]').forEach(el => {
+      el.querySelector('div').style.border = el.dataset.av===id ? '3px solid var(--sun)' : '3px solid rgba(255,255,255,0.2)';
+    });
+    localStorage.setItem('selectedAvatar', id);
+  },
+  loadSaved() { const s = localStorage.getItem('selectedAvatar'); if(s) this.select(s); }
+};
+
+// ── QUESTION GENERATOR ───────────────────────────────────────
+const QGen = {
+  generate(sid, wid, stid, ag, count=5) { return Array.from({length:count}, () => this._make(sid,wid,stid,ag)); },
+  _make(sid, wid, stid, ag) {
+    if (sid==='math'||sid==='numbers') return this._math(wid,stid,ag);
+    if (sid==='shapes') return this._pick([
+      {q:'Which shape has 3 sides?',c:'Triangle',w:['Circle','Square','Rectangle']},
+      {q:'Which shape is round?',c:'Circle',w:['Triangle','Square','Oval']},
+      {q:'Which has 4 equal sides?',c:'Square',w:['Circle','Triangle','Rectangle']}
+    ],'Look at the number of sides!');
+    if (sid==='colors') return this._pick([
+      {q:'What color is the sky?',c:'Blue',w:['Red','Green','Yellow']},
+      {q:'What color is grass?',c:'Green',w:['Blue','Red','Orange']},
+      {q:'What color is the sun?',c:'Yellow',w:['Blue','Green','Purple']}
+    ],'Think about what you see every day!');
+    if (sid==='animals') return this._pick([
+      {q:'Which animal says moo?',c:'Cow',w:['Dog','Cat','Duck']},
+      {q:'Which animal has a trunk?',c:'Elephant',w:['Lion','Tiger','Giraffe']},
+      {q:'Which animal lives in water with fins?',c:'Fish',w:['Cat','Dog','Bird']}
+    ],'Think about each animal!');
+    if (sid==='phonics'||sid==='reading') return this._pick([
+      {q:'Which word has a short "a" sound?',c:'cat',w:['cake','boat','tree'],h:'"cat" sounds like aah'},
+      {q:'Synonym for happy?',c:'joyful',w:['sad','angry','tired'],h:'Synonyms mean the same'},
+      {q:'Opposite of hot?',c:'cold',w:['warm','cool','mild'],h:'Antonyms are opposites'},
+      {q:'Which word is a NOUN?',c:'dog',w:['run','happy','quickly'],h:'Nouns are people, places, things'}
+    ],'');
+    if (sid==='science'||sid==='biology') return this._pick([
+      {q:'What do plants need to make food?',c:'Sunlight, water & air',w:['Only water','Only soil','Sunlight only'],h:'Photosynthesis needs sun, water and CO2'},
+      {q:'Which animal is a mammal?',c:'Dog',w:['Eagle','Frog','Salmon'],h:'Mammals have fur and feed babies milk'},
+      {q:'How many planets in our solar system?',c:'8',w:['7','9','10'],h:'Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune'},
+      {q:'What does the heart do?',c:'Pumps blood',w:['Helps breathe','Digests food','Controls movement'],h:'Your heart beats 100,000 times a day'}
+    ],'');
+    if (sid==='social'||sid==='history') return this._pick([
+      {q:'Who was the first US President?',c:'George Washington',w:['Abraham Lincoln','Thomas Jefferson','Benjamin Franklin'],h:'He led the Continental Army'},
+      {q:'What is democracy?',c:'Citizens vote for leaders',w:['One ruler controls all','Military rules','Richest people rule'],h:'Democracy = rule by the people'},
+      {q:'How many continents?',c:'7',w:['5','6','8'],h:'Africa Antarctica Asia Australia Europe North America South America'}
+    ],'');
+    if (sid==='algebra') return this._algebra(stid);
+    if (sid==='literature') return this._pick([
+      {q:'What is the theme of a story?',c:'The central message or lesson',w:['The main character','The setting','The plot twist'],h:'Theme is the big idea'},
+      {q:'What is a metaphor?',c:'Saying something IS something else',w:['Comparing using like/as','A type of rhyme','Story structure'],h:'No like or as needed'},
+      {q:'What is the protagonist?',c:'The main character',w:['The villain','The narrator','A side character'],h:'Protagonist = the hero'}
+    ],'');
+    if (sid==='compsci') return this._pick([
+      {q:'What does algorithm mean?',c:'Step by step instructions to solve a problem',w:['A type of computer','A programming language','A data type'],h:'Like a recipe'},
+      {q:'What does a loop do?',c:'Repeats code multiple times',w:['Stops the program','Creates a variable','Connects to internet'],h:'Loops run until a condition is met'},
+      {q:'What is binary?',c:'A number system using only 0s and 1s',w:['A type of file','A programming language','A virus'],h:'Everything in computers is 0 or 1'}
+    ],'');
+    if (sid==='finance') return this._pick([
+      {q:'What is interest on a loan?',c:'Extra money paid back on top of borrowed amount',w:['A monthly fee','A type of investment','A bank account'],h:'Banks charge interest for lending'},
+      {q:'What is a budget?',c:'A plan for how to spend money',w:['A bank account','A tax form','A credit card'],h:'Budgets track income vs spending'},
+      {q:'What is inflation?',c:'When prices rise and money buys less',w:['When money gains value','A type of loan','A stock term'],h:'5% inflation means $100 becomes $105'}
+    ],'');
+    if (sid==='quantum') return this._pick([
+      {q:'What is superposition?',c:'A particle existing in multiple states at once',w:['Two particles in same place','A particle moving fast','A type of wave'],h:"Like Schrödinger's cat"},
+      {q:'What is quantum entanglement?',c:'Two particles linked so measuring one affects the other',w:['Two particles colliding','A particle splitting','A type of radiation'],h:'Spooky action at a distance'},
+      {q:'What is a qubit?',c:'A quantum bit that can be 0, 1, or both at once',w:['A regular bit','A quantum particle','A type of wave'],h:'Qubits use superposition'}
+    ],'');
+    return this._math(wid, stid, ag);
+  },
+  _pick(arr, defaultHint) {
+    const x = arr[rand(0,arr.length-1)];
+    return { text:x.q, answers:makeA(x.c,x.w), correctValue:x.c, hint:x.h||defaultHint };
+  },
+  _math(wid, stid, ag) {
+    const easy = ag==='0-3'||ag==='4-6';
+    const max = easy?5:stid===1?10:stid===2?25:50;
+    const ops = wid===1?['+']: wid===2?['-']: wid===3?['×']: wid===4?['÷']:['+','-','×'];
+    const op = ops[Math.floor(Math.random()*ops.length)];
+    let a,b,correct,text,hint;
+    if (op==='+') { a=rand(1,max); b=rand(1,max); correct=a+b; text=`${a} + ${b} = ?`; hint=`Count up from ${a} by ${b}`; }
+    else if (op==='-') { b=rand(1,max); a=rand(b,max); correct=a-b; text=`${a} − ${b} = ?`; hint=`Start at ${a}, count back ${b}`; }
+    else if (op==='×') { a=rand(2,easy?3:10); b=rand(2,easy?3:10); correct=a*b; text=`${a} × ${b} = ?`; hint=`Think of ${a} groups of ${b}`; }
+    else { b=rand(2,easy?3:10); correct=rand(2,easy?3:10); a=b*correct; text=`${a} ÷ ${b} = ?`; hint=`How many groups of ${b} fit in ${a}?`; }
+    return { text, answers:makeAnswers(correct,3,max*2), correctValue:String(correct), hint };
+  },
+  _algebra(stid) {
+    if (stid===1) { const x=rand(1,10),a=rand(1,10),r=x+a; return {text:`If x + ${a} = ${r}, find x`,answers:makeAnswers(x,3,15),correctValue:String(x),hint:`Subtract ${a} from both sides`}; }
+    const a=rand(2,5),b=rand(1,10),x=rand(1,8);
+    return { text:`Solve: ${a}x + ${b} = ${a*x+b}`, answers:makeAnswers(x,3,15), correctValue:String(x), hint:`Subtract ${b} first, then divide by ${a}` };
+  }
+};
+
+// ── DATA ─────────────────────────────────────────────────────
+const SUBJECT_MAP = {
+  '0-3': [{id:'shapes',name:'Shapes',icon:'🔷',desc:'Circles & squares'},{id:'colors',name:'Colors',icon:'🎨',desc:'Red, blue, yellow!'},{id:'animals',name:'Animals',icon:'🐾',desc:'Cat, dog, lion...'},{id:'numbers',name:'Numbers',icon:'🔢',desc:'Count to 5!'}],
+  '4-6': [{id:'phonics',name:'Phonics',icon:'🔤',desc:'Letters & sounds'},{id:'math',name:'Math',icon:'🔢',desc:'Numbers & counting'},{id:'science',name:'Science',icon:'🔬',desc:'Explore & discover'},{id:'social',name:'My World',icon:'🌍',desc:'People & places'}],
+  '7-10':[{id:'math',name:'Math',icon:'🔢',desc:'Numbers & puzzles'},{id:'reading',name:'Reading',icon:'📚',desc:'Stories & words'},{id:'science',name:'Science',icon:'🔬',desc:'Explore & discover'},{id:'social',name:'Social Studies',icon:'🌎',desc:'People & history'}],
+  '11-14':[{id:'algebra',name:'Algebra',icon:'📐',desc:'Equations & geometry'},{id:'biology',name:'Biology',icon:'🧬',desc:'Life & chemistry'},{id:'history',name:'World History',icon:'🏛️',desc:'Events that shaped us'},{id:'literature',name:'Literature',icon:'📖',desc:'Stories & meaning'},{id:'compsci',name:'Computer Sci',icon:'💻',desc:'Code & logic'},{id:'finance',name:'Finance',icon:'💰',desc:'Money & economics'}],
+  '15-17':[{id:'algebra',name:'Algebra',icon:'📐',desc:'Advanced equations'},{id:'biology',name:'Biology',icon:'🧬',desc:'Advanced life science'},{id:'history',name:'World History',icon:'🏛️',desc:'Deep world history'},{id:'literature',name:'Literature',icon:'📖',desc:'Analysis & essays'},{id:'compsci',name:'Computer Sci',icon:'💻',desc:'Algorithms & systems'},{id:'finance',name:'Finance',icon:'💰',desc:'Investment & markets'},{id:'quantum',name:'Quantum Physics',icon:'⚛️',desc:'The quantum world'}]
+};
+const WORLDS = {
+  math:[{id:1,name:'Addition',icon:'➕'},{id:2,name:'Subtraction',icon:'➖'},{id:3,name:'Multiplication',icon:'✖️'},{id:4,name:'Division',icon:'➗'},{id:5,name:'Fractions',icon:'½'}],
+  reading:[{id:1,name:'Phonics',icon:'🔤'},{id:2,name:'Sight Words',icon:'👀'},{id:3,name:'Vocabulary',icon:'📖'},{id:4,name:'Grammar',icon:'✏️'},{id:5,name:'Comprehension',icon:'🧠'}],
+  science:[{id:1,name:'Living Things',icon:'🌿'},{id:2,name:'Our Earth',icon:'🌍'},{id:3,name:'Weather',icon:'⛅'},{id:4,name:'Space',icon:'🚀'},{id:5,name:'Human Body',icon:'🫀'}],
+  social:[{id:1,name:'Community',icon:'🏘️'},{id:2,name:'History',icon:'🏛️'},{id:3,name:'Geography',icon:'🗺️'},{id:4,name:'Government',icon:'⚖️'},{id:5,name:'Cultures',icon:'🎭'}],
+  phonics:[{id:1,name:'Short Vowels',icon:'🔤'},{id:2,name:'Long Vowels',icon:'📣'},{id:3,name:'Blends',icon:'🔗'}],
+  numbers:[{id:1,name:'Count to 3',icon:'1️⃣'},{id:2,name:'Count to 5',icon:'5️⃣'},{id:3,name:'More & Less',icon:'⚖️'}],
+  shapes:[{id:1,name:'Basic Shapes',icon:'🔷'},{id:2,name:'Find the Shape',icon:'🔍'},{id:3,name:'Shape Colours',icon:'🎨'}],
+  colors:[{id:1,name:'Basic Colors',icon:'🎨'},{id:2,name:'Mix Colors',icon:'🖌️'},{id:3,name:'Color Match',icon:'✅'}],
+  animals:[{id:1,name:'Farm Animals',icon:'🐄'},{id:2,name:'Wild Animals',icon:'🦁'},{id:3,name:'Sea Animals',icon:'🐠'}],
+  algebra:[{id:1,name:'Equations',icon:'🔢'},{id:2,name:'Linear',icon:'📈'},{id:3,name:'Quadratics',icon:'📉'},{id:4,name:'Geometry',icon:'📐'},{id:5,name:'Statistics',icon:'📊'}],
+  biology:[{id:1,name:'Cells',icon:'🔬'},{id:2,name:'Genetics',icon:'🧬'},{id:3,name:'Ecosystems',icon:'🌿'},{id:4,name:'Chemistry',icon:'⚗️'},{id:5,name:'The Body',icon:'🫀'}],
+  history:[{id:1,name:'Ancient World',icon:'🏛️'},{id:2,name:'Middle Ages',icon:'🏰'},{id:3,name:'Revolutions',icon:'✊'},{id:4,name:'World Wars',icon:'🌍'},{id:5,name:'Modern Era',icon:'🚀'}],
+  literature:[{id:1,name:'Story Elements',icon:'📖'},{id:2,name:'Poetry',icon:'🎭'},{id:3,name:'Literary Devices',icon:'✍️'},{id:4,name:'Genres',icon:'📚'},{id:5,name:'Analysis',icon:'🧠'}],
+  compsci:[{id:1,name:'Basics',icon:'💻'},{id:2,name:'Algorithms',icon:'🔁'},{id:3,name:'Data Structures',icon:'🗂️'},{id:4,name:'Web Dev',icon:'🌐'},{id:5,name:'AI & ML',icon:'🤖'}],
+  finance:[{id:1,name:'Budgeting',icon:'💰'},{id:2,name:'Saving',icon:'🏦'},{id:3,name:'Investing',icon:'📈'},{id:4,name:'Taxes',icon:'📋'},{id:5,name:'Markets',icon:'💹'}],
+  quantum:[{id:1,name:'Wave-Particle',icon:'⚛️'},{id:2,name:'Superposition',icon:'🌀'},{id:3,name:'Entanglement',icon:'🔗'},{id:4,name:'Uncertainty',icon:'❓'},{id:5,name:'Quantum Computing',icon:'💻'}]
+};
+const SPW = 3;
+
+// ── HELPERS ──────────────────────────────────────────────────
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function makeAnswers(correct,count,max){
+  const w=new Set(); let i=0;
+  while(w.size<count&&i++<60){const c=correct+rand(-5,5);if(c!==correct&&c>=0)w.add(String(c));}
+  while(w.size<count)w.add(String(correct+w.size+1));
+  return makeA(String(correct),Array.from(w));
+}
+function makeA(correct,wrongs){
+  const all=[{label:correct,isCorrect:true},...wrongs.slice(0,3).map(w=>({label:String(w),isCorrect:false}))];
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  return all;
+}
+function el(id){return document.getElementById(id);}
+function setText(id,val){const e=el(id);if(e)e.textContent=val;}
+
+// ── STATE ────────────────────────────────────────────────────
+const S = {
+  user:null, score:0, progress:[], ageGroup:'7-10',
+  subject:null, worldIndex:null, stageIndex:null,
+  questions:[], qIndex:0, correct:0, answered:false, currentWorld:null
+};
+
+// ── APP ──────────────────────────────────────────────────────
+const App = {
+  async init() {
+    DB.init();
+    SoundSystem.init();
+    DB.client.auth.onAuthStateChange(async(ev,sess) => {
+      S.user = sess?.user || null; App.updateAuth();
+      if (S.user) { S.progress = await DB.loadProgress(); const ag=S.user.user_metadata?.age_group; if(ag) App.selectAge(ag,false); }
+    });
+    try {
+      S.user = await DB.getUser(); App.updateAuth();
+      if (S.user) { S.progress = await DB.loadProgress(); const ag=S.user.user_metadata?.age_group; if(ag) App.selectAge(ag,false); }
+    } catch(e) {}
+    App.renderSubjects();
+    Avatars.loadSaved();
+    setTimeout(() => App.updateSearchSuggestions(), 500);
+  },
+
+  showScreen(id, param) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const sc = el(id); if (!sc) return;
+    sc.classList.add('active'); window.scrollTo(0,0);
+    if (id==='screen-auth'&&param) App.switchTab(param);
+    if (id==='screen-dashboard') App.renderDash();
+    if (id==='screen-parent') App.renderParent();
+    if (id==='screen-quiz') AITutor.showFloat(); else AITutor.hideFloat();
+  },
+
+  updateAuth() {
+    const in_ = !!S.user;
+    el('btn-login')?.classList.toggle('hidden', in_);
+    el('btn-signup')?.classList.toggle('hidden', in_);
+    el('btn-dashboard')?.classList.toggle('hidden', !in_);
+    el('btn-parent')?.classList.toggle('hidden', !in_);
+    el('btn-logout')?.classList.toggle('hidden', !in_);
+  },
+
+  // ★ FIXED: baby mode goes to screen-baby, NOT tries to render subjects
+  selectAge(g, toast=true) {
+    S.ageGroup = g;
+    document.querySelectorAll('.age-card').forEach(c => c.classList.toggle('selected', c.dataset.age===g));
+    if (g === '0-3') {
+      App.showScreen('screen-baby');
+      SoundSystem.speakBaby('Welcome to Baby World! Tap what you want to learn!');
+      return;
+    }
+    App.renderSubjects();
+    App.updateSearchSuggestions();
+    if (toast) App.toast(`Switched to ${g} group! 🎉`);
+  },
+
+  renderSubjects() {
+    const subs = SUBJECT_MAP[S.ageGroup] || SUBJECT_MAP['7-10'];
+    const grid = el('subjects-grid'); const title = el('subjects-title');
+    if (!grid||!title) return;
+    const labels = {'4-6':'🌱 Junior World!','7-10':'⭐ Explorer World!','11-14':'🚀 Pro World!','15-17':'🎓 Senior World!'};
+    title.textContent = labels[S.ageGroup] || '✨ Pick a subject:';
+    grid.innerHTML = subs.map(s => `<div class="subject-card" data-subject="${s.id}" onclick="App.openSubject('${s.id}')"><div class="subject-icon">${s.icon}</div><div class="subject-name">${s.name}</div><div class="subject-desc">${s.desc}</div></div>`).join('');
+  },
+
+  selectAvatar(id) { Avatars.select(id); App.toast(`${Avatars.names[id]} is your tutor! ${Avatars.emojis[id]}`); },
+
+  searchTopic() {
+    const v = el('topic-input')?.value.trim(); if (!v) { App.toast('Type a topic first! 🔍'); return; }
+    const result = smartSearch(v);
+    const card = el('search-result-card'); if (!card) return;
+    // ★ FIXED: handle pep and baby from search
+    if (result?.s === 'pep') { App.showScreen('screen-pep'); return; }
+    if (result?.s === 'baby') { App.showScreen('screen-baby'); return; }
+    if (result) {
+      card.innerHTML = `<div style="background:rgba(255,255,255,0.97);border-radius:20px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.15);animation:pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1);"><div style="font-size:2.2rem;">${result.icon}</div><div style="flex:1;"><div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#1A1A2E;">${result.label}</div><div style="font-size:0.82rem;color:#7A7A9D;margin-top:2px;">Tap to start learning!</div></div><button class="btn btn-primary" onclick="App.openSubject('${result.s}');el('search-result-card').innerHTML=''">Go! 🚀</button></div>`;
+      App.toast(`Found: ${result.label}! 🎉`);
+    } else {
+      card.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.7);padding:12px;"><div style="font-size:1.8rem;margin-bottom:6px;">🤔</div><div style="font-weight:700;">Hmm, try: volcano, fractions, planets, coding...</div></div>`;
+    }
+  },
+
+  updateSearchSuggestions() {
+    const wrap = el('search-suggestions'); if (!wrap) return;
+    const suggs = getSearchSuggestions(S.ageGroup);
+    wrap.innerHTML = suggs.map(s => `<span onclick="el('topic-input').value='${s}';App.searchTopic();" style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;">${s}</span>`).join('');
+  },
+
+  openSubject(sid) {
+    S.subject = sid;
+    const worlds = WORLDS[sid] || WORLDS['math'];
+    const def = (SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10']).find(s=>s.id===sid);
+    setText('worlds-title', `${def?.icon||'📚'} ${def?.name||sid} Worlds`);
+    App.updateScores(); App.renderWorlds(worlds); App.showScreen('screen-worlds');
+  },
+
+  renderWorlds(worlds) {
+    const c = el('worlds-list'); if (!c) return; c.innerHTML='';
+    worlds.forEach((w,i) => {
+      const unlocked = i===0 || App.worldUnlocked(S.subject,i,worlds);
+      const done = App.stagesDone(S.subject, w.id);
+      const pct = Math.round((done/SPW)*100);
+      const d = document.createElement('div'); d.className=`world-card ${unlocked?'':'locked'}`;
+      d.innerHTML = `<div class="world-num c${i%5}">${w.icon||w.id}</div><div class="world-info"><div class="world-name">World ${w.id}: ${w.name}</div><div class="world-meta">${SPW} stages · ${done}/${SPW} done</div></div><div class="world-lock-icon">${unlocked?(done===SPW?'✅':'▶️'):'🔒'}</div><div class="world-progress-bar" style="width:${pct}%"></div>`;
+      d.onclick = unlocked ? () => App.openWorld(i,worlds) : () => App.toast('Complete the previous world first! 🔒');
+      c.appendChild(d);
+    });
+  },
+
+  openWorld(idx, worlds) {
+    S.worldIndex = idx; const w = worlds[idx];
+    setText('stages-title', `World ${w.id}: ${w.name}`);
+    App.updateScores(); App.renderStages(w); App.showScreen('screen-stages');
+  },
+
+  renderStages(world) {
+    const c = el('stages-list'); if (!c) return; c.innerHTML='';
+    for (let i=0;i<SPW;i++) {
+      const sid = i+1;
+      const rec = S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid);
+      const prev = i===0 || S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid-1&&p.completed);
+      const unlocked = !!prev; const done = !!(rec&&rec.completed); const stars = done?(rec.stars||1):0;
+      const diff = i===0?'Easy':i===1?'Medium':'Hard'; const dc = i===0?'diff-1':i===1?'diff-2':'diff-3';
+      const d = document.createElement('div'); d.className=`stage-card ${unlocked?'':'locked'}`;
+      d.innerHTML = `<div class="stage-icon">${done?'🌟':unlocked?'▶️':'🔒'}</div><div><div class="stage-name">Stage ${sid}: ${diff} <span class="difficulty-badge ${dc}">${Adaptive.label(Adaptive.get(S.subject))}</span></div><div class="stage-meta">5 questions</div></div><div class="stage-stars">${done?'⭐'.repeat(stars):''}</div>`;
+      d.onclick = unlocked ? () => App.startStage(i,world) : () => App.toast('Complete the previous stage first! 🔒');
+      c.appendChild(d);
+    }
+  },
+
+  startStage(idx, world) {
+    S.stageIndex=idx; S.questions=QGen.generate(S.subject,world.id,idx+1,S.ageGroup,5);
+    S.qIndex=0; S.correct=0; S.answered=false; S.currentWorld=world;
+    AITutor.wrongStreak=0; AITutor.ageGroup=S.ageGroup;
+    setText('quiz-subject-badge', `${S.subject} · World ${world.id} · Stage ${idx+1}`);
+    setText('quiz-q-total', S.questions.length);
+    App.updateScores(); App.showScreen('screen-quiz'); App.renderQ();
+  },
+
+  renderQ() {
+    const q = S.questions[S.qIndex]; S.answered=false; AITutor.hideHint();
+    setText('quiz-q-num', `Q${S.qIndex+1}`);
+    const pbar = el('quiz-progress-bar'); if(pbar) pbar.style.width=`${(S.qIndex/S.questions.length)*100}%`;
+    setText('quiz-question', q.text);
+    const ae = el('quiz-answers'); if (!ae) return; ae.innerHTML='';
+    q.answers.forEach(a => {
+      const b = document.createElement('button'); b.className='answer-btn'; b.textContent=a.label;
+      b.onclick = () => App.answer(a,q,b); ae.appendChild(b);
+    });
+    const fb = el('quiz-feedback'); if(fb) fb.className='quiz-feedback hidden';
+    // ★ Speak the question (sound system integrated properly)
+    setTimeout(() => { if(SoundSystem.enabled) SoundSystem.speak(q.text, 0.85, 1.05); }, 300);
+  },
+
+  // ★ FIXED method name — was "selectAnswer" in patch, actual name is "answer"
+  answer(ans, q, btn) {
+    if (S.answered) return; S.answered=true;
+    document.querySelectorAll('.answer-btn').forEach(b => b.disabled=true);
+    if (ans.isCorrect) {
+      btn.classList.add('correct'); S.correct++; S.score+=10;
+      AITutor.trackCorrect();
+      SoundSystem.playTone('correct'); // ★ Sound now works!
+      App.feedback(true, AITutor.tutorMsg('correct',''));
+    } else {
+      btn.classList.add('wrong');
+      document.querySelectorAll('.answer-btn').forEach(b => { if(b.textContent===String(q.answers.find(a=>a.isCorrect)?.label)) b.classList.add('correct'); });
+      AITutor.trackWrong(q, S.ageGroup);
+      SoundSystem.playTone('wrong'); // ★ Sound now works!
+      App.feedback(false, AITutor.tutorMsg('wrong', q.hint));
+    }
+    App.updateScores(); setTimeout(() => App.nextQ(), 2200);
+  },
+
+  feedback(ok, msg) {
+    const fb = el('quiz-feedback'); if (!fb) return;
+    fb.textContent=msg; fb.className=`quiz-feedback ${ok?'correct-fb':'wrong-fb'}`;
+  },
+
+  nextQ() { S.qIndex++; if(S.qIndex>=S.questions.length) App.finishStage(); else App.renderQ(); },
+
+  async finishStage() {
+    const total=S.questions.length; const acc=S.correct/total; const pct=Math.round(acc*100);
+    const pts=S.correct*10; const world=S.currentWorld;
+    const adaptive=Adaptive.update(S.subject,acc);
+    // ★ Sound on finish
+    if (acc>=0.8) { SoundSystem.playTone('celebrate'); SoundSystem.speak('Stage complete! Amazing work!'); }
+    if (S.user) {
+      const name=S.user.user_metadata?.full_name||S.user.email;
+      await DB.saveScore({student:name,subject:S.subject,world:world.id,stage:S.stageIndex+1,score:pts,total:total*10,accuracy:acc});
+      await DB.saveProgress(S.subject,world.id,S.stageIndex+1,acc);
+      S.progress=await DB.loadProgress();
+    }
+    setText('result-star',pct>=90?'🌟':pct>=70?'⭐':'💪');
+    setText('result-title',acc>=0.8?'Stage Complete! 🎉':'Keep Practicing! 💪');
+    setText('result-score',`${pct}%`);
+    setText('result-points',`+${pts} pts earned!`);
+    setText('result-adaptive-msg',adaptive.message);
+    const msgs={100:'Perfect score!! INCREDIBLE! 🌟',90:'Amazing!! Almost perfect! 🚀',80:'Great job! You passed! 🔓',60:'Good effort! Try again 💪',0:'Keep going — every mistake is learning! 💛'};
+    setText('result-msg',msgs[pct===100?100:pct>=90?90:pct>=80?80:pct>=60?60:0]);
+    const worlds=WORLDS[S.subject]||[];
+    const lastStage=S.stageIndex>=SPW-1; const lastWorld=S.worldIndex>=worlds.length-1;
+    const nb=el('result-next-btn');
+    if(lastStage&&lastWorld){if(nb){nb.textContent='🏆 Subject Complete!';nb._action='done';}}
+    else if(lastStage){if(nb){nb.textContent='Next World 🗺️';nb._action='next-world';}}
+    else{if(nb){nb.textContent='Next Stage 🚀';nb._action='next-stage';}}
+    App.showScreen('screen-result');
+  },
+
+  resultNext() {
+    const action=el('result-next-btn')?._action;
+    const worlds=WORLDS[S.subject]||[];
+    if(action==='next-stage') App.startStage(S.stageIndex+1,S.currentWorld);
+    else if(action==='next-world') App.openWorld(S.worldIndex+1,worlds);
+    else{App.toast('🏆 Subject complete!');App.showScreen('screen-home');}
+  },
+
+  confirmQuit() {
+    const ov=el('modal-overlay'); if(!ov) return; ov.classList.remove('hidden');
+    el('modal-confirm').onclick=()=>{ov.classList.add('hidden');App.showScreen('screen-worlds');};
+    el('modal-cancel').onclick=()=>ov.classList.add('hidden');
+  },
+
+  switchTab(tab) {
+    const isL=tab==='login';
+    el('tab-login')?.classList.toggle('active',isL);
+    el('tab-signup')?.classList.toggle('active',!isL);
+    setText('auth-title',isL?'Welcome Back!':'Join the Adventure!');
+    el('auth-name')?.classList.toggle('hidden',isL);
+    App._tab=tab;
+  },
+  _tab:'login',
+
+  async handleAuth() {
+    const email=el('auth-email')?.value.trim();
+    const pw=el('auth-password')?.value;
+    const name=el('auth-name')?.value.trim();
+    const msg=el('auth-msg'); if(!msg) return;
+    msg.className='auth-msg';
+    if(!email||!pw){msg.textContent='Please fill in email and password.';msg.classList.add('error');return;}
+    if(App._tab==='signup'){
+      if(!name){msg.textContent='Please enter your name!';msg.classList.add('error');return;}
+      msg.textContent='Creating account...';
+      const{error}=await DB.signUp(email,pw,name,S.ageGroup);
+      if(error){msg.textContent=error.message;msg.classList.add('error');}
+      else{msg.textContent='🎉 Account created! You can now log in.';msg.classList.add('success');App.switchTab('login');}
+    } else {
+      msg.textContent='Logging in...';
+      const{data,error}=await DB.login(email,pw);
+      if(error){msg.textContent=error.message;msg.classList.add('error');}
+      else{S.user=data.user;S.progress=await DB.loadProgress();App.updateAuth();App.toast('Welcome back! 🌟');App.showScreen('screen-home');}
+    }
+  },
+
+  async logout() {
+    await DB.logout(); S.user=null;S.score=0;S.progress=[];
+    App.updateAuth(); App.toast('See you soon! 👋'); App.showScreen('screen-home');
+  },
+
+  async renderDash() {
+    const user=await DB.getUser(); if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
+    const name=user.user_metadata?.full_name||user.email.split('@')[0];
+    setText('dash-name',name);
+    const ageLbl={'4-6':'Junior · Ages 4–6','7-10':'Explorer · Ages 7–10','11-14':'Pro · Ages 11–14','15-17':'Senior · Ages 15–17'};
+    setText('dash-age-badge',ageLbl[S.ageGroup]||'Explorer');
+    const progress=await DB.loadProgress(); const recent=await DB.loadScores(10);
+    setText('dash-total-score',recent.reduce((s,r)=>s+r.score,0));
+    setText('dash-worlds-done',new Set(progress.filter(p=>p.completed).map(p=>`${p.subject}-${p.world}`)).size);
+    setText('dash-stages-done',progress.filter(p=>p.completed).length);
+    const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
+    el('dash-progress-list').innerHTML=subs.map(s=>{
+      const worlds=WORLDS[s.id]||[]; const total=worlds.length*SPW;
+      const done=progress.filter(p=>p.subject===s.id&&p.completed).length;
+      const pct=total>0?Math.round((done/total)*100):0;
+      return `<div class="dash-subject-row"><div class="dash-subject-icon">${s.icon}</div><div class="dash-subject-info"><div class="dash-subject-name">${s.name}</div><div class="dash-subject-progress">${done}/${total} stages · ${Adaptive.label(Adaptive.get(s.id))}</div></div><div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%"></div></div></div>`;
+    }).join('');
+    el('dash-activity').innerHTML=recent.length===0?'<p class="empty-msg">No activity yet. Start learning! 🚀</p>':recent.map(r=>`<div class="activity-row"><span>${r.subject} · W${r.world} S${r.stage}</span><span>${Math.round((r.accuracy||0)*100)}%</span><span class="activity-pts">+${r.score} pts</span></div>`).join('');
+  },
+
+  async renderParent() {
+    const user=await DB.getUser(); if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
+    const name=user.user_metadata?.full_name||user.email.split('@')[0];
+    setText('parent-sub',`Tracking progress for ${name}`);
+    const recent=await DB.loadScores(50);
+    setText('parent-total-quizzes',recent.length);
+    setText('parent-total-pts',recent.reduce((s,r)=>s+r.score,0));
+    setText('parent-avg-accuracy',`${recent.length>0?Math.round(recent.reduce((s,r)=>s+(r.accuracy||0),0)/recent.length*100):0}%`);
+    setText('parent-streak',App.calcStreak(recent));
+    const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
+    el('parent-subject-list').innerHTML=subs.map(s=>{
+      const sr=recent.filter(r=>r.subject===s.id);
+      const acc=sr.length>0?Math.round(sr.reduce((sum,r)=>sum+(r.accuracy||0),0)/sr.length*100):0;
+      const cls=acc>=75?'strong':acc>=50?'medium':'weak';
+      const lbl=acc>=75?'Strong 💪':acc>=50?'Developing 📈':'Needs help 💛';
+      return `<div class="subject-progress-card"><div class="subject-progress-header"><div class="subject-progress-icon">${s.icon}</div><div class="subject-progress-name">${s.name}</div><div class="subject-progress-pct" style="color:${acc>=75?'#6BCB77':acc>=50?'#FFD93D':'#FF6B6B'}">${acc}%</div></div><div class="subject-bar-wrap"><div class="subject-bar-fill ${cls}" style="width:${acc}%"></div></div><div class="subject-label-row"><span>${sr.length} quizzes</span><span>${lbl}</span></div></div>`;
+    }).join('');
+    const subMap={}; subs.forEach(s=>{const sr=recent.filter(r=>r.subject===s.id);subMap[s.id]={name:s.name,icon:s.icon,acc:sr.length>0?Math.round(sr.reduce((sum,r)=>sum+(r.accuracy||0),0)/sr.length*100):0,q:sr.length};});
+    const weak=Object.values(subMap).filter(s=>s.acc<50&&s.q>0);
+    const med=Object.values(subMap).filter(s=>s.acc>=50&&s.acc<75);
+    const str=Object.values(subMap).filter(s=>s.acc>=75);
+    let sug='';
+    weak.forEach(s=>{sug+=`<div class="suggestion-item"><div class="suggestion-icon">🆘</div><div><b>${s.name}</b> needs extra practice (${s.acc}%). Daily 10-min sessions recommended.</div></div>`;});
+    med.forEach(s=>{sug+=`<div class="suggestion-item"><div class="suggestion-icon">📈</div><div><b>${s.name}</b> is developing (${s.acc}%). Keep practicing!</div></div>`;});
+    str.forEach(s=>{sug+=`<div class="suggestion-item"><div class="suggestion-icon">🌟</div><div><b>${s.name}</b> is excellent (${s.acc}%)! Try harder worlds.</div></div>`;});
+    if(!sug) sug='<div class="suggestion-item"><div class="suggestion-icon">🚀</div><div>Start some quizzes to get personalised suggestions!</div></div>';
+    el('parent-suggestions').innerHTML=sug;
+  },
+
+  calcStreak(scores) {
+    if(!scores.length) return 0;
+    const days=new Set(scores.map(s=>s.created_at?.slice(0,10)));
+    let streak=0; const d=new Date();
+    while(days.has(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1);}
+    return streak;
+  },
+
+  worldUnlocked(sid,idx,worlds) {
+    if(idx===0) return true;
+    const prev=worlds[idx-1];
+    for(let s=1;s<=SPW;s++){const r=S.progress.find(p=>p.subject===sid&&p.world===prev.id&&p.stage===s);if(!r||!r.completed||r.accuracy<0.8)return false;}
+    return true;
+  },
+
+  stagesDone(sid,wid) {
+    let c=0;
+    for(let s=1;s<=SPW;s++){if(S.progress.find(p=>p.subject===sid&&p.world===wid&&p.stage===s&&p.completed))c++;}
+    return c;
+  },
+
+  updateScores() {
+    ['worlds-score','stages-score','quiz-score'].forEach(id=>{const e=el(id);if(e)e.textContent=S.score;});
+  },
+
+  toast(msg,dur=2800) {
+    const t=el('toast'); if(!t) return;
+    t.textContent=msg; t.classList.remove('hidden'); t.classList.add('show');
+    clearTimeout(App._tt);
+    App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);
+  }
+};
+
+// ── BABY MODE — FIXED (no longer depends on patch or State) ──
 const BabyMode = {
-
-  score: 0,
-  current: null,
-  category: null,
-
-  // Content for each category
+  score: 0, current: null, category: null,
   content: {
     animals: [
-      { name:'Dog',      emoji:'🐕', sound:'Woof woof!',    color:'#FF9B3F' },
-      { name:'Cat',      emoji:'🐈', sound:'Meow meow!',    color:'#C77DFF' },
-      { name:'Cow',      emoji:'🐄', sound:'Moo moo!',      color:'#FFD93D' },
-      { name:'Duck',     emoji:'🦆', sound:'Quack quack!',  color:'#7EC8E3' },
-      { name:'Lion',     emoji:'🦁', sound:'Roar!',         color:'#FF6B6B' },
-      { name:'Elephant', emoji:'🐘', sound:'Trumpet!',      color:'#6BCB77' },
-      { name:'Frog',     emoji:'🐸', sound:'Ribbit ribbit!',color:'#6BCB77' },
-      { name:'Bird',     emoji:'🐦', sound:'Tweet tweet!',  color:'#7EC8E3' },
+      {name:'Dog',emoji:'🐕',sound:'Woof woof!',color:'#FF9B3F'},
+      {name:'Cat',emoji:'🐈',sound:'Meow meow!',color:'#C77DFF'},
+      {name:'Cow',emoji:'🐄',sound:'Moo moo!',color:'#FFD93D'},
+      {name:'Duck',emoji:'🦆',sound:'Quack quack!',color:'#7EC8E3'},
+      {name:'Lion',emoji:'🦁',sound:'Roar!',color:'#FF6B6B'},
+      {name:'Elephant',emoji:'🐘',sound:'Trumpet!',color:'#6BCB77'},
+      {name:'Frog',emoji:'🐸',sound:'Ribbit ribbit!',color:'#6BCB77'},
+      {name:'Bird',emoji:'🐦',sound:'Tweet tweet!',color:'#7EC8E3'},
     ],
     colors: [
-      { name:'Red',    emoji:'🔴', sound:'Red! Like apples!',    color:'#FF6B6B' },
-      { name:'Blue',   emoji:'🔵', sound:'Blue! Like the sky!',  color:'#7EC8E3' },
-      { name:'Yellow', emoji:'🟡', sound:'Yellow! Like the sun!',color:'#FFD93D' },
-      { name:'Green',  emoji:'🟢', sound:'Green! Like grass!',   color:'#6BCB77' },
-      { name:'Orange', emoji:'🟠', sound:'Orange! Like oranges!',color:'#FF9B3F' },
-      { name:'Purple', emoji:'🟣', sound:'Purple! So pretty!',   color:'#C77DFF' },
+      {name:'Red',emoji:'🔴',sound:'Red! Like apples!',color:'#FF6B6B'},
+      {name:'Blue',emoji:'🔵',sound:'Blue! Like the sky!',color:'#7EC8E3'},
+      {name:'Yellow',emoji:'🟡',sound:'Yellow! Like the sun!',color:'#FFD93D'},
+      {name:'Green',emoji:'🟢',sound:'Green! Like grass!',color:'#6BCB77'},
+      {name:'Orange',emoji:'🟠',sound:'Orange! Like oranges!',color:'#FF9B3F'},
+      {name:'Purple',emoji:'🟣',sound:'Purple! So pretty!',color:'#C77DFF'},
     ],
     shapes: [
-      { name:'Circle',   emoji:'⭕', sound:'Circle! Round and round!',    color:'#FF6B6B' },
-      { name:'Square',   emoji:'🟥', sound:'Square! Four equal sides!',   color:'#7EC8E3' },
-      { name:'Triangle', emoji:'🔺', sound:'Triangle! Three corners!',    color:'#FFD93D' },
-      { name:'Star',     emoji:'⭐', sound:'Star! You are a star!',        color:'#FF9B3F' },
-      { name:'Heart',    emoji:'❤️', sound:'Heart! Full of love!',         color:'#FF6B6B' },
-      { name:'Diamond',  emoji:'💎', sound:'Diamond! So sparkly!',         color:'#7EC8E3' },
+      {name:'Circle',emoji:'⭕',sound:'Circle! Round and round!',color:'#FF6B6B'},
+      {name:'Square',emoji:'🟥',sound:'Square! Four equal sides!',color:'#7EC8E3'},
+      {name:'Triangle',emoji:'🔺',sound:'Triangle! Three corners!',color:'#FFD93D'},
+      {name:'Star',emoji:'⭐',sound:'Star! You are a star!',color:'#FF9B3F'},
+      {name:'Heart',emoji:'❤️',sound:'Heart! Full of love!',color:'#FF6B6B'},
+      {name:'Diamond',emoji:'💎',sound:'Diamond! So sparkly!',color:'#7EC8E3'},
     ],
     numbers: [
-      { name:'One',   emoji:'1️⃣', sound:'One! 1! Count with me! One!',         color:'#FF6B6B' },
-      { name:'Two',   emoji:'2️⃣', sound:'Two! 1, 2! Great counting!',          color:'#7EC8E3' },
-      { name:'Three', emoji:'3️⃣', sound:'Three! 1, 2, 3! Wonderful!',          color:'#FFD93D' },
-      { name:'Four',  emoji:'4️⃣', sound:'Four! 1, 2, 3, 4! Amazing!',          color:'#6BCB77' },
-      { name:'Five',  emoji:'5️⃣', sound:'Five! 1, 2, 3, 4, 5! You did it!',   color:'#FF9B3F' },
+      {name:'One',emoji:'1️⃣',sound:'One! 1! Count with me! One!',color:'#FF6B6B'},
+      {name:'Two',emoji:'2️⃣',sound:'Two! 1, 2! Great counting!',color:'#7EC8E3'},
+      {name:'Three',emoji:'3️⃣',sound:'Three! 1, 2, 3! Wonderful!',color:'#FFD93D'},
+      {name:'Four',emoji:'4️⃣',sound:'Four! 1, 2, 3, 4! Amazing!',color:'#6BCB77'},
+      {name:'Five',emoji:'5️⃣',sound:'Five! 1, 2, 3, 4, 5! You did it!',color:'#FF9B3F'},
     ]
   },
 
   start(category) {
-    this.category = category;
-    this.score = 0;
-    document.getElementById('baby-score').textContent = '0';
-    document.getElementById('baby-categories').classList.add('hidden');
-    document.getElementById('baby-activity').classList.remove('hidden');
-
-    const labels = {
-      animals: 'Animals 🐾',
-      colors:  'Colors 🎨',
-      shapes:  'Shapes 🔷',
-      numbers: 'Numbers 🔢'
-    };
-    document.getElementById('baby-screen-title').textContent = labels[category];
+    this.category=category; this.score=0;
+    setText('baby-score','0');
+    el('baby-categories').classList.add('hidden');
+    el('baby-activity').classList.remove('hidden');
+    const labels={animals:'Animals 🐾',colors:'Colors 🎨',shapes:'Shapes 🔷',numbers:'Numbers 🔢'};
+    setText('baby-screen-title', labels[category]);
     this.nextQuestion();
   },
 
   nextQuestion() {
     const items = this.content[this.category];
-    // Pick correct answer
-    const correct = items[Math.floor(Math.random() * items.length)];
+    const correct = items[Math.floor(Math.random()*items.length)];
     this.current = correct;
-
-    // Pick 3 wrong answers
-    const others = items.filter(i => i.name !== correct.name);
-    const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
-    const all = [correct, ...shuffled].sort(() => Math.random() - 0.5);
-
-    // Set question text
-    const questions = {
-      animals: `Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
-      colors:  `Tap the color ${correct.name.toUpperCase()}! ${correct.emoji}`,
-      shapes:  `Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
-      numbers: `Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`
-    };
-    document.getElementById('baby-question').textContent = questions[this.category];
-
-    // Speak the question
+    const others = items.filter(i=>i.name!==correct.name).sort(()=>Math.random()-0.5).slice(0,3);
+    const all = [correct,...others].sort(()=>Math.random()-0.5);
+    const qText = {animals:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,colors:`Tap ${correct.name.toUpperCase()}! ${correct.emoji}`,shapes:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,numbers:`Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`};
+    setText('baby-question', qText[this.category]);
     SoundSystem.speakBaby(`Tap the ${correct.name}!`);
-
-    // Render items
-    const grid = document.getElementById('baby-items-grid');
-    grid.innerHTML = '';
+    const grid = el('baby-items-grid'); grid.innerHTML='';
     all.forEach(item => {
       const btn = document.createElement('button');
-      btn.className = 'baby-item-btn';
-      btn.innerHTML = `
-        <div class="baby-item-emoji">${item.emoji}</div>
-        <div class="baby-item-word">${item.name}</div>`;
+      btn.className='baby-item-btn';
+      btn.innerHTML=`<div class="baby-item-emoji">${item.emoji}</div><div class="baby-item-word">${item.name}</div>`;
       btn.onclick = () => this.answer(item, btn);
       grid.appendChild(btn);
     });
@@ -1857,16 +1505,13 @@ const BabyMode = {
   answer(item, btn) {
     SoundSystem.playTone('tap');
     if (item.name === this.current.name) {
-      // Correct!
       btn.classList.add('correct-baby');
-      this.score += 10;
-      document.getElementById('baby-score').textContent = this.score;
+      this.score+=10; setText('baby-score', this.score);
       SoundSystem.playTone('correct');
       SoundSystem.speakBaby(`Yes! That is the ${item.name}! ${item.sound} Amazing!`);
       this.celebrate(item);
       setTimeout(() => this.nextQuestion(), 2500);
     } else {
-      // Wrong
       btn.classList.add('wrong-baby');
       SoundSystem.playTone('wrong');
       SoundSystem.speakBaby(`Try again! Find the ${this.current.name}!`);
@@ -1875,254 +1520,113 @@ const BabyMode = {
   },
 
   celebrate(item) {
-    const div = document.createElement('div');
-    div.className = 'baby-celebrate';
-    div.innerHTML = `
-      <div class="baby-celebrate-inner">
-        <span class="baby-celebrate-emoji">${item.emoji}</span>
-        <div class="baby-celebrate-text">⭐ ${item.name}! ⭐</div>
-        <div style="font-size:1.2rem;color:rgba(255,255,255,0.9);margin-top:8px;">${item.sound}</div>
-      </div>`;
+    const div = document.createElement('div'); div.className='baby-celebrate';
+    div.innerHTML=`<div class="baby-celebrate-inner"><span class="baby-celebrate-emoji">${item.emoji}</span><div class="baby-celebrate-text">⭐ ${item.name}! ⭐</div><div style="font-size:1.2rem;color:rgba(255,255,255,0.9);margin-top:8px;">${item.sound}</div></div>`;
     document.body.appendChild(div);
     SoundSystem.playTone('celebrate');
-    setTimeout(() => div.remove(), 2000);
+    setTimeout(()=>div.remove(), 2000);
   },
 
   backToCategories() {
-    document.getElementById('baby-categories').classList.remove('hidden');
-    document.getElementById('baby-activity').classList.add('hidden');
+    el('baby-categories').classList.remove('hidden');
+    el('baby-activity').classList.add('hidden');
   }
 };
 
-
-// ============================================================
-// PEP QUESTION BANK
-// ============================================================
+// ── PEP MODULE — FIXED (uses S not State, uses App.* methods) ─
 const PEP = {
-
   questions: {
     math: [
-      { q:'What is 245 + 378?', a:makeA('623',['613','633','523']), c:'623', h:'Add the ones first: 5+8=13, carry 1. Then tens: 4+7+1=12, carry 1. Hundreds: 2+3+1=6.' },
-      { q:'What is 1000 - 367?', a:makeA('633',['633','637','733']), c:'633', h:'Borrow from the thousands. 1000 - 367 = 633.' },
-      { q:'What is 24 × 5?', a:makeA('120',['100','115','125']), c:'120', h:'24 × 5 = 24 × 10 ÷ 2 = 240 ÷ 2 = 120.' },
-      { q:'What fraction of 20 is 5?', a:makeA('¼',['⅕','½','⅓']), c:'¼', h:'5 out of 20 = 5/20 = 1/4.' },
-      { q:'What is the perimeter of a square with sides of 6cm?', a:makeA('24cm',['12cm','36cm','18cm']), c:'24cm', h:'Perimeter = 4 × side = 4 × 6 = 24cm.' },
-      { q:'Round 4,567 to the nearest hundred.', a:makeA('4,600',['4,500','4,570','5,000']), c:'4,600', h:'Look at the tens digit (6). Since 6 ≥ 5, round up.' },
-      { q:'What is 15% of 200?', a:makeA('30',['25','35','15']), c:'30', h:'15% = 15/100. 15/100 × 200 = 30.' },
-      { q:'A triangle has angles of 60° and 80°. What is the third angle?', a:makeA('40°',['50°','30°','20°']), c:'40°', h:'Angles in a triangle add up to 180°. 180 - 60 - 80 = 40°.' },
-      { q:'What is the area of a rectangle 8cm long and 5cm wide?', a:makeA('40cm²',['26cm²','13cm²','80cm²']), c:'40cm²', h:'Area = length × width = 8 × 5 = 40cm².' },
-      { q:'What is 3/4 + 1/4?', a:makeA('1',['¾','½','1¼']), c:'1', h:'Same denominator: 3/4 + 1/4 = 4/4 = 1.' },
+      {q:'What is 245 + 378?',a:makeA('623',['613','633','523']),c:'623',h:'Add ones first: 5+8=13, carry 1. Tens: 4+7+1=12. Hundreds: 2+3+1=6.'},
+      {q:'What is 1000 - 367?',a:makeA('633',['643','537','733']),c:'633',h:'Borrow from thousands. 1000 - 367 = 633.'},
+      {q:'What is 24 × 5?',a:makeA('120',['100','115','125']),c:'120',h:'24 × 5 = 24 × 10 ÷ 2 = 120.'},
+      {q:'What fraction of 20 is 5?',a:makeA('¼',['⅕','½','⅓']),c:'¼',h:'5 out of 20 = 5/20 = 1/4.'},
+      {q:'Perimeter of a square with sides 6cm?',a:makeA('24cm',['12cm','36cm','18cm']),c:'24cm',h:'Perimeter = 4 × side = 4 × 6 = 24cm.'},
+      {q:'Round 4,567 to the nearest hundred.',a:makeA('4,600',['4,500','4,570','5,000']),c:'4,600',h:'Tens digit is 6 ≥ 5, so round up.'},
+      {q:'What is 15% of 200?',a:makeA('30',['25','35','15']),c:'30',h:'15/100 × 200 = 30.'},
+      {q:'Triangle angles: 60° and 80°. Third angle?',a:makeA('40°',['50°','30°','20°']),c:'40°',h:'Angles in triangle = 180°. 180-60-80=40.'},
+      {q:'Area of rectangle 8cm × 5cm?',a:makeA('40cm²',['26cm²','13cm²','80cm²']),c:'40cm²',h:'Area = length × width = 8 × 5 = 40.'},
+      {q:'What is 3/4 + 1/4?',a:makeA('1',['¾','½','1¼']),c:'1',h:'Same denominator: 3+1=4, 4/4=1.'},
     ],
-
     language: [
-      { q:'Which sentence is written correctly?', a:makeA('She went to the market yesterday.', ['she went to the market yesterday.','She went to the market Yesterday.','She Went to the market yesterday.']), c:'She went to the market yesterday.', h:'Sentences start with a capital letter. Only proper nouns and the first word are capitalized.' },
-      { q:'What is the plural of "child"?', a:makeA('children',['childs','childrens','childs']), c:'children', h:'Child is an irregular plural. The plural is children, not childs.' },
-      { q:'Choose the correct word: "The dog wagged ___ tail."', a:makeA('its',['it\'s','their','his']), c:'its', h:'"Its" (no apostrophe) shows possession. "It\'s" means "it is".' },
-      { q:'What type of word is "quickly"?', a:makeA('Adverb',['Adjective','Noun','Verb']), c:'Adverb', h:'Adverbs describe HOW something is done. "Quickly" describes how the action happened.' },
-      { q:'Which word is a synonym for "happy"?', a:makeA('joyful',['sad','angry','worried']), c:'joyful', h:'Synonyms are words with similar meanings. Joyful means very happy.' },
-      { q:'What is the main idea of a paragraph?', a:makeA('The most important point the paragraph makes',['The first sentence','The last sentence','The longest sentence']), c:'The most important point the paragraph makes', h:'The main idea is what the whole paragraph is about — usually found in the topic sentence.' },
-      { q:'Choose the correct punctuation: "What time is it___"', a:makeA('?',['.',',','!']), c:'?', h:'Questions end with a question mark (?).' },
-      { q:'What is the past tense of "run"?', a:makeA('ran',['runned','runs','running']), c:'ran', h:'"Run" is an irregular verb. Its past tense is "ran" not "runned".' },
-      { q:'Which word is an antonym (opposite) of "ancient"?', a:makeA('modern',['old','historic','past']), c:'modern', h:'Ancient means very old. The opposite is modern (new/current).' },
-      { q:'A story\'s "setting" refers to:', a:makeA('Where and when the story takes place',['The main character','The problem in the story','How the story ends']), c:'Where and when the story takes place', h:'Setting = the time and place where a story happens.' },
+      {q:'Which sentence is correct?',a:makeA('She went to the market yesterday.',['she went to the market yesterday.','She went to the Market Yesterday.','She Went to the market yesterday.']),c:'She went to the market yesterday.',h:'Start with capital. Only proper nouns capitalized.'},
+      {q:'Plural of "child"?',a:makeA('children',['childs','childrens','child\'s']),c:'children',h:'Irregular plural — children, not childs.'},
+      {q:'"The dog wagged ___ tail."',a:makeA('its',["it's",'their','his']),c:'its',h:'"Its" (no apostrophe) = possession. "It\'s" = "it is".'},
+      {q:'What type of word is "quickly"?',a:makeA('Adverb',['Adjective','Noun','Verb']),c:'Adverb',h:'Adverbs describe HOW something is done.'},
+      {q:'Synonym for "happy"?',a:makeA('joyful',['sad','angry','worried']),c:'joyful',h:'Synonyms have similar meanings.'},
+      {q:'What is the main idea of a paragraph?',a:makeA('The most important point',['The first sentence','The last sentence','The longest sentence']),c:'The most important point',h:'Main idea = what the whole paragraph is about.'},
+      {q:'Correct punctuation: "What time is it___"',a:makeA('?',['.',',','!']),c:'?',h:'Questions end with ?.'},
+      {q:'Past tense of "run"?',a:makeA('ran',['runned','runs','running']),c:'ran',h:'"Run" is irregular — past tense is "ran".'},
+      {q:'Antonym (opposite) of "ancient"?',a:makeA('modern',['old','historic','past']),c:'modern',h:'Ancient = very old. Opposite = modern.'},
+      {q:'A story\'s "setting" refers to:',a:makeA('Where and when the story takes place',['The main character','The problem','The ending']),c:'Where and when the story takes place',h:'Setting = time and place of the story.'},
     ],
-
     science: [
-      { q:'What gas do plants absorb from the air to make food?', a:makeA('Carbon dioxide',['Oxygen','Nitrogen','Hydrogen']), c:'Carbon dioxide', h:'Plants absorb carbon dioxide (CO2) and use sunlight and water to make food through photosynthesis.' },
-      { q:'Which part of the plant makes seeds?', a:makeA('Flower',['Leaf','Root','Stem']), c:'Flower', h:'The flower is the reproductive part of the plant — it produces seeds.' },
-      { q:'What is the function of red blood cells?', a:makeA('Carry oxygen around the body',['Fight disease','Clot blood','Digest food']), c:'Carry oxygen around the body', h:'Red blood cells contain haemoglobin which carries oxygen from the lungs to all body cells.' },
-      { q:'Which type of rock is formed from cooled lava?', a:makeA('Igneous',['Sedimentary','Metamorphic','Limestone']), c:'Igneous', h:'Igneous rock forms when magma or lava cools and solidifies.' },
-      { q:'What is the process by which water turns into vapour?', a:makeA('Evaporation',['Condensation','Precipitation','Transpiration']), c:'Evaporation', h:'Evaporation is when liquid water is heated and turns into water vapour (gas).' },
-      { q:'Which planet is closest to the Sun?', a:makeA('Mercury',['Venus','Earth','Mars']), c:'Mercury', h:'Mercury is the first and smallest planet — closest to the Sun.' },
-      { q:'What does a thermometer measure?', a:makeA('Temperature',['Rainfall','Wind speed','Air pressure']), c:'Temperature', h:'A thermometer measures how hot or cold something is.' },
-      { q:'What is the largest organ in the human body?', a:makeA('Skin',['Heart','Brain','Liver']), c:'Skin', h:'The skin is the largest organ — it covers and protects the entire body.' },
-      { q:'Which force pulls objects towards the Earth?', a:makeA('Gravity',['Magnetism','Friction','Tension']), c:'Gravity', h:'Gravity is the force that pulls all objects with mass toward each other.' },
-      { q:'What is a food chain?', a:makeA('The order in which organisms eat each other',['A list of foods animals eat','How plants grow','The water cycle']), c:'The order in which organisms eat each other', h:'A food chain shows how energy passes from plants (producers) to animals (consumers).' },
+      {q:'What gas do plants absorb to make food?',a:makeA('Carbon dioxide',['Oxygen','Nitrogen','Hydrogen']),c:'Carbon dioxide',h:'Plants absorb CO2 and use sunlight + water to make food.'},
+      {q:'Which part of the plant makes seeds?',a:makeA('Flower',['Leaf','Root','Stem']),c:'Flower',h:'The flower is the reproductive part.'},
+      {q:'Function of red blood cells?',a:makeA('Carry oxygen around the body',['Fight disease','Clot blood','Digest food']),c:'Carry oxygen around the body',h:'Red blood cells contain haemoglobin.'},
+      {q:'Rock formed from cooled lava?',a:makeA('Igneous',['Sedimentary','Metamorphic','Limestone']),c:'Igneous',h:'Igneous rock forms when magma cools.'},
+      {q:'Process when water turns to vapour?',a:makeA('Evaporation',['Condensation','Precipitation','Transpiration']),c:'Evaporation',h:'Evaporation = liquid water heated into vapour.'},
+      {q:'Which planet is closest to the Sun?',a:makeA('Mercury',['Venus','Earth','Mars']),c:'Mercury',h:'Mercury is the first and smallest planet.'},
+      {q:'What does a thermometer measure?',a:makeA('Temperature',['Rainfall','Wind speed','Air pressure']),c:'Temperature',h:'A thermometer measures hot or cold.'},
+      {q:'Largest organ in the human body?',a:makeA('Skin',['Heart','Brain','Liver']),c:'Skin',h:'Skin covers and protects the entire body.'},
+      {q:'Which force pulls objects toward Earth?',a:makeA('Gravity',['Magnetism','Friction','Tension']),c:'Gravity',h:'Gravity pulls all objects with mass together.'},
+      {q:'What is a food chain?',a:makeA('The order in which organisms eat each other',['A list of foods','How plants grow','The water cycle']),c:'The order in which organisms eat each other',h:'Food chain = energy passing from plants to animals.'},
     ],
-
     social: [
-      { q:'What is the capital city of Jamaica?', a:makeA('Kingston',['Montego Bay','Spanish Town','Mandeville']), c:'Kingston', h:'Kingston is the capital and largest city of Jamaica.' },
-      { q:'Which sea surrounds the Caribbean islands?', a:makeA('Caribbean Sea',['Atlantic Ocean','Pacific Ocean','Gulf of Mexico']), c:'Caribbean Sea', h:'The Caribbean Sea surrounds the islands of the Caribbean region.' },
-      { q:'Who brought enslaved Africans to the Caribbean?', a:makeA('European colonizers',['Asian traders','Native Americans','Arab merchants']), c:'European colonizers', h:'European countries (Britain, Spain, France, etc.) colonized the Caribbean and brought enslaved Africans to work on plantations.' },
-      { q:'What crop was most important in the Caribbean during colonialism?', a:makeA('Sugar cane',['Coffee','Tobacco','Cotton']), c:'Sugar cane', h:'Sugar cane was the most valuable crop — Caribbean islands were known as "sugar islands".' },
-      { q:'What does CARICOM stand for?', a:makeA('Caribbean Community',['Caribbean Commerce','Caribbean Council','Caribbean Corporation']), c:'Caribbean Community', h:'CARICOM = Caribbean Community — an organization of Caribbean nations working together.' },
-      { q:'Which is the largest island in the Caribbean?', a:makeA('Cuba',['Jamaica','Haiti','Trinidad']), c:'Cuba', h:'Cuba is the largest island in the Caribbean by both area and population.' },
-      { q:'What is the name of Jamaica\'s national hero who fought for workers\' rights?', a:makeA('Alexander Bustamante',['Norman Manley','Marcus Garvey','Paul Bogle']), c:'Alexander Bustamante', h:'Sir Alexander Bustamante founded the Bustamante Industrial Trade Union and was Jamaica\'s first Prime Minister.' },
-      { q:'What type of government does Jamaica have?', a:makeA('Parliamentary democracy',['Republic','Monarchy only','Dictatorship']), c:'Parliamentary democracy', h:'Jamaica is a parliamentary democracy with a Prime Minister as head of government and the British monarch as head of state.' },
-      { q:'What is the Caribbean\'s main source of income today?', a:makeA('Tourism',['Sugar','Oil','Mining']), c:'Tourism', h:'Tourism is the largest industry in most Caribbean nations today.' },
-      { q:'Which Caribbean island nation was the first to gain independence?', a:makeA('Haiti',['Jamaica','Trinidad','Barbados']), c:'Haiti', h:'Haiti gained independence in 1804 after a successful slave revolution — the only successful slave revolt in history.' },
+      {q:'Capital city of Jamaica?',a:makeA('Kingston',['Montego Bay','Spanish Town','Mandeville']),c:'Kingston',h:'Kingston is the capital and largest city of Jamaica.'},
+      {q:'Which sea surrounds Caribbean islands?',a:makeA('Caribbean Sea',['Atlantic Ocean','Pacific Ocean','Gulf of Mexico']),c:'Caribbean Sea',h:'The Caribbean Sea surrounds the islands.'},
+      {q:'Who brought enslaved Africans to the Caribbean?',a:makeA('European colonizers',['Asian traders','Native Americans','Arab merchants']),c:'European colonizers',h:'British, Spanish, French colonized the Caribbean.'},
+      {q:'Most important crop during colonialism?',a:makeA('Sugar cane',['Coffee','Tobacco','Cotton']),c:'Sugar cane',h:'Caribbean islands were known as "sugar islands".'},
+      {q:'CARICOM stands for?',a:makeA('Caribbean Community',['Caribbean Commerce','Caribbean Council','Caribbean Corporation']),c:'Caribbean Community',h:'CARICOM = Caribbean Community — nations working together.'},
+      {q:'Largest island in the Caribbean?',a:makeA('Cuba',['Jamaica','Haiti','Trinidad']),c:'Cuba',h:'Cuba is the largest Caribbean island.'},
+      {q:"Jamaica's type of government?",a:makeA('Parliamentary democracy',['Republic','Military rule','Dictatorship']),c:'Parliamentary democracy',h:'Jamaica has a Prime Minister as head of government.'},
+      {q:"Caribbean's main source of income today?",a:makeA('Tourism',['Sugar','Oil','Mining']),c:'Tourism',h:'Tourism is the largest industry in most Caribbean nations.'},
+      {q:'First Caribbean nation to gain independence?',a:makeA('Haiti',['Jamaica','Trinidad','Barbados']),c:'Haiti',h:'Haiti gained independence in 1804 after a slave revolution.'},
+      {q:"Jamaica's national hero for workers' rights?",a:makeA('Alexander Bustamante',['Norman Manley','Marcus Garvey','Paul Bogle']),c:'Alexander Bustamante',h:'Bustamante founded the industrial trade union.'},
     ],
-
     general: [
-      { q:'What is the national bird of Jamaica?', a:makeA('Doctor Bird (Streamertail Hummingbird)',['Flamingo','Pelican','Parrot']), c:'Doctor Bird (Streamertail Hummingbird)', h:'The Doctor Bird (Red-billed Streamertail) is Jamaica\'s national bird — found only in Jamaica!' },
-      { q:'What are the colors of the Jamaican flag?', a:makeA('Black, gold and green',['Red, white and blue','Blue, white and green','Black, red and gold']), c:'Black, gold and green', h:'Jamaica\'s flag has a gold cross with black triangles on the sides and green triangles top and bottom.' },
-      { q:'What is Jamaica\'s national motto?', a:makeA('Out of Many, One People',['Land of Wood and Water','Unity is Strength','Forward Ever, Backward Never']), c:'Out of Many, One People', h:'Jamaica\'s motto "Out of Many, One People" reflects its diverse multicultural heritage.' },
-      { q:'Who is known as the "Father of the Nation" in Jamaica?', a:makeA('Norman Washington Manley',['Alexander Bustamante','Marcus Garvey','Paul Bogle']), c:'Norman Washington Manley', h:'Norman Washington Manley founded the People\'s National Party and championed Jamaican independence.' },
-      { q:'What is the name of Jamaica\'s highest mountain?', a:makeA('Blue Mountain Peak',['John Crow Mountains','Dunn\'s River','Mount Rosalie']), c:'Blue Mountain Peak', h:'Blue Mountain Peak at 2,256m is the highest point in Jamaica — famous for Blue Mountain coffee!' },
-      { q:'In what year did Jamaica gain independence?', a:makeA('1962',['1958','1970','1944']), c:'1962', h:'Jamaica gained independence from Britain on August 6, 1962.' },
-      { q:'What is the currency of Jamaica?', a:makeA('Jamaican Dollar',['Caribbean Dollar','Jamaican Pound','Jamaican Peso']), c:'Jamaican Dollar', h:'Jamaica\'s currency is the Jamaican Dollar (JMD or J$).' },
-      { q:'Which Jamaican is considered the fastest man in history?', a:makeA('Usain Bolt',['Asafa Powell','Yohan Blake','Michael Frater']), c:'Usain Bolt', h:'Usain Bolt holds world records in the 100m (9.58s) and 200m (19.19s) — the fastest human ever!' },
-      { q:'What is Jamaica\'s national dish?', a:makeA('Ackee and Saltfish',['Jerk Chicken','Rice and Peas','Curry Goat']), c:'Ackee and Saltfish', h:'Ackee and Saltfish is Jamaica\'s national dish — ackee is also the national fruit!' },
-      { q:'What does the acronym PEP stand for in Jamaica\'s education system?', a:makeA('Primary Exit Profile',['Primary Education Programme','Primary Exam Profile','Primary Exit Programme']), c:'Primary Exit Profile', h:'PEP (Primary Exit Profile) replaced GSAT as the primary school leaving examination in Jamaica.' },
-    ],
-
-    practice: [] // Will be filled with mixed questions
+      {q:"Jamaica's national bird?",a:makeA('Doctor Bird (Streamertail Hummingbird)',['Flamingo','Pelican','Parrot']),c:'Doctor Bird (Streamertail Hummingbird)',h:'The Doctor Bird is found only in Jamaica!'},
+      {q:'Colors of the Jamaican flag?',a:makeA('Black, gold and green',['Red, white and blue','Blue, white and green','Black, red and gold']),c:'Black, gold and green',h:"Jamaica's flag has a gold cross with black and green triangles."},
+      {q:"Jamaica's national motto?",a:makeA('Out of Many, One People',['Land of Wood and Water','Unity is Strength','Forward Ever']),c:'Out of Many, One People',h:'Reflects Jamaica\'s diverse multicultural heritage.'},
+      {q:"Jamaica's highest mountain?",a:makeA('Blue Mountain Peak',['John Crow Mountains',"Dunn's River",'Mount Rosalie']),c:'Blue Mountain Peak',h:'Blue Mountain Peak at 2,256m — famous for coffee!'},
+      {q:'Year Jamaica gained independence?',a:makeA('1962',['1958','1970','1944']),c:'1962',h:'Jamaica gained independence from Britain on August 6, 1962.'},
+      {q:"Jamaica's currency?",a:makeA('Jamaican Dollar',['Caribbean Dollar','Jamaican Pound','Jamaican Peso']),c:'Jamaican Dollar',h:"Jamaica's currency is the Jamaican Dollar (JMD)."},
+      {q:'Fastest man in history?',a:makeA('Usain Bolt',['Asafa Powell','Yohan Blake','Michael Frater']),c:'Usain Bolt',h:'Usain Bolt holds world records in 100m and 200m!'},
+      {q:"Jamaica's national dish?",a:makeA('Ackee and Saltfish',['Jerk Chicken','Rice and Peas','Curry Goat']),c:'Ackee and Saltfish',h:'Ackee is also the national fruit!'},
+      {q:'PEP stands for?',a:makeA('Primary Exit Profile',['Primary Education Programme','Primary Exam Profile','Primary Exit Programme']),c:'Primary Exit Profile',h:'PEP replaced GSAT in Jamaica.'},
+      {q:"Jamaica's national flower?",a:makeA('Lignum Vitae',['Hibiscus','Rose','Orchid']),c:'Lignum Vitae',h:'The Lignum Vitae is Jamaica\'s national flower — a symbol of strength.'},
+    ]
   },
 
-  currentSubject: null,
-  currentQuestions: [],
-  currentIndex: 0,
-  correct: 0,
-
+  // ★ FIXED: uses S (not State), uses App.showScreen and App.renderQ
   openSubject(subject) {
-    this.currentSubject = subject;
-    this.correct = 0;
-    this.currentIndex = 0;
+    const allQ = subject === 'practice'
+      ? [...this.questions.math.slice(0,3),...this.questions.language.slice(0,3),...this.questions.science.slice(0,2),...this.questions.social.slice(0,2),...this.questions.general.slice(0,2)].sort(()=>Math.random()-0.5)
+      : [...(this.questions[subject]||[])].sort(()=>Math.random()-0.5);
 
-    // For practice test mix all subjects
-    if (subject === 'practice') {
-      const all = [
-        ...this.questions.math.slice(0,3),
-        ...this.questions.language.slice(0,3),
-        ...this.questions.science.slice(0,2),
-        ...this.questions.social.slice(0,2),
-        ...this.questions.general.slice(0,2)
-      ].sort(() => Math.random() - 0.5);
-      this.currentQuestions = all;
-    } else {
-      this.currentQuestions = [...this.questions[subject]].sort(() => Math.random() - 0.5);
-    }
+    // Load into S (the main state object — was broken as "State" before)
+    S.questions = allQ.map(q => ({ text:q.q, answers:q.a, correctValue:q.c, hint:q.h }));
+    S.qIndex = 0; S.correct = 0; S.answered = false;
+    S.subject = 'pep-'+subject;
+    S.currentWorld = { id:1, name:'PEP '+subject };
+    S.stageIndex = 0; S.worldIndex = 0;
 
-    // Store in State for quiz engine
-    State.questions = this.currentQuestions.map((q, i) => ({
-      text: q.q,
-      answers: q.a,
-      correctValue: q.c,
-      hint: q.h
-    }));
-    State.qIndex = 0;
-    State.correct = 0;
-    State.answered = false;
-    State.subject = 'pep-' + subject;
-    State._currentWorld = { id: 1, name: 'PEP ' + subject };
-    State.stageIndex = 0;
-    State.worldIndex = 0;
+    const labels = {math:'PEP Mathematics',language:'PEP Language Arts',science:'PEP Science',social:'PEP Social Studies',general:'PEP General Knowledge',practice:'PEP Practice Test'};
+    setText('quiz-subject-badge', labels[subject]||'PEP');
+    setText('quiz-q-total', S.questions.length);
 
-    // Update quiz badge
-    const labels = {
-      math:'PEP Mathematics',language:'PEP Language Arts',
-      science:'PEP Science',social:'PEP Social Studies',
-      general:'PEP General Knowledge',practice:'PEP Practice Test'
-    };
-    const badge = document.getElementById('quiz-subject-badge');
-    if (badge) badge.textContent = labels[subject] || 'PEP';
-
-    document.getElementById('quiz-q-total').textContent = State.questions.length;
-    App.showScreen('screen-quiz');
-    App.renderQ();
+    App.showScreen('screen-quiz'); // ★ FIXED: was App.showScreen — correct!
+    App.renderQ();                 // ★ FIXED: was App.renderQ — correct!
     App.updateScores();
   }
 };
 
-// Make makeA available for PEP (it's defined in main script)
-// PEP uses the same makeA helper from the main script
+// ── BOOT ──────────────────────────────────────────────────────
+window.App=App; window.AITutor=AITutor; window.Avatars=Avatars;
+window.BabyMode=BabyMode; window.PEP=PEP; window.SoundSystem=SoundSystem;
 
-
-// ============================================================
-// PATCH APP — Add sound, baby mode, PEP to navigation
-// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    if (typeof App === 'undefined') return;
-
-    // Initialize sound system
-    SoundSystem.init();
-
-    // Add PEP button to homepage header
-    const headerBtns = document.querySelector('.header-btns');
-    if (headerBtns && !document.getElementById('btn-pep')) {
-      const pepBtn = document.createElement('button');
-      pepBtn.id = 'btn-pep';
-      pepBtn.className = 'btn btn-primary';
-      pepBtn.style.background = 'linear-gradient(135deg, #C77DFF, #7928CA)';
-      pepBtn.innerHTML = '🇯🇲 PEP';
-      pepBtn.onclick = () => App.showScreen('screen-pep');
-      headerBtns.appendChild(pepBtn);
-    }
-
-    // Override selectAge to open baby screen for 0-3
-    const originalSelectAge = App.selectAge.bind(App);
-    App.selectAge = function(g, toast=true) {
-      if (g === '0-3') {
-        State.ageGroup = '0-3';
-        document.querySelectorAll('.age-card').forEach(c =>
-          c.classList.toggle('selected', c.dataset.age === '0-3')
-        );
-        App.showScreen('screen-baby');
-        SoundSystem.speakBaby('Welcome to Baby World! Tap what you want to learn!');
-        return;
-      }
-      originalSelectAge(g, toast);
-    };
-
-    // Patch selectAnswer to add sounds
-    const originalSelectAnswer = App.selectAnswer.bind(App);
-    App.selectAnswer = function(ans, q, btnEl) {
-      if (ans.isCorrect) {
-        SoundSystem.playTone('correct');
-        SoundSystem.speak(App.tutorMsg('correct', '') || 'Correct! Great job!');
-      } else {
-        SoundSystem.playTone('wrong');
-      }
-      originalSelectAnswer(ans, q, btnEl);
-    };
-
-    // Patch finishStage to add celebration sound
-    const originalFinishStage = App.finishStage.bind(App);
-    App.finishStage = async function() {
-      const accuracy = State.correct / State.questions.length;
-      if (accuracy >= 0.8) {
-        SoundSystem.playTone('celebrate');
-        SoundSystem.speak('Stage complete! Amazing work!');
-      }
-      await originalFinishStage();
-    };
-
-    // Patch renderQ to speak questions aloud
-    const originalRenderQ = App.renderQ.bind(App);
-    App.renderQ = function() {
-      originalRenderQ();
-      setTimeout(() => {
-        const q = State.questions[State.qIndex];
-        if (q && SoundSystem.enabled) {
-          SoundSystem.speak(q.text, 0.85, 1.05);
-        }
-      }, 300);
-    };
-
-    // Add PEP to search database
-    if (typeof SearchDB !== 'undefined') {
-      SearchDB.push(
-        {k:['pep','primary exit','exit profile','primary school exam','gsat'],s:'pep',label:'PEP Preparation',icon:'🇯🇲'},
-        {k:['jamaica','jamaican','caribbean exam','caribbean school'],s:'pep',label:'PEP Caribbean',icon:'🌴'},
-        {k:['baby','babies','toddler','0-3','infant'],s:'baby',label:'Baby World',icon:'🍼'}
-      );
-    }
-
-    // Patch smartSearch to handle pep and baby
-    const originalSearchTopic = App.searchTopic.bind(App);
-    App.searchTopic = function() {
-      const v = document.getElementById('topic-input')?.value.trim();
-      if (!v) { App.toast('Type a topic first! 🔍'); return; }
-      const result = smartSearch(v);
-      if (result?.s === 'pep') { App.showScreen('screen-pep'); return; }
-      if (result?.s === 'baby') { App.showScreen('screen-baby'); return; }
-      originalSearchTopic();
-    };
-
-    console.log('Upgrade 3 installed: Sound, Voice, Baby Mode, PEP ✅');
-
-  }, 700);
+  try { App.init(); } catch(e) { console.error('Boot error:',e); }
 });
 </script>
 </body>
