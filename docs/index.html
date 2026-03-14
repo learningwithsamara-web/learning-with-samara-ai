@@ -656,7 +656,14 @@ opacity:0; transition:opacity 0.3s, transform 0.3s; pointer-events:none;
 <div class="samara-tutor-wrap hidden" id="samara-tutor-wrap">
   <div class="samara-tutor-card">
     <div class="samara-tutor-header">
-      <div class="samara-avatar" id="samara-avatar">👧</div>
+     <div class="samara-avatar" id="samara-avatar">
+  <img 
+    src="samara.png" 
+    alt="Samara AI" 
+    style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
+    onerror="this.style.display='none';this.parentElement.innerHTML='👧';"
+  />
+</div>
       <div class="samara-name-wrap">
         <div class="samara-name">Samara AI ✨</div>
         <div class="samara-status" id="samara-status">thinking...</div>
