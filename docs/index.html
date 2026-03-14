@@ -2254,6 +2254,181 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 <script>
+  
+const AvatarSystem = {
 
+  avatars: [
+    {
+      id: 'samara',
+      name: 'Samara',
+      file: 'samara.png.jpeg',
+      emoji: '👧',
+      color: '#C77DFF'
+    },
+    {
+      id: 'littlejr',
+      name: 'Little Jr',
+      file: 'littlejr.png.jpeg',
+      emoji: '🧒',
+      color: '#7EC8E3'
+    },
+    {
+      id: 'mommytutor',
+      name: 'Mommy Tutor',
+      file: 'tutormommy.png.jpeg',
+      emoji: '👩',
+      color: '#FF9B3F'
+    },
+    {
+      id: 'star',
+      name: 'Star',
+      file: 'starmascot.png.jpeg',
+      emoji: '⭐',
+      color: '#FFD93D'
+    }
+  ],
+
+  selected: 'samara',
+
+  // Render avatar selector on homepage
+  renderSelector(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = `
+      <p class="avatar-selector-title">👋 Pick your tutor!</p>
+      <div class="avatar-grid">
+        ${this.avatars.map(a => `
+          <div class="avatar-option ${a.id === this.selected ? 'selected' : ''}"
+               onclick="AvatarSystem.select('${a.id}')"
+               data-avatar="${a.id}">
+            <div class="avatar-img-wrap">
+              <img src="${a.file}" alt="${a.name}"
+                   onerror="this.style.display='none';this.parentElement.innerHTML='${a.emoji}';" />
+            </div>
+            <div class="avatar-option-name">${a.name}</div>
+          </div>`).join('')}
+      </div>`;
+  },
+
+  select(id) {
+    this.selected = id;
+    // Update selected state
+    document.querySelectorAll('.avatar-option').forEach(el => {
+      el.classList.toggle('selected', el.dataset.avatar === id);
+    });
+    // Update tutor avatar in quiz
+    const avatar = this.avatars.find(a => a.id === id);
+    if (avatar) {
+      const tutorAvatar = document.getElementById('samara-avatar');
+      if (tutorAvatar) {
+        tutorAvatar.innerHTML = `
+          <img src="${avatar.file}" alt="${avatar.name}"
+               style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
+               onerror="this.style.display='none';this.parentElement.innerHTML='${avatar.emoji}';" />`;
+      }
+      const tutorName = document.querySelector('.samara-name');
+      if (tutorName) tutorName.textContent = `${avatar.name} ✨`;
+    }
+    // Save choice
+    localStorage.setItem('selectedAvatar', id);
+    App.showToast(`${avatar?.name} is your tutor! ${avatar?.emoji}`);
+  },
+
+  // Load saved avatar choice
+  loadSaved() {
+    const saved = localStorage.getItem('selectedAvatar');
+    if (saved) this.select(saved);
+  },
+
+  // Get current avatar file
+  getCurrentFile() {
+    const a = this.avatars.find(av => av.id === this.selected);
+    return a ? a.file : 'samara.png.jpeg';
+  },
+
+  getCurrentEmoji() {
+    const a = this.avatars.find(av => av.id === this.selected);
+    return a ? a.emoji : '👧';
+  }
+};
+
+
+// ============================================================
+// SMART TOPIC SEARCH — 200+ keywords mapped to subjects/worlds
+// ============================================================
+const SmartSearch = {
+
+  // Each entry: { keywords, subject, world, stage, label, icon, desc }
+  database: [
+
+    // ── MATH ──────────────────────────────────────────────────
+    { keywords: ['add','adding','addition','plus','sum','total','count up','more'], subject:'math', world:1, stage:1, label:'Addition', icon:'➕', desc:'Learn to add numbers together!' },
+    { keywords: ['subtract','subtraction','minus','take away','difference','less','count back'], subject:'math', world:2, stage:1, label:'Subtraction', icon:'➖', desc:'Learn to take numbers away!' },
+    { keywords: ['multiply','multiplication','times','groups of','repeated addition'], subject:'math', world:3, stage:1, label:'Multiplication', icon:'✖️', desc:'Learn your times tables!' },
+    { keywords: ['divide','division','share','split','equal groups','how many groups'], subject:'math', world:4, stage:1, label:'Division', icon:'➗', desc:'Learn to share numbers equally!' },
+    { keywords: ['fraction','fractions','half','quarter','third','numerator','denominator','parts of whole'], subject:'math', world:5, stage:1, label:'Fractions', icon:'½', desc:'Learn about parts of a whole!' },
+    { keywords: ['number','numbers','count','counting','maths','math','arithmetic','calculate','calculation'], subject:'math', world:1, stage:1, label:'Math', icon:'🔢', desc:'Start your math adventure!' },
+
+    // ── SCIENCE ───────────────────────────────────────────────
+    { keywords: ['plant','plants','flower','flowers','tree','trees','leaf','leaves','root','roots','photosynthesis','grow','garden'], subject:'science', world:1, stage:1, label:'Plants', icon:'🌿', desc:'Discover how plants grow!' },
+    { keywords: ['animal','animals','mammal','reptile','amphibian','bird','fish','insect','creature','wildlife'], subject:'science', world:1, stage:2, label:'Animals', icon:'🐾', desc:'Explore the animal kingdom!' },
+    { keywords: ['lifecycle','life cycle','butterfly','caterpillar','tadpole','frog','metamorphosis','hatch','egg'], subject:'science', world:1, stage:3, label:'Life Cycles', icon:'🦋', desc:'See how living things change!' },
+    { keywords: ['earth','land','water','ocean','sea','river','lake','continent','island','mountain','valley'], subject:'science', world:2, stage:1, label:'Our Earth', icon:'🌍', desc:'Explore our amazing planet!' },
+    { keywords: ['rock','rocks','soil','dirt','fossil','mineral','stone','pebble','erosion','geology'], subject:'science', world:2, stage:2, label:'Rocks & Soil', icon:'🪨', desc:'Discover rocks and soil!' },
+    { keywords: ['volcano','volcanoes','earthquake','tsunami','flood','tornado','hurricane','natural disaster','eruption','lava'], subject:'science', world:2, stage:3, label:'Natural Events', icon:'🌋', desc:'Learn about natural forces!' },
+    { keywords: ['weather','rain','snow','cloud','clouds','thunder','lightning','wind','storm','sunny','temperature'], subject:'science', world:3, stage:1, label:'Weather', icon:'⛅', desc:'Explore different weather!' },
+    { keywords: ['season','seasons','spring','summer','autumn','fall','winter','solstice','equinox'], subject:'science', world:3, stage:2, label:'Seasons', icon:'🍂', desc:'Discover the four seasons!' },
+    { keywords: ['water cycle','evaporation','condensation','precipitation','rain cycle','clouds form'], subject:'science', world:3, stage:3, label:'Water Cycle', icon:'💧', desc:'Follow the journey of water!' },
+    { keywords: ['space','planet','planets','star','stars','moon','sun','solar system','galaxy','universe','astronaut','rocket'], subject:'science', world:4, stage:1, label:'Space', icon:'🚀', desc:'Blast off into space!' },
+    { keywords: ['mars','jupiter','saturn','neptune','mercury','venus','uranus','pluto','asteroid','comet','orbit'], subject:'science', world:4, stage:2, label:'Planets', icon:'🪐', desc:'Explore the planets!' },
+    { keywords: ['nasa','apollo','neil armstrong','space station','satellite','telescope','hubble','spacewalk'], subject:'science', world:4, stage:3, label:'Space Exploration', icon:'👨‍🚀', desc:'Discover space exploration!' },
+    { keywords: ['body','human body','heart','lungs','brain','bones','skeleton','muscle','organ','blood','breathing'], subject:'science', world:5, stage:1, label:'Human Body', icon:'🫀', desc:'Explore the human body!' },
+    { keywords: ['senses','sight','hearing','smell','taste','touch','eyes','ears','nose','tongue','skin'], subject:'science', world:5, stage:2, label:'The Senses', icon:'👁️', desc:'Discover your five senses!' },
+    { keywords: ['healthy','health','exercise','nutrition','food','diet','sleep','hygiene','vitamins','germs','virus'], subject:'science', world:5, stage:3, label:'Staying Healthy', icon:'💪', desc:'Learn to stay healthy!' },
+
+    // ── READING ───────────────────────────────────────────────
+    { keywords: ['phonics','letters','alphabet','sounds','vowels','consonants','blends','reading','decode'], subject:'reading', world:1, stage:1, label:'Phonics', icon:'🔤', desc:'Learn letters and sounds!' },
+    { keywords: ['sight words','common words','high frequency','dolch','fry words'], subject:'reading', world:2, stage:1, label:'Sight Words', icon:'👀', desc:'Learn common words!' },
+    { keywords: ['vocabulary','word meaning','definition','words','dictionary','meaning'], subject:'reading', world:3, stage:1, label:'Vocabulary', icon:'📖', desc:'Build your word power!' },
+    { keywords: ['synonym','synonyms','same meaning','similar words'], subject:'reading', world:3, stage:2, label:'Synonyms', icon:'🔄', desc:'Find words that mean the same!' },
+    { keywords: ['antonym','antonyms','opposite','opposites'], subject:'reading', world:3, stage:3, label:'Antonyms', icon:'↔️', desc:'Learn words that are opposites!' },
+    { keywords: ['grammar','noun','verb','adjective','adverb','sentence','punctuation','capital letter'], subject:'reading', world:4, stage:1, label:'Grammar', icon:'✏️', desc:'Master grammar rules!' },
+    { keywords: ['comprehension','understand','main idea','detail','inference','reading','passage','story'], subject:'reading', world:5, stage:1, label:'Comprehension', icon:'🧠', desc:'Understand what you read!' },
+
+    // ── SOCIAL STUDIES ────────────────────────────────────────
+    { keywords: ['community','neighborhood','helper','police','firefighter','teacher','doctor','rules','laws'], subject:'social', world:1, stage:1, label:'Community', icon:'🏘️', desc:'Learn about your community!' },
+    { keywords: ['history','historical','ancient','past','civilisation','civilization','medieval','revolution','war'], subject:'social', world:2, stage:1, label:'History', icon:'🏛️', desc:'Explore history!' },
+    { keywords: ['president','george washington','abraham lincoln','martin luther king','rosa parks','leader','famous'], subject:'social', world:2, stage:1, label:'Famous Leaders', icon:'👑', desc:'Learn about famous leaders!' },
+    { keywords: ['geography','continent','continents','country','countries','capital','map','atlas','location'], subject:'social', world:3, stage:1, label:'Geography', icon:'🗺️', desc:'Explore the world!' },
+    { keywords: ['africa','asia','europe','north america','south america','australia','antarctica','continent'], subject:'social', world:3, stage:1, label:'Continents', icon:'🌍', desc:'Learn the continents!' },
+    { keywords: ['eiffel tower','pyramid','great wall','statue of liberty','landmark','monument','wonder'], subject:'social', world:3, stage:3, label:'Landmarks', icon:'🗼', desc:'Discover world landmarks!' },
+    { keywords: ['government','democracy','president','congress','law','vote','election','constitution','rights','freedom'], subject:'social', world:4, stage:1, label:'Government', icon:'⚖️', desc:'Learn how government works!' },
+    { keywords: ['culture','tradition','celebration','festival','holiday','diwali','christmas','hanukkah','eid','culture'], subject:'social', world:5, stage:1, label:'Cultures', icon:'🎭', desc:'Explore world cultures!' },
+
+    // ── ALGEBRA (11-14) ───────────────────────────────────────
+    { keywords: ['algebra','equation','variable','solve','x','linear','quadratic','polynomial'], subject:'algebra', world:1, stage:1, label:'Algebra', icon:'📐', desc:'Solve equations with algebra!' },
+    { keywords: ['geometry','shape','angle','triangle','circle','area','perimeter','volume','theorem'], subject:'algebra', world:4, stage:1, label:'Geometry', icon:'📏', desc:'Explore shapes and angles!' },
+    { keywords: ['statistics','data','graph','chart','average','mean','median','mode','probability'], subject:'algebra', world:5, stage:1, label:'Statistics', icon:'📊', desc:'Learn about data and graphs!' },
+
+    // ── BIOLOGY (11+) ─────────────────────────────────────────
+    { keywords: ['cell','cells','nucleus','dna','chromosome','biology','organism','bacteria','virus'], subject:'biology', world:1, stage:1, label:'Cells', icon:'🔬', desc:'Discover the building blocks of life!' },
+    { keywords: ['genetics','gene','genes','heredity','trait','inherit','evolution','darwin','natural selection'], subject:'biology', world:2, stage:1, label:'Genetics', icon:'🧬', desc:'Explore genetics and DNA!' },
+    { keywords: ['ecosystem','habitat','food chain','food web','predator','prey','biodiversity','rainforest','biome'], subject:'biology', world:3, stage:1, label:'Ecosystems', icon:'🌿', desc:'Explore ecosystems!' },
+    { keywords: ['chemistry','element','atom','molecule','periodic table','reaction','compound','acid','base'], subject:'biology', world:4, stage:1, label:'Chemistry', icon:'⚗️', desc:'Discover chemistry!' },
+
+    // ── COMPUTER SCIENCE ──────────────────────────────────────
+    { keywords: ['coding','code','program','programming','algorithm','computer','software','html','css','javascript','python'], subject:'compsci', world:1, stage:1, label:'Computer Science', icon:'💻', desc:'Learn to code!' },
+    { keywords: ['binary','data','bit','byte','loop','variable','function','debugging','bug','logic'], subject:'compsci', world:2, stage:1, label:'Algorithms', icon:'🔁', desc:'Learn programming logic!' },
+    { keywords: ['artificial intelligence','ai','machine learning','robot','automation','neural network'], subject:'compsci', world:5, stage:1, label:'AI & Machine Learning', icon:'🤖', desc:'Explore artificial intelligence!' },
+
+    // ── FINANCE ───────────────────────────────────────────────
+    { keywords: ['money','finance','budget','save','saving','invest','investing','bank','interest','loan','debt'], subject:'finance', world:1, stage:1, label:'Finance', icon:'💰', desc:'Learn about money!' },
+    { keywords: ['stock','stocks','market','shares','economy','inflation','tax','income','expense'], subject:'finance', world:3, stage:1, label:'Investing', icon:'📈', desc:'Learn about investing!' },
+
+    // ── QUANTUM PHYSICS ───────────────────────────────────────
+    { keywords: ['quantum','quantum physics','superposition','entanglement','wave','particle','uncertainty','qubit','planck'], subject:'quantum', world:1, stage:1, label:'Quantum Physics', icon:'⚛️', desc:'Explore quantum physics!' },
+
+  ],
+   </script>
 </body>
 </html>
