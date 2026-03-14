@@ -623,7 +623,18 @@ async sendMessage(){
 const inp=document.getElementById('ai-chat-input'); const txt=inp?.value.trim(); if(!txt) return;
 inp.value=''; this.addMsg(txt,'user'); this.showTyping();
 await new Promise(r=>setTimeout(r,1100));
-this.hideTyping(); this.addMsg(this.chatResponse(txt),'ai');
+this.hideTyping();
+try {
+  const res = await fetch('/.netlify/functions/claude', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({message:txt, ageGroup:S.ageGroup})
+  });
+  const data = await res.json();
+  this.addMsg(data.response,'ai');
+} catch(e) {
+  this.addMsg(this.chatResponse(txt),'ai');
+}
 },
 chatResponse(t){
 const l=t.toLowerCase();
