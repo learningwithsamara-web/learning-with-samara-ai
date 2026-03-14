@@ -20,10 +20,10 @@
   --shadow-pop: 0 12px 40px rgba(0,0,0,0.18);
 }
 .logo-img {
-  width: 120px;
-  height: 48px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 48px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
