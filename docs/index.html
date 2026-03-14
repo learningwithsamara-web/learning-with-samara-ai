@@ -1,3 +1,1002 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learning With Samara AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root {
+--sun: #FFD93D;
+--grass: #6BCB77;
+--coral: #FF6B6B;
+--purple: #C77DFF;
+--orange: #FF9B3F;
+--navy: #1A1A2E;
+--muted: #7A7A9D;
+--radius: 20px;
+--shadow: 0 8px 32px rgba(0,0,0,0.12);
+--shadow-pop: 0 12px 40px rgba(0,0,0,0.18);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+font-family: 'Nunito', sans-serif;
+background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+min-height: 100vh;
+color: #2D2D2D;
+overflow-x: hidden;
+}
+.stars {
+position: fixed; inset: 0; pointer-events: none; z-index: 0;
+background-image:
+radial-gradient(circle, #fff 1px, transparent 1px),
+radial-gradient(circle, #fff 1px, transparent 1px),
+radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px);
+background-size: 300px 300px, 200px 200px, 150px 150px;
+background-position: 0 0, 80px 80px, 40px 140px;
+opacity: 0.25;
+animation: twinkle 8s ease-in-out infinite alternate;
+}
+@keyframes twinkle { from{opacity:0.15} to{opacity:0.35} }
+.screen { display:none; min-height:100vh; padding:0 0 60px; position:relative; z-index:1; }
+.screen.active { display:block; }
+.hidden { display:none !important; }
+
+```
+/* HEADER */
+.home-header {
+display:flex; justify-content:space-between; align-items:center;
+padding:24px 32px; position:relative; z-index:2;
+}
+.logo-wrap { display:flex; align-items:center; gap:12px; }
+.logo-star { font-size:2.2rem; animation:spin-star 6s linear infinite; }
+@keyframes spin-star { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.logo-img { width:48px; height:48px; object-fit:contain; border-radius:12px; }
+.title { font-family:'Fredoka One',cursive; font-size:2rem; line-height:1.1; color:#fff; text-shadow:0 3px 12px rgba(0,0,0,0.4); }
+.title-accent { color:var(--sun); }
+.header-btns { display:flex; gap:10px; flex-wrap:wrap; }
+
+/* BUTTONS */
+.btn {
+font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem;
+padding:10px 22px; border-radius:50px; border:none; cursor:pointer;
+transition:transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover { transform:translateY(-2px) scale(1.03); }
+.btn:active { transform:scale(0.97); }
+.btn-primary { background:linear-gradient(135deg,var(--sun),var(--orange)); color:#fff; box-shadow:0 6px 20px rgba(255,155,63,0.5); }
+.btn-outline { background:rgba(255,255,255,0.12); color:#fff; border:2px solid rgba(255,255,255,0.35); }
+.btn-outline:hover { background:rgba(255,255,255,0.22); }
+.btn-glow { background:linear-gradient(135deg,#7928CA,#FF0080); color:#fff; box-shadow:0 6px 20px rgba(121,40,202,0.5); }
+.btn-danger { background:linear-gradient(135deg,#FF416C,#FF4B2B); color:#fff; }
+.btn.big { font-size:1.15rem; padding:14px 36px; }
+
+/* HERO */
+.hero { text-align:center; padding:10px 32px 32px; position:relative; z-index:2; }
+.hero-subtitle { font-size:1.15rem; color:rgba(255,255,255,0.85); font-weight:600; max-width:560px; margin:0 auto; }
+
+/* AGE GROUP SELECTOR */
+.age-select-wrap { max-width:900px; margin:0 auto; padding:0 24px 32px; position:relative; z-index:2; }
+.age-select-title { font-family:'Fredoka One',cursive; font-size:1.4rem; color:#fff; text-align:center; margin-bottom:16px; }
+.age-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; }
+.age-card {
+background:rgba(255,255,255,0.97); border-radius:18px; padding:18px 12px;
+text-align:center; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s;
+box-shadow:var(--shadow); border:3px solid transparent;
+}
+.age-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-pop); }
+.age-card.selected { border-color:var(--sun); background:#fffbe6; }
+.age-icon { font-size:2rem; margin-bottom:6px; }
+.age-label { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--navy); }
+.age-range { font-size:0.78rem; color:var(--muted); margin-top:2px; font-weight:700; }
+
+/* SUBJECTS GRID */
+.subjects-section { max-width:980px; margin:0 auto; padding:0 32px; position:relative; z-index:2; }
+.subjects-title { font-family:'Fredoka One',cursive; font-size:1.3rem; color:rgba(255,255,255,0.9); margin-bottom:16px; text-align:center; }
+.subjects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; }
+.subject-card {
+background:rgba(255,255,255,0.97); border-radius:24px; padding:28px 20px 20px;
+cursor:pointer; transition:transform 0.2s, box-shadow 0.2s;
+box-shadow:var(--shadow); position:relative; overflow:hidden; text-align:center;
+}
+.subject-card::before { content:''; position:absolute; top:0; left:0; right:0; height:6px; border-radius:24px 24px 0 0; }
+.subject-card[data-subject="math"]::before { background:linear-gradient(90deg,#FFD93D,#FF9B3F); }
+.subject-card[data-subject="reading"]::before { background:linear-gradient(90deg,#7EC8E3,#C77DFF); }
+.subject-card[data-subject="science"]::before { background:linear-gradient(90deg,#6BCB77,#7EC8E3); }
+.subject-card[data-subject="social"]::before { background:linear-gradient(90deg,#FF6B6B,#C77DFF); }
+.subject-card[data-subject="algebra"]::before { background:linear-gradient(90deg,#FFD93D,#FF6B6B); }
+.subject-card[data-subject="biology"]::before { background:linear-gradient(90deg,#6BCB77,#FFD93D); }
+.subject-card[data-subject="history"]::before { background:linear-gradient(90deg,#FF9B3F,#C77DFF); }
+.subject-card[data-subject="literature"]::before { background:linear-gradient(90deg,#7EC8E3,#FF6B6B); }
+.subject-card[data-subject="compsci"]::before { background:linear-gradient(90deg,#C77DFF,#7EC8E3); }
+.subject-card[data-subject="finance"]::before { background:linear-gradient(90deg,#6BCB77,#C77DFF); }
+.subject-card[data-subject="quantum"]::before { background:linear-gradient(90deg,#302b63,#C77DFF); }
+.subject-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:var(--shadow-pop); }
+.subject-icon { font-size:2.6rem; margin-bottom:8px; }
+.subject-name { font-family:'Fredoka One',cursive; font-size:1.3rem; color:var(--navy); margin-bottom:4px; }
+.subject-desc { font-size:0.85rem; color:var(--muted); }
+
+/* TOPIC SEARCH */
+.topic-search-wrap { max-width:600px; margin:24px auto 0; padding:0 24px; position:relative; z-index:2; }
+.topic-search-label { font-family:'Fredoka One',cursive; font-size:1.1rem; color:rgba(255,255,255,0.9); text-align:center; margin-bottom:10px; }
+.topic-search-row { display:flex; gap:10px; }
+.topic-input {
+flex:1; font-family:'Nunito',sans-serif; font-weight:700; font-size:1rem;
+border:2px solid rgba(255,255,255,0.3); border-radius:50px;
+padding:12px 20px; background:rgba(255,255,255,0.12); color:#fff;
+outline:none; backdrop-filter:blur(8px);
+}
+.topic-input::placeholder { color:rgba(255,255,255,0.5); }
+.topic-input:focus { border-color:var(--sun); background:rgba(255,255,255,0.18); }
+
+/* HOME CHARACTERS */
+.home-characters { display:flex; justify-content:center; gap:40px; padding:28px 0 0; position:relative; z-index:2; }
+.character { font-size:2.8rem; }
+.bounce-slow { animation:bounce 3s ease-in-out infinite; }
+.bounce-mid { animation:bounce 2.2s ease-in-out infinite 0.4s; }
+.bounce-fast { animation:bounce 1.8s ease-in-out infinite 0.8s; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+
+/* TOP BAR */
+.top-bar {
+display:flex; align-items:center; gap:14px; padding:20px 28px;
+background:rgba(255,255,255,0.06); backdrop-filter:blur(10px);
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.back-btn {
+font-family:'Nunito',sans-serif; font-weight:800; font-size:0.95rem;
+color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.1);
+border:1px solid rgba(255,255,255,0.2); border-radius:50px;
+padding:8px 18px; cursor:pointer; transition:background 0.15s; white-space:nowrap;
+}
+.back-btn:hover { background:rgba(255,255,255,0.2); }
+.score-pill {
+margin-left:auto; background:linear-gradient(135deg,#FFD93D,#FF9B3F);
+color:#fff; font-weight:800; font-size:1rem; padding:6px 18px;
+border-radius:50px; box-shadow:0 4px 14px rgba(255,155,63,0.4); white-space:nowrap;
+}
+.screen-title { font-family:'Fredoka One',cursive; font-size:2rem; color:#fff; text-align:center; padding:24px 24px 6px; }
+.screen-title.small { font-size:1.4rem; padding:0; }
+.screen-sub { text-align:center; color:rgba(255,255,255,0.7); font-size:1rem; padding:0 24px 24px; }
+
+/* WORLDS */
+.worlds-list { max-width:680px; margin:0 auto; padding:0 24px; display:flex; flex-direction:column; gap:16px; }
+.world-card {
+background:rgba(255,255,255,0.96); border-radius:var(--radius); padding:20px 24px;
+display:flex; align-items:center; gap:18px; cursor:pointer;
+transition:transform 0.18s, box-shadow 0.18s; box-shadow:var(--shadow);
+position:relative; overflow:hidden;
+}
+.world-card.locked { opacity:0.5; cursor:not-allowed; filter:grayscale(0.4); }
+.world-card:not(.locked):hover { transform:translateX(6px); box-shadow:var(--shadow-pop); }
+.world-num {
+font-family:'Fredoka One',cursive; font-size:1.6rem; width:52px; height:52px;
+border-radius:14px; display:flex; align-items:center; justify-content:center;
+flex-shrink:0; color:#fff;
+}
+.world-num.c0 { background:linear-gradient(135deg,#FFD93D,#FF9B3F); }
+.world-num.c1 { background:linear-gradient(135deg,#7EC8E3,#4A90D9); }
+.world-num.c2 { background:linear-gradient(135deg,#6BCB77,#3DAA45); }
+.world-num.c3 { background:linear-gradient(135deg,#FF6B6B,#FF416C); }
+.world-num.c4 { background:linear-gradient(135deg,#C77DFF,#7928CA); }
+.world-info { flex:1; }
+.world-name { font-family:'Fredoka One',cursive; font-size:1.2rem; color:var(--navy); }
+.world-meta { font-size:0.88rem; color:var(--muted); margin-top:3px; }
+.world-lock-icon { font-size:1.5rem; }
+.world-progress-bar { position:absolute; bottom:0; left:0; height:4px; background:linear-gradient(90deg,#6BCB77,#FFD93D); transition:width 0.5s; }
+
+/* STAGES */
+.stages-list { max-width:620px; margin:0 auto; padding:0 24px; display:flex; flex-direction:column; gap:14px; }
+.stage-card {
+background:rgba(255,255,255,0.96); border-radius:var(--radius); padding:18px 22px;
+display:flex; align-items:center; gap:16px; cursor:pointer;
+transition:transform 0.15s, box-shadow 0.15s; box-shadow:var(--shadow);
+}
+.stage-card.locked { opacity:0.45; cursor:not-allowed; }
+.stage-card:not(.locked):hover { transform:scale(1.02); box-shadow:var(--shadow-pop); }
+.stage-icon { font-size:2rem; }
+.stage-name { font-family:'Fredoka One',cursive; font-size:1.1rem; color:var(--navy); }
+.stage-meta { font-size:0.85rem; color:var(--muted); margin-top:2px; }
+.stage-stars { font-size:1.1rem; margin-left:auto; }
+
+/* QUIZ */
+.quiz-progress { flex:1; display:flex; align-items:center; gap:8px; font-weight:800; color:#fff; font-size:0.95rem; }
+.progress-bar-wrap { flex:1; height:8px; background:rgba(255,255,255,0.2); border-radius:50px; overflow:hidden; }
+.progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--grass),var(--sun)); border-radius:50px; transition:width 0.4s; width:0%; }
+.quiz-card { max-width:640px; margin:28px auto 0; padding:0 24px; }
+.quiz-subject-badge {
+display:inline-block; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9);
+font-weight:700; font-size:0.85rem; padding:5px 16px; border-radius:50px; margin-bottom:16px;
+}
+.quiz-question {
+font-family:'Fredoka One',cursive; font-size:2rem; color:#fff; text-align:center;
+padding:28px 16px; background:rgba(255,255,255,0.08); border-radius:24px;
+border:2px solid rgba(255,255,255,0.15); margin-bottom:20px;
+min-height:110px; display:flex; align-items:center; justify-content:center;
+}
+.quiz-answers { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.answer-btn {
+font-family:'Fredoka One',cursive; font-size:1.4rem; color:var(--navy);
+background:rgba(255,255,255,0.97); border:3px solid transparent;
+border-radius:18px; padding:18px 10px; cursor:pointer;
+transition:transform 0.15s, box-shadow 0.15s; box-shadow:0 6px 20px rgba(0,0,0,0.12);
+}
+.answer-btn:hover { transform:scale(1.05); }
+.answer-btn.correct { background:linear-gradient(135deg,#6BCB77,#3DAA45); color:#fff; border-color:#3DAA45; }
+.answer-btn.wrong { background:linear-gradient(135deg,#FF6B6B,#FF416C); color:#fff; animation:shake 0.4s ease; }
+.answer-btn:disabled { cursor:default; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 60%{transform:translateX(8px)} }
+.quiz-feedback {
+margin-top:16px; padding:14px 20px; border-radius:16px;
+font-weight:700; font-size:1rem; text-align:center;
+animation:pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.quiz-feedback.correct-fb { background:rgba(107,203,119,0.2); color:#6BCB77; border:2px solid rgba(107,203,119,0.4); }
+.quiz-feedback.wrong-fb { background:rgba(255,107,107,0.2); color:#FF6B6B; border:2px solid rgba(255,107,107,0.4); }
+
+/* AI TUTOR */
+.ai-tutor-hint { max-width:640px; margin:16px auto 0; padding:0 24px; display:flex; align-items:flex-start; gap:12px; animation:slide-up 0.4s ease; }
+.tutor-avatar {
+font-size:2rem; flex-shrink:0; background:rgba(255,255,255,0.1);
+width:50px; height:50px; border-radius:50%; display:flex; align-items:center;
+justify-content:center; border:2px solid rgba(255,255,255,0.2);
+}
+.tutor-bubble {
+background:rgba(255,255,255,0.12); backdrop-filter:blur(8px);
+border:1.5px solid rgba(255,255,255,0.2); border-radius:16px 16px 16px 4px;
+padding:12px 16px; color:rgba(255,255,255,0.9); font-size:0.95rem; font-weight:600; flex:1;
+}
+.tutor-name { font-size:0.75rem; color:var(--sun); font-weight:800; margin-bottom:4px; }
+
+/* RESULT */
+.result-wrap { max-width:500px; margin:0 auto; padding:36px 24px; text-align:center; }
+.result-star { font-size:5rem; display:block; margin-bottom:10px; animation:pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+.result-title { font-family:'Fredoka One',cursive; font-size:2.2rem; color:#fff; margin-bottom:20px; }
+.result-score-box { background:rgba(255,255,255,0.12); border-radius:20px; border:2px solid rgba(255,255,255,0.2); padding:22px; margin-bottom:14px; }
+.result-score { font-family:'Fredoka One',cursive; font-size:3.2rem; color:var(--sun); }
+.result-score-label { color:rgba(255,255,255,0.7); font-weight:700; font-size:0.9rem; margin-top:4px; }
+.result-points { font-size:1.2rem; font-weight:800; color:var(--grass); margin:10px 0; }
+.result-msg { color:rgba(255,255,255,0.8); font-size:1rem; margin-bottom:24px; }
+.result-btns { display:flex; flex-direction:column; gap:12px; }
+
+/* AUTH */
+.auth-wrap { max-width:420px; margin:0 auto; padding:32px 24px; }
+.auth-card { background:rgba(255,255,255,0.97); border-radius:28px; padding:36px 32px; box-shadow:var(--shadow-pop); text-align:center; }
+.auth-icon { font-size:3rem; margin-bottom:10px; }
+.auth-card h2 { font-family:'Fredoka One',cursive; font-size:1.9rem; color:var(--navy); margin-bottom:18px; }
+.tab-row { display:flex; gap:8px; margin-bottom:20px; border-radius:50px; background:#f0f0f8; padding:4px; }
+.tab { flex:1; font-family:'Nunito',sans-serif; font-weight:800; font-size:0.95rem; padding:9px; border-radius:50px; border:none; cursor:pointer; background:transparent; color:var(--muted); transition:background 0.2s, color 0.2s; }
+.tab.active { background:#fff; color:var(--navy); box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+.auth-fields { display:flex; flex-direction:column; gap:12px; margin-bottom:18px; }
+.field { font-family:'Nunito',sans-serif; font-size:1rem; font-weight:600; border:2px solid #e8e8f0; border-radius:14px; padding:12px 16px; outline:none; transition:border-color 0.2s; background:#fafafa; color:var(--navy); }
+.field:focus { border-color:var(--purple); background:#fff; }
+.auth-msg { font-size:0.9rem; font-weight:700; margin-top:10px; min-height:20px; }
+.auth-msg.error { color:var(--coral); }
+.auth-msg.success { color:var(--grass); }
+
+/* DASHBOARD */
+.dashboard-wrap { max-width:740px; margin:0 auto; padding:20px 24px; }
+.dash-welcome { font-family:'Fredoka One',cursive; font-size:1.7rem; color:#fff; text-align:center; margin-bottom:20px; }
+.dash-age-badge { text-align:center; margin-bottom:20px; }
+.age-badge-pill { display:inline-block; background:linear-gradient(135deg,var(--sun),var(--orange)); color:#fff; font-weight:800; font-size:0.9rem; padding:6px 20px; border-radius:50px; }
+.dash-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px; }
+.stat-card { background:rgba(255,255,255,0.97); border-radius:20px; padding:20px 14px; text-align:center; box-shadow:var(--shadow); }
+.stat-icon { font-size:1.8rem; margin-bottom:4px; }
+.stat-val { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--navy); }
+.stat-lbl { font-size:0.78rem; color:var(--muted); font-weight:700; margin-top:2px; }
+.dash-section-title { font-family:'Fredoka One',cursive; font-size:1.2rem; color:rgba(255,255,255,0.9); margin:0 0 12px; }
+.dash-progress-list { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+.dash-subject-row { background:rgba(255,255,255,0.12); border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
+.dash-subject-icon { font-size:1.5rem; }
+.dash-subject-info { flex:1; }
+.dash-subject-name { font-weight:800; color:#fff; font-size:0.95rem; }
+.dash-subject-progress { font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:2px; }
+.mini-bar-wrap { width:70px; height:6px; background:rgba(255,255,255,0.2); border-radius:50px; overflow:hidden; }
+.mini-bar-fill { height:100%; background:linear-gradient(90deg,var(--grass),var(--sun)); border-radius:50px; transition:width 0.5s; }
+.dash-activity { background:rgba(255,255,255,0.08); border-radius:14px; padding:14px; }
+.activity-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.85); font-size:0.88rem; }
+.activity-row:last-child { border-bottom:none; }
+.activity-pts { font-weight:800; color:var(--sun); }
+.empty-msg { text-align:center; color:rgba(255,255,255,0.5); font-size:0.9rem; padding:14px; }
+
+/* TOAST */
+.toast {
+position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
+background:rgba(30,30,60,0.95); color:#fff; font-weight:700; font-size:1rem;
+padding:12px 28px; border-radius:50px; box-shadow:0 8px 32px rgba(0,0,0,0.3);
+border:1px solid rgba(255,255,255,0.15); z-index:9999;
+opacity:0; transition:opacity 0.3s, transform 0.3s; pointer-events:none;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); z-index:9000; display:flex; align-items:center; justify-content:center; }
+.modal-box { background:rgba(255,255,255,0.97); border-radius:24px; padding:32px; max-width:360px; width:90%; text-align:center; box-shadow:var(--shadow-pop); animation:pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+#modal-msg { font-family:'Fredoka One',cursive; font-size:1.4rem; color:var(--navy); margin-bottom:20px; }
+.modal-btns { display:flex; gap:12px; justify-content:center; }
+
+@keyframes pop-in { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes slide-up { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+@media(max-width:600px){
+.home-header{flex-direction:column;gap:14px;align-items:flex-start;}
+.title{font-size:1.5rem;}
+.subjects-grid{grid-template-columns:1fr 1fr;gap:12px;}
+.quiz-question{font-size:1.5rem;}
+.answer-btn{font-size:1.1rem;padding:14px 8px;}
+.age-grid{grid-template-columns:repeat(3,1fr);}
+}
+```
+
+</style>
+</head>
+<body>
+
+<!-- ===== HOME ===== -->
+
+<div id="screen-home" class="screen active">
+<div class="stars"></div>
+<header class="home-header">
+<div class="logo-wrap">
+<div class="logo-star">⭐</div>
+<!-- If you have a logo.png add it here: -->
+<!-- <img src="logo.png" alt="Logo" class="logo-img" /> -->
+<h1 class="title">Learning With<br><span class="title-accent">Samara AI</span></h1>
+</div>
+<div class="header-btns">
+<button id="btn-login" class="btn btn-outline" onclick="App.showScreen('screen-auth')">Log In</button>
+<button id="btn-signup" class="btn btn-outline" onclick="App.showScreen('screen-auth','signup')">Sign Up</button>
+<button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 Dashboard</button>
+<button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
+</div>
+</header>
+
+<div class="hero">
+<p class="hero-subtitle">Explore magical learning worlds 🌍✨ — adventure through Math, Reading, Science & more!</p>
+</div>
+
+<!-- Age Group Selector -->
+
+<div class="age-select-wrap">
+<p class="age-select-title">👋 First, who is learning today?</p>
+<div class="age-grid">
+<div class="age-card" data-age="0-3" onclick="App.selectAge('0-3')"> <div class="age-icon">🍼</div><div class="age-label">Samara Baby</div> <div class="age-range">Ages 0–3</div></div>
+<div class="age-card" data-age="4-6" onclick="App.selectAge('4-6')"> <div class="age-icon">🌱</div><div class="age-label">Junior</div> <div class="age-range">Ages 4–6</div></div>
+<div class="age-card" data-age="7-10" onclick="App.selectAge('7-10')"> <div class="age-icon">⭐</div><div class="age-label">Explorer</div> <div class="age-range">Ages 7–10</div></div>
+<div class="age-card" data-age="11-14" onclick="App.selectAge('11-14')"><div class="age-icon">🚀</div><div class="age-label">Pro</div> <div class="age-range">Ages 11–14</div></div>
+<div class="age-card" data-age="15-17" onclick="App.selectAge('15-17')"><div class="age-icon">🎓</div><div class="age-label">Senior</div> <div class="age-range">Ages 15–17</div></div>
+</div>
+</div>
+
+<!-- Topic Search -->
+
+<div class="topic-search-wrap">
+<p class="topic-search-label">🔍 Or type a topic you want to learn:</p>
+<div class="topic-search-row">
+<input class="topic-input" id="topic-input" type="text" placeholder="e.g. volcanoes, fractions, world war 2..." />
+<button class="btn btn-primary" onclick="App.searchTopic()">Go! 🚀</button>
+</div>
+</div>
+
+<!-- Subjects -->
+
+<div class="subjects-section" id="subjects-section" style="margin-top:28px;">
+<p class="subjects-title" id="subjects-title">✨ Pick a subject to explore:</p>
+<div class="subjects-grid" id="subjects-grid"></div>
+</div>
+
+<div class="home-characters">
+<div class="character bounce-slow">🦄</div>
+<div class="character bounce-mid">🚀</div>
+<div class="character bounce-fast">🌟</div>
+</div>
+</div>
+
+<!-- ===== AUTH ===== -->
+
+<div id="screen-auth" class="screen">
+<div class="auth-wrap">
+<button class="back-btn" style="margin-bottom:16px;" onclick="App.showScreen('screen-home')">← Back</button>
+<div class="auth-card">
+<div class="auth-icon">🌟</div>
+<h2 id="auth-title">Welcome Back!</h2>
+<div class="tab-row">
+<button class="tab active" id="tab-login" onclick="App.switchTab('login')">Log In</button>
+<button class="tab" id="tab-signup" onclick="App.switchTab('signup')">Sign Up</button>
+</div>
+<div class="auth-fields">
+<input class="field" type="email" id="auth-email" placeholder="Your email" />
+<input class="field" type="password" id="auth-password" placeholder="Password" />
+<input class="field hidden" type="text" id="auth-name" placeholder="Your name (e.g. Samara)" />
+</div>
+<button class="btn btn-primary big" onclick="App.handleAuth()">Let's Go! 🚀</button>
+<p id="auth-msg" class="auth-msg"></p>
+</div>
+</div>
+</div>
+
+<!-- ===== WORLDS ===== -->
+
+<div id="screen-worlds" class="screen">
+<div class="top-bar">
+<button class="back-btn" onclick="App.showScreen('screen-home')">← Back</button>
+<div class="score-pill">⭐ <span id="worlds-score">0</span> pts</div>
+</div>
+<h2 class="screen-title" id="worlds-title">Worlds</h2>
+<p class="screen-sub">Complete a world to unlock the next one! 🔓</p>
+<div class="worlds-list" id="worlds-list"></div>
+</div>
+
+<!-- ===== STAGES ===== -->
+
+<div id="screen-stages" class="screen">
+<div class="top-bar">
+<button class="back-btn" onclick="App.showScreen('screen-worlds')">← Worlds</button>
+<div class="score-pill">⭐ <span id="stages-score">0</span> pts</div>
+</div>
+<h2 class="screen-title" id="stages-title">Stages</h2>
+<p class="screen-sub">3 stages — earn 80% to unlock the next world! 🎯</p>
+<div class="stages-list" id="stages-list"></div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+
+<div id="screen-quiz" class="screen">
+<div class="top-bar">
+<button class="back-btn" onclick="App.confirmQuit()">✕ Quit</button>
+<div class="quiz-progress">
+<span id="quiz-q-num">Q1</span>/<span id="quiz-q-total">5</span>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="quiz-progress-bar"></div></div>
+</div>
+<div class="score-pill">⭐ <span id="quiz-score">0</span></div>
+</div>
+<div class="quiz-card">
+<div class="quiz-subject-badge" id="quiz-subject-badge">Math · World 1</div>
+<div class="quiz-question" id="quiz-question">What is 3 + 4?</div>
+<div class="quiz-answers" id="quiz-answers"></div>
+<div class="quiz-feedback hidden" id="quiz-feedback"></div>
+</div>
+<div class="ai-tutor-hint hidden" id="ai-tutor-hint">
+<div class="tutor-avatar">🤖</div>
+<div class="tutor-bubble">
+<div class="tutor-name">Samara AI ✨</div>
+<div id="tutor-bubble-text">Let me help you with this!</div>
+</div>
+</div>
+</div>
+
+<!-- ===== RESULT ===== -->
+
+<div id="screen-result" class="screen">
+<div class="result-wrap">
+<div class="result-star" id="result-star">⭐</div>
+<h2 class="result-title" id="result-title">Stage Complete!</h2>
+<div class="result-score-box">
+<div class="result-score" id="result-score">80%</div>
+<div class="result-score-label">Accuracy</div>
+</div>
+<div class="result-points" id="result-points">+50 pts earned!</div>
+<div class="result-msg" id="result-msg">Great job!</div>
+<div class="result-btns">
+<button class="btn btn-primary big" id="result-next-btn" onclick="App.resultNext()">Next Stage 🚀</button>
+<button class="btn btn-outline big" onclick="App.showScreen('screen-worlds')">World Map 🗺️</button>
+</div>
+</div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+
+<div id="screen-dashboard" class="screen">
+<div class="top-bar">
+<button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+<h2 class="screen-title small">My Dashboard</h2>
+</div>
+<div class="dashboard-wrap">
+<div class="dash-welcome">Welcome back, <span id="dash-name">Learner</span>! 🌟</div>
+<div class="dash-age-badge"><span class="age-badge-pill" id="dash-age-badge">Explorer · Ages 7–10</span></div>
+<div class="dash-stats">
+<div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-val" id="dash-total-score">0</div><div class="stat-lbl">Total Points</div></div>
+<div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-val" id="dash-worlds-done">0</div><div class="stat-lbl">Worlds Done</div></div>
+<div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-val" id="dash-stages-done">0</div><div class="stat-lbl">Stages Done</div></div>
+</div>
+<h3 class="dash-section-title">Subject Progress</h3>
+<div class="dash-progress-list" id="dash-progress-list"></div>
+<h3 class="dash-section-title">Recent Activity</h3>
+<div class="dash-activity" id="dash-activity"><p class="empty-msg">No activity yet. Start learning! 🚀</p></div>
+</div>
+</div>
+
+<!-- TOAST -->
+
+<div id="toast" class="toast hidden"></div>
+
+<!-- MODAL -->
+
+<div id="modal-overlay" class="modal-overlay hidden">
+<div class="modal-box">
+<p id="modal-msg">Are you sure you want to quit?</p>
+<div class="modal-btns">
+<button class="btn btn-danger" id="modal-confirm">Yes, Quit</button>
+<button class="btn btn-outline" id="modal-cancel">Keep Going!</button>
+</div>
+</div>
+</div>
+
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+
+<script>
+// ============================================================
+// SUPABASE CONFIG — replace with your real values
+// ============================================================
+const SUPABASE_URL = 'https://bfivpvlzehtmksnmgnzb.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDEzODgsImV4cCI6MjA4ODkxNzM4OH0.HJ2iITuM4y0fxdIeMM23wW-AkkUg16oKT9CkLBHl3dk';
+
+const { createClient } = supabase;
+window.DB = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const SB = {
+async signUp(email, password, name, ageGroup) {
+return await window.DB.auth.signUp({ email, password, options:{ data:{ full_name:name, age_group:ageGroup } } });
+},
+async login(email, password) {
+return await window.DB.auth.signInWithPassword({ email, password });
+},
+async logout() {
+return await window.DB.auth.signOut();
+},
+async getUser() {
+const { data:{ user } } = await window.DB.auth.getUser();
+return user;
+},
+async saveScore(r) {
+const user = await this.getUser();
+if (!user) return;
+await window.DB.from('scores').insert({
+user_id:r.userId||user.id, student:r.student, subject:r.subject,
+world:r.world, stage:r.stage, score:r.score, total:r.total,
+accuracy:r.accuracy, created_at:new Date().toISOString()
+});
+},
+async saveProgress(subject, world, stage, accuracy) {
+const user = await this.getUser();
+if (!user) return;
+const stars = accuracy>=0.9?3:accuracy>=0.7?2:1;
+await window.DB.from('progress').upsert({
+user_id:user.id, subject, world, stage,
+completed:true, stars, accuracy, created_at:new Date().toISOString()
+},{ onConflict:'user_id,subject,world,stage' });
+},
+async loadProgress() {
+const user = await this.getUser();
+if (!user) return [];
+const { data } = await window.DB.from('progress').select('*').eq('user_id',user.id);
+return data||[];
+},
+async loadRecentScores(limit=8) {
+const user = await this.getUser();
+if (!user) return [];
+const { data } = await window.DB.from('scores').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(limit);
+return data||[];
+}
+};
+
+// ============================================================
+// SUBJECTS BY AGE GROUP
+// ============================================================
+const SUBJECT_MAP = {
+'0-3': [
+{ id:'shapes', name:'Shapes', icon:'🔷', desc:'Circles, squares & more', color:'#FFD93D' },
+{ id:'colors', name:'Colors', icon:'🎨', desc:'Red, blue, yellow!', color:'#FF6B6B' },
+{ id:'animals', name:'Animals', icon:'🐾', desc:'Cat, dog, lion...', color:'#6BCB77' },
+{ id:'numbers', name:'Numbers', icon:'🔢', desc:'Count to 5!', color:'#7EC8E3' },
+],
+'4-6': [
+{ id:'phonics', name:'Phonics', icon:'🔤', desc:'Letters & sounds', color:'#7EC8E3' },
+{ id:'math', name:'Math', icon:'🔢', desc:'Numbers & counting', color:'#FFD93D' },
+{ id:'science', name:'Science', icon:'🔬', desc:'Explore & discover', color:'#6BCB77' },
+{ id:'social', name:'My World', icon:'🌍', desc:'People & places', color:'#FF6B6B' },
+],
+'7-10': [
+{ id:'math', name:'Math', icon:'🔢', desc:'Numbers & puzzles', color:'#FFD93D' },
+{ id:'reading', name:'Reading', icon:'📚', desc:'Stories & words', color:'#7EC8E3' },
+{ id:'science', name:'Science', icon:'🔬', desc:'Explore & discover', color:'#6BCB77' },
+{ id:'social', name:'Social Studies',icon:'🌎', desc:'People, places & history',color:'#FF6B6B' },
+],
+'11-14':[
+{ id:'algebra', name:'Algebra', icon:'📐', desc:'Equations & geometry', color:'#FFD93D' },
+{ id:'biology', name:'Biology', icon:'🧬', desc:'Life & chemistry', color:'#6BCB77' },
+{ id:'history', name:'World History',icon:'🏛️', desc:'Events that shaped us', color:'#FF9B3F' },
+{ id:'literature', name:'Literature', icon:'📖', desc:'Stories & meaning', color:'#7EC8E3' },
+{ id:'compsci', name:'Computer Sci', icon:'💻', desc:'Code & logic', color:'#C77DFF' },
+{ id:'finance', name:'Finance', icon:'💰', desc:'Money & economics', color:'#FF6B6B' },
+],
+'15-17':[
+{ id:'algebra', name:'Algebra', icon:'📐', desc:'Advanced equations', color:'#FFD93D' },
+{ id:'biology', name:'Biology', icon:'🧬', desc:'Advanced life science', color:'#6BCB77' },
+{ id:'history', name:'World History', icon:'🏛️', desc:'Deep world history', color:'#FF9B3F' },
+{ id:'literature', name:'Literature', icon:'📖', desc:'Analysis & essays', color:'#7EC8E3' },
+{ id:'compsci', name:'Computer Sci', icon:'💻', desc:'Algorithms & systems', color:'#C77DFF' },
+{ id:'finance', name:'Finance', icon:'💰', desc:'Investment & markets', color:'#FF6B6B' },
+{ id:'quantum', name:'Quantum Physics',icon:'⚛️',desc:'The quantum world', color:'#302b63' },
+]
+};
+
+// ============================================================
+// AI TUTOR MESSAGES — per age group personality
+// ============================================================
+const TUTOR = {
+getMessage(ageGroup, type, hint) {
+const msgs = {
+'0-3': {
+correct: ['Yay!! 🎉🎉 You did it! Amazing!', 'WOW!! ⭐ So clever!', 'Yes yes yes!! 🌈 Well done!'],
+wrong: ['Oopsie! 🌸 Try again, you can do it!', 'Almost! 💛 Let\'s try one more time!'],
+hint: [`Look carefully... ${hint} 👀`]
+},
+'4-6': {
+correct: ['Awesome job!! 🌟 You are SO smart!', 'Woohoo!! 🎊 That\'s correct!', 'You got it!! ⭐ High five!'],
+wrong: [`Hmm, not quite! 💛 Here\'s a little hint: ${hint}`, 'Good try! Let\'s look at this together 🤔'],
+hint: [`💡 Hint: ${hint}`]
+},
+'7-10': {
+correct: ['Brilliant! 🚀 You nailed it!', 'That\'s right! ⭐ Keep that brain working!', 'Excellent explorer! 🗺️ Correct!'],
+wrong: [`Not quite — but great attempt! 💪 Think about it this way: ${hint}`, 'Close! Here\'s a clue to help you 🔍'],
+hint: [`🔍 Hint: ${hint}`]
+},
+'11-14': {
+correct: ['Correct! 🎯 Strong work!', 'Spot on! 🚀 Your brain is levelling up!', 'Nailed it! 💡 Keep pushing forward!'],
+wrong: [`Not this time — here\'s how to think about it: ${hint}`, 'Good effort! Let\'s break it down together 🧠'],
+hint: [`💡 Think about it this way: ${hint}`]
+},
+'15-17': {
+correct: ['Excellent! ⚡ That\'s solid reasoning!', 'Correct! 🎓 You\'re thinking at a high level!', 'Well done! 💎 Keep that analytical mind sharp!'],
+wrong: [`Not quite — let\'s analyse this: ${hint}`, 'Interesting attempt! Here\'s the key insight: 🔬'],
+hint: [`🔬 Key insight: ${hint}`]
+}
+};
+const group = msgs[ageGroup] || msgs['7-10'];
+const pool = group[type] || group.hint;
+return pool[Math.floor(Math.random() * pool.length)];
+}
+};
+
+// ============================================================
+// QUESTION GENERATOR
+// ============================================================
+const QGen = {
+generate(subjectId, worldId, stageId, ageGroup, count=5) {
+const questions = [];
+for (let i=0; i<count; i++) {
+questions.push(this._make(subjectId, worldId, stageId, ageGroup));
+}
+return questions;
+},
+
+_make(subjectId, worldId, stageId, ageGroup) {
+if (subjectId === 'math' || subjectId === 'numbers') return this._math(worldId, stageId, ageGroup);
+if (subjectId === 'shapes') return this._shapes();
+if (subjectId === 'colors') return this._colors();
+if (subjectId === 'animals') return this._animals();
+if (subjectId === 'phonics' || subjectId === 'reading') return this._reading(worldId, stageId);
+if (subjectId === 'science' || subjectId === 'biology') return this._science(worldId, stageId, ageGroup);
+if (subjectId === 'social' || subjectId === 'history') return this._social(worldId, stageId, ageGroup);
+if (subjectId === 'algebra') return this._algebra(worldId, stageId);
+if (subjectId === 'literature') return this._literature();
+if (subjectId === 'compsci') return this._compsci(stageId);
+if (subjectId === 'finance') return this._finance();
+if (subjectId === 'quantum') return this._quantum();
+return this._math(worldId, stageId, ageGroup);
+},
+
+_math(worldId, stageId, ageGroup) {
+const easy = ageGroup==='0-3'||ageGroup==='4-6';
+const max = easy ? 5 : stageId===1 ? 10 : stageId===2 ? 25 : 50;
+const ops = worldId===1?['+']:worldId===2?['-']:worldId===3?['×']:worldId===4?['÷']:['+','-','×'];
+const op = ops[Math.floor(Math.random()*ops.length)];
+let a,b,correct,text;
+if (op==='+') { a=rand(1,max); b=rand(1,max); correct=a+b; text=`${a} + ${b} = ?`; }
+else if (op==='-') { b=rand(1,max); a=rand(b,max); correct=a-b; text=`${a} − ${b} = ?`; }
+else if (op==='×') { a=rand(2,easy?3:10); b=rand(2,easy?3:10); correct=a*b; text=`${a} × ${b} = ?`; }
+else { b=rand(2,easy?3:10); correct=rand(2,easy?3:10); a=b*correct; text=`${a} ÷ ${b} = ?`; }
+const hint = op==='+'?`Count up from ${a} by ${b}`
+: op==='-'?`Start at ${a}, count back ${b}`
+: op==='×'?`Think of ${a} groups of ${b}`
+: `How many groups of ${b} fit in ${a}?`;
+return { text, answers:makeAnswers(correct,3,max*2), correctValue:String(correct), hint };
+},
+
+_shapes() {
+const shapes = [
+{q:'Which shape has 3 sides?', correct:'Triangle', wrong:['Circle','Square','Rectangle']},
+{q:'Which shape is perfectly round?', correct:'Circle', wrong:['Triangle','Square','Rectangle']},
+{q:'Which shape has 4 equal sides?', correct:'Square', wrong:['Circle','Triangle','Oval']},
+{q:'Which shape has 4 sides but not all equal?', correct:'Rectangle', wrong:['Square','Circle','Triangle']},
+{q:'Which shape looks like an egg?', correct:'Oval', wrong:['Circle','Square','Triangle']},
+];
+const s = shapes[rand(0,shapes.length-1)];
+return { text:s.q, answers:makeA(s.correct,s.wrong), correctValue:s.correct, hint:`Look at the number of sides and corners!` };
+},
+
+_colors() {
+const colors = [
+{q:'What color is the sky?', correct:'Blue', wrong:['Red','Green','Yellow']},
+{q:'What color is grass?', correct:'Green', wrong:['Blue','Red','Orange']},
+{q:'What color is the sun?', correct:'Yellow', wrong:['Blue','Green','Purple']},
+{q:'What color is an apple?', correct:'Red', wrong:['Blue','Yellow','Green']},
+{q:'What color is a pumpkin?', correct:'Orange', wrong:['Blue','Green','Pink']},
+];
+const c = colors[rand(0,colors.length-1)];
+return { text:c.q, answers:makeA(c.correct,c.wrong), correctValue:c.correct, hint:`Think about what you see every day!` };
+},
+
+_animals() {
+const animals = [
+{q:'Which animal says "moo"?', correct:'Cow', wrong:['Dog','Cat','Duck']},
+{q:'Which animal has a trunk?', correct:'Elephant',wrong:['Lion','Tiger','Giraffe']},
+{q:'Which animal has a very long neck?', correct:'Giraffe', wrong:['Elephant','Lion','Zebra']},
+{q:'Which animal is the king of the jungle?', correct:'Lion', wrong:['Tiger','Elephant','Giraffe']},
+{q:'Which animal lives in water and has fins?', correct:'Fish', wrong:['Cat','Dog','Bird']},
+];
+const a = animals[rand(0,animals.length-1)];
+return { text:a.q, answers:makeA(a.correct,a.wrong), correctValue:a.correct, hint:`Think about what you know about each animal!` };
+},
+
+_reading(worldId, stageId) {
+const pools = [
+{q:'Which word has a short "a" sound?', correct:'cat', wrong:['cake','boat','tree'], hint:'"cat" — the "a" sounds like aah'},
+{q:'Which word has a long "e" sound?', correct:'tree', wrong:['ten','bed','let'], hint:'"tree" — two e\'s make a long sound'},
+{q:'What is a synonym for "happy"?', correct:'joyful',wrong:['sad','angry','tired'], hint:'Synonyms mean the same thing'},
+{q:'What is the opposite of "hot"?', correct:'cold', wrong:['warm','cool','mild'], hint:'Antonyms are opposites'},
+{q:'Which word is a NOUN?', correct:'dog', wrong:['run','happy','quickly'], hint:'Nouns are people, places or things'},
+{q:'Which sentence is complete?', correct:'The dog barks.',wrong:['The dog.','Barks!','Running.'],hint:'A sentence needs a subject and verb'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+},
+
+_science(worldId, stageId, ageGroup) {
+const pools = [
+{q:'What do plants need to make food?', correct:'Sunlight, water & air',wrong:['Only water','Only soil','Sunlight only'],hint:'Photosynthesis needs sun, water and CO₂'},
+{q:'Which animal is a mammal?', correct:'Dog', wrong:['Eagle','Frog','Salmon'], hint:'Mammals have fur and feed babies milk'},
+{q:'What covers most of Earth\'s surface?',correct:'Water (oceans)',wrong:['Land','Ice','Desert'],hint:'About 71% of Earth is covered by oceans'},
+{q:'What causes an earthquake?', correct:'Movement of tectonic plates',wrong:['Heavy rain','Strong wind','Volcanic ash'],hint:'Earth\'s plates move and shift'},
+{q:'What does the heart do?', correct:'Pumps blood',wrong:['Helps you breathe','Digests food','Controls movement'],hint:'Your heart beats about 100,000 times a day'},
+{q:'How many planets are in our solar system?',correct:'8',wrong:['7','9','10'],hint:'Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune'},
+{q:'What is photosynthesis?', correct:'How plants make food using sunlight',wrong:['How animals breathe','How rocks form','How clouds appear'],hint:'Photo = light, synthesis = making'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+},
+
+_social(worldId, stageId, ageGroup) {
+const pools = [
+{q:'Who was the first US President?', correct:'George Washington',wrong:['Abraham Lincoln','Thomas Jefferson','Benjamin Franklin'],hint:'He led the Continental Army first'},
+{q:'What is democracy?', correct:'Citizens vote for leaders',wrong:['One ruler controls all','Military rules','Richest people rule'],hint:'Democracy means rule by the people'},
+{q:'How many continents are there?', correct:'7',wrong:['5','6','8'],hint:'Africa, Antarctica, Asia, Australia, Europe, North America, South America'},
+{q:'Where is the Eiffel Tower?', correct:'Paris, France',wrong:['London','Rome','Berlin'],hint:'Built for the 1889 World\'s Fair'},
+{q:'What is the largest continent?', correct:'Asia',wrong:['Africa','North America','Europe'],hint:'Asia covers about 30% of Earth\'s land'},
+{q:'What does MLK Jr stand for?', correct:'Martin Luther King Jr.',wrong:['Martin Luther King Jr','Michael Luther King','Marcus Luther King'],hint:'Civil rights leader famous for "I Have a Dream"'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+},
+
+_algebra(worldId, stageId) {
+const difficulty = stageId;
+if (difficulty===1) {
+const x = rand(1,10), a = rand(1,10);
+const result = x+a;
+return { text:`If x + ${a} = ${result}, what is x?`, answers:makeAnswers(x,3,15), correctValue:String(x), hint:`Subtract ${a} from both sides: x = ${result} - ${a}` };
+} else if (difficulty===2) {
+const a=rand(2,5), b=rand(1,10), c=rand(1,15);
+const x = Math.round((c-b)/a);
+return { text:`Solve: ${a}x + ${b} = ${a*x+b}`, answers:makeAnswers(x,3,15), correctValue:String(x), hint:`Subtract ${b} first, then divide by ${a}` };
+} else {
+const a=rand(1,5),b=rand(1,5),c=rand(1,5),d=rand(1,5);
+const x=rand(1,5);
+return { text:`${a}x + ${b} = ${c}x + ${d}, find x (where x=${x})`, answers:makeAnswers(x,3,10), correctValue:String(x), hint:`Move x terms to one side, numbers to the other` };
+}
+},
+
+_literature() {
+const pools = [
+{q:'What is the "theme" of a story?', correct:'The central message or lesson',wrong:['The main character','The setting','The plot twist'],hint:'Theme is the big idea the author wants you to take away'},
+{q:'What is a metaphor?', correct:'Saying something IS something else',wrong:['Comparing using like/as','A type of rhyme','A story structure'],hint:'"Life is a journey" — no like or as needed'},
+{q:'What is foreshadowing?', correct:'Hints about what will happen later',wrong:['Describing the past','Explaining a character','Ending the story'],hint:'Authors drop clues early to build suspense'},
+{q:'What is the "protagonist"?', correct:'The main character',wrong:['The villain','The narrator','A side character'],hint:'Protagonist = the hero or main person of the story'},
+{q:'What does "irony" mean?', correct:'When the opposite of what is expected happens',wrong:['When characters argue','A type of poem','A happy ending'],hint:'A fire station burning down is ironic'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+},
+
+_compsci(stageId) {
+const pools = [
+{q:'What does "algorithm" mean?', correct:'Step by step instructions to solve a problem',wrong:['A type of computer','A programming language','A data type'],hint:'Like a recipe — step by step to get a result'},
+{q:'What is a "variable" in coding?', correct:'A container that stores a value',wrong:['A type of loop','A function','A file'],hint:'Think of it like a labelled box holding data'},
+{q:'What does a loop do in programming?', correct:'Repeats code multiple times',wrong:['Stops the program','Creates a variable','Connects to the internet'],hint:'Loops keep running until a condition is met'},
+{q:'What is binary?', correct:'A number system using only 0s and 1s',wrong:['A type of file','A programming language','A computer virus'],hint:'Computers speak in binary — everything is 0 or 1'},
+{q:'What does HTML stand for?', correct:'HyperText Markup Language',wrong:['High Tech Modern Language','HyperText Machine Learning','Hyper Transfer Markup Logic'],hint:'HTML is the language used to build web pages'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+},
+
+_finance() {
+const pools = [
+{q:'What is "interest" on a loan?', correct:'Extra money paid back on top of what was borrowed',wrong:['A monthly fee','A type of investment','A bank account'],hint:'Banks charge interest for lending you money'},
+{q:'What does "budget" mean?', correct:'A plan for how to spend money',wrong:['A type of bank account','A tax form','A credit card'],hint:'Budgets help you track income vs spending'},
+{q:'What is inflation?', correct:'When prices rise and money buys less',wrong:['When money gains value','A type of loan','A stock market term'],hint:'If inflation is 5%, something costing $100 now costs $105'},
+{q:'What is a "stock"?', correct:'A small ownership share in a company',wrong:['A type of bank account','A government bond','A type of currency'],hint:'Buying stock = owning a tiny piece of a company'},
+{q:'What is compound interest?', correct:'Earning interest on both principal and past interest',wrong:['Simple interest twice','A bank fee','A type of tax'],hint:'It grows exponentially — interest on top of interest!'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+},
+
+_quantum() {
+const pools = [
+{q:'What is superposition in quantum physics?', correct:'A particle existing in multiple states at once', wrong:['Two particles in the same place','A particle moving fast','A type of wave'],hint:'Like Schrödinger\'s cat — alive AND dead until observed'},
+{q:'What is quantum entanglement?', correct:'Two particles linked so measuring one instantly affects the other',wrong:['Two particles colliding','A particle splitting in two','A type of radiation'],hint:'Einstein called it "spooky action at a distance"'},
+{q:'What did Max Planck discover?', correct:'Energy is released in discrete packets called quanta',wrong:['The speed of light','Gravity','The atom\'s structure'],hint:'This discovery launched quantum mechanics in 1900'},
+{q:'What is the Heisenberg Uncertainty Principle?', correct:'You cannot know both position and momentum of a particle precisely', wrong:['Particles are always uncertain','Energy is uncertain','Time is relative'],hint:'The more precisely you know position, the less you know speed'},
+{q:'What is a "qubit" in quantum computing?', correct:'A quantum bit that can be 0, 1, or both simultaneously',wrong:['A regular computer bit','A quantum particle','A type of quantum wave'],hint:'Unlike regular bits, qubits use superposition to process more data'},
+];
+const q = pools[rand(0,pools.length-1)];
+return { text:q.q, answers:makeA(q.correct,q.wrong), correctValue:q.correct, hint:q.hint };
+}
+};
+
+// ============================================================
+// WORLDS BY SUBJECT
+// ============================================================
+const WORLDS = {
+math: [{id:1,name:'Addition',icon:'➕'},{id:2,name:'Subtraction',icon:'➖'},{id:3,name:'Multiplication',icon:'✖️'},{id:4,name:'Division',icon:'➗'},{id:5,name:'Fractions',icon:'½'}],
+reading: [{id:1,name:'Phonics',icon:'🔤'},{id:2,name:'Sight Words',icon:'👀'},{id:3,name:'Vocabulary',icon:'📖'},{id:4,name:'Grammar',icon:'✏️'},{id:5,name:'Comprehension',icon:'🧠'}],
+science: [{id:1,name:'Living Things',icon:'🌿'},{id:2,name:'Our Earth',icon:'🌍'},{id:3,name:'Weather',icon:'⛅'},{id:4,name:'Space',icon:'🚀'},{id:5,name:'Human Body',icon:'🫀'}],
+social: [{id:1,name:'Community',icon:'🏘️'},{id:2,name:'History',icon:'🏛️'},{id:3,name:'Geography',icon:'🗺️'},{id:4,name:'Government',icon:'⚖️'},{id:5,name:'Cultures',icon:'🎭'}],
+phonics: [{id:1,name:'Short Vowels',icon:'🔤'},{id:2,name:'Long Vowels',icon:'📣'},{id:3,name:'Blends',icon:'🔗'}],
+numbers: [{id:1,name:'Count to 3',icon:'1️⃣'},{id:2,name:'Count to 5',icon:'5️⃣'},{id:3,name:'More & Less',icon:'⚖️'}],
+shapes: [{id:1,name:'Basic Shapes',icon:'🔷'},{id:2,name:'Find the Shape',icon:'🔍'},{id:3,name:'Shape Colours',icon:'🎨'}],
+colors: [{id:1,name:'Basic Colors',icon:'🎨'},{id:2,name:'Mix Colors',icon:'🖌️'},{id:3,name:'Color Match',icon:'✅'}],
+animals: [{id:1,name:'Farm Animals',icon:'🐄'},{id:2,name:'Wild Animals',icon:'🦁'},{id:3,name:'Sea Animals',icon:'🐠'}],
+algebra: [{id:1,name:'Equations',icon:'🔢'},{id:2,name:'Linear Algebra',icon:'📈'},{id:3,name:'Quadratics',icon:'📉'},{id:4,name:'Geometry',icon:'📐'},{id:5,name:'Statistics',icon:'📊'}],
+biology: [{id:1,name:'Cells',icon:'🔬'},{id:2,name:'Genetics',icon:'🧬'},{id:3,name:'Ecosystems',icon:'🌿'},{id:4,name:'Chemistry',icon:'⚗️'},{id:5,name:'The Body',icon:'🫀'}],
+history: [{id:1,name:'Ancient Civilizations',icon:'🏛️'},{id:2,name:'Middle Ages',icon:'🏰'},{id:3,name:'Revolutions',icon:'✊'},{id:4,name:'World Wars',icon:'🌍'},{id:5,name:'Modern Era',icon:'🚀'}],
+literature: [{id:1,name:'Story Elements',icon:'📖'},{id:2,name:'Poetry',icon:'🎭'},{id:3,name:'Literary Devices',icon:'✍️'},{id:4,name:'Genres',icon:'📚'},{id:5,name:'Analysis',icon:'🧠'}],
+compsci: [{id:1,name:'Basics',icon:'💻'},{id:2,name:'Algorithms',icon:'🔁'},{id:3,name:'Data Structures',icon:'🗂️'},{id:4,name:'Web Dev',icon:'🌐'},{id:5,name:'AI & ML',icon:'🤖'}],
+finance: [{id:1,name:'Budgeting',icon:'💰'},{id:2,name:'Saving',icon:'🏦'},{id:3,name:'Investing',icon:'📈'},{id:4,name:'Taxes',icon:'📋'},{id:5,name:'Markets',icon:'💹'}],
+quantum: [{id:1,name:'Wave-Particle',icon:'⚛️'},{id:2,name:'Superposition',icon:'🌀'},{id:3,name:'Entanglement',icon:'🔗'},{id:4,name:'Uncertainty',icon:'❓'},{id:5,name:'Quantum Computing',icon:'💻'}],
+};
+const STAGES_PER_WORLD = 3;
+
+// ============================================================
+// HELPERS
+// ============================================================
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function makeAnswers(correct, count, maxVal) {
+const wrongs = new Set();
+let i=0;
+while(wrongs.size<count && i++<60){
+const c = correct + rand(-5,5);
+if(c!==correct && c>=0) wrongs.add(String(c));
+}
+while(wrongs.size<count) wrongs.add(String(correct+wrongs.size+1));
+return makeA(String(correct), Array.from(wrongs));
+}
+
+function makeA(correct, wrongs) {
+const all = [{label:correct,isCorrect:true},...wrongs.slice(0,3).map(w=>({label:String(w),isCorrect:false}))];
+for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+return all;
+}
+
+// ============================================================
+// APP STATE
+// ============================================================
+const State = {
+user:null, score:0, progress:[], ageGroup:'7-10',
+subject:null, worldIndex:null, stageIndex:null,
+questions:[], qIndex:0, correct:0, answered:false
+};
+
+// ============================================================
+// APP CONTROLLER
+// ============================================================
+const App = {
+
+async init() {
+window.DB.auth.onAuthStateChange(async(event,session)=>{
+State.user = session?.user||null;
+App._updateAuthUI();
+if(State.user){
+State.progress = await SB.loadProgress();
+const saved = State.user.user_metadata?.age_group;
+if(saved) App.selectAge(saved, false);
+}
+});
+const user = await SB.getUser();
+State.user = user;
+App._updateAuthUI();
+if(user){
+State.progress = await SB.loadProgress();
+const saved = user.user_metadata?.age_group;
+if(saved) App.selectAge(saved, false);
+}
+App.renderSubjects();
+},
+
+showScreen(id, param) {
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+window.scrollTo(0,0);
+if(id==='screen-auth' && param) App.switchTab(param);
+if(id==='screen-dashboard') App.renderDashboard();
+},
+
+_updateAuthUI() {
+const in_ = !!State.user;
+document.getElementById('btn-login').classList.toggle('hidden',in_);
+document.getElementById('btn-signup').classList.toggle('hidden',in_);
+document.getElementById('btn-dashboard').classList.toggle('hidden',!in_);
+document.getElementById('btn-logout').classList.toggle('hidden',!in_);
+},
+
+selectAge(group, toast=true) {
+State.ageGroup = group;
+document.querySelectorAll('.age-card').forEach(c=>{
+c.classList.toggle('selected', c.dataset.age===group);
+});
+App.renderSubjects();
+if(toast) App.showToast(`Switched to ${group} group! 🎉`);
+},
+
+renderSubjects() {
+const subjects = SUBJECT_MAP[State.ageGroup]||SUBJECT_MAP['7-10'];
+const grid = document.getElementById('subjects-grid');
+const title = document.getElementById('subjects-title');
+const labels = {'0-3':'🍼 Baby World — tap a subject!','4-6':'🌱 Junior World — pick a subject!','7-10':'⭐ Explorer World — choose your adventure!','11-14':'🚀 Pro World — level up your knowledge!','15-17':'🎓 Senior World — master every subject!'};
+title.textContent = labels[State.ageGroup]||'✨ Pick a subject:';
+grid.innerHTML = subjects.map(s=>`
+<div class="subject-card" data-subject="${s.id}" onclick="App.openSubject('${s.id}')">
+<div class="subject-icon">${s.icon}</div>
+<div class="subject-name">${s.name}</div>
+<div class="subject-desc">${s.desc}</div>
+</div>`).join('');
+},
+
+searchTopic() {
+const val = document.getElementById('topic-input').value.trim().toLowerCase();
+if(!val){ App.showToast('Type a topic first! 🔍'); return; }
+const allSubjects = Object.values(SUBJECT_MAP).flat();
+const match = allSubjects.find(s=>s.name.toLowerCase().includes(val)||s.desc.toLowerCase().includes(val)||s.id.toLowerCase().includes(val));
+if(match){
+App.showToast(`Found: ${match.name}! Opening... 🚀`);
+setTimeout(()=>App.openSubject(match.id),800);
+} else {
+App.showToast(`Hmm, try a different topic! We\'re always adding more 🌟`);
+}
+},
+
+openSubject(subjectId) {
+State.subject = subjectId;
+const worlds = WORLDS[subjectId]||WORLDS['math'];
+const subjectDef = (SUBJECT_MAP[State.ageGroup]||SUBJECT_MAP['7-10']).find(s=>s.id===subjectId);
+document.getElementById('worlds-title').textContent = `${subjectDef?.icon||'📚'} ${subjectDef?.name||subjectId} Worlds`;
+App._updateScoreDisplays();
+App.renderWorlds(worlds);
+App.showScreen('screen-worlds');
+},
+
+renderWorlds(worlds) {
+const container = document.getElementById('worlds-list');
+container.innerHTML = '';
+worlds.forEach((world,idx)=>{
+const unlocked = idx===0 || App._worldUnlocked(State.subject, idx, worlds);
+const stagesDone = App._stagesDone(State.subject,
 const pct = Math.round((stagesDone/STAGES_PER_WORLD)*100);
       const card = document.createElement('div');
       card.className = `world-card ${unlocked?'':'locked'}`;
