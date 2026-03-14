@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Learning With Samara AI</title>
+<title>Learning With Samara AI | learningwithsamara.com</title>
+<meta name="description" content="AI-powered learning platform for children ages 0–17. Samara AI tutors every subject, every age group. Free to start at learningwithsamara.com" />
+<meta property="og:title" content="Learning With Samara AI" />
+<meta property="og:description" content="Magical AI learning for every child — from Baby World to Quantum Physics!" />
+<meta property="og:url" content="https://learningwithsamara.com" />
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{--sun:#FFD93D;--grass:#6BCB77;--coral:#FF6B6B;--purple:#C77DFF;--orange:#FF9B3F;--navy:#1A1A2E;--muted:#7A7A9D;--radius:20px;--shadow:0 8px 32px rgba(0,0,0,0.12);--shadow-pop:0 12px 40px rgba(0,0,0,0.18);}
@@ -439,18 +443,19 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
       <div class="plan-price">$0</div>
       <div class="plan-period">forever</div>
       <ul class="plan-features">
-        <li><span class="check">✓</span> 3 subjects per age group</li>
-        <li><span class="check">✓</span> 5 quizzes per day</li>
-        <li><span class="check">✓</span> Pre-built quiz questions</li>
-        <li><span class="check">✓</span> Baby World (ages 0-3)</li>
+        <li><span class="check">✓</span> ALL subjects open</li>
+        <li><span class="check">✓</span> 10 quizzes per day</li>
+        <li><span class="check">✓</span> Pre-built question bank (always varied)</li>
+        <li><span class="check">✓</span> Baby World (ages 0–3)</li>
+        <li><span class="check">✓</span> 3 AI chat messages/day <span style="font-size:0.72rem;color:#aaa;">— taste it!</span></li>
+        <li><span class="check">✓</span> 3 AI avatar hints/day <span style="font-size:0.72rem;color:#aaa;">— kids love these!</span></li>
+        <li><span class="check">✓</span> 1 Research topic/day <span style="font-size:0.72rem;color:#aaa;">— explore anything!</span></li>
+        <li><span class="check">✓</span> 5 AI-generated questions/day</li>
+        <li><span class="check">✓</span> 1 PEP subject free <span style="font-size:0.72rem;color:#aaa;">— try Jamaica prep!</span></li>
         <li><span class="check">✓</span> Basic progress tracking</li>
-        <li class="locked-feature"><span class="cross">✗</span> AI-generated questions (unlimited variety)</li>
-        <li class="locked-feature"><span class="cross">✗</span> Full AI tutor chat (any topic)</li>
-        <li class="locked-feature"><span class="cross">✗</span> 🔭 Research anything mode</li>
-        <li class="locked-feature"><span class="cross">✗</span> All subjects unlocked</li>
-        <li class="locked-feature"><span class="cross">✗</span> PEP Jamaica full access</li>
+        <li class="locked-feature"><span class="cross">✗</span> Unlimited everything (Pro only)</li>
         <li class="locked-feature"><span class="cross">✗</span> Parent dashboard & reports</li>
-        <li class="locked-feature"><span class="cross">✗</span> Personalised study plan</li>
+        <li class="locked-feature"><span class="cross">✗</span> Full PEP Jamaica (all 6 subjects)</li>
       </ul>
       <button class="btn btn-outline" style="width:100%;color:#333;border-color:#ccc;" disabled>Current Plan</button>
     </div>
@@ -486,7 +491,11 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     </div>
     <button class="btn btn-green" onclick="Payments.checkout('annual')">Get Annual — $29.99/yr</button>
   </div>
-  <div class="money-back">🔒 Secure payment via Stripe · 30-day money-back guarantee · Cancel any time</div>
+  <div class="money-back">💳 Paid securely via PayPal · Visa &amp; Mastercard accepted · learningwithsamara.com<br>30-day money-back guarantee · Cancel any time · Questions? <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a></div>
+  <div style="background:rgba(255,255,255,0.06);border-radius:14px;padding:14px 18px;margin-top:16px;text-align:center;border:1px solid rgba(255,255,255,0.1);">
+    <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:0.95rem;margin-bottom:4px;">Already paid? 🎉</div>
+    <div style="color:rgba(255,255,255,0.55);font-size:0.82rem;">Email us at <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a> with your PayPal receipt and we'll activate your Pro account right away!</div>
+  </div>
   <!-- FAMILY PLAN -->
   <div style="background:rgba(107,203,119,0.12);border-radius:18px;padding:20px 24px;margin-top:18px;border:1.5px solid rgba(107,203,119,0.3);">
     <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin-bottom:4px;">👨‍👩‍👧 Family Plan — $7.99/month</div>
@@ -514,6 +523,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     </div>
     <button class="btn btn-primary big" onclick="App.handleAuth()">Let's Go! 🚀</button>
     <p id="auth-msg" class="auth-msg"></p>
+    <p style="margin-top:12px;font-size:0.78rem;color:var(--muted);">Need help? <a href="mailto:edu@learningwithsamara.com" style="color:#7928CA;font-weight:800;text-decoration:none;">edu@learningwithsamara.com</a></p>
   </div>
 </div>
 </div>
@@ -740,7 +750,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
   <div class="ai-chat-window hidden" id="ai-chat-window">
     <div class="ai-chat-header">
       <div class="ai-chat-avatar"><img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" /></div>
-      <div><div class="ai-chat-name" id="ai-chat-name-label">Samara AI</div><div class="ai-chat-status">Ask me ANYTHING! ✨</div></div>
+      <div><div class="ai-chat-name" id="ai-chat-name-label">Samara AI</div><div class="ai-chat-status">Ask me ANYTHING! ✨ · <a href="mailto:edu@learningwithsamara.com" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.65rem;">edu@learningwithsamara.com</a></div></div>
       <button class="ai-chat-close" onclick="AITutor.toggleChat()">✕</button>
     </div>
     <div class="ai-chat-messages" id="ai-chat-messages"></div>
@@ -777,85 +787,206 @@ const SUPABASE_URL='https://bfivpvlzehtmksnmgnzb.supabase.co';
 const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDEzODgsImV4cCI6MjA4ODkxNzM4OH0.HJ2iITuM4y0fxdIeMM23wW-AkkUg16oKT9CkLBHl3dk';
 
 // ── FREE PLAN LIMITS ─────────────────────────────────────────
-const FREE_SUBJECTS_LIMIT = 3;   // free users get first 3 subjects only
-const FREE_DAILY_QUIZ_LIMIT = 5; // free users get 5 quizzes per day
+// ── HOOK & CONVERT FREEMIUM MODEL ───────────────────────────
+// Strategy: everyone gets a TASTE of every premium feature.
+// They hit a soft daily limit, see a warm upgrade prompt, and convert.
+// No hard walls — soft gates with encouragement.
 
-// ── PLAN MANAGEMENT ─────────────────────────────────────────
+const LIMITS = {
+  // Free daily limits — enough to get hooked, not enough to be satisfied
+  quizzes:      10,   // 10 quizzes/day free (generous — habit forming)
+  aiChat:        3,   // 3 AI chat messages/day — they'll want more after 1
+  aiHints:       3,   // 3 avatar popup hints/day — kids LOVE these
+  research:      1,   // 1 Research topic/day — one taste is all it takes
+  aiQuestions:   5,   // 5 AI-generated questions/day, rest are pre-built
+  pepSubjects:   1,   // 1 PEP subject free — enough to see the value
+};
+
 const Plan = {
-  // In production: check Supabase for active subscription
-  // For now: localStorage flag (set by Payments.activate())
-  isPro() {
-    return localStorage.getItem('samara_pro') === 'true';
-  },
+  isPro() { return localStorage.getItem('samara_pro') === 'true'; },
   activate(plan) {
     localStorage.setItem('samara_pro', 'true');
     localStorage.setItem('samara_plan', plan);
     localStorage.setItem('samara_pro_since', new Date().toISOString());
   },
-  deactivate() {
-    localStorage.removeItem('samara_pro');
+  deactivate() { localStorage.removeItem('samara_pro'); },
+
+  // ── Daily usage tracking ──
+  _getDay() { return new Date().toISOString().slice(0,10); },
+  _getData() {
+    try {
+      const d = JSON.parse(localStorage.getItem('samara_daily')||'{}');
+      if (d.date !== this._getDay()) return { date: this._getDay() };
+      return d;
+    } catch(e) { return { date: this._getDay() }; }
   },
-  // Daily quiz counter
-  getQuizzesToday() {
-    const today = new Date().toISOString().slice(0,10);
-    const data = JSON.parse(localStorage.getItem('samara_daily')||'{}');
-    if (data.date !== today) return 0;
-    return data.count || 0;
+  _saveData(d) { localStorage.setItem('samara_daily', JSON.stringify(d)); },
+  _count(key) { return this._getData()[key] || 0; },
+  _bump(key) {
+    const d = this._getData(); d[key] = (d[key]||0) + 1; this._saveData(d);
   },
-  incrementQuizzes() {
-    const today = new Date().toISOString().slice(0,10);
-    const data = JSON.parse(localStorage.getItem('samara_daily')||'{}');
-    const count = data.date === today ? (data.count||0)+1 : 1;
-    localStorage.setItem('samara_daily', JSON.stringify({date:today, count}));
-  },
+
+  // ── Check + consume each feature ──
   canStartQuiz() {
-    if (this.isPro()) return true;
-    return this.getQuizzesToday() < FREE_DAILY_QUIZ_LIMIT;
+    if (this.isPro()) return { ok:true };
+    const used = this._count('quizzes');
+    if (used < LIMITS.quizzes) return { ok:true };
+    return { ok:false, msg:`You've used all ${LIMITS.quizzes} free quizzes today! 🎯 Upgrade for unlimited quizzes.` };
   },
-  canUseAI() {
-    return this.isPro();
+  useQuiz() { if (!this.isPro()) this._bump('quizzes'); },
+
+  canUseAIChat() {
+    if (this.isPro()) return { ok:true };
+    const used = this._count('aiChat');
+    if (used < LIMITS.aiChat) return { ok:true, remaining: LIMITS.aiChat - used };
+    return { ok:false, msg:`You've used your ${LIMITS.aiChat} free AI messages today! 💬 Upgrade to chat with Samara all day, every day.` };
+  },
+  useAIChat() { if (!this.isPro()) this._bump('aiChat'); },
+
+  canUseAIHint() {
+    if (this.isPro()) return { ok:true };
+    const used = this._count('aiHints');
+    if (used < LIMITS.aiHints) return { ok:true };
+    return { ok:false };  // silently fall back to local hint — no hard wall
+  },
+  useAIHint() { if (!this.isPro()) this._bump('aiHints'); },
+
+  canUseResearch() {
+    if (this.isPro()) return { ok:true };
+    const used = this._count('research');
+    if (used < LIMITS.research) return { ok:true };
+    return { ok:false, msg:`You've used your ${LIMITS.research} free research today! 🔭 Upgrade to explore ANY topic, any time.` };
+  },
+  useResearch() { if (!this.isPro()) this._bump('research'); },
+
+  canUseAIQuestion() {
+    if (this.isPro()) return { ok:true };
+    const used = this._count('aiQuestions');
+    return used < LIMITS.aiQuestions ? { ok:true } : { ok:false };
+  },
+  useAIQuestion() { if (!this.isPro()) this._bump('aiQuestions'); },
+
+  canUsePEPSubject(subjectIndex) {
+    if (this.isPro()) return { ok:true };
+    if (subjectIndex === 0) return { ok:true };  // first subject always free
+    return { ok:false, msg:`Full PEP Jamaica prep is a Pro feature! 🇯🇲 Upgrade to practise all subjects.` };
+  },
+
+  getUsageSummary() {
+    if (this.isPro()) return null;
+    const d = this._getData();
+    return {
+      quizzes:     { used: d.quizzes||0,     limit: LIMITS.quizzes },
+      aiChat:      { used: d.aiChat||0,       limit: LIMITS.aiChat },
+      aiHints:     { used: d.aiHints||0,      limit: LIMITS.aiHints },
+      research:    { used: d.research||0,     limit: LIMITS.research },
+      aiQuestions: { used: d.aiQuestions||0,  limit: LIMITS.aiQuestions },
+    };
   }
 };
 
-// ── PAYMENTS (Stripe-ready) ──────────────────────────────────
+// ── PAYMENTS — PayPal via learningwithsamara.com ─────────────
+//
+// HOW TO CONNECT YOUR PAYPAL (3 steps):
+//
+// 1. Log into PayPal Business at business.paypal.com
+// 2. Go to: Tools → PayPal Buttons → Subscriptions
+//    Create 3 subscription buttons (Monthly $4.99, Annual $29.99, Family $7.99)
+//    OR use Buy Now buttons for one-time plans.
+//    Copy each hosted button URL — looks like:
+//    https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XXXXX
+// 3. Paste each URL into the LINKS object below.
+//
+// SHOPIFY OPTION:
+// In your Shopify store (learningwithsamara.com):
+// 1. Create 3 products: "Samara Pro Monthly", "Samara Pro Annual", "Family Plan"
+// 2. Set prices to $4.99, $29.99, $7.99
+// 3. Go to each product → "Share" → copy the direct checkout link
+//    Looks like: https://learningwithsamara.com/cart/VARIANT_ID:1?channel=buy_button
+// 4. Paste below.
+//
+// After payment, email the customer a code OR set up a PayPal IPN webhook.
+// Customer support: edu@learningwithsamara.com
+
 const Payments = {
-  // Replace these with your actual Stripe payment links
-  STRIPE_LINKS: {
-    monthly: 'https://buy.stripe.com/YOUR_MONTHLY_LINK',  // replace!
-    annual:  'https://buy.stripe.com/YOUR_ANNUAL_LINK',   // replace!
-    family:  'https://buy.stripe.com/YOUR_FAMILY_LINK'    // replace!
+  SITE: 'learningwithsamara.com',
+
+  // ── PASTE YOUR PAYPAL OR SHOPIFY CHECKOUT LINKS HERE ──────
+  LINKS: {
+    monthly: '',   // e.g. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YOUR_ID
+    annual:  '',   // e.g. https://learningwithsamara.com/cart/VARIANT_ID:1?channel=buy_button
+    family:  '',   // e.g. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YOUR_FAMILY_ID
   },
+  // ──────────────────────────────────────────────────────────
+
+  PRICES: { monthly:'$4.99/mo', annual:'$29.99/yr', family:'$7.99/mo' },
+  NAMES:  { monthly:'Samara Pro — Monthly', annual:'Samara Pro — Annual (save 50%)', family:'Family Plan (4 children)' },
+  DESCRIPTIONS: {
+    monthly: 'Unlimited quizzes · Full AI tutor · All subjects · PEP Jamaica · Parent dashboard',
+    annual:  'Everything in Monthly · Save $29.88/yr · Best value for families',
+    family:  'Up to 4 children · All Pro features · One parent dashboard · $7.99/month total',
+  },
+
   checkout(plan) {
-    // In production: open Stripe payment page
-    // For demo: simulate activation
-    const link = this.STRIPE_LINKS[plan];
-    if (link && link !== 'https://buy.stripe.com/YOUR_MONTHLY_LINK') {
-      window.open(link, '_blank');
-    } else {
-      // Demo mode: show activation dialog
-      this._demoActivate(plan);
+    const link = this.LINKS[plan];
+    if(link && link.startsWith('http')) {
+      // Opens PayPal or Shopify checkout — same tab so return URL works
+      window.location.href = link;
+      return;
     }
+    this._showSetupModal(plan);
   },
-  _demoActivate(plan) {
-    const prices = {monthly:'$4.99/mo',annual:'$29.99/yr',family:'$7.99/mo'};
+
+  _showSetupModal(plan) {
     const div = document.createElement('div');
-    div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99999;display:flex;align-items:center;justify-content:center;';
-    div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;max-width:380px;width:90%;text-align:center;border:2px solid rgba(199,125,255,0.4);">
-      <div style="font-size:3rem;margin-bottom:12px;">⭐</div>
-      <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:#fff;margin-bottom:8px;">Samara Pro — ${prices[plan]}</div>
-      <div style="color:rgba(255,255,255,0.7);font-size:0.88rem;margin-bottom:20px;">To accept real payments, add your Stripe payment link to STRIPE_LINKS in the code. For now, activating Pro in demo mode!</div>
-      <div style="display:flex;gap:12px;justify-content:center;">
-        <button onclick="Payments._confirm('${plan}');this.closest('[style]').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;">✅ Activate Demo Pro</button>
-        <button onclick="this.closest('[style]').remove();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 22px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;">Cancel</button>
-      </div>
-    </div>`;
+    div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
+    div.innerHTML = `
+      <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px 28px 24px;max-width:420px;width:100%;text-align:center;border:2px solid rgba(199,125,255,0.4);margin:auto;">
+        <div style="font-size:2.2rem;margin-bottom:8px;">⭐</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:#fff;margin-bottom:4px;">${this.NAMES[plan]}</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.9rem;color:#FFD93D;margin-bottom:6px;">${this.PRICES[plan]}</div>
+        <div style="color:rgba(255,255,255,0.65);font-size:0.82rem;margin-bottom:18px;">${this.DESCRIPTIONS[plan]}</div>
+
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;margin-bottom:16px;text-align:left;border:1px solid rgba(255,255,255,0.13);">
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.88rem;margin-bottom:8px;">⚙️ Owner: add your payment link</div>
+          <div style="color:rgba(255,255,255,0.75);font-size:0.79rem;line-height:1.8;">
+            <span style="color:#6BCB77;">PayPal Business:</span> Tools → Payment Buttons → Subscriptions → Create button → copy URL → paste into <code style="background:rgba(255,255,255,0.12);padding:1px 5px;border-radius:4px;">LINKS.${plan}</code><br>
+            <span style="color:#7EC8E3;">Shopify (learningwithsamara.com):</span> Create product → set price → copy checkout link → paste into <code style="background:rgba(255,255,255,0.12);padding:1px 5px;border-radius:4px;">LINKS.${plan}</code>
+          </div>
+        </div>
+
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:16px;">Demo mode — test all Pro features before going live</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="Payments._activateDemo('${plan}');this.closest('[style]').remove();"
+            style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;">
+            ✅ Test Pro Features
+          </button>
+          <button onclick="this.closest('[style]').remove();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:11px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.25);cursor:pointer;">
+            Close
+          </button>
+        </div>
+        <div style="margin-top:14px;font-size:0.75rem;color:rgba(255,255,255,0.4);">Questions? <a href="mailto:edu@learningwithsamara.com" style="color:rgba(255,217,61,0.7);text-decoration:none;">edu@learningwithsamara.com</a></div>
+      </div>`;
     document.body.appendChild(div);
   },
-  _confirm(plan) {
+
+  _activateDemo(plan) {
     Plan.activate(plan);
     App.updatePlanUI();
-    App.toast('🎉 Samara Pro activated! Enjoy unlimited learning!', 4000);
+    App.toast('🎉 Samara Pro activated! All features unlocked!', 4000);
     App.showScreen('screen-home');
+  },
+
+  // ── Auto-activation after payment ────────────────────────
+  // Call from your Shopify webhook or PayPal IPN:
+  // POST to a small server function that calls this with the buyer's email.
+  // Until you have a webhook, email buyers a code and manually activate via Supabase.
+  async activateForUser(email, plan) {
+    console.log(`Activating ${plan} for ${email} on ${this.SITE}`);
+    // In production: set samara_pro=true in Supabase for this user
+    // await supabaseAdmin.from('profiles').update({plan}).eq('email', email)
+    Plan.activate(plan);
+    App.updatePlanUI();
   }
 };
 
@@ -1037,16 +1168,18 @@ const AITutor = {
     const avEmoji=Avatars.emojis[av]||'👧';
     const ageDesc={'0-3':'a 2-year-old','4-6':'a 5-year-old','7-10':'a 9-year-old','11-14':'a 12-year-old','15-17':'a 16-year-old'}[ag]||'a student';
 
-    // Quick local hint first so popup is instant
+    // Always show popup immediately with local hint — instant feel
     const localHint = this._localHint(q, ag);
-    this._showAvatarPopup(avFile, avName, avEmoji, localHint);
+    this._showAvatarPopup(avFile, avName, avEmoji, localHint, false);
 
-    // Then try AI hint (Pro feature) and update popup text
-    if(Plan.canUseAI()) {
+    // Try AI hint — available to all users up to daily limit
+    const canAI = Plan.canUseAIHint();
+    if(canAI.ok) {
+      Plan.useAIHint();
       const aiHint = await callClaudeAI(
-        `A student got this question wrong twice: "${q?.text}"\nCorrect answer: "${q?.correctValue}"\nHint: "${q?.hint}"\n\nGive ${ageDesc} ONE sentence of encouragement + ONE specific tip to understand the concept. Max 25 words total. Be warm and specific.`,
+        `A student got this wrong twice: "${q?.text}"\nCorrect answer: "${q?.correctValue}"\nHint: "${q?.hint}"\nGive ${ageDesc} ONE encouraging sentence + ONE specific tip. Max 25 words. Warm and specific.`,
         ag,
-        `You are ${avName}, the world's most encouraging and knowledgeable tutor. Be specific, not generic.`,
+        `You are ${avName}, the world's most encouraging tutor. Be specific, not generic.`,
         80
       );
       if(aiHint){
@@ -1054,7 +1187,12 @@ const AITutor = {
         if(hintEl){hintEl.textContent=aiHint;SoundSystem.speakHint(aiHint);}
       }
     } else {
+      // Show local hint with a gentle upsell at the bottom of popup
       SoundSystem.speakHint(localHint);
+      const hintEl=document.getElementById('avatar-popup-hint-text');
+      if(hintEl && !Plan.isPro()){
+        hintEl.insertAdjacentHTML('afterend',`<div style="margin-top:10px;font-size:0.78rem;color:rgba(255,217,61,0.9);cursor:pointer;" onclick="document.getElementById('avatar-popup-overlay').remove();App.showScreen('screen-pricing')">⭐ Upgrade for unlimited AI hints!</div>`);
+      }
     }
   },
 
@@ -1091,7 +1229,15 @@ const AITutor = {
     const win=document.getElementById('ai-chat-window');this.isOpen=!this.isOpen;win?.classList.toggle('hidden',!this.isOpen);
     if(this.isOpen&&document.getElementById('ai-chat-messages')?.children.length===0){
       const avName=Avatars.names[Avatars.current]||'Samara';
-      this.addMsg(`Hi! 👋 I'm ${avName} AI — I can answer ANY question you have! Science, math, history, life advice... anything! What's on your mind? 🌟`,'ai');
+      const isPro = Plan.isPro();
+      const chatCheck = Plan.canUseAIChat();
+      let greeting = `Hi! 👋 I'm ${avName} AI — I can answer ANY question! Science, maths, history, sports, music, life... anything! What's on your mind? 🌟`;
+      if(!isPro && chatCheck.ok){
+        greeting += `\n\n<span style="font-size:0.78em;opacity:0.7;">💬 ${chatCheck.remaining || LIMITS.aiChat} free message${(chatCheck.remaining||LIMITS.aiChat)===1?'':'s'} remaining today · <span style="cursor:pointer;color:#FFD93D;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">Go Pro for unlimited</span></span>`;
+      } else if(!isPro && !chatCheck.ok) {
+        greeting = `Hi! 👋 You've used your free messages today — but I'll be back tomorrow! 💛\n\n<span style="cursor:pointer;color:#FFD93D;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">⭐ Upgrade for unlimited AI chat!</span>`;
+      }
+      this.addMsg(greeting,'ai');
     }
   },
 
@@ -1112,10 +1258,30 @@ const AITutor = {
   },
   hideTyping() { document.getElementById('ai-typing')?.remove(); },
 
-  // ★ SMART AI — full multi-turn conversation, knows everything
+  // ★ SMART AI — hook model: free users get 3/day, then warm upgrade
   async sendMessage() {
     const inp=document.getElementById('ai-chat-input');const txt=inp?.value.trim();if(!txt)return;
+
+    // Check daily AI chat limit
+    const canChat = Plan.canUseAIChat();
+    if (!canChat.ok) {
+      // Don't block — show warm upgrade message in the chat itself
+      inp.value='';
+      this.addMsg(txt,'user');
+      const remainMsg = `You've used all your free AI messages today! 💬\n\nUpgrade to Samara Pro for unlimited conversations with me — I can answer ANYTHING: science, maths, history, sports, music, life advice... any topic at all! 🌟\n\n⭐ <span style="cursor:pointer;text-decoration:underline;color:#FFD93D;" onclick="App.showScreen('screen-pricing')">See Pro plans →</span>`;
+      this.addMsg(remainMsg,'ai');
+      return;
+    }
+
     inp.value='';this.addMsg(txt,'user');this.showTyping();
+    Plan.useAIChat();
+
+    // Show remaining count to free users (creates urgency that drives upgrades)
+    const remaining = Plan.canUseAIChat();
+    if (!Plan.isPro() && remaining.ok && remaining.remaining === 1) {
+      setTimeout(()=>this.addMsg(`<span style="font-size:0.8em;opacity:0.7;">💡 Last free message today — <span style="cursor:pointer;color:#FFD93D;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">upgrade for unlimited</span></span>`,'ai'), 50);
+    }
+
     const avName=Avatars.names[Avatars.current]||'Samara';
     const ageDescs={'0-3':'a 2-year-old baby','4-6':'a 5-year-old child','7-10':'a 9-year-old','11-14':'a 12-year-old student','15-17':'a 16-year-old student'};
     const ageDesc=ageDescs[S.ageGroup]||ageDescs['7-10'];
@@ -1132,7 +1298,6 @@ Rules:
 - Remember the conversation context and refer back to previous messages when relevant`;
 
     try {
-      // Use multi-turn conversation history for context
       const messages = [...this.conversationHistory.slice(-8), {role:'user',content:txt}];
       const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:sys,messages})});
       const d=await r.json();
@@ -1143,11 +1308,11 @@ Rules:
         const spoken=reply.replace(/[\u{1F300}-\u{1FFFF}\u{2600}-\u{27BF}]/gu,'').trim().slice(0,120);
         SoundSystem.speak(spoken,0.88,1.15);
       } else {
-        this.addMsg('Hmm! Let me think about that differently — could you rephrase your question? 🤔','ai');
+        this.addMsg('Hmm! Could you rephrase that? 🤔','ai');
       }
     } catch(e) {
       this.hideTyping();
-      this.addMsg(`Great question about "${txt}"! I had a little connection issue. Try again in a moment! 💛`,'ai');
+      this.addMsg(`Great question! I had a little connection issue — try again in a moment! 💛`,'ai');
     }
   },
 
@@ -1189,162 +1354,349 @@ const Avatars = {
   loadSaved(){const s=localStorage.getItem('selectedAvatar');if(s)this.select(s);}
 };
 
-// ── FALLBACK QUESTION GENERATOR (for free users / offline) ───
+// ── QUESTION BANK — No-Repeat Fallback Generator ─────────────
+// Each bank has 20+ questions. Cross-session dedup via localStorage.
+// Math uses infinite random generation — can never repeat.
 const QGen = {
-  // Large banks of varied questions — different each call due to shuffling
-  banks: {
-    math_addition: [
-      {text:'What is 7 + 8?',correct:'15',wrong:['13','14','16'],hint:'Count up from 7 by 8'},
-      {text:'What is 13 + 9?',correct:'22',wrong:['20','21','23'],hint:'Count up from 13 by 9'},
-      {text:'What is 25 + 17?',correct:'42',wrong:['40','41','43'],hint:'Add the tens, then the ones'},
-      {text:'What is 46 + 38?',correct:'84',wrong:['82','83','85'],hint:'46+38: 40+30=70, 6+8=14, so 84'},
-      {text:'What is 123 + 456?',correct:'579',wrong:['567','578','580'],hint:'Add hundreds, tens, ones separately'},
-      {text:'What is 8 + 7?',correct:'15',wrong:['14','16','13'],hint:'8+7 — try 8+2=10, then +5=15'},
-      {text:'What is 99 + 1?',correct:'100',wrong:['98','101','99'],hint:'99+1 crosses over to 100'},
-      {text:'What is 34 + 56?',correct:'90',wrong:['88','89','91'],hint:'30+50=80, 4+6=10, so 90'},
-    ],
-    math_subtraction: [
-      {text:'What is 15 − 8?',correct:'7',wrong:['6','8','9'],hint:'Count back 8 from 15'},
-      {text:'What is 23 − 9?',correct:'14',wrong:['12','13','15'],hint:'23−9: think 23−10+1=14'},
-      {text:'What is 50 − 17?',correct:'33',wrong:['31','32','34'],hint:'50−17: 50−20+3=33'},
-      {text:'What is 100 − 45?',correct:'55',wrong:['54','56','65'],hint:'100−45: count up from 45 to 100'},
-      {text:'What is 200 − 73?',correct:'127',wrong:['123','126','128'],hint:'200−73: 200−70=130, 130−3=127'},
-    ],
-    math_multiplication: [
-      {text:'What is 6 × 7?',correct:'42',wrong:['40','41','43'],hint:'6×7: 6×5=30, 6×2=12, 30+12=42'},
-      {text:'What is 8 × 9?',correct:'72',wrong:['63','70','73'],hint:'8×9: try 8×10=80, then −8=72'},
-      {text:'What is 12 × 5?',correct:'60',wrong:['55','58','65'],hint:'12×5: half of 12×10=120, so 60'},
-      {text:'What is 7 × 7?',correct:'49',wrong:['46','48','50'],hint:'7×7 = 49 — a square number!'},
-      {text:'What is 11 × 8?',correct:'88',wrong:['80','86','89'],hint:'11×8: 10×8=80, 1×8=8, total 88'},
-    ],
-    literature: [
-      {text:'What is the "protagonist" of a story?',correct:'The main character the story follows',wrong:['The villain','The narrator','The author'],hint:'Protagonist comes from Greek meaning "first actor"'},
-      {text:'What does "foreshadowing" mean?',correct:'Clues that hint at future events',wrong:['Describing the past','A type of metaphor','The story\'s ending'],hint:'Foreshadowing "casts a shadow" of what\'s coming'},
-      {text:'What is an "antagonist"?',correct:'The character or force opposing the hero',wrong:['The main character','A minor character','The narrator'],hint:'Anti = against, agonist = actor'},
-      {text:'What is "dramatic irony"?',correct:'When the audience knows something characters don\'t',wrong:['When characters say the opposite of what they mean','A funny misunderstanding','When plot twists occur'],hint:'Think of horror movies when you shout "don\'t go in!"'},
-      {text:'What is a "sonnet"?',correct:'A 14-line poem with a specific rhyme scheme',wrong:['A 10-line poem','Any rhyming poem','A type of short story'],hint:'Shakespeare wrote 154 sonnets'},
-      {text:'What is "alliteration"?',correct:'Repeating the same consonant sound at the start of words',wrong:['Repeating the same vowel sounds','A type of rhyme','Using the same word twice'],hint:'"Peter Piper picked a peck" — all P sounds!'},
-      {text:'What is the "climax" of a story?',correct:'The moment of highest tension or turning point',wrong:['The beginning','The ending','The first problem'],hint:'Climax = top of the mountain in the story\'s journey'},
-      {text:'What does "personification" mean?',correct:'Giving human qualities to non-human things',wrong:['Comparing two things using "like"','Exaggerating for effect','Repeating sounds'],hint:'"The wind whispered" — wind doesn\'t actually whisper!'},
-      {text:'What is a "metaphor"?',correct:'Saying one thing IS another to show similarity',wrong:['Comparing using "like" or "as"','Repeating sounds','A 14-line poem'],hint:'"Life is a journey" — not using like or as'},
-      {text:'What is "symbolism" in literature?',correct:'Using objects/characters to represent bigger ideas',wrong:['Describing sensory details','A type of poem','A story structure'],hint:'A dove often symbolizes peace'},
-      {text:'What is "theme" in a story?',correct:'The central message or lesson the author conveys',wrong:['The main plot events','The setting','The character\'s name'],hint:'Theme answers: "What is this story really about?"'},
-      {text:'What is an "oxymoron"?',correct:'Two contradictory words placed together',wrong:['A type of metaphor','Comparing with "like"','A repeated sound'],hint:'"Deafening silence" or "bittersweet" are examples'},
-      {text:'What is the "denouement" of a story?',correct:'The resolution after the climax where loose ends are tied',wrong:['The opening scene','The main conflict','The turning point'],hint:'French word meaning "untying"'},
-      {text:'What makes a story "unreliable narrator"?',correct:'The narrator cannot be fully trusted due to bias or limited knowledge',wrong:['A narrator who talks too much','A story with no narrator','A third-person story'],hint:'Think: is the narrator hiding something or wrong about events?'},
-      {text:'What is "hubris" in literature?',correct:'Excessive pride that leads to a character\'s downfall',wrong:['A type of courage','Grief over a loss','Jealousy toward others'],hint:'Common in Greek tragedies — Icarus flew too close to the sun'},
-    ],
-    science: [
-      {text:'What process do plants use to make food?',correct:'Photosynthesis',wrong:['Respiration','Digestion','Transpiration'],hint:'Photo = light, synthesis = making'},
-      {text:'What is the chemical formula for water?',correct:'H₂O',wrong:['CO₂','O₂','NaCl'],hint:'2 hydrogen atoms + 1 oxygen atom'},
-      {text:'What force keeps planets orbiting the Sun?',correct:'Gravity',wrong:['Magnetism','Friction','Electricity'],hint:'Newton discovered this with an apple!'},
-      {text:'How many bones are in the adult human body?',correct:'206',wrong:['190','198','212'],hint:'Babies have more — some fuse together as we grow'},
-      {text:'What is the speed of light?',correct:'About 300,000 km per second',wrong:['150,000 km/s','500,000 km/s','3,000 km/s'],hint:'Light takes 8 minutes to travel from Sun to Earth'},
-      {text:'What type of animal is a whale?',correct:'Mammal',wrong:['Fish','Reptile','Amphibian'],hint:'Whales breathe air and feed their babies milk'},
-      {text:'What is the hardest natural substance on Earth?',correct:'Diamond',wrong:['Gold','Granite','Titanium'],hint:'Diamonds are made of pure carbon under extreme pressure'},
-      {text:'What planet is known as the Red Planet?',correct:'Mars',wrong:['Jupiter','Venus','Saturn'],hint:'Red due to iron oxide — rust — on its surface'},
-    ],
-    social_history: [
-      {text:'In what year did World War II end?',correct:'1945',wrong:['1943','1944','1946'],hint:'VE Day (Europe) May 1945, VJ Day (Pacific) September 1945'},
-      {text:'Who was the first person to walk on the Moon?',correct:'Neil Armstrong',wrong:['Buzz Aldrin','Yuri Gagarin','John Glenn'],hint:'Apollo 11, July 1969 — "One small step for man..."'},
-      {text:'What ancient wonder was located in Alexandria, Egypt?',correct:'The Great Library',wrong:['The Colosseum','The Hanging Gardens','The Lighthouse'],hint:'The Lighthouse of Alexandria was also there!'},
-      {text:'Who wrote "I Have a Dream"?',correct:'Martin Luther King Jr.',correct:'Martin Luther King Jr.',wrong:['Malcolm X','Rosa Parks','Barack Obama'],hint:'1963 March on Washington speech'},
-      {text:'What empire was the largest in history by land area?',correct:'The Mongol Empire',wrong:['The British Empire','The Roman Empire','The Ottoman Empire'],hint:'At its peak, covered over 24 million km² under Genghis Khan'},
-    ],
-    algebra: [
-      {text:'Solve: 2x + 4 = 10',correct:'x = 3',wrong:['x = 2','x = 4','x = 5'],hint:'Subtract 4 from both sides: 2x=6, then divide by 2'},
-      {text:'What is the value of 3² + 4²?',correct:'25',wrong:['14','49','7'],hint:'3²=9, 4²=16, 9+16=25 (Pythagorean triple!)'},
-      {text:'Simplify: 3x + 2x − x',correct:'4x',wrong:['3x','5x','6x'],hint:'3+2−1=4, so 4x'},
-      {text:'If y = 2x and x = 5, what is y?',correct:'10',wrong:['5','7','12'],hint:'Substitute: y = 2×5'},
-      {text:'What is the slope of y = 3x + 7?',correct:'3',wrong:['7','10','-3'],hint:'In y = mx + b, m is the slope'},
-      {text:'Factor: x² − 4',correct:'(x+2)(x−2)',wrong:['(x+4)(x−1)','(x+2)²','(x−4)(x+1)'],hint:'Difference of squares: a²−b²=(a+b)(a−b)'},
-    ],
-    biology: [
-      {text:'What is the powerhouse of the cell?',correct:'Mitochondria',wrong:['Nucleus','Ribosome','Cell membrane'],hint:'ATP (energy) is produced here'},
-      {text:'What is the function of DNA?',correct:'Carries genetic instructions for building and running an organism',wrong:['Produces energy','Transports oxygen','Digests food'],hint:'DNA = blueprint of life, stored in the nucleus'},
-      {text:'What is natural selection?',correct:'The process where organisms best adapted to their environment survive and reproduce',wrong:['Animals choosing their mates','Random genetic mutations','Humans breeding animals'],hint:'Darwin — survival of the fittest'},
-      {text:'What are the 4 DNA bases?',correct:'Adenine, Thymine, Guanine, Cytosine',wrong:['Alpha, Beta, Gamma, Delta','Alanine, Tyrosine, Glycine, Cysteine','Sodium, Potassium, Calcium, Iron'],hint:'A pairs with T, G pairs with C'},
-    ],
-    finance: [
-      {text:'What is compound interest?',correct:'Interest earned on both the principal and previously earned interest',wrong:['Interest only on the original amount','A government tax on savings','Interest paid monthly'],hint:'Einstein reportedly called it the 8th wonder of the world'},
-      {text:'What is a stock?',correct:'A share of ownership in a company',wrong:['A type of bond','A government loan','A savings account'],hint:'Buy a stock = own a tiny piece of that company'},
-      {text:'What is inflation?',correct:'The general rise in prices over time, reducing purchasing power',wrong:['When the economy grows','When interest rates fall','When taxes increase'],hint:'$100 today buys less than $100 did 20 years ago'},
-      {text:'What is diversification in investing?',correct:'Spreading investments across different assets to reduce risk',wrong:['Investing all money in one stock','Saving money in a bank only','Buying only government bonds'],hint:'"Don\'t put all your eggs in one basket"'},
-    ],
-    compsci: [
-      {text:'What does "algorithm" mean?',correct:'A step-by-step set of instructions to solve a problem',wrong:['A type of computer chip','A programming language','A type of data'],hint:'Like a recipe — follow steps to get a result'},
-      {text:'What is "recursion" in programming?',correct:'When a function calls itself to solve a smaller version of the same problem',wrong:['A loop that runs forever','A type of variable','An error in code'],hint:'A Russian nesting doll is a real-world analogy'},
-      {text:'What does "RAM" stand for?',correct:'Random Access Memory',wrong:['Read All Memory','Real Application Memory','Remote Access Module'],hint:'RAM stores data your computer is actively using'},
-      {text:'What is a "boolean" in programming?',correct:'A data type that is either true or false',wrong:['A number between 0 and 1','A type of loop','A database term'],hint:'Named after mathematician George Boole'},
-      {text:'What is "machine learning"?',correct:'AI systems that learn patterns from data without being explicitly programmed',wrong:['Robots building other robots','A type of computer hardware','Programming in binary'],hint:'Spotify learning your music taste is machine learning'},
-    ]
+
+  // Track used questions across sessions — persisted to localStorage
+  _usedKey(sid, wid) { return `sq_${sid}_${wid}`; },
+  _getUsed(sid, wid) {
+    try { return new Set(JSON.parse(localStorage.getItem(this._usedKey(sid,wid))||'[]')); }
+    catch(e) { return new Set(); }
+  },
+  _saveUsed(sid, wid, usedSet) {
+    // Keep last 50 used — stops the set growing forever
+    const arr = [...usedSet].slice(-50);
+    try { localStorage.setItem(this._usedKey(sid,wid), JSON.stringify(arr)); } catch(e){}
+  },
+  _resetUsed(sid, wid) {
+    try { localStorage.removeItem(this._usedKey(sid,wid)); } catch(e){}
   },
 
   generate(sid, wid, stid, ag, count=5) {
-    // Select the right bank
-    let bankKey = this._getBankKey(sid, wid);
-    let bank = this.banks[bankKey] || this._buildMathBank(wid, ag);
+    // Math & numbers = infinite random, never repeats
+    if(sid==='math'||sid==='numbers') return this._mathRandom(wid, stid, ag, count);
 
-    // Shuffle the bank so questions come in different order each time
-    const shuffled = [...bank].sort(() => Math.random() - 0.5);
+    const bank = this._getBank(sid, wid, ag);
+    const used = this._getUsed(sid, wid);
+    const newUsed = new Set(used);
 
-    // If bank is smaller than count, repeat with shuffling (but track to avoid same question back-to-back)
+    // Shuffle the bank
+    const shuffled = [...bank].sort(()=>Math.random()-0.5);
+
+    // Pick unused questions first
     const result = [];
-    const used = new Set();
-    let attempts = 0;
-    while(result.length < count && attempts < count * 3) {
-      const q = shuffled[attempts % shuffled.length];
-      attempts++;
-      if(!q)continue;
-      // Use text as dedup key
-      if(!used.has(q.text)){
-        used.add(q.text);
-        result.push({
-          text: q.text,
-          answers: makeA(q.correct, q.wrong),
-          correctValue: q.correct,
-          hint: q.hint
-        });
+    for(const q of shuffled) {
+      if(result.length >= count) break;
+      if(!used.has(q.text)) {
+        result.push(q);
+        newUsed.add(q.text);
       }
+    }
+
+    // If not enough unused, reset the used set and pick from the rest
+    if(result.length < count) {
+      this._resetUsed(sid, wid);
+      const remaining = shuffled.filter(q=>!result.some(r=>r.text===q.text));
+      for(const q of remaining) {
+        if(result.length >= count) break;
+        result.push(q);
+        newUsed.add(q.text);
+      }
+    }
+
+    this._saveUsed(sid, wid, newUsed);
+
+    return result.map(q=>({
+      text: q.text,
+      answers: makeA(q.correct, q.wrong),
+      correctValue: q.correct,
+      hint: q.hint
+    }));
+  },
+
+  // Infinite random math — numbers are always different
+  _mathRandom(wid, stid, ag, count) {
+    const easy = ag==='0-3'||ag==='4-6';
+    const max = easy?8 : stid===1?15 : stid===2?30 : 60;
+    const usedTexts = new Set();
+    const result = [];
+    let safety = 0;
+    while(result.length < count && safety++ < 100) {
+      const ops = wid===1?['+']: wid===2?['-']: wid===3?['×']: wid===4?['÷']:['+','-'];
+      const op = ops[Math.floor(Math.random()*ops.length)];
+      let a,b,correct,text,hint;
+      if(op==='+'){a=rand(1,max);b=rand(1,max);correct=a+b;text=`${a} + ${b} = ?`;hint=`Start at ${a}, count up ${b}`;}
+      else if(op==='-'){b=rand(1,max);a=rand(b,max);correct=a-b;text=`${a} − ${b} = ?`;hint=`Start at ${a}, count back ${b}`;}
+      else if(op==='×'){a=rand(2,easy?5:12);b=rand(2,easy?5:12);correct=a*b;text=`${a} × ${b} = ?`;hint=`${a} groups of ${b}`;}
+      else{b=rand(2,easy?5:12);correct=rand(2,easy?5:12);a=b*correct;text=`${a} ÷ ${b} = ?`;hint=`Groups of ${b} in ${a}`;}
+      if(usedTexts.has(text))continue;
+      usedTexts.add(text);
+      const wrongs = makeAnswers(correct,3,max*2).filter(w=>!w.isCorrect).map(w=>w.label);
+      result.push({text,answers:makeA(String(correct),wrongs),correctValue:String(correct),hint});
     }
     return result;
   },
 
-  _getBankKey(sid, wid) {
-    if(sid==='math'||sid==='numbers'){
-      if(wid===1)return'math_addition';
-      if(wid===2)return'math_subtraction';
-      if(wid===3)return'math_multiplication';
-      return'math_addition';
-    }
-    if(sid==='literature')return'literature';
-    if(sid==='science'||sid==='biology')return sid==='biology'?'biology':'science';
-    if(sid==='social'||sid==='history')return'social_history';
-    if(sid==='algebra')return'algebra';
-    if(sid==='finance')return'finance';
-    if(sid==='compsci')return'compsci';
-    if(sid==='shapes')return'_shapes';
-    if(sid==='colors')return'_colors';
-    if(sid==='animals')return'_animals';
-    if(sid==='phonics'||sid==='reading')return'_reading';
-    return'science';
+  _getBank(sid, wid, ag) {
+    if(sid==='literature') return this._litBank(wid);
+    if(sid==='science') return this._sciBank(wid);
+    if(sid==='biology') return this._bioBank(wid);
+    if(sid==='social'||sid==='history') return this._socialBank(wid);
+    if(sid==='algebra') return this._algebraBank(wid);
+    if(sid==='finance') return this._financeBank(wid);
+    if(sid==='compsci') return this._csBank(wid);
+    if(sid==='quantum') return this._quantumBank(wid);
+    if(sid==='reading'||sid==='phonics') return this._readingBank(wid);
+    if(sid==='shapes') return this._shapesBank();
+    if(sid==='colors') return this._colorsBank();
+    if(sid==='animals') return this._animalsBank(wid);
+    return this._sciBank(wid);
   },
 
-  _buildMathBank(wid, ag) {
-    // Generate random math questions
-    const easy=ag==='0-3'||ag==='4-6';
-    const max=easy?5:wid===1?10:wid===2?25:50;
-    return Array.from({length:15},()=>{
-      const ops=wid===1?['+']: wid===2?['-']: wid===3?['×']: wid===4?['÷']:['+','-','×'];
-      const op=ops[Math.floor(Math.random()*ops.length)];
-      let a,b,correct,text,hint;
-      if(op==='+'){a=rand(1,max);b=rand(1,max);correct=String(a+b);text=`${a} + ${b} = ?`;hint=`Count up from ${a} by ${b}`;}
-      else if(op==='-'){b=rand(1,max);a=rand(b,max);correct=String(a-b);text=`${a} − ${b} = ?`;hint=`Start at ${a}, count back ${b}`;}
-      else if(op==='×'){a=rand(2,easy?3:10);b=rand(2,easy?3:10);correct=String(a*b);text=`${a} × ${b} = ?`;hint=`Think of ${a} groups of ${b}`;}
-      else{b=rand(2,easy?3:10);const c=rand(2,easy?3:10);a=b*c;correct=String(c);text=`${a} ÷ ${b} = ?`;hint=`How many groups of ${b} fit in ${a}?`;}
-      const wrongs=makeAnswers(parseInt(correct),3,max*2).filter(w=>!w.isCorrect).map(w=>w.label);
-      return{text,correct,wrong:wrongs,hint};
-    });
+  _litBank(wid) {
+    const all = [
+      {text:'What is the "protagonist"?',correct:'The main character the story follows',wrong:['The villain','The narrator','The author'],hint:'Greek: "first actor"'},
+      {text:'What is "foreshadowing"?',correct:'Clues that hint at future events in the story',wrong:['Describing the past','A type of rhyme','The story ending'],hint:'It "casts a shadow" of what\'s coming'},
+      {text:'What is an "antagonist"?',correct:'The character or force opposing the hero',wrong:['The main character','A minor character','The narrator'],hint:'Anti = against'},
+      {text:'What is "dramatic irony"?',correct:'When the audience knows something the characters don\'t',wrong:['When a character lies','A funny accident','A plot twist'],hint:'You want to warn the characters!'},
+      {text:'What is a "sonnet"?',correct:'A 14-line poem with a specific rhyme scheme',wrong:['A 10-line poem','Any rhyming poem','A type of short story'],hint:'Shakespeare wrote 154 of them'},
+      {text:'What is "alliteration"?',correct:'Repeating the same consonant sound at the start of words',wrong:['Repeating vowel sounds','A type of rhyme','Exaggeration for effect'],hint:'"Peter Piper picked a peck"'},
+      {text:'What is the "climax" of a story?',correct:'The moment of highest tension or turning point',wrong:['The opening scene','The resolution','The first problem'],hint:'Top of the dramatic mountain'},
+      {text:'What is "personification"?',correct:'Giving human qualities to non-human things',wrong:['Comparing two things using "like"','Exaggeration for effect','Repeating sounds'],hint:'"The wind whispered" — wind can\'t actually whisper'},
+      {text:'What is a "metaphor"?',correct:'Saying one thing IS another to show similarity',wrong:['Comparing using "like" or "as"','Repeating sounds','A 14-line poem'],hint:'"Life is a journey" — no "like" or "as"'},
+      {text:'What is "symbolism"?',correct:'Using objects or characters to represent bigger ideas',wrong:['Describing sensory details','A type of poem','A story structure'],hint:'A dove = peace; a storm = trouble'},
+      {text:'What is "theme" in a story?',correct:'The central message or lesson the author conveys',wrong:['The main plot events','The setting','The character\'s name'],hint:'What is this story REALLY about?'},
+      {text:'What is an "oxymoron"?',correct:'Two contradictory words placed together',wrong:['A type of metaphor','Comparing with "like"','A repeated sound'],hint:'"Deafening silence" or "bittersweet"'},
+      {text:'What is "hubris"?',correct:'Excessive pride that leads to a character\'s downfall',wrong:['A type of courage','Grief','Jealousy'],hint:'Icarus flew too close to the sun'},
+      {text:'What is a "simile"?',correct:'Comparing two things using "like" or "as"',wrong:['Saying something IS something else','Repeating sounds','Exaggeration for effect'],hint:'"Fast as lightning" — uses "as"'},
+      {text:'What is "hyperbole"?',correct:'Extreme exaggeration used for effect',wrong:['A type of metaphor','A comparison using "like"','Giving objects human traits'],hint:'"I\'ve told you a million times!"'},
+      {text:'What is "imagery" in writing?',correct:'Language that paints a vivid picture using the five senses',wrong:['Only visual descriptions','A type of metaphor','The story\'s setting'],hint:'Sight, sound, smell, taste, touch'},
+      {text:'What is the "setting" of a story?',correct:'The time and place where the story takes place',wrong:['The main problem','The characters\' feelings','The story\'s lesson'],hint:'WHERE and WHEN'},
+      {text:'What is "conflict" in a story?',correct:'The central struggle or problem that drives the plot',wrong:['The story\'s ending','The character\'s personality','The author\'s message'],hint:'No conflict = no story!'},
+      {text:'What is "point of view" in literature?',correct:'The perspective from which a story is narrated',wrong:['The theme of the story','The story\'s setting','The plot structure'],hint:'1st person = I, 3rd person = he/she/they'},
+      {text:'What is "satire"?',correct:'Using humour and irony to criticise people, society or institutions',wrong:['A type of tragedy','A form of poetry','An unreliable narrator'],hint:'Political cartoons are a form of satire'},
+      {text:'What is "stream of consciousness"?',correct:'Writing that follows a character\'s unfiltered thoughts and feelings',wrong:['A type of setting','A plot structure','Dialogue between characters'],hint:'James Joyce\'s style in Ulysses'},
+      {text:'What is the "exposition" of a story?',correct:'The opening section that introduces characters, setting and background',wrong:['The climax','The resolution','The falling action'],hint:'It EXPOSES the world of the story to the reader'},
+      {text:'What is "rising action"?',correct:'The series of events that build tension leading to the climax',wrong:['The opening of the story','The resolution','The flashback'],hint:'Think of climbing up a mountain toward the peak'},
+      {text:'What is a "tragedy" in literature?',correct:'A story in which the protagonist suffers a downfall, often due to a fatal flaw',wrong:['A comedy with a sad ending','Any sad story','A poem about death'],hint:'Hamlet, Macbeth, Romeo and Juliet are all tragedies'},
+      {text:'What is a "foil" character?',correct:'A character whose traits contrast with the protagonist to highlight their qualities',wrong:['A villain','A narrator','A minor character with no purpose'],hint:'Sherlock Holmes and Dr. Watson are a classic foil pair'},
+    ];
+    // Literature worlds target different aspects
+    const byWorld = {1:all.slice(0,10), 2:all.slice(5,15), 3:all.slice(10,20), 4:all.slice(15,25), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _sciBank(wid) {
+    const all = [
+      {text:'What do plants need for photosynthesis?',correct:'Sunlight, water and carbon dioxide',wrong:['Only water','Sunlight and oxygen','Soil and water'],hint:'Sun + water + CO2 → food + oxygen'},
+      {text:'What is the chemical formula for water?',correct:'H₂O',wrong:['CO₂','O₂','H₂SO₄'],hint:'2 hydrogen + 1 oxygen'},
+      {text:'What force keeps planets in orbit?',correct:'Gravity',wrong:['Magnetism','Friction','Electricity'],hint:'Newton discovered it with an apple'},
+      {text:'How many bones in the adult human body?',correct:'206',wrong:['180','198','212'],hint:'Babies have around 270 — some fuse as we grow'},
+      {text:'What type of animal is a whale?',correct:'Mammal',wrong:['Fish','Reptile','Amphibian'],hint:'Whales breathe air and nurse their young'},
+      {text:'What is the hardest natural substance?',correct:'Diamond',wrong:['Iron','Gold','Quartz'],hint:'Pure carbon under extreme pressure'},
+      {text:'What planet is known as the Red Planet?',correct:'Mars',wrong:['Jupiter','Venus','Saturn'],hint:'Red from iron oxide — rust — on its surface'},
+      {text:'What is a food chain?',correct:'A sequence showing how energy passes from one organism to another',wrong:['A list of foods animals eat','How plants grow','The water cycle'],hint:'Grass → rabbit → fox'},
+      {text:'What is the function of the heart?',correct:'Pump blood around the body',wrong:['Filter waste','Digest food','Control breathing'],hint:'Beats about 100,000 times a day'},
+      {text:'What is evaporation?',correct:'Liquid water turning into water vapour when heated',wrong:['Water freezing','Rain falling','Water turning solid'],hint:'Puddles disappear on a sunny day'},
+      {text:'What layer of Earth do we live on?',correct:'The crust',wrong:['The mantle','The core','The lithosphere'],hint:'Thinnest layer — like the skin of an apple'},
+      {text:'What is a vertebrate?',correct:'An animal with a backbone',wrong:['An animal without legs','An insect','A plant-eating animal'],hint:'Vertebra = backbone bone'},
+      {text:'What gas do humans exhale?',correct:'Carbon dioxide',wrong:['Oxygen','Nitrogen','Hydrogen'],hint:'Plants absorb it for photosynthesis'},
+      {text:'What is the role of the Sun in the solar system?',correct:'It provides heat and light and holds planets in orbit with gravity',wrong:['It reflects light from Earth','It produces oxygen','It causes weather on Earth'],hint:'Our nearest star — 150 million km away'},
+      {text:'What is the water cycle?',correct:'The continuous movement of water between Earth\'s surface and atmosphere',wrong:['How rivers form','The process of rain only','Ocean tides'],hint:'Evaporation → condensation → precipitation → collection'},
+      {text:'What is an ecosystem?',correct:'All the living and non-living things in an area interacting together',wrong:['Only the animals in an area','The weather pattern of a region','A type of habitat'],hint:'A pond, a rainforest and a desert are all ecosystems'},
+      {text:'What is the role of the lungs?',correct:'Exchange oxygen and carbon dioxide between the body and air',wrong:['Pump blood','Filter the blood','Digest nutrients'],hint:'You breathe in O₂ and breathe out CO₂'},
+      {text:'What causes day and night?',correct:'Earth rotating on its axis every 24 hours',wrong:['The Moon blocking the Sun','Earth moving around the Sun','The Sun moving around Earth'],hint:'Half the Earth faces the Sun, half faces away'},
+      {text:'What is the function of red blood cells?',correct:'Carry oxygen from the lungs to all body cells',wrong:['Fight infection','Clot wounds','Digest food'],hint:'They contain haemoglobin — a protein that binds oxygen'},
+      {text:'What is a producer in a food chain?',correct:'A plant or organism that makes its own food through photosynthesis',wrong:['An animal that eats plants','A predator at the top','A decomposer'],hint:'All food chains start with a producer'},
+    ];
+    const byWorld = {1:all.slice(0,8), 2:all.slice(4,13), 3:all.slice(8,17), 4:all.slice(12,20), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _bioBank(wid) {
+    const all = [
+      {text:'What is the powerhouse of the cell?',correct:'Mitochondria',wrong:['Nucleus','Ribosome','Cell membrane'],hint:'Produces ATP — the energy currency of the cell'},
+      {text:'What does DNA stand for?',correct:'Deoxyribonucleic acid',wrong:['Dynamic Nuclear Acid','Deoxyribose Nuclear Agent','Dual Nucleotide Array'],hint:'It carries genetic information in all living things'},
+      {text:'What is natural selection?',correct:'The process where organisms best adapted to their environment survive and reproduce',wrong:['Animals choosing mates','Random mutations only','Humans selectively breeding animals'],hint:'Darwin — "survival of the fittest"'},
+      {text:'What are the 4 DNA bases?',correct:'Adenine, Thymine, Guanine, Cytosine',wrong:['Alpha, Beta, Gamma, Delta','Alanine, Tyrosine, Glycine, Cysteine','Sodium, Potassium, Calcium, Iron'],hint:'A pairs with T; G pairs with C'},
+      {text:'What is the role of ribosomes?',correct:'Build proteins by reading mRNA instructions',wrong:['Store genetic material','Produce energy','Control what enters the cell'],hint:'Think of them as protein factories'},
+      {text:'What is a chromosome?',correct:'A structure made of DNA that carries genes',wrong:['A type of protein','An organelle in mitochondria','A cell membrane protein'],hint:'Humans have 46 chromosomes (23 pairs)'},
+      {text:'What is osmosis?',correct:'The movement of water through a semi-permeable membrane from high to low concentration',wrong:['Active transport of proteins','Movement of ions against a gradient','Diffusion of gases'],hint:'Water moves to dilute — balancing concentrations'},
+      {text:'What is the role of chloroplasts?',correct:'Carry out photosynthesis to produce glucose using sunlight',wrong:['Produce ATP by respiration','Break down waste materials','Control cell division'],hint:'Only found in plant cells — contain chlorophyll'},
+      {text:'What is a gene?',correct:'A section of DNA that codes for a specific protein or trait',wrong:['The entire chromosome','A type of cell','A hormone in the bloodstream'],hint:'Genes determine eye colour, blood type and more'},
+      {text:'What is an enzyme?',correct:'A biological catalyst that speeds up chemical reactions',wrong:['A type of fat','A hormone','A structural protein'],hint:'Enzymes are not used up — they work over and over'},
+      {text:'What is the function of the cell membrane?',correct:'Controls what enters and exits the cell',wrong:['Produces energy','Carries out photosynthesis','Stores genetic material'],hint:'Like a security guard for the cell'},
+      {text:'What is cellular respiration?',correct:'The process of breaking down glucose to release energy (ATP)',wrong:['Breathing in oxygen','Absorbing nutrients from food','Making glucose from sunlight'],hint:'C₆H₁₂O₆ + O₂ → CO₂ + H₂O + ATP'},
+      {text:'What is meiosis?',correct:'Cell division that produces gametes (sex cells) with half the normal chromosomes',wrong:['Cell division that produces identical daughter cells','The process of DNA replication','Protein synthesis'],hint:'Produces sperm and egg cells with 23 chromosomes each'},
+      {text:'What is a mutation?',correct:'A change in the DNA sequence',wrong:['A type of viral infection','A hormone response','Cell death'],hint:'Can be caused by UV radiation, chemicals, or copying errors'},
+      {text:'What is the role of the nucleus?',correct:'Controls cell activities and contains the genetic material (DNA)',wrong:['Produces energy','Breaks down waste','Transports materials around the cell'],hint:'The "brain" of the cell'},
+    ];
+    const byWorld = {1:all.slice(0,8), 2:all.slice(4,12), 3:all.slice(8,15), 4:all.slice(10,15), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _socialBank(wid) {
+    const all = [
+      {text:'World War II ended in which year?',correct:'1945',wrong:['1943','1944','1946'],hint:'VE Day May 1945, VJ Day September 1945'},
+      {text:'Who was the first person to walk on the Moon?',correct:'Neil Armstrong',wrong:['Buzz Aldrin','Yuri Gagarin','John Glenn'],hint:'Apollo 11, July 1969'},
+      {text:'What empire was the largest in history by land area?',correct:'The Mongol Empire',wrong:['The British Empire','The Roman Empire','The Ottoman Empire'],hint:'Over 24 million km² under Genghis Khan'},
+      {text:'Who delivered the "I Have a Dream" speech?',correct:'Martin Luther King Jr.',wrong:['Malcolm X','Rosa Parks','Barack Obama'],hint:'1963 March on Washington'},
+      {text:'What caused the French Revolution?',correct:'Inequality, poverty and resentment of absolute monarchy',wrong:['A foreign invasion','A natural disaster','A religious conflict'],hint:'The Third Estate paid taxes while nobles did not'},
+      {text:'What is democracy?',correct:'A system of government where citizens choose their leaders by voting',wrong:['Rule by one person','Rule by the military','Rule by the richest people'],hint:'From Greek: demos = people, kratos = power'},
+      {text:'What was the Cold War?',correct:'A political and military tension between the USA and USSR without direct warfare',wrong:['A war fought in Arctic regions','A trade war between Europe and Asia','A conflict over oil resources'],hint:'1947–1991 — proxy wars, arms race, space race'},
+      {text:'What is the United Nations?',correct:'An international organisation that promotes peace, cooperation and human rights',wrong:['A military alliance','A trade agreement','A European government'],hint:'Founded in 1945 after WWII — 193 member states'},
+      {text:'What was the Renaissance?',correct:'A European cultural and intellectual revival (14th–17th century) inspired by ancient Greece and Rome',wrong:['The fall of the Roman Empire','A period of religious wars','A scientific revolution in Asia'],hint:'Leonardo da Vinci and Michelangelo were Renaissance figures'},
+      {text:'What was apartheid?',correct:'A system of racial segregation in South Africa (1948–1994)',wrong:['A type of government in Germany','A colonial policy in India','A trade system in Africa'],hint:'Nelson Mandela fought against it and became South Africa\'s first Black president'},
+      {text:'What is the significance of the Magna Carta (1215)?',correct:'It limited the king\'s power and established the rule of law',wrong:['It created the British Parliament','It ended the Crusades','It established religious freedom'],hint:'King John was forced to sign it by rebellious barons'},
+      {text:'What was the Industrial Revolution?',correct:'A period of rapid industrialisation transforming manufacturing from hand production to machines',wrong:['A political revolution in France','A farming revolution in Asia','A series of worker strikes in America'],hint:'Started in Britain around the 1760s — steam power changed everything'},
+      {text:'What was the significance of the Berlin Wall?',correct:'It physically divided East and West Berlin, symbolising the Iron Curtain of the Cold War',wrong:['It separated France and Germany after WWII','It was built to keep out Soviet troops','It marked the boundary of the Roman Empire'],hint:'Built in 1961, torn down in 1989 — marking the end of the Cold War'},
+      {text:'What is globalisation?',correct:'The increasing interconnection of economies, cultures and people worldwide',wrong:['A type of government','The spread of one language globally','The process of forming new countries'],hint:'Your phone was designed in the USA, made in China, sold in Jamaica'},
+      {text:'What was the significance of the printing press (1440s)?',correct:'It enabled mass production of books, spreading knowledge and literacy across Europe',wrong:['It allowed newspapers to replace books','It enabled governments to spread propaganda','It created the first written alphabet'],hint:'Gutenberg\'s invention helped spark the Renaissance and Reformation'},
+    ];
+    const byWorld = {1:all.slice(0,6), 2:all.slice(3,10), 3:all.slice(7,13), 4:all.slice(9,15), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _algebraBank(wid) {
+    const all = [
+      {text:'Solve: 2x + 4 = 10',correct:'x = 3',wrong:['x = 2','x = 4','x = 5'],hint:'Subtract 4 from both sides, then divide by 2'},
+      {text:'What is the value of 3² + 4²?',correct:'25',wrong:['14','49','7'],hint:'9 + 16 = 25 — a Pythagorean triple!'},
+      {text:'Simplify: 3x + 2x − x',correct:'4x',wrong:['3x','5x','6x'],hint:'Collect like terms: 3+2−1=4'},
+      {text:'If y = 2x and x = 5, what is y?',correct:'10',wrong:['5','7','12'],hint:'Substitute x=5 into y=2x'},
+      {text:'What is the slope in y = 3x + 7?',correct:'3',wrong:['7','10','-3'],hint:'In y = mx + b, m is the slope'},
+      {text:'Factor: x² − 4',correct:'(x+2)(x−2)',wrong:['(x+4)(x−1)','(x+2)²','(x−4)(x+1)'],hint:'Difference of squares: a²−b² = (a+b)(a−b)'},
+      {text:'Solve: 3x − 5 = 16',correct:'x = 7',wrong:['x = 4','x = 6','x = 8'],hint:'Add 5 to both sides → 3x=21, divide by 3'},
+      {text:'What is the area of a rectangle with length 2x and width 5?',correct:'10x',wrong:['7x','10x²','2x+5'],hint:'Area = length × width = 2x × 5'},
+      {text:'Expand: 2(x + 3)',correct:'2x + 6',wrong:['2x + 3','x + 6','2x + 5'],hint:'Multiply each term inside the bracket by 2'},
+      {text:'Solve: x/4 = 3',correct:'x = 12',wrong:['x = 7','x = 0.75','x = 9'],hint:'Multiply both sides by 4'},
+      {text:'What is the y-intercept of y = 4x − 3?',correct:'-3',wrong:['4','3','-4'],hint:'In y = mx + b, b is the y-intercept'},
+      {text:'Solve the inequality: 2x > 8',correct:'x > 4',wrong:['x > 6','x < 4','x > 8'],hint:'Divide both sides by 2 (inequality stays the same)'},
+      {text:'What is the gradient of a line through (0,0) and (3,9)?',correct:'3',wrong:['9','0','1/3'],hint:'Gradient = rise/run = 9/3'},
+      {text:'Solve: x² = 25',correct:'x = ±5',wrong:['x = 5','x = 12.5','x = 625'],hint:'Both +5 and -5 squared equal 25'},
+      {text:'Expand and simplify: (x+2)(x+3)',correct:'x² + 5x + 6',wrong:['x² + 6','x² + 5x','x² + 6x + 6'],hint:'FOIL: x²+3x+2x+6 = x²+5x+6'},
+    ];
+    const byWorld = {1:all.slice(0,7), 2:all.slice(4,11), 3:all.slice(8,15), 4:all.slice(10,15), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _financeBank(wid) {
+    const all = [
+      {text:'What is compound interest?',correct:'Interest earned on both the original amount and previously earned interest',wrong:['Interest only on the original amount','A government savings bonus','A fee for borrowing'],hint:'Einstein called it "the 8th wonder of the world"'},
+      {text:'What is a stock?',correct:'A share of ownership in a company',wrong:['A type of government bond','A savings account','A business loan'],hint:'Buy stock = own a tiny piece of that company'},
+      {text:'What is inflation?',correct:'The general rise in prices over time, reducing purchasing power',wrong:['When the economy grows fast','When interest rates fall','When unemployment drops'],hint:'$100 today buys less than $100 did 20 years ago'},
+      {text:'What is diversification in investing?',correct:'Spreading investments across different assets to reduce risk',wrong:['Investing all money in one stock','Only saving in a bank','Borrowing to invest'],hint:'"Don\'t put all your eggs in one basket"'},
+      {text:'What is the difference between a debit and credit card?',correct:'Debit uses your own money; credit borrows money you repay later',wrong:['They are identical products','Credit uses your own money; debit borrows','Debit earns rewards; credit doesn\'t'],hint:'Debit = your money, Credit = borrowed money'},
+      {text:'What is a budget?',correct:'A plan for managing income and expenses over a period of time',wrong:['A type of bank account','A government tax form','A credit score'],hint:'Income − expenses = surplus or deficit'},
+      {text:'What is the stock market?',correct:'A marketplace where shares of public companies are bought and sold',wrong:['A type of supermarket for businesses','A government bank','A place where currencies are exchanged'],hint:'NYSE and NASDAQ are two famous stock markets'},
+      {text:'What is a mortgage?',correct:'A loan secured against property, repaid with interest over time',wrong:['A type of insurance','A savings account for a house','A government housing grant'],hint:'Most people take out a mortgage to buy a home'},
+      {text:'What does ROI stand for?',correct:'Return on Investment',wrong:['Rate of Income','Risk of Investment','Revenue over Interest'],hint:'ROI measures how profitable an investment is'},
+      {text:'What is net worth?',correct:'Total assets minus total liabilities',wrong:['Annual income after tax','Total savings in the bank','Monthly take-home pay'],hint:'What you OWN minus what you OWE'},
+      {text:'What is a recession?',correct:'A period of economic decline — negative GDP growth for two or more consecutive quarters',wrong:['When inflation rises above 10%','When unemployment falls below 5%','A boom period of high growth'],hint:'Businesses cut costs, unemployment rises, spending falls'},
+      {text:'What is an emergency fund?',correct:'Savings set aside for unexpected expenses — typically 3–6 months of living costs',wrong:['A government benefit payment','Insurance for medical emergencies','A type of pension'],hint:'Financial experts recommend 3-6 months of expenses in cash'},
+    ];
+    const byWorld = {1:all.slice(0,6), 2:all.slice(3,9), 3:all.slice(6,12), 4:all.slice(8,12), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _csBank(wid) {
+    const all = [
+      {text:'What does "algorithm" mean?',correct:'A step-by-step set of instructions to solve a problem',wrong:['A type of computer chip','A programming language','A data type'],hint:'Like a recipe — precise steps to get a result'},
+      {text:'What is "recursion"?',correct:'When a function calls itself to solve smaller versions of the same problem',wrong:['A loop that runs forever','A type of variable','An error in code'],hint:'Russian nesting dolls are a good analogy'},
+      {text:'What does RAM stand for?',correct:'Random Access Memory',wrong:['Read All Memory','Real Application Memory','Remote Access Module'],hint:'Stores data your computer is actively using — lost when you turn off'},
+      {text:'What is a "boolean"?',correct:'A data type that is either true or false',wrong:['A number between 0 and 1','A type of loop','A database term'],hint:'Named after mathematician George Boole'},
+      {text:'What is machine learning?',correct:'AI systems that learn patterns from data without being explicitly programmed',wrong:['Robots building other robots','A type of hardware','Programming in binary'],hint:'Spotify recommending songs is machine learning'},
+      {text:'What is the difference between a compiler and interpreter?',correct:'A compiler translates all code at once; an interpreter translates line by line',wrong:['They are identical','An interpreter is faster','A compiler only works with Python'],hint:'Python uses an interpreter; C++ uses a compiler'},
+      {text:'What is a "function" in programming?',correct:'A reusable block of code that performs a specific task',wrong:['A type of variable','An error handler','A loop structure'],hint:'Write once, call many times'},
+      {text:'What does HTML stand for?',correct:'HyperText Markup Language',wrong:['High Tech Machine Language','HyperText Modern Language','Hyperlink Text Markup Language'],hint:'The standard language for creating web pages'},
+      {text:'What is binary?',correct:'A number system using only 0s and 1s',wrong:['A computer programming language','A type of file','A form of encryption'],hint:'Everything in computers is ultimately 0s and 1s'},
+      {text:'What is a "variable" in programming?',correct:'A named storage location that holds a value which can change',wrong:['A fixed number','A type of function','An error message'],hint:'Like a labelled box that holds data'},
+      {text:'What is an API?',correct:'A set of rules that allows different software applications to communicate',wrong:['A type of computer processor','A programming language','A database management system'],hint:'APIs let apps "talk to" other apps'},
+      {text:'What is the difference between frontend and backend?',correct:'Frontend is what users see; backend is the server-side logic and databases',wrong:['They mean the same thing','Frontend handles databases; backend handles design','Backend is the user interface'],hint:'You see the frontend; the backend powers it invisibly'},
+      {text:'What is "debugging"?',correct:'The process of finding and fixing errors in code',wrong:['Writing new code','Testing a program for speed','Compiling code'],hint:'The term comes from a literal bug found in an early computer in 1947'},
+      {text:'What is a "loop" in programming?',correct:'A structure that repeats a block of code while a condition is true',wrong:['A type of error','A function that calls itself','A data structure'],hint:'for loops and while loops are the most common types'},
+    ];
+    const byWorld = {1:all.slice(0,6), 2:all.slice(3,10), 3:all.slice(7,14), 4:all.slice(9,14), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _quantumBank(wid) {
+    return [
+      {text:'What is superposition?',correct:'A particle existing in multiple states simultaneously until measured',wrong:['Two particles occupying the same space','A particle moving faster than light','A type of atomic bond'],hint:'Schrödinger\'s cat is alive AND dead until observed'},
+      {text:'What is quantum entanglement?',correct:'Two particles linked so that measuring one instantly affects the other, regardless of distance',wrong:['Two particles colliding and merging','A particle splitting into two','A particle orbit around a nucleus'],hint:'"Spooky action at a distance" — Einstein\'s phrase'},
+      {text:'What is a qubit?',correct:'A quantum bit that can be 0, 1, or both simultaneously due to superposition',wrong:['A regular binary bit','A quantum particle','A unit of quantum energy'],hint:'Regular bits are 0 OR 1; qubits are 0 AND 1'},
+      {text:'What is the uncertainty principle?',correct:'The more precisely you know a particle\'s position, the less precisely you can know its momentum',wrong:['Particles always move unpredictably','Quantum computers are unreliable','Measurements always have errors'],hint:'Heisenberg\'s discovery — there\'s a fundamental limit to knowledge'},
+      {text:'What is wave-particle duality?',correct:'The property of quantum objects of behaving as both waves and particles',wrong:['Waves and particles are entirely separate','Only electrons show wave behaviour','Light is only a particle'],hint:'The double-slit experiment demonstrates this beautifully'},
+      {text:'What is quantum computing\'s main advantage?',correct:'It can solve certain complex problems exponentially faster than classical computers',wrong:['It uses less electricity','It is immune to viruses','It has unlimited storage'],hint:'Factoring huge numbers — useful for breaking encryption'},
+      {text:'What is quantum tunnelling?',correct:'The ability of particles to pass through energy barriers that classical physics says they cannot',wrong:['Particles teleporting between dimensions','Electrons jumping between energy levels in atoms','The movement of light through a vacuum'],hint:'Makes transistors and nuclear fusion inside stars possible'},
+      {text:'What did Planck discover?',correct:'Energy is emitted and absorbed in discrete packets called quanta, not continuously',wrong:['Light always travels in straight lines','Matter and energy are equivalent','Electrons orbit in fixed shells'],hint:'E = hf — energy is quantised, h is Planck\'s constant'},
+    ];
+  },
+
+  _readingBank(wid) {
+    const all = [
+      {text:'Which word has a short "a" sound?',correct:'cat',wrong:['cake','boat','tree'],hint:'"cat" sounds like aah — short and sharp'},
+      {text:'Synonym for "happy"?',correct:'joyful',wrong:['sad','angry','tired'],hint:'Synonyms have similar meanings'},
+      {text:'Opposite of "hot"?',correct:'cold',wrong:['warm','cool','mild'],hint:'Antonyms are opposites'},
+      {text:'Which word is a NOUN?',correct:'dog',wrong:['run','quickly','happy'],hint:'Nouns are people, places or things'},
+      {text:'Which sentence uses correct punctuation?',correct:'She went to the park.',wrong:['she went to the park.','She went to the park','She went to the park!'],hint:'Sentences start with a capital and end with a full stop'},
+      {text:'What is the plural of "child"?',correct:'children',wrong:['childs','childrens',"child's"],hint:'Irregular plural — not just adding "s"'},
+      {text:'Which word is an adjective?',correct:'bright',wrong:['run','slowly','happiness'],hint:'Adjectives describe nouns'},
+      {text:'Which word is a verb?',correct:'jumped',wrong:['quickly','tall','silence'],hint:'Verbs are action or being words'},
+      {text:'The dog wagged ___ tail.',correct:'its',wrong:["it's",'their','his'],hint:'"Its" = possession; "it\'s" = "it is"'},
+      {text:'What type of word is "quickly"?',correct:'Adverb',wrong:['Adjective','Noun','Verb'],hint:'Adverbs describe HOW something is done'},
+      {text:'What is the main idea of a paragraph?',correct:'The most important point the paragraph makes',wrong:['The first sentence only','The last sentence','The longest sentence'],hint:'Often found in the topic sentence'},
+      {text:'What does a question mark indicate?',correct:'A sentence that is asking something',wrong:['A statement of fact','An exclamation','A command'],hint:'Questions end with ?'},
+      {text:'Past tense of "run"?',correct:'ran',wrong:['runned','runs','running'],hint:'Irregular verb — past tense is "ran"'},
+      {text:'Antonym of "ancient"?',correct:'modern',wrong:['old','historic','past'],hint:'Ancient = very old; opposite = new/modern'},
+      {text:'Which sentence is a simile?',correct:'"She ran as fast as a cheetah."',wrong:['"The wind is a wolf."','"The stars danced."','"He was furious."'],hint:'Similes compare using "like" or "as"'},
+    ];
+    const byWorld = {1:all.slice(0,7), 2:all.slice(4,11), 3:all.slice(8,15), 4:all.slice(10,15), 5:all};
+    return byWorld[wid]||all;
+  },
+
+  _shapesBank() {
+    return [
+      {text:'Which shape has 3 sides?',correct:'Triangle',wrong:['Circle','Square','Rectangle'],hint:'Tri = three'},
+      {text:'Which shape has no corners?',correct:'Circle',wrong:['Triangle','Square','Rectangle'],hint:'Round and smooth all the way around'},
+      {text:'Which shape has 4 equal sides?',correct:'Square',wrong:['Rectangle','Triangle','Oval'],hint:'All 4 sides are the same length'},
+      {text:'Which shape has 4 sides but sides that are not all equal?',correct:'Rectangle',wrong:['Square','Circle','Triangle'],hint:'2 long sides and 2 short sides'},
+      {text:'Which shape has 5 sides?',correct:'Pentagon',wrong:['Hexagon','Triangle','Octagon'],hint:'Penta = five in Greek'},
+      {text:'Which shape has 6 sides?',correct:'Hexagon',wrong:['Pentagon','Octagon','Heptagon'],hint:'Honeybees build hexagons!'},
+      {text:'A ball is an example of which 3D shape?',correct:'Sphere',wrong:['Cube','Cylinder','Cone'],hint:'Round in every direction'},
+      {text:'A can of soup is shaped like a...?',correct:'Cylinder',wrong:['Cube','Sphere','Cuboid'],hint:'Circle on top and bottom, curved sides'},
+    ];
+  },
+
+  _colorsBank() {
+    return [
+      {text:'What color is the sky?',correct:'Blue',wrong:['Red','Green','Yellow'],hint:'Look up on a clear day!'},
+      {text:'What color is grass?',correct:'Green',wrong:['Blue','Red','Orange'],hint:'Chlorophyll makes plants green'},
+      {text:'What color is the sun?',correct:'Yellow',wrong:['Blue','Green','Purple'],hint:'Think of a sunny day'},
+      {text:'What do red and blue make?',correct:'Purple',wrong:['Green','Orange','Brown'],hint:'Mix warm and cool'},
+      {text:'What do red and yellow make?',correct:'Orange',wrong:['Purple','Green','Brown'],hint:'Think of a sunset'},
+      {text:'What do blue and yellow make?',correct:'Green',wrong:['Orange','Purple','Brown'],hint:'Both cool colours mix together'},
+      {text:'What color is a carrot?',correct:'Orange',wrong:['Red','Yellow','Purple'],hint:'A very popular vegetable!'},
+      {text:'What color is a banana?',correct:'Yellow',wrong:['Green','Orange','Blue'],hint:'Ripe and ready to eat!'},
+    ];
+  },
+
+  _animalsBank(wid) {
+    const all = [
+      {text:'Which animal says moo?',correct:'Cow',wrong:['Dog','Cat','Duck'],hint:'Lives on a farm and gives milk'},
+      {text:'Which animal has a trunk?',correct:'Elephant',wrong:['Lion','Tiger','Giraffe'],hint:'The largest land animal'},
+      {text:'Which animal lives in water and has fins?',correct:'Fish',wrong:['Cat','Dog','Bird'],hint:'Found in rivers, lakes and oceans'},
+      {text:'Which animal has black and white stripes?',correct:'Zebra',wrong:['Tiger','Giraffe','Cheetah'],hint:'Looks like a striped horse'},
+      {text:'Which is the fastest land animal?',correct:'Cheetah',wrong:['Lion','Horse','Leopard'],hint:'Can reach 110 km/h in short bursts'},
+      {text:'Which animal sleeps hanging upside down?',correct:'Bat',wrong:['Monkey','Sloth','Koala'],hint:'The only flying mammal'},
+      {text:'Which animal is known as the King of the Jungle?',correct:'Lion',wrong:['Tiger','Elephant','Gorilla'],hint:'Actually lives in the savannah, not the jungle!'},
+      {text:'Which sea animal has 8 arms?',correct:'Octopus',wrong:['Squid','Jellyfish','Starfish'],hint:'Very intelligent — can open jars!'},
+      {text:'Which bird cannot fly?',correct:'Penguin',wrong:['Eagle','Parrot','Sparrow'],hint:'Lives in Antarctica and swims brilliantly'},
+      {text:'What is a baby frog called?',correct:'Tadpole',wrong:['Froglet','Spawn','Larvae'],hint:'Lives in water before growing legs'},
+    ];
+    const byWorld = {1:all.slice(0,5), 2:all.slice(4,9), 3:all.slice(5,10), 4:all, 5:all};
+    return byWorld[wid]||all;
   }
 };
 
@@ -1411,15 +1763,9 @@ const App = {
     sc.classList.add('active');window.scrollTo(0,0);
     if(id==='screen-auth'&&param)App.switchTab(param);
     if(id==='screen-dashboard')App.renderDash();
-    if(id==='screen-parent'){
-      if(!Plan.isPro()){App.showProGate('Parent Dashboard is a Pro feature 📊');return;}
-      App.renderParent();
-    }
+    if(id==='screen-parent')App.renderParent();  // open to all — upsell inside
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
-    if(id==='screen-research'){
-      if(!Plan.isPro()){App.showProGate('Research Anything is a Pro feature 🔭');return;}
-      setTimeout(()=>Research.init(),100);
-    }
+    if(id==='screen-research')setTimeout(()=>Research.init(),100);  // open to all — limit inside
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
   },
 
@@ -1444,26 +1790,16 @@ const App = {
   },
 
   renderSubjects() {
-    const allSubs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
-    // Free users get first 3 subjects
-    const freeSubs = allSubs.slice(0,FREE_SUBJECTS_LIMIT);
-    const paidSubs = allSubs.slice(FREE_SUBJECTS_LIMIT);
-    const isPro = Plan.isPro();
-    const subs = isPro ? allSubs : [...freeSubs, ...paidSubs];
-
+    const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
     const grid=el('subjects-grid');const title=el('subjects-title');if(!grid||!title)return;
     const labels={'4-6':'🌱 Junior World!','7-10':'⭐ Explorer World!','11-14':'🚀 Pro World!','15-17':'🎓 Senior World!'};
     title.textContent=labels[S.ageGroup]||'✨ Pick a subject:';
-
-    grid.innerHTML=subs.map((s,i)=>{
-      const locked = !isPro && i >= FREE_SUBJECTS_LIMIT;
-      return `<div class="subject-card${locked?' pro-lock':''}" data-subject="${s.id}" onclick="${locked?`App.showProGate('Unlock all subjects with Samara Pro!')`:`App.openSubject('${s.id}')`}" style="position:relative;">
-        ${locked?`<div class="pro-overlay"><div class="pro-overlay-icon">🔒</div><div class="pro-overlay-text">Pro feature <span class="pro-badge">⭐ PRO</span></div></div>`:''}
-        <div class="subject-icon">${s.icon}</div>
-        <div class="subject-name">${s.name}${locked?'<span class="pro-badge">⭐ PRO</span>':''}</div>
-        <div class="subject-desc">${s.desc}</div>
-      </div>`;
-    }).join('');
+    // All subjects are free to access — AI features are what's limited
+    grid.innerHTML=subs.map(s=>`<div class="subject-card" data-subject="${s.id}" onclick="App.openSubject('${s.id}')">
+      <div class="subject-icon">${s.icon}</div>
+      <div class="subject-name">${s.name}</div>
+      <div class="subject-desc">${s.desc}</div>
+    </div>`).join('');
   },
 
   selectAvatar(id){Avatars.select(id);App.toast(`${Avatars.names[id]} is your tutor! ${Avatars.emojis[id]}`);},
@@ -1530,10 +1866,22 @@ const App = {
   },
 
   async startStage(idx, world) {
-    // Check daily quiz limit for free users
-    if(!Plan.canStartQuiz()){
-      App.toast(`⭐ You've used all 5 free quizzes today!`);
-      setTimeout(()=>App.showScreen('screen-pricing'),800);
+    // Check daily quiz limit
+    const canQuiz = Plan.canStartQuiz();
+    if(!canQuiz.ok){
+      // Warm upgrade prompt — not a hard wall
+      const div=document.createElement('div');
+      div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99999;display:flex;align-items:center;justify-content:center;';
+      div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;max-width:380px;width:90%;text-align:center;border:2px solid rgba(199,125,255,0.4);">
+        <div style="font-size:3rem;margin-bottom:12px;">🎯</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;margin-bottom:8px;">You're on fire today!</div>
+        <div style="color:rgba(255,255,255,0.75);font-size:0.9rem;margin-bottom:20px;">${canQuiz.msg}</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="Payments.checkout('monthly');this.closest('[style]').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 22px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade Now</button>
+          <button onclick="this.closest('[style]').remove();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;">Come back tomorrow</button>
+        </div>
+      </div>`;
+      document.body.appendChild(div);
       return;
     }
 
@@ -1543,28 +1891,28 @@ const App = {
     setText('quiz-subject-badge',`${S.subject} · World ${world.id} · Stage ${idx+1}`);
     App.updateScores();App.showScreen('screen-quiz');
 
-    // Show loading indicator
     el('quiz-loading')?.classList.remove('hidden');
-    el('quiz-question').textContent='';
-    el('quiz-answers').innerHTML='';
+    el('quiz-question').textContent='';el('quiz-answers').innerHTML='';
 
-    // Try AI-generated questions first (Pro users)
+    // AI questions: free users get up to LIMITS.aiQuestions per day, then pre-built
     let questions = null;
-    if(Plan.isPro()) {
-      const worldName = world.name;
-      const stageName = idx===0?'Beginner':idx===1?'Intermediate':'Advanced';
-      questions = await AIQuestionGen.generate(S.subject, worldName, stageName, S.ageGroup, 5);
+    const canAIQ = Plan.canUseAIQuestion();
+    if(canAIQ.ok) {
+      Plan.useAIQuestion();
+      const worldName=world.name;
+      const stageName=idx===0?'Beginner':idx===1?'Intermediate':'Advanced';
+      questions = await AIQuestionGen.generate(S.subject,worldName,stageName,S.ageGroup,5);
     }
 
-    // Fall back to pre-built bank
-    if(!questions || questions.length < 3) {
-      questions = QGen.generate(S.subject, world.id, idx+1, S.ageGroup, 5);
+    // Fall back to large pre-built bank (always available)
+    if(!questions||questions.length<3){
+      questions=QGen.generate(S.subject,world.id,idx+1,S.ageGroup,5);
     }
 
-    S.questions = questions;
-    Plan.incrementQuizzes();
+    S.questions=questions;
+    Plan.useQuiz();
     el('quiz-loading')?.classList.add('hidden');
-    setText('quiz-q-total', S.questions.length);
+    setText('quiz-q-total',S.questions.length);
     App.renderQ();
   },
 
@@ -1659,9 +2007,40 @@ const App = {
     const subs=SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10'];
     el('dash-progress-list').innerHTML=subs.map(s=>{const worlds=WORLDS[s.id]||[];const total=worlds.length*SPW;const done=progress.filter(p=>p.subject===s.id&&p.completed).length;const pct=total>0?Math.round((done/total)*100):0;return`<div class="dash-subject-row"><div class="dash-subject-icon">${s.icon}</div><div class="dash-subject-info"><div class="dash-subject-name">${s.name}</div><div class="dash-subject-progress">${done}/${total} stages · ${Adaptive.label(Adaptive.get(s.id))}</div></div><div class="mini-bar-wrap"><div class="mini-bar-fill" style="width:${pct}%"></div></div></div>`;}).join('');
     el('dash-activity').innerHTML=recent.length===0?'<p class="empty-msg">No activity yet!</p>':recent.map(r=>`<div class="activity-row"><span>${r.subject} · W${r.world} S${r.stage}</span><span>${Math.round((r.accuracy||0)*100)}%</span><span class="activity-pts">+${r.score} pts</span></div>`).join('');
-    // Daily quiz counter
-    const quizzesLeft = Plan.isPro() ? '∞' : `${FREE_DAILY_QUIZ_LIMIT - Plan.getQuizzesToday()} left today`;
-    el('dash-activity').insertAdjacentHTML('beforebegin',`<div style="background:rgba(255,217,61,0.15);border-radius:12px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,217,61,0.3);"><span style="color:#fff;font-weight:800;font-size:0.88rem;">📝 Quizzes today</span><span style="font-family:'Fredoka One',cursive;color:var(--sun);">${quizzesLeft}</span></div>`);
+    // ── Daily usage summary for free users (creates upgrade urgency) ──
+    const usage = Plan.getUsageSummary();
+    if(usage){
+      const makeBar = (used,limit,label,icon) => {
+        const pct = Math.round((used/limit)*100);
+        const color = pct>=100?'#FF6B6B':pct>=66?'#FFD93D':'#6BCB77';
+        return `<div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="color:#fff;font-weight:800;font-size:0.85rem;">${icon} ${label}</span>
+            <span style="font-weight:800;font-size:0.85rem;color:${color};">${used}/${limit}</span>
+          </div>
+          <div style="height:6px;background:rgba(255,255,255,0.12);border-radius:50px;overflow:hidden;">
+            <div style="height:100%;width:${Math.min(pct,100)}%;background:${color};border-radius:50px;transition:width 0.5s;"></div>
+          </div>
+        </div>`;
+      };
+      const allUsed = Object.values(usage).every(u=>u.used>=u.limit);
+      el('dash-activity').insertAdjacentHTML('beforebegin',`
+        <div style="background:rgba(255,255,255,0.08);border-radius:16px;padding:16px 18px;margin-bottom:20px;border:1.5px solid rgba(255,255,255,0.13);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.05rem;">Today's Free Usage</div>
+            <button class="btn btn-gold" style="font-size:0.8rem;padding:6px 14px;" onclick="App.showScreen('screen-pricing')">⭐ Go Pro</button>
+          </div>
+          ${makeBar(usage.quizzes.used,usage.quizzes.limit,'Quizzes','📝')}
+          ${makeBar(usage.aiChat.used,usage.aiChat.limit,'AI Chat messages','💬')}
+          ${makeBar(usage.aiHints.used,usage.aiHints.limit,'AI Hints','🧠')}
+          ${makeBar(usage.research.used,usage.research.limit,'Research topics','🔭')}
+          ${makeBar(usage.aiQuestions.used,usage.aiQuestions.limit,'AI-generated questions','✨')}
+          ${allUsed?`<div style="text-align:center;margin-top:12px;color:rgba(255,255,255,0.7);font-size:0.85rem;">Resets tomorrow — or <span style="color:#FFD93D;cursor:pointer;font-weight:800;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">upgrade for unlimited</span></div>`:''}
+        </div>`);
+    } else {
+      // Pro users — show plan badge
+      el('dash-activity').insertAdjacentHTML('beforebegin',`<div style="background:rgba(199,125,255,0.12);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;border:1px solid rgba(199,125,255,0.25);"><span style="font-size:1.4rem;">⭐</span><span style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;">Samara Pro — Unlimited everything!</span></div>`);
+    }
   },
 
   async renderParent(){
@@ -1720,8 +2099,25 @@ const BabyMode = {
 // ── PEP MODULE (AI-powered) ──────────────────────────────────
 const PEP = {
   async openSubject(subject) {
-    // PEP is Pro-only
-    if(!Plan.isPro()){App.showProGate('Full PEP Jamaica preparation is a Pro feature 🇯🇲');return;}
+    const subjects = ['math','language','science','social','general','practice'];
+    const idx = subjects.indexOf(subject);
+    const canPEP = Plan.canUsePEPSubject(idx);
+
+    if(!canPEP.ok){
+      const div=document.createElement('div');
+      div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99999;display:flex;align-items:center;justify-content:center;';
+      div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;max-width:380px;width:90%;text-align:center;border:2px solid rgba(199,125,255,0.4);">
+        <div style="font-size:3rem;margin-bottom:12px;">🇯🇲</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;margin-bottom:8px;">You loved the free PEP taste!</div>
+        <div style="color:rgba(255,255,255,0.75);font-size:0.9rem;margin-bottom:20px;">Upgrade to practise ALL 6 PEP subjects with fresh AI questions every time. Get fully prepared for your Primary Exit Profile exam!</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="Payments.checkout('monthly');this.closest('[style]').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 22px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade Now</button>
+          <button onclick="this.closest('[style]').remove();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;">Not yet</button>
+        </div>
+      </div>`;
+      document.body.appendChild(div);
+      return;
+    }
 
     App.showScreen('screen-quiz');
     el('quiz-loading')?.classList.remove('hidden');
@@ -1810,15 +2206,45 @@ const Research = {
   async search(){
     const input=document.getElementById('research-input');const topic=input?.value.trim();
     if(!topic){App.toast('Type something to research! 🔍');return;}
+
+    // Check research limit — free users get 1/day as a taste
+    const canResearch = Plan.canUseResearch();
+    if(!canResearch.ok){
+      // Show upgrade prompt right in the result area
+      document.getElementById('research-loading').style.display='none';
+      document.getElementById('research-result').style.display='block';
+      document.getElementById('research-topic-label').textContent=`You tried: ${topic}`;
+      document.getElementById('research-answer').innerHTML=`
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:2.8rem;margin-bottom:12px;">🔭</div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;margin-bottom:8px;">You've used your free Research today!</div>
+          <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:18px;">Come back tomorrow, or upgrade to explore <b>any topic, any time</b> — black holes, Shakespeare, dinosaurs, AI, Caribbean history... everything!</div>
+          <button class="btn btn-gold big" onclick="App.showScreen('screen-pricing')">⭐ Upgrade to Samara Pro</button>
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:10px;">7-day free trial · cancel any time</div>
+        </div>`;
+      return;
+    }
+
     this.lastTopic=topic;
     document.getElementById('research-loading').style.display='block';
     document.getElementById('research-result').style.display='none';
+    Plan.useResearch();
+
     const ageDesc={'0-3':'a 2-year-old','4-6':'a 5-year-old','7-10':'a 9-year-old','11-14':'a 12-year-old','15-17':'a 16-year-old'}[S.ageGroup]||'a student';
     const prompt=`Explain "${topic}" to ${ageDesc} in an amazing, engaging way. Structure: 1) Main explanation (2-3 sentences), 2) Real-world example or analogy, 3) Surprising "Did You Know?" fact. Use simple clear language. Add 2-3 relevant emojis. Make them want to learn more!`;
     const answer=await callClaudeAI(prompt,S.ageGroup,'You are Samara AI, the most enthusiastic educational tutor in the world. Make every topic come alive!',400);
-    this.showAnswer(topic,answer||`${topic} is a fascinating topic! 🌟 Keep exploring and asking questions about it — curiosity is the best teacher!`);
+    this.showAnswer(topic,answer||`${topic} is a fascinating topic! 🌟 Keep exploring and asking questions!`);
     PersonalAlgo.trackResearch(topic);
     document.getElementById('research-loading').style.display='none';
+
+    // After showing result, add upsell for free users
+    if(!Plan.isPro()){
+      document.getElementById('research-answer').insertAdjacentHTML('afterend',
+        `<div style="background:rgba(255,217,61,0.12);border-radius:12px;padding:12px 16px;margin-top:14px;border:1px solid rgba(255,217,61,0.25);text-align:center;">
+          <span style="font-size:0.85rem;color:rgba(255,255,255,0.8);">That was your free Research for today! ⭐ </span>
+          <span style="cursor:pointer;color:#FFD93D;font-weight:800;font-size:0.85rem;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">Upgrade for unlimited</span>
+        </div>`);
+    }
   },
   async askFollowUp(prompt){
     if(!this.lastTopic)return;
