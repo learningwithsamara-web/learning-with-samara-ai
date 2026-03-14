@@ -2,12 +2,46 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Learning With Samara AI | learningwithsamara.com</title>
-<meta name="description" content="AI-powered learning platform for children ages 0–17. Samara AI tutors every subject, every age group. Free to start at learningwithsamara.com" />
+<meta name="description" content="AI-powered learning for children ages 0–17. Samara AI tutors every subject. Free to start at learningwithsamara.com" />
+
+<!-- ── PWA MANIFEST ── -->
+<link rel="manifest" href="/manifest.json" />
+
+<!-- ── THEME COLORS ── -->
+<meta name="theme-color" content="#302b63" />
+<meta name="msapplication-TileColor" content="#302b63" />
+<meta name="msapplication-TileImage" content="/icons/icon-144.png" />
+
+<!-- ── iOS / APPLE PWA ── -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Samara AI" />
+<link rel="apple-touch-icon" href="/icons/icon-192.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192.png" />
+
+<!-- Apple splash screens (iPhone & iPad) -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-startup-image" href="/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+<link rel="apple-touch-startup-image" href="/icons/splash-828x1792.png"  media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" />
+
+<!-- ── FAVICONS ── -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72.png" />
+<link rel="shortcut icon" href="/icons/icon-192.png" />
+
+<!-- ── SOCIAL / OG ── -->
+<meta property="og:type" content="website" />
 <meta property="og:title" content="Learning With Samara AI" />
 <meta property="og:description" content="Magical AI learning for every child — from Baby World to Quantum Physics!" />
 <meta property="og:url" content="https://learningwithsamara.com" />
+<meta property="og:image" content="https://learningwithsamara.com/icons/icon-512.png" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Learning With Samara AI" />
+<meta name="twitter:description" content="AI-powered learning for children ages 0–17" />
+
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{--sun:#FFD93D;--grass:#6BCB77;--coral:#FF6B6B;--purple:#C77DFF;--orange:#FF9B3F;--navy:#1A1A2E;--muted:#7A7A9D;--radius:20px;--shadow:0 8px 32px rgba(0,0,0,0.12);--shadow-pop:0 12px 40px rgba(0,0,0,0.18);}
@@ -2319,6 +2353,153 @@ document.addEventListener('DOMContentLoaded',()=>{
     PersonalAlgo.load();
   }catch(e){console.error('Boot error:',e);}
 });
+</script>
+<!-- ══ PWA INSTALL BANNER ══════════════════════════════════════ -->
+<div id="pwa-install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:linear-gradient(135deg,#1a1a3e,#302b63);border-top:2px solid rgba(199,125,255,0.4);padding:14px 20px 14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));box-shadow:0 -8px 32px rgba(0,0,0,0.4);">
+  <div style="max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px;">
+    <img src="/icons/icon-96.png" style="width:52px;height:52px;border-radius:12px;flex-shrink:0;" onerror="this.style.display='none'" />
+    <div style="flex:1;">
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">Install Samara AI App 📱</div>
+      <div style="color:rgba(255,255,255,0.65);font-size:0.78rem;margin-top:2px;">Add to your home screen — works offline too!</div>
+    </div>
+    <button id="pwa-install-btn" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 18px;border-radius:50px;border:none;cursor:pointer;flex-shrink:0;">Install</button>
+    <button onclick="document.getElementById('pwa-install-banner').style.display='none';localStorage.setItem('pwa-dismissed','1');" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:1rem;flex-shrink:0;">✕</button>
+  </div>
+</div>
+
+<!-- ══ iOS INSTALL INSTRUCTIONS (shown on Safari/iPhone) ═══════ -->
+<div id="ios-install-tip" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:linear-gradient(135deg,#1a1a3e,#302b63);border-top:2px solid rgba(199,125,255,0.4);padding:16px 20px;padding-bottom:calc(16px + env(safe-area-inset-bottom));">
+  <div style="max-width:640px;margin:0 auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">📱 Install Samara AI</div>
+      <button onclick="document.getElementById('ios-install-tip').style.display='none';localStorage.setItem('pwa-dismissed','1');" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:1rem;">✕</button>
+    </div>
+    <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;line-height:1.7;">
+      To install on your iPhone or iPad:<br>
+      1. Tap the <b style="color:#FFD93D;">Share button</b> <span style="font-size:1.1rem;">⎙</span> at the bottom of Safari<br>
+      2. Tap <b style="color:#FFD93D;">"Add to Home Screen"</b> 📲<br>
+      3. Tap <b style="color:#FFD93D;">Add</b> — done! Samara AI is on your home screen ✅
+    </div>
+  </div>
+</div>
+
+<style>
+/* ── Safe area insets for iPhone notch & Dynamic Island ── */
+body { padding-top: env(safe-area-inset-top); }
+.home-header { padding-top: calc(18px + env(safe-area-inset-top)); }
+.top-bar { padding-top: calc(16px + env(safe-area-inset-top)); }
+.ai-tutor-float { bottom: calc(24px + env(safe-area-inset-bottom)); right: calc(20px + env(safe-area-inset-right)); }
+.sound-toggle { top: calc(14px + env(safe-area-inset-top)); right: calc(14px + env(safe-area-inset-right)); }
+/* Smooth scrolling & tap targets for mobile */
+* { -webkit-tap-highlight-color: transparent; }
+button, .btn, .age-card, .subject-card, .world-card, .stage-card, .answer-btn, .baby-item-btn { touch-action: manipulation; }
+/* Prevent text selection on buttons */
+.btn, button, .age-card, .subject-card { -webkit-user-select: none; user-select: none; }
+/* App-like full-height on installed PWA */
+@media (display-mode: standalone) {
+  body { overscroll-behavior: none; }
+  .screen { min-height: 100dvh; }
+}
+</style>
+
+<script>
+// ── PWA INSTALL LOGIC ────────────────────────────────────────
+(function() {
+  let deferredPrompt = null;
+  const dismissed = localStorage.getItem('pwa-dismissed');
+
+  // Detect iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  // Already installed — don't show banner
+  if (isInStandaloneMode) return;
+  if (dismissed) return;
+
+  // Android/Chrome/Edge — capture install prompt
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Show banner after 30 seconds (user has had time to explore first)
+    setTimeout(() => {
+      const banner = document.getElementById('pwa-install-banner');
+      if (banner) banner.style.display = 'block';
+    }, 30000);
+  });
+
+  // Handle install button click
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('pwa-install-btn');
+    if (btn) {
+      btn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        document.getElementById('pwa-install-banner').style.display = 'none';
+        if (outcome === 'accepted') {
+          console.log('PWA installed!');
+        }
+      });
+    }
+
+    // iOS — show instructions after 45 seconds
+    if (isIOS && !isInStandaloneMode && !dismissed) {
+      setTimeout(() => {
+        const tip = document.getElementById('ios-install-tip');
+        if (tip) tip.style.display = 'block';
+      }, 45000);
+    }
+  });
+
+  // Installed event
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('pwa-install-banner').style.display = 'none';
+    console.log('Samara AI app installed ✅');
+  });
+
+  // ── Handle shortcut URL params (?action=learn/pep/research) ──
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+    if (action === 'pep') setTimeout(() => App?.showScreen?.('screen-pep'), 800);
+    if (action === 'research') setTimeout(() => App?.showScreen?.('screen-research'), 800);
+    if (action === 'learn') setTimeout(() => {
+      const subjects = document.getElementById('subjects-grid');
+      if (subjects) subjects.scrollIntoView({ behavior: 'smooth' });
+    }, 800);
+  });
+})();
+
+// ── SERVICE WORKER REGISTRATION ─────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      console.log('[PWA] Service worker registered ✅', reg.scope);
+
+      // Check for updates every time app opens
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // New version available — show update toast
+            const t = document.getElementById('toast');
+            if (t) {
+              t.textContent = '✨ App updated! Refresh for the latest version.';
+              t.classList.remove('hidden'); t.classList.add('show');
+              t.style.cursor = 'pointer';
+              t.onclick = () => window.location.reload();
+            }
+          }
+        });
+      });
+    } catch(err) {
+      console.warn('[PWA] Service worker registration failed:', err);
+    }
+  });
+}
 </script>
 </body>
 </html>
