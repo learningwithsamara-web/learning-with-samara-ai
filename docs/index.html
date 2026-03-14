@@ -1594,7 +1594,6 @@ setTimeout(()=>App.updateSearchSuggestions(), 500);
 </script>
   
 <script>
-
 // ============================================================
 // SOUND & VOICE SYSTEM
 // ============================================================
@@ -1603,15 +1602,14 @@ const SoundSystem = {
   speechEnabled: true,
   voices: [],
 
-  setTimeout(()=>{
-SoundSystem.init();
-},500); {
+  init() {
     // Load available voices
     if ('speechSynthesis' in window) {
       window.speechSynthesis.onvoiceschanged = () => {
-   setTimeout(()=>{
-this.voices = window.speechSynthesis.getVoices();
-},200);
+        this.voices = window.speechSynthesis.getVoices();
+      };
+      this.voices = window.speechSynthesis.getVoices();
+    }
     // Add sound toggle button
     const btn = document.createElement('button');
     btn.className = 'sound-toggle';
@@ -2123,7 +2121,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }, 700);
 });
-
 </script>
 </body>
 </html>
