@@ -498,7 +498,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
       <div class="plan-popular">MOST POPULAR</div>
       <div class="plan-name">Samara Pro</div>
       <div class="plan-price">$4.99</div>
-      <div class="plan-period">per month · cancel anytime</div>
+      <div class="plan-period">per month</div>
       <ul class="plan-features">
         <li><span class="check">✓</span> All subjects unlocked</li>
         <li><span class="check">✓</span> <b>Unlimited</b> quizzes every day</li>
@@ -525,10 +525,10 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     </div>
     <button class="btn btn-green" onclick="Payments.checkout('annual')">Get Annual — $29.99/yr</button>
   </div>
-  <div class="money-back">💳 Paid securely via PayPal · Visa &amp; Mastercard accepted · learningwithsamara.com<br>30-day money-back guarantee · Cancel any time · Questions? <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a></div>
+  <div class="money-back">🔒 Secure checkout · learningwithsamara.com · Questions? <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a></div>
   <div style="background:rgba(255,255,255,0.06);border-radius:14px;padding:14px 18px;margin-top:16px;text-align:center;border:1px solid rgba(255,255,255,0.1);">
     <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:0.95rem;margin-bottom:4px;">Already paid? 🎉</div>
-    <div style="color:rgba(255,255,255,0.55);font-size:0.82rem;">Email us at <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a> with your PayPal receipt and we'll activate your Pro account right away!</div>
+    <div style="color:rgba(255,255,255,0.55);font-size:0.82rem;">Email us at <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a> with your order confirmation and we'll activate your Pro account right away!</div>
   </div>
   <!-- FAMILY PLAN -->
   <div style="background:rgba(107,203,119,0.12);border-radius:18px;padding:20px 24px;margin-top:18px;border:1.5px solid rgba(107,203,119,0.3);">
@@ -919,37 +919,22 @@ const Plan = {
   }
 };
 
-// ── PAYMENTS — PayPal via learningwithsamara.com ─────────────
-//
-// HOW TO CONNECT YOUR PAYPAL (3 steps):
-//
-// 1. Log into PayPal Business at business.paypal.com
-// 2. Go to: Tools → PayPal Buttons → Subscriptions
-//    Create 3 subscription buttons (Monthly $4.99, Annual $29.99, Family $7.99)
-//    OR use Buy Now buttons for one-time plans.
-//    Copy each hosted button URL — looks like:
-//    https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XXXXX
-// 3. Paste each URL into the LINKS object below.
-//
-// SHOPIFY OPTION:
-// In your Shopify store (learningwithsamara.com):
-// 1. Create 3 products: "Samara Pro Monthly", "Samara Pro Annual", "Family Plan"
-// 2. Set prices to $4.99, $29.99, $7.99
-// 3. Go to each product → "Share" → copy the direct checkout link
-//    Looks like: https://learningwithsamara.com/cart/VARIANT_ID:1?channel=buy_button
-// 4. Paste below.
-//
-// After payment, email the customer a code OR set up a PayPal IPN webhook.
-// Customer support: edu@learningwithsamara.com
+// ── PAYMENTS — Shopify via learningwithsamara.com ────────────
+// Products are created in your Shopify store.
+// Links are already connected below.
+// After payment, Shopify sends the customer an order confirmation.
+// To activate Pro: check your Shopify orders and update the user in Supabase,
+// or set up a Shopify webhook (orders/paid) to auto-activate.
+// Support: edu@learningwithsamara.com
 
 const Payments = {
   SITE: 'learningwithsamara.com',
 
   // ── PASTE YOUR PAYPAL OR SHOPIFY CHECKOUT LINKS HERE ──────
   LINKS: {
-    monthly: '',   // e.g. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YOUR_ID
-    annual:  '',   // e.g. https://learningwithsamara.com/cart/VARIANT_ID:1?channel=buy_button
-    family:  '',   // e.g. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YOUR_FAMILY_ID
+    monthly: 'https://learningwithsamara.com/products/samara-pro-monthly-subscription?variant=52078192132389',
+    annual:  'https://learningwithsamara.com/products/samara-pro-annual-plan?variant=52078222442789',
+    family:  'https://learningwithsamara.com/products/samara-pro-family-plan?variant=52078205403429',
   },
   // ──────────────────────────────────────────────────────────
 
@@ -982,10 +967,9 @@ const Payments = {
         <div style="color:rgba(255,255,255,0.65);font-size:0.82rem;margin-bottom:18px;">${this.DESCRIPTIONS[plan]}</div>
 
         <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:14px 16px;margin-bottom:16px;text-align:left;border:1px solid rgba(255,255,255,0.13);">
-          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.88rem;margin-bottom:8px;">⚙️ Owner: add your payment link</div>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.88rem;margin-bottom:8px;">⚙️ Owner: add your Shopify checkout link</div>
           <div style="color:rgba(255,255,255,0.75);font-size:0.79rem;line-height:1.8;">
-            <span style="color:#6BCB77;">PayPal Business:</span> Tools → Payment Buttons → Subscriptions → Create button → copy URL → paste into <code style="background:rgba(255,255,255,0.12);padding:1px 5px;border-radius:4px;">LINKS.${plan}</code><br>
-            <span style="color:#7EC8E3;">Shopify (learningwithsamara.com):</span> Create product → set price → copy checkout link → paste into <code style="background:rgba(255,255,255,0.12);padding:1px 5px;border-radius:4px;">LINKS.${plan}</code>
+            In Shopify: go to the product → copy the checkout URL → paste into <code style="background:rgba(255,255,255,0.12);padding:1px 5px;border-radius:4px;">LINKS.${plan}</code> in the code.
           </div>
         </div>
 
@@ -1012,13 +996,10 @@ const Payments = {
   },
 
   // ── Auto-activation after payment ────────────────────────
-  // Call from your Shopify webhook or PayPal IPN:
-  // POST to a small server function that calls this with the buyer's email.
-  // Until you have a webhook, email buyers a code and manually activate via Supabase.
+  // Set up a Shopify webhook (orders/paid) to call this automatically,
+  // or manually activate via Supabase after each order.
   async activateForUser(email, plan) {
-    console.log(`Activating ${plan} for ${email} on ${this.SITE}`);
-    // In production: set samara_pro=true in Supabase for this user
-    // await supabaseAdmin.from('profiles').update({plan}).eq('email', email)
+    console.log(`Activating ${plan} for ${email}`);
     Plan.activate(plan);
     App.updatePlanUI();
   }
@@ -2254,7 +2235,7 @@ const Research = {
           <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;margin-bottom:8px;">You've used your free Research today!</div>
           <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:18px;">Come back tomorrow, or upgrade to explore <b>any topic, any time</b> — black holes, Shakespeare, dinosaurs, AI, Caribbean history... everything!</div>
           <button class="btn btn-gold big" onclick="App.showScreen('screen-pricing')">⭐ Upgrade to Samara Pro</button>
-          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:10px;">7-day free trial · cancel any time</div>
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:10px;">7-day free trial</div>
         </div>`;
       return;
     }
