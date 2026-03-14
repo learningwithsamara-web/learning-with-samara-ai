@@ -889,19 +889,19 @@ opacity:0; transition:opacity 0.3s, transform 0.3s; pointer-events:none;
 
   </div>
 </div>
-  
-<!-- Subjects -->
 
-<div class="subjects-section" id="subjects-section" style="margin-top:28px;">
-<p class="subjects-title" id="subjects-title">✨ Pick a subject to explore:</p>
-<div class="subjects-grid" id="subjects-grid"></div>
-</div>
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
 
-<div class="home-characters">
-<div class="character bounce-slow">🦄</div>
-<div class="character bounce-mid">🚀</div>
-<div class="character bounce-fast">🌟</div>
-</div>
+<!-- MODAL -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal-box">
+    <p id="modal-msg">Are you sure you want to quit?</p>
+    <div class="modal-btns">
+      <button class="btn btn-danger" id="modal-confirm">Yes, Quit</button>
+      <button class="btn btn-outline" id="modal-cancel">Keep Going!</button>
+    </div>
+  </div>
 </div>
 
 <!-- ===== AUTH ===== -->
