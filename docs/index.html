@@ -237,6 +237,293 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .age-grid{grid-template-columns:repeat(3,1fr);}
 .parent-stats{grid-template-columns:repeat(2,1fr);}
 }
+<style id="upgrade-3-styles">
+
+/* ── BABY MODE (0-3) ── */
+.baby-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.baby-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.3);
+}
+
+.baby-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 500px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.baby-category-btn {
+  background: rgba(255,255,255,0.97);
+  border-radius: 24px;
+  padding: 28px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.baby-category-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  border-radius: 24px 24px 0 0;
+}
+.baby-category-btn:nth-child(1)::before { background: linear-gradient(90deg,#FF9B3F,#FFD93D); }
+.baby-category-btn:nth-child(2)::before { background: linear-gradient(90deg,#FF6B6B,#C77DFF); }
+.baby-category-btn:nth-child(3)::before { background: linear-gradient(90deg,#6BCB77,#7EC8E3); }
+.baby-category-btn:nth-child(4)::before { background: linear-gradient(90deg,#7EC8E3,#C77DFF); }
+.baby-category-btn:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 14px 40px rgba(0,0,0,0.2); }
+.baby-category-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+.baby-category-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: #1A1A2E;
+}
+
+/* Baby Activity Screen */
+.baby-activity-wrap {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+}
+
+.baby-question-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  color: #fff;
+  margin-bottom: 24px;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.3);
+  animation: bounce-text 0.5s ease;
+}
+@keyframes bounce-text {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.baby-items-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.baby-item-btn {
+  background: rgba(255,255,255,0.97);
+  border-radius: 24px;
+  padding: 20px 16px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border: 4px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.baby-item-btn:hover { transform: scale(1.05); }
+.baby-item-btn.correct-baby {
+  border-color: #6BCB77;
+  background: linear-gradient(135deg, #6BCB77, #3DAA45);
+  animation: baby-pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.baby-item-btn.wrong-baby {
+  border-color: #FF6B6B;
+  animation: baby-shake 0.4s ease;
+}
+@keyframes baby-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1.05); }
+}
+@keyframes baby-shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.baby-item-emoji { font-size: 4rem; line-height: 1; }
+.baby-item-word {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem;
+  color: #1A1A2E;
+}
+.baby-item-btn.correct-baby .baby-item-word { color: #fff; }
+
+/* Baby celebration */
+.baby-celebrate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  animation: fade-in 0.3s ease;
+}
+@keyframes fade-in { from{opacity:0} to{opacity:1} }
+.baby-celebrate-inner {
+  background: linear-gradient(135deg, #FFD93D, #FF9B3F);
+  border-radius: 32px;
+  padding: 40px;
+  text-align: center;
+  animation: pop-in 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.baby-celebrate-emoji { font-size: 5rem; display: block; margin-bottom: 10px; }
+.baby-celebrate-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* ── SOUND BUTTON ── */
+.sound-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 8500;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50px;
+  padding: 8px 16px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.sound-toggle:hover { background: rgba(255,255,255,0.25); }
+
+/* ── VOICE INPUT BUTTON ── */
+.voice-input-btn {
+  background: linear-gradient(135deg, #7928CA, #FF0080);
+  border: none;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(121,40,202,0.4);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.voice-input-btn:hover { transform: scale(1.1); }
+.voice-input-btn.listening {
+  animation: pulse-voice 1s ease-in-out infinite;
+  background: linear-gradient(135deg, #FF0080, #FF416C);
+}
+@keyframes pulse-voice {
+  0%,100% { box-shadow: 0 6px 20px rgba(255,0,128,0.4); }
+  50% { box-shadow: 0 6px 30px rgba(255,0,128,0.8); transform: scale(1.1); }
+}
+
+/* ── PEP SECTION ── */
+.pep-header {
+  background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+  padding: 24px;
+  text-align: center;
+  border-bottom: 2px solid rgba(199,125,255,0.3);
+}
+.pep-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #FFD93D, #FF9B3F);
+  color: #fff;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem;
+  padding: 4px 16px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+}
+.pep-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.3);
+}
+.pep-subtitle {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+.pep-subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 0 24px;
+}
+
+.pep-subject-card {
+  background: rgba(255,255,255,0.97);
+  border-radius: 20px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  position: relative;
+  overflow: hidden;
+}
+.pep-subject-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  border-radius: 20px 20px 0 0;
+}
+.pep-subject-card[data-pep="math"]::before     { background: linear-gradient(90deg,#FFD93D,#FF9B3F); }
+.pep-subject-card[data-pep="language"]::before { background: linear-gradient(90deg,#7EC8E3,#C77DFF); }
+.pep-subject-card[data-pep="science"]::before  { background: linear-gradient(90deg,#6BCB77,#7EC8E3); }
+.pep-subject-card[data-pep="social"]::before   { background: linear-gradient(90deg,#FF6B6B,#C77DFF); }
+.pep-subject-card[data-pep="general"]::before  { background: linear-gradient(90deg,#FF9B3F,#FFD93D); }
+.pep-subject-card[data-pep="practice"]::before { background: linear-gradient(90deg,#C77DFF,#7928CA); }
+.pep-subject-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(0,0,0,0.18); }
+.pep-subject-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.pep-subject-name { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: #1A1A2E; }
+.pep-subject-count { font-size: 0.78rem; color: #7A7A9D; margin-top: 4px; }
+
+.pep-info-box {
+  max-width: 860px;
+  margin: 0 auto 20px;
+  padding: 0 24px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  backdrop-filter: blur(8px);
+}
+.pep-info-icon { font-size: 2rem; flex-shrink: 0; }
+.pep-info-text { color: rgba(255,255,255,0.85); font-size: 0.9rem; font-weight: 600; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -486,6 +773,99 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 </button>
 </div>
 
+  <!-- BABY SCREEN (Ages 0-3) -->
+<div id="screen-baby" class="screen">
+  <div class="stars"></div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Back</button>
+    <h2 class="screen-title small" id="baby-screen-title">🍼 Baby World</h2>
+  </div>
+
+  <!-- Category Selection -->
+  <div id="baby-categories" class="baby-screen">
+    <p class="baby-title">What do you want to learn? 🌟</p>
+    <div class="baby-category-grid">
+      <button class="baby-category-btn" onclick="BabyMode.start('animals')">
+        <span class="baby-category-icon">🐾</span>
+        <span class="baby-category-name">Animals</span>
+      </button>
+      <button class="baby-category-btn" onclick="BabyMode.start('colors')">
+        <span class="baby-category-icon">🎨</span>
+        <span class="baby-category-name">Colors</span>
+      </button>
+      <button class="baby-category-btn" onclick="BabyMode.start('shapes')">
+        <span class="baby-category-icon">🔷</span>
+        <span class="baby-category-name">Shapes</span>
+      </button>
+      <button class="baby-category-btn" onclick="BabyMode.start('numbers')">
+        <span class="baby-category-icon">🔢</span>
+        <span class="baby-category-name">Numbers</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Activity Area -->
+  <div id="baby-activity" class="baby-screen hidden">
+    <div class="baby-activity-wrap">
+      <p class="baby-question-text" id="baby-question">Tap the DOG! 🐕</p>
+      <div class="baby-items-grid" id="baby-items-grid"></div>
+      <div style="margin-top:16px;">
+        <div class="score-pill" style="display:inline-block;">⭐ <span id="baby-score">0</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PEP SCREEN -->
+<div id="screen-pep" class="screen">
+  <div class="pep-header">
+    <button class="back-btn" style="position:absolute;left:24px;top:24px;" onclick="App.showScreen('screen-home')">← Back</button>
+    <div class="pep-badge">🇯🇲 Caribbean · PEP Preparation</div>
+    <h2 class="pep-title">PEP Practice Zone</h2>
+    <p class="pep-subtitle">Primary Exit Profile · Grades 4–6</p>
+  </div>
+
+  <div class="pep-info-box" style="margin-top:20px;">
+    <div class="pep-info-icon">💡</div>
+    <div class="pep-info-text">
+      Practice PEP style questions covering all subjects tested in the Primary Exit Profile examination.
+      Samara AI will help explain every answer! 🌟
+    </div>
+  </div>
+
+  <div class="pep-subjects-grid">
+    <div class="pep-subject-card" data-pep="math" onclick="PEP.openSubject('math')">
+      <div class="pep-subject-icon">🔢</div>
+      <div class="pep-subject-name">Mathematics</div>
+      <div class="pep-subject-count">Numbers, Fractions, Geometry</div>
+    </div>
+    <div class="pep-subject-card" data-pep="language" onclick="PEP.openSubject('language')">
+      <div class="pep-subject-icon">📚</div>
+      <div class="pep-subject-name">Language Arts</div>
+      <div class="pep-subject-count">Reading, Writing, Grammar</div>
+    </div>
+    <div class="pep-subject-card" data-pep="science" onclick="PEP.openSubject('science')">
+      <div class="pep-subject-icon">🔬</div>
+      <div class="pep-subject-name">Science</div>
+      <div class="pep-subject-count">Living Things, Earth, Energy</div>
+    </div>
+    <div class="pep-subject-card" data-pep="social" onclick="PEP.openSubject('social')">
+      <div class="pep-subject-icon">🌍</div>
+      <div class="pep-subject-name">Social Studies</div>
+      <div class="pep-subject-count">Caribbean History & Geography</div>
+    </div>
+    <div class="pep-subject-card" data-pep="general" onclick="PEP.openSubject('general')">
+      <div class="pep-subject-icon">🧠</div>
+      <div class="pep-subject-name">General Knowledge</div>
+      <div class="pep-subject-count">Current Affairs & Culture</div>
+    </div>
+    <div class="pep-subject-card" data-pep="practice" onclick="PEP.openSubject('practice')">
+      <div class="pep-subject-icon">📝</div>
+      <div class="pep-subject-name">Practice Test</div>
+      <div class="pep-subject-count">Full Mock PEP Exam</div>
+    </div>
+  </div>
+</div>
 <!-- TOAST -->
 
 <div id="toast" class="toast hidden"></div>
@@ -1211,6 +1591,533 @@ setTimeout(()=>App.updateSearchSuggestions(), 500);
 }catch(e){console.error('Boot error:',e);}
 });
 </script>
+<script>
 
+// ============================================================
+// SOUND & VOICE SYSTEM
+// ============================================================
+const SoundSystem = {
+  enabled: true,
+  speechEnabled: true,
+  voices: [],
+
+  init() {
+    // Load available voices
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        this.voices = window.speechSynthesis.getVoices();
+      };
+      this.voices = window.speechSynthesis.getVoices();
+    }
+    // Add sound toggle button
+    const btn = document.createElement('button');
+    btn.className = 'sound-toggle';
+    btn.id = 'sound-toggle-btn';
+    btn.textContent = '🔊 Sound ON';
+    btn.onclick = () => this.toggle();
+    document.body.appendChild(btn);
+    // Add voice input button to chat
+    this.addVoiceInput();
+  },
+
+  toggle() {
+    this.enabled = !this.enabled;
+    const btn = document.getElementById('sound-toggle-btn');
+    if (btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+  },
+
+  // Speak text aloud
+  speak(text, rate = 0.9, pitch = 1.1) {
+    if (!this.speechEnabled || !this.enabled) return;
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.rate = rate;
+    utt.pitch = pitch;
+    utt.volume = 0.9;
+    // Try to find a good voice
+    const preferred = this.voices.find(v =>
+      v.name.includes('Google') || v.name.includes('Female') || v.lang.startsWith('en')
+    );
+    if (preferred) utt.voice = preferred;
+    window.speechSynthesis.speak(utt);
+  },
+
+  // Speak for babies — slower and higher pitch
+  speakBaby(text) {
+    this.speak(text, 0.7, 1.3);
+  },
+
+  // Play sound effects using Web Audio API
+  playTone(type) {
+    if (!this.enabled) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'correct') {
+        // Happy ascending tones
+        osc.frequency.setValueAtTime(523, ctx.currentTime);
+        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+      } else if (type === 'wrong') {
+        // Low sad tone
+        osc.frequency.setValueAtTime(200, ctx.currentTime);
+        osc.frequency.setValueAtTime(150, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+      } else if (type === 'celebrate') {
+        // Celebration fanfare
+        const notes = [523, 659, 784, 1047];
+        notes.forEach((freq, i) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.connect(g); g.connect(ctx.destination);
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.12);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.3);
+          o.start(ctx.currentTime + i * 0.12);
+          o.stop(ctx.currentTime + i * 0.12 + 0.3);
+        });
+      } else if (type === 'tap') {
+        // Soft tap for baby
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+      }
+    } catch(e) { /* Audio not supported */ }
+  },
+
+  // Add voice input button to chat
+  addVoiceInput() {
+    setTimeout(() => {
+      const inputRow = document.querySelector('.ai-chat-input-row');
+      if (inputRow && !document.getElementById('voice-input-btn')) {
+        const btn = document.createElement('button');
+        btn.className = 'voice-input-btn';
+        btn.id = 'voice-input-btn';
+        btn.innerHTML = '🎤';
+        btn.title = 'Speak your answer';
+        btn.onclick = () => this.startVoiceInput();
+        inputRow.insertBefore(btn, inputRow.querySelector('.ai-send-btn'));
+      }
+    }, 1000);
+  },
+
+  // Voice input using Web Speech API
+  startVoiceInput() {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      if (typeof App !== 'undefined') App.toast('Voice input not supported on this browser 😔');
+      return;
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+
+    const btn = document.getElementById('voice-input-btn');
+    if (btn) btn.classList.add('listening');
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      const input = document.getElementById('ai-chat-input');
+      if (input) { input.value = transcript; }
+      if (btn) btn.classList.remove('listening');
+      if (typeof AITutor !== 'undefined') AITutor.sendMessage();
+    };
+
+    recognition.onerror = () => {
+      if (btn) btn.classList.remove('listening');
+    };
+
+    recognition.onend = () => {
+      if (btn) btn.classList.remove('listening');
+    };
+
+    recognition.start();
+  }
+};
+  // ============================================================
+// BABY MODE (Ages 0-3)
+// ============================================================
+const BabyMode = {
+
+  score: 0,
+  current: null,
+  category: null,
+
+  // Content for each category
+  content: {
+    animals: [
+      { name:'Dog',      emoji:'🐕', sound:'Woof woof!',    color:'#FF9B3F' },
+      { name:'Cat',      emoji:'🐈', sound:'Meow meow!',    color:'#C77DFF' },
+      { name:'Cow',      emoji:'🐄', sound:'Moo moo!',      color:'#FFD93D' },
+      { name:'Duck',     emoji:'🦆', sound:'Quack quack!',  color:'#7EC8E3' },
+      { name:'Lion',     emoji:'🦁', sound:'Roar!',         color:'#FF6B6B' },
+      { name:'Elephant', emoji:'🐘', sound:'Trumpet!',      color:'#6BCB77' },
+      { name:'Frog',     emoji:'🐸', sound:'Ribbit ribbit!',color:'#6BCB77' },
+      { name:'Bird',     emoji:'🐦', sound:'Tweet tweet!',  color:'#7EC8E3' },
+    ],
+    colors: [
+      { name:'Red',    emoji:'🔴', sound:'Red! Like apples!',    color:'#FF6B6B' },
+      { name:'Blue',   emoji:'🔵', sound:'Blue! Like the sky!',  color:'#7EC8E3' },
+      { name:'Yellow', emoji:'🟡', sound:'Yellow! Like the sun!',color:'#FFD93D' },
+      { name:'Green',  emoji:'🟢', sound:'Green! Like grass!',   color:'#6BCB77' },
+      { name:'Orange', emoji:'🟠', sound:'Orange! Like oranges!',color:'#FF9B3F' },
+      { name:'Purple', emoji:'🟣', sound:'Purple! So pretty!',   color:'#C77DFF' },
+    ],
+    shapes: [
+      { name:'Circle',   emoji:'⭕', sound:'Circle! Round and round!',    color:'#FF6B6B' },
+      { name:'Square',   emoji:'🟥', sound:'Square! Four equal sides!',   color:'#7EC8E3' },
+      { name:'Triangle', emoji:'🔺', sound:'Triangle! Three corners!',    color:'#FFD93D' },
+      { name:'Star',     emoji:'⭐', sound:'Star! You are a star!',        color:'#FF9B3F' },
+      { name:'Heart',    emoji:'❤️', sound:'Heart! Full of love!',         color:'#FF6B6B' },
+      { name:'Diamond',  emoji:'💎', sound:'Diamond! So sparkly!',         color:'#7EC8E3' },
+    ],
+    numbers: [
+      { name:'One',   emoji:'1️⃣', sound:'One! 1! Count with me! One!',         color:'#FF6B6B' },
+      { name:'Two',   emoji:'2️⃣', sound:'Two! 1, 2! Great counting!',          color:'#7EC8E3' },
+      { name:'Three', emoji:'3️⃣', sound:'Three! 1, 2, 3! Wonderful!',          color:'#FFD93D' },
+      { name:'Four',  emoji:'4️⃣', sound:'Four! 1, 2, 3, 4! Amazing!',          color:'#6BCB77' },
+      { name:'Five',  emoji:'5️⃣', sound:'Five! 1, 2, 3, 4, 5! You did it!',   color:'#FF9B3F' },
+    ]
+  },
+
+  start(category) {
+    this.category = category;
+    this.score = 0;
+    document.getElementById('baby-score').textContent = '0';
+    document.getElementById('baby-categories').classList.add('hidden');
+    document.getElementById('baby-activity').classList.remove('hidden');
+
+    const labels = {
+      animals: 'Animals 🐾',
+      colors:  'Colors 🎨',
+      shapes:  'Shapes 🔷',
+      numbers: 'Numbers 🔢'
+    };
+    document.getElementById('baby-screen-title').textContent = labels[category];
+    this.nextQuestion();
+  },
+
+  nextQuestion() {
+    const items = this.content[this.category];
+    // Pick correct answer
+    const correct = items[Math.floor(Math.random() * items.length)];
+    this.current = correct;
+
+    // Pick 3 wrong answers
+    const others = items.filter(i => i.name !== correct.name);
+    const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
+    const all = [correct, ...shuffled].sort(() => Math.random() - 0.5);
+
+    // Set question text
+    const questions = {
+      animals: `Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
+      colors:  `Tap the color ${correct.name.toUpperCase()}! ${correct.emoji}`,
+      shapes:  `Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
+      numbers: `Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`
+    };
+    document.getElementById('baby-question').textContent = questions[this.category];
+
+    // Speak the question
+    SoundSystem.speakBaby(`Tap the ${correct.name}!`);
+
+    // Render items
+    const grid = document.getElementById('baby-items-grid');
+    grid.innerHTML = '';
+    all.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'baby-item-btn';
+      btn.innerHTML = `
+        <div class="baby-item-emoji">${item.emoji}</div>
+        <div class="baby-item-word">${item.name}</div>`;
+      btn.onclick = () => this.answer(item, btn);
+      grid.appendChild(btn);
+    });
+  },
+
+  answer(item, btn) {
+    SoundSystem.playTone('tap');
+    if (item.name === this.current.name) {
+      // Correct!
+      btn.classList.add('correct-baby');
+      this.score += 10;
+      document.getElementById('baby-score').textContent = this.score;
+      SoundSystem.playTone('correct');
+      SoundSystem.speakBaby(`Yes! That is the ${item.name}! ${item.sound} Amazing!`);
+      this.celebrate(item);
+      setTimeout(() => this.nextQuestion(), 2500);
+    } else {
+      // Wrong
+      btn.classList.add('wrong-baby');
+      SoundSystem.playTone('wrong');
+      SoundSystem.speakBaby(`Try again! Find the ${this.current.name}!`);
+      setTimeout(() => btn.classList.remove('wrong-baby'), 600);
+    }
+  },
+
+  celebrate(item) {
+    const div = document.createElement('div');
+    div.className = 'baby-celebrate';
+    div.innerHTML = `
+      <div class="baby-celebrate-inner">
+        <span class="baby-celebrate-emoji">${item.emoji}</span>
+        <div class="baby-celebrate-text">⭐ ${item.name}! ⭐</div>
+        <div style="font-size:1.2rem;color:rgba(255,255,255,0.9);margin-top:8px;">${item.sound}</div>
+      </div>`;
+    document.body.appendChild(div);
+    SoundSystem.playTone('celebrate');
+    setTimeout(() => div.remove(), 2000);
+  },
+
+  backToCategories() {
+    document.getElementById('baby-categories').classList.remove('hidden');
+    document.getElementById('baby-activity').classList.add('hidden');
+  }
+};
+
+
+// ============================================================
+// PEP QUESTION BANK
+// ============================================================
+const PEP = {
+
+  questions: {
+    math: [
+      { q:'What is 245 + 378?', a:makeA('623',['613','633','523']), c:'623', h:'Add the ones first: 5+8=13, carry 1. Then tens: 4+7+1=12, carry 1. Hundreds: 2+3+1=6.' },
+      { q:'What is 1000 - 367?', a:makeA('633',['633','637','733']), c:'633', h:'Borrow from the thousands. 1000 - 367 = 633.' },
+      { q:'What is 24 × 5?', a:makeA('120',['100','115','125']), c:'120', h:'24 × 5 = 24 × 10 ÷ 2 = 240 ÷ 2 = 120.' },
+      { q:'What fraction of 20 is 5?', a:makeA('¼',['⅕','½','⅓']), c:'¼', h:'5 out of 20 = 5/20 = 1/4.' },
+      { q:'What is the perimeter of a square with sides of 6cm?', a:makeA('24cm',['12cm','36cm','18cm']), c:'24cm', h:'Perimeter = 4 × side = 4 × 6 = 24cm.' },
+      { q:'Round 4,567 to the nearest hundred.', a:makeA('4,600',['4,500','4,570','5,000']), c:'4,600', h:'Look at the tens digit (6). Since 6 ≥ 5, round up.' },
+      { q:'What is 15% of 200?', a:makeA('30',['25','35','15']), c:'30', h:'15% = 15/100. 15/100 × 200 = 30.' },
+      { q:'A triangle has angles of 60° and 80°. What is the third angle?', a:makeA('40°',['50°','30°','20°']), c:'40°', h:'Angles in a triangle add up to 180°. 180 - 60 - 80 = 40°.' },
+      { q:'What is the area of a rectangle 8cm long and 5cm wide?', a:makeA('40cm²',['26cm²','13cm²','80cm²']), c:'40cm²', h:'Area = length × width = 8 × 5 = 40cm².' },
+      { q:'What is 3/4 + 1/4?', a:makeA('1',['¾','½','1¼']), c:'1', h:'Same denominator: 3/4 + 1/4 = 4/4 = 1.' },
+    ],
+
+    language: [
+      { q:'Which sentence is written correctly?', a:makeA('She went to the market yesterday.', ['she went to the market yesterday.','She went to the market Yesterday.','She Went to the market yesterday.']), c:'She went to the market yesterday.', h:'Sentences start with a capital letter. Only proper nouns and the first word are capitalized.' },
+      { q:'What is the plural of "child"?', a:makeA('children',['childs','childrens','childs']), c:'children', h:'Child is an irregular plural. The plural is children, not childs.' },
+      { q:'Choose the correct word: "The dog wagged ___ tail."', a:makeA('its',['it\'s','their','his']), c:'its', h:'"Its" (no apostrophe) shows possession. "It\'s" means "it is".' },
+      { q:'What type of word is "quickly"?', a:makeA('Adverb',['Adjective','Noun','Verb']), c:'Adverb', h:'Adverbs describe HOW something is done. "Quickly" describes how the action happened.' },
+      { q:'Which word is a synonym for "happy"?', a:makeA('joyful',['sad','angry','worried']), c:'joyful', h:'Synonyms are words with similar meanings. Joyful means very happy.' },
+      { q:'What is the main idea of a paragraph?', a:makeA('The most important point the paragraph makes',['The first sentence','The last sentence','The longest sentence']), c:'The most important point the paragraph makes', h:'The main idea is what the whole paragraph is about — usually found in the topic sentence.' },
+      { q:'Choose the correct punctuation: "What time is it___"', a:makeA('?',['.',',','!']), c:'?', h:'Questions end with a question mark (?).' },
+      { q:'What is the past tense of "run"?', a:makeA('ran',['runned','runs','running']), c:'ran', h:'"Run" is an irregular verb. Its past tense is "ran" not "runned".' },
+      { q:'Which word is an antonym (opposite) of "ancient"?', a:makeA('modern',['old','historic','past']), c:'modern', h:'Ancient means very old. The opposite is modern (new/current).' },
+      { q:'A story\'s "setting" refers to:', a:makeA('Where and when the story takes place',['The main character','The problem in the story','How the story ends']), c:'Where and when the story takes place', h:'Setting = the time and place where a story happens.' },
+    ],
+
+    science: [
+      { q:'What gas do plants absorb from the air to make food?', a:makeA('Carbon dioxide',['Oxygen','Nitrogen','Hydrogen']), c:'Carbon dioxide', h:'Plants absorb carbon dioxide (CO2) and use sunlight and water to make food through photosynthesis.' },
+      { q:'Which part of the plant makes seeds?', a:makeA('Flower',['Leaf','Root','Stem']), c:'Flower', h:'The flower is the reproductive part of the plant — it produces seeds.' },
+      { q:'What is the function of red blood cells?', a:makeA('Carry oxygen around the body',['Fight disease','Clot blood','Digest food']), c:'Carry oxygen around the body', h:'Red blood cells contain haemoglobin which carries oxygen from the lungs to all body cells.' },
+      { q:'Which type of rock is formed from cooled lava?', a:makeA('Igneous',['Sedimentary','Metamorphic','Limestone']), c:'Igneous', h:'Igneous rock forms when magma or lava cools and solidifies.' },
+      { q:'What is the process by which water turns into vapour?', a:makeA('Evaporation',['Condensation','Precipitation','Transpiration']), c:'Evaporation', h:'Evaporation is when liquid water is heated and turns into water vapour (gas).' },
+      { q:'Which planet is closest to the Sun?', a:makeA('Mercury',['Venus','Earth','Mars']), c:'Mercury', h:'Mercury is the first and smallest planet — closest to the Sun.' },
+      { q:'What does a thermometer measure?', a:makeA('Temperature',['Rainfall','Wind speed','Air pressure']), c:'Temperature', h:'A thermometer measures how hot or cold something is.' },
+      { q:'What is the largest organ in the human body?', a:makeA('Skin',['Heart','Brain','Liver']), c:'Skin', h:'The skin is the largest organ — it covers and protects the entire body.' },
+      { q:'Which force pulls objects towards the Earth?', a:makeA('Gravity',['Magnetism','Friction','Tension']), c:'Gravity', h:'Gravity is the force that pulls all objects with mass toward each other.' },
+      { q:'What is a food chain?', a:makeA('The order in which organisms eat each other',['A list of foods animals eat','How plants grow','The water cycle']), c:'The order in which organisms eat each other', h:'A food chain shows how energy passes from plants (producers) to animals (consumers).' },
+    ],
+
+    social: [
+      { q:'What is the capital city of Jamaica?', a:makeA('Kingston',['Montego Bay','Spanish Town','Mandeville']), c:'Kingston', h:'Kingston is the capital and largest city of Jamaica.' },
+      { q:'Which sea surrounds the Caribbean islands?', a:makeA('Caribbean Sea',['Atlantic Ocean','Pacific Ocean','Gulf of Mexico']), c:'Caribbean Sea', h:'The Caribbean Sea surrounds the islands of the Caribbean region.' },
+      { q:'Who brought enslaved Africans to the Caribbean?', a:makeA('European colonizers',['Asian traders','Native Americans','Arab merchants']), c:'European colonizers', h:'European countries (Britain, Spain, France, etc.) colonized the Caribbean and brought enslaved Africans to work on plantations.' },
+      { q:'What crop was most important in the Caribbean during colonialism?', a:makeA('Sugar cane',['Coffee','Tobacco','Cotton']), c:'Sugar cane', h:'Sugar cane was the most valuable crop — Caribbean islands were known as "sugar islands".' },
+      { q:'What does CARICOM stand for?', a:makeA('Caribbean Community',['Caribbean Commerce','Caribbean Council','Caribbean Corporation']), c:'Caribbean Community', h:'CARICOM = Caribbean Community — an organization of Caribbean nations working together.' },
+      { q:'Which is the largest island in the Caribbean?', a:makeA('Cuba',['Jamaica','Haiti','Trinidad']), c:'Cuba', h:'Cuba is the largest island in the Caribbean by both area and population.' },
+      { q:'What is the name of Jamaica\'s national hero who fought for workers\' rights?', a:makeA('Alexander Bustamante',['Norman Manley','Marcus Garvey','Paul Bogle']), c:'Alexander Bustamante', h:'Sir Alexander Bustamante founded the Bustamante Industrial Trade Union and was Jamaica\'s first Prime Minister.' },
+      { q:'What type of government does Jamaica have?', a:makeA('Parliamentary democracy',['Republic','Monarchy only','Dictatorship']), c:'Parliamentary democracy', h:'Jamaica is a parliamentary democracy with a Prime Minister as head of government and the British monarch as head of state.' },
+      { q:'What is the Caribbean\'s main source of income today?', a:makeA('Tourism',['Sugar','Oil','Mining']), c:'Tourism', h:'Tourism is the largest industry in most Caribbean nations today.' },
+      { q:'Which Caribbean island nation was the first to gain independence?', a:makeA('Haiti',['Jamaica','Trinidad','Barbados']), c:'Haiti', h:'Haiti gained independence in 1804 after a successful slave revolution — the only successful slave revolt in history.' },
+    ],
+
+    general: [
+      { q:'What is the national bird of Jamaica?', a:makeA('Doctor Bird (Streamertail Hummingbird)',['Flamingo','Pelican','Parrot']), c:'Doctor Bird (Streamertail Hummingbird)', h:'The Doctor Bird (Red-billed Streamertail) is Jamaica\'s national bird — found only in Jamaica!' },
+      { q:'What are the colors of the Jamaican flag?', a:makeA('Black, gold and green',['Red, white and blue','Blue, white and green','Black, red and gold']), c:'Black, gold and green', h:'Jamaica\'s flag has a gold cross with black triangles on the sides and green triangles top and bottom.' },
+      { q:'What is Jamaica\'s national motto?', a:makeA('Out of Many, One People',['Land of Wood and Water','Unity is Strength','Forward Ever, Backward Never']), c:'Out of Many, One People', h:'Jamaica\'s motto "Out of Many, One People" reflects its diverse multicultural heritage.' },
+      { q:'Who is known as the "Father of the Nation" in Jamaica?', a:makeA('Norman Washington Manley',['Alexander Bustamante','Marcus Garvey','Paul Bogle']), c:'Norman Washington Manley', h:'Norman Washington Manley founded the People\'s National Party and championed Jamaican independence.' },
+      { q:'What is the name of Jamaica\'s highest mountain?', a:makeA('Blue Mountain Peak',['John Crow Mountains','Dunn\'s River','Mount Rosalie']), c:'Blue Mountain Peak', h:'Blue Mountain Peak at 2,256m is the highest point in Jamaica — famous for Blue Mountain coffee!' },
+      { q:'In what year did Jamaica gain independence?', a:makeA('1962',['1958','1970','1944']), c:'1962', h:'Jamaica gained independence from Britain on August 6, 1962.' },
+      { q:'What is the currency of Jamaica?', a:makeA('Jamaican Dollar',['Caribbean Dollar','Jamaican Pound','Jamaican Peso']), c:'Jamaican Dollar', h:'Jamaica\'s currency is the Jamaican Dollar (JMD or J$).' },
+      { q:'Which Jamaican is considered the fastest man in history?', a:makeA('Usain Bolt',['Asafa Powell','Yohan Blake','Michael Frater']), c:'Usain Bolt', h:'Usain Bolt holds world records in the 100m (9.58s) and 200m (19.19s) — the fastest human ever!' },
+      { q:'What is Jamaica\'s national dish?', a:makeA('Ackee and Saltfish',['Jerk Chicken','Rice and Peas','Curry Goat']), c:'Ackee and Saltfish', h:'Ackee and Saltfish is Jamaica\'s national dish — ackee is also the national fruit!' },
+      { q:'What does the acronym PEP stand for in Jamaica\'s education system?', a:makeA('Primary Exit Profile',['Primary Education Programme','Primary Exam Profile','Primary Exit Programme']), c:'Primary Exit Profile', h:'PEP (Primary Exit Profile) replaced GSAT as the primary school leaving examination in Jamaica.' },
+    ],
+
+    practice: [] // Will be filled with mixed questions
+  },
+
+  currentSubject: null,
+  currentQuestions: [],
+  currentIndex: 0,
+  correct: 0,
+
+  openSubject(subject) {
+    this.currentSubject = subject;
+    this.correct = 0;
+    this.currentIndex = 0;
+
+    // For practice test mix all subjects
+    if (subject === 'practice') {
+      const all = [
+        ...this.questions.math.slice(0,3),
+        ...this.questions.language.slice(0,3),
+        ...this.questions.science.slice(0,2),
+        ...this.questions.social.slice(0,2),
+        ...this.questions.general.slice(0,2)
+      ].sort(() => Math.random() - 0.5);
+      this.currentQuestions = all;
+    } else {
+      this.currentQuestions = [...this.questions[subject]].sort(() => Math.random() - 0.5);
+    }
+
+    // Store in State for quiz engine
+    State.questions = this.currentQuestions.map((q, i) => ({
+      text: q.q,
+      answers: q.a,
+      correctValue: q.c,
+      hint: q.h
+    }));
+    State.qIndex = 0;
+    State.correct = 0;
+    State.answered = false;
+    State.subject = 'pep-' + subject;
+    State._currentWorld = { id: 1, name: 'PEP ' + subject };
+    State.stageIndex = 0;
+    State.worldIndex = 0;
+
+    // Update quiz badge
+    const labels = {
+      math:'PEP Mathematics',language:'PEP Language Arts',
+      science:'PEP Science',social:'PEP Social Studies',
+      general:'PEP General Knowledge',practice:'PEP Practice Test'
+    };
+    const badge = document.getElementById('quiz-subject-badge');
+    if (badge) badge.textContent = labels[subject] || 'PEP';
+
+    document.getElementById('quiz-q-total').textContent = State.questions.length;
+    App.showScreen('screen-quiz');
+    App.renderQ();
+    App.updateScores();
+  }
+};
+
+// Make makeA available for PEP (it's defined in main script)
+// PEP uses the same makeA helper from the main script
+
+
+// ============================================================
+// PATCH APP — Add sound, baby mode, PEP to navigation
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    if (typeof App === 'undefined') return;
+
+    // Initialize sound system
+    SoundSystem.init();
+
+    // Add PEP button to homepage header
+    const headerBtns = document.querySelector('.header-btns');
+    if (headerBtns && !document.getElementById('btn-pep')) {
+      const pepBtn = document.createElement('button');
+      pepBtn.id = 'btn-pep';
+      pepBtn.className = 'btn btn-primary';
+      pepBtn.style.background = 'linear-gradient(135deg, #C77DFF, #7928CA)';
+      pepBtn.innerHTML = '🇯🇲 PEP';
+      pepBtn.onclick = () => App.showScreen('screen-pep');
+      headerBtns.appendChild(pepBtn);
+    }
+
+    // Override selectAge to open baby screen for 0-3
+    const originalSelectAge = App.selectAge.bind(App);
+    App.selectAge = function(g, toast=true) {
+      if (g === '0-3') {
+        State.ageGroup = '0-3';
+        document.querySelectorAll('.age-card').forEach(c =>
+          c.classList.toggle('selected', c.dataset.age === '0-3')
+        );
+        App.showScreen('screen-baby');
+        SoundSystem.speakBaby('Welcome to Baby World! Tap what you want to learn!');
+        return;
+      }
+      originalSelectAge(g, toast);
+    };
+
+    // Patch selectAnswer to add sounds
+    const originalSelectAnswer = App.selectAnswer.bind(App);
+    App.selectAnswer = function(ans, q, btnEl) {
+      if (ans.isCorrect) {
+        SoundSystem.playTone('correct');
+        SoundSystem.speak(App.tutorMsg('correct', '') || 'Correct! Great job!');
+      } else {
+        SoundSystem.playTone('wrong');
+      }
+      originalSelectAnswer(ans, q, btnEl);
+    };
+
+    // Patch finishStage to add celebration sound
+    const originalFinishStage = App.finishStage.bind(App);
+    App.finishStage = async function() {
+      const accuracy = State.correct / State.questions.length;
+      if (accuracy >= 0.8) {
+        SoundSystem.playTone('celebrate');
+        SoundSystem.speak('Stage complete! Amazing work!');
+      }
+      await originalFinishStage();
+    };
+
+    // Patch renderQ to speak questions aloud
+    const originalRenderQ = App.renderQ.bind(App);
+    App.renderQ = function() {
+      originalRenderQ();
+      setTimeout(() => {
+        const q = State.questions[State.qIndex];
+        if (q && SoundSystem.enabled) {
+          SoundSystem.speak(q.text, 0.85, 1.05);
+        }
+      }, 300);
+    };
+
+    // Add PEP to search database
+    if (typeof SearchDB !== 'undefined') {
+      SearchDB.push(
+        {k:['pep','primary exit','exit profile','primary school exam','gsat'],s:'pep',label:'PEP Preparation',icon:'🇯🇲'},
+        {k:['jamaica','jamaican','caribbean exam','caribbean school'],s:'pep',label:'PEP Caribbean',icon:'🌴'},
+        {k:['baby','babies','toddler','0-3','infant'],s:'baby',label:'Baby World',icon:'🍼'}
+      );
+    }
+
+    // Patch smartSearch to handle pep and baby
+    const originalSearchTopic = App.searchTopic.bind(App);
+    App.searchTopic = function() {
+      const v = document.getElementById('topic-input')?.value.trim();
+      if (!v) { App.toast('Type a topic first! 🔍'); return; }
+      const result = smartSearch(v);
+      if (result?.s === 'pep') { App.showScreen('screen-pep'); return; }
+      if (result?.s === 'baby') { App.showScreen('screen-baby'); return; }
+      originalSearchTopic();
+    };
+
+    console.log('Upgrade 3 installed: Sound, Voice, Baby Mode, PEP ✅');
+
+  }, 700);
+});
+<script>
 </body>
 </html>
