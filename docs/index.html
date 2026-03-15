@@ -381,6 +381,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .ai-chat-window{width:calc(100vw - 36px);}
 .pricing-grid{grid-template-columns:1fr;}
 }
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 </style>
 </head>
 <body>
@@ -458,7 +459,6 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
   <div style="font-size:2.6rem;animation:bounce 2.2s ease-in-out infinite 0.4s;">🤖</div>
   <div style="font-size:2.6rem;animation:bounce 1.8s ease-in-out infinite 0.8s;">🌟</div>
 </div>
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 </div>
 
 <!-- ══ PRICING ══ -->
@@ -1037,17 +1037,20 @@ const Payments = {
 };
 
 // ── CLAUDE AI ────────────────────────────────────────────────
+// ── CLAUDE AI — via Cloudflare Worker (free, secure) ─────────
+const AI_WORKER = 'https://samara-proxy.learningwithsamara.workers.dev';
+
 async function callClaudeAI(userMessage, ageGroup, systemOverride, maxTokens=350) {
   const sys = systemOverride || `You are Samara AI, an expert tutor for a ${ageGroup}-year-old. Be encouraging, age-appropriate, fun. Add 1-2 emojis. Answer directly and completely.`;
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch(AI_WORKER, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:maxTokens, system:sys, messages:[{role:'user',content:userMessage}]})
     });
     const d = await r.json();
     return d.content?.[0]?.text || null;
-  } catch(e) { return null; }
+  } catch(e) { console.error('AI error:',e); return null; }
 }
 
 // ── AI QUESTION GENERATOR ────────────────────────────────────
@@ -1164,10 +1167,16 @@ const SoundSystem = {
   speak(text,rate=0.88,pitch=1.15) {
     if(!this.enabled||!('speechSynthesis' in window))return;
     window.speechSynthesis.cancel();
-    const utt=new SpeechSynthesisUtterance(text);utt.rate=rate;utt.pitch=pitch;utt.volume=1.0;
-    if(!this.selectedVoice)this.selectedVoice=this._pickBestVoice();
-    if(this.selectedVoice)utt.voice=this.selectedVoice;
-    window.speechSynthesis.speak(utt);
+    // 120ms delay after cancel fixes the "lik..." cutoff bug in Chrome
+    setTimeout(()=>{
+      const utt=new SpeechSynthesisUtterance(text);utt.rate=rate;utt.pitch=pitch;utt.volume=1.0;
+      if(!this.selectedVoice)this.selectedVoice=this._pickBestVoice();
+      if(this.selectedVoice)utt.voice=this.selectedVoice;
+      // Chrome bug: long speech pauses — keep it alive
+      const t=setInterval(()=>{if(!window.speechSynthesis.speaking){clearInterval(t);return;}window.speechSynthesis.pause();window.speechSynthesis.resume();},8000);
+      utt.onend=()=>clearInterval(t);utt.onerror=()=>clearInterval(t);
+      window.speechSynthesis.speak(utt);
+    },120);
   },
   speakBaby(text){this.speak(text,0.72,1.35);},
   speakPraise(text){this.speak(text,0.95,1.25);},
@@ -1345,7 +1354,7 @@ Rules:
 
     try {
       const messages = [...this.conversationHistory.slice(-8), {role:'user',content:txt}];
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:sys,messages})});
+      const r=await fetch(AI_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:sys,messages})});
       const d=await r.json();
       const reply=d.content?.[0]?.text;
       this.hideTyping();
@@ -1975,7 +1984,7 @@ const App = {
     }
 
     S.stageIndex=idx;S.currentWorld=world;
-    S.qIndex=0;S.correct=0;S.answered=false;
+    S.qIndex=0;S.correct=0;S.answered=false;S._finishing=false;
     AITutor.wrongStreak=0;AITutor.ageGroup=S.ageGroup;
     setText('quiz-subject-badge',`${S.subject} · World ${world.id} · Stage ${idx+1}`);
     App.updateScores();App.showScreen('screen-quiz');
@@ -2037,7 +2046,16 @@ const App = {
     App.updateScores();setTimeout(()=>App.nextQ(),2200);
   },
 
-  nextQ(){S.qIndex++;if(S.qIndex>=S.questions.length)App.finishStage();else App.renderQ();},
+  nextQ(){
+    if(S._finishing) return; // prevent double-call
+    S.qIndex++;
+    if(S.qIndex >= S.questions.length) {
+      S._finishing = true;
+      App.finishStage();
+    } else {
+      App.renderQ();
+    }
+  },
 
   async finishStage() {
     const total=S.questions.length;const acc=S.correct/total;const pct=Math.round(acc*100);
