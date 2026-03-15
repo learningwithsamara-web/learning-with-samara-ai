@@ -3055,7 +3055,8 @@ const Videos = {
       localStorage.setItem('samara_yt_cache_time', Date.now().toString());
     } catch(e) {}
   },
-    this.currentFilter = age;
+
+  filter(age) {
     this.activePlaylist = null;
     this.activeVideo = null;
     ['all','baby','junior','all-ages'].forEach(f => {
