@@ -533,11 +533,22 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:0.95rem;margin-bottom:4px;">Already paid? 🎉</div>
     <div style="color:rgba(255,255,255,0.55);font-size:0.82rem;">Email us at <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;font-weight:800;">edu@learningwithsamara.com</a> with your order confirmation and we'll activate your Pro account right away!</div>
   </div>
-  <!-- FAMILY PLAN -->
-  <div style="background:rgba(107,203,119,0.12);border-radius:18px;padding:20px 24px;margin-top:18px;border:1.5px solid rgba(107,203,119,0.3);">
+  <!-- FAMILY PLAN -->\n  <div style="background:rgba(107,203,119,0.12);border-radius:18px;padding:20px 24px;margin-top:18px;border:1.5px solid rgba(107,203,119,0.3);">
     <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin-bottom:4px;">👨‍👩‍👧 Family Plan — $7.99/month</div>
     <div style="color:rgba(255,255,255,0.75);font-size:0.88rem;margin-bottom:14px;">Up to 4 children · full Pro features for all · one family dashboard</div>
     <button class="btn btn-green" onclick="Payments.checkout('family')">Get Family Plan</button>
+  </div>
+
+  <!-- PROMO CODE -->
+  <div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:20px 24px;margin-top:18px;border:1.5px solid rgba(255,255,255,0.1);text-align:center;">
+    <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:1rem;margin-bottom:12px;">🎁 Have a promo code?</div>
+    <div style="display:flex;gap:9px;max-width:360px;margin:0 auto;">
+      <input id="promo-input" type="text" placeholder="Enter your code..." 
+        style="flex:1;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 18px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;outline:none;text-transform:uppercase;"
+        onkeydown="if(event.key==='Enter')PromoCode.redeem()" />
+      <button class="btn btn-gold" onclick="PromoCode.redeem()">Apply ✨</button>
+    </div>
+    <div id="promo-msg" style="margin-top:10px;font-size:0.85rem;min-height:20px;"></div>
   </div>
 </div>
 </div>
@@ -1127,6 +1138,24 @@ const LIMITS = {
 const Plan = {
   // ── Pro (paid) ─────────────────────────────────────────────
   isRealPro() { return localStorage.getItem('samara_pro') === 'true'; },
+
+  // ── Promo codes — share these with your children only! ────
+  PROMO_CODES: {
+    'SAMARA2026':   'Family Access',
+    'MYKIDS':       'Family Access',
+    'LEARNINGTIME': 'Family Access',
+  },
+
+  redeemCode(code) {
+    const match = this.PROMO_CODES[code.trim().toUpperCase()];
+    if(!match) return { ok:false, msg:'❌ Invalid code — please check and try again!' };
+    if(this.isRealPro()) return { ok:false, msg:'You already have Pro access!' };
+    localStorage.setItem('samara_pro', 'true');
+    localStorage.setItem('samara_plan', 'family');
+    localStorage.setItem('samara_pro_since', new Date().toISOString());
+    localStorage.setItem('samara_promo_used', code.toUpperCase());
+    return { ok:true, label:match };
+  },
   activate(plan) {
     localStorage.setItem('samara_pro', 'true');
     localStorage.setItem('samara_plan', plan);
@@ -3333,6 +3362,31 @@ const BabyTV = {
   }
 };
 window.BabyTV = BabyTV;
+// ── PROMO CODE ───────────────────────────────────────────────
+const PromoCode = {
+  redeem() {
+    const input = document.getElementById('promo-input');
+    const msg = document.getElementById('promo-msg');
+    const code = input?.value?.trim();
+    if(!code) { if(msg) msg.innerHTML = '<span style="color:#FF6B6B;">Please enter a code!</span>'; return; }
+    const result = Plan.redeemCode(code);
+    if(result.ok) {
+      if(msg) msg.innerHTML = `<span style="color:#6BCB77;">✅ Code accepted! ${result.label} unlocked!</span>`;
+      input.value = '';
+      App.updatePlanUI();
+      setTimeout(() => {
+        App.toast('🎉 Welcome to Samara Pro! Enjoy unlimited learning!', 4000);
+        App.showScreen('screen-home');
+      }, 1500);
+    } else {
+      if(msg) msg.innerHTML = `<span style="color:#FF6B6B;">${result.msg}</span>`;
+      input.style.borderColor = 'rgba(255,107,107,0.6)';
+      setTimeout(() => { if(input) input.style.borderColor = 'rgba(255,255,255,0.2)'; }, 2000);
+    }
+  }
+};
+window.PromoCode = PromoCode;
+
 const SearchDB=[
   {k:['add','addition','plus','sum'],s:'math',label:'Addition',icon:'➕'},
   {k:['subtract','minus','take away'],s:'math',label:'Subtraction',icon:'➖'},
