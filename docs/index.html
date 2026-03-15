@@ -1356,8 +1356,11 @@ const Payments = {
 // ── CLAUDE AI — via Cloudflare Worker ────────────────────────
 const AI_WORKER = 'https://samara-proxy.learningwithsamara.workers.dev';
 
-async function callClaudeAI(userMessage, ageGroup, systemOverride, maxTokens=350) {
-  const sys = systemOverride || `You are Samara AI, an expert tutor for a ${ageGroup}-year-old. Be encouraging, age-appropriate, fun. Add 1-2 emojis. Answer directly and completely.`;
+async function callClaudeAI(userMessage, ageGroup, systemOverride, maxTokens=800) {
+  const sys = systemOverride || `You are Samara AI, a fun and encouraging tutor for children ages 0-17. 
+Always answer questions directly and completely — never say you don't know.
+Explain step-by-step when needed. Use simple age-appropriate language.
+Add 1-2 emojis. Keep answers clear and engaging.`;
   try {
     const r = await fetch(AI_WORKER, {
       method: 'POST',
@@ -1370,22 +1373,17 @@ async function callClaudeAI(userMessage, ageGroup, systemOverride, maxTokens=350
       })
     });
     if(!r.ok) {
-      console.error('[AI] HTTP error:', r.status, await r.text());
+      console.error('[AI] HTTP error:', r.status);
       return null;
     }
     const d = await r.json();
-    if(d.error) {
-      console.error('[AI] API error:', d.error);
+    if(d.error || d.anthropic_error) {
+      console.error('[AI] Error:', d.error || d.anthropic_error);
       return null;
     }
-    const text = d.content?.[0]?.text;
-    if(!text) {
-      console.error('[AI] No text in response:', JSON.stringify(d));
-      return null;
-    }
-    return text;
+    return d.content?.[0]?.text || null;
   } catch(e) {
-    console.error('[AI] Fetch error:', e.message);
+    console.error('[AI] Fetch failed:', e.message);
     return null;
   }
 }
@@ -1797,7 +1795,7 @@ Rules:
 
     try {
       const messages = [...this.conversationHistory.slice(-8), {role:'user',content:txt}];
-      const r=await fetch(AI_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:400,system:sys,messages})});
+      const r=await fetch(AI_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,system:sys,messages})});
       if(!r.ok) throw new Error(`HTTP ${r.status}`);
       const d=await r.json();
       if(d.error) throw new Error(d.error.message||'API error');
