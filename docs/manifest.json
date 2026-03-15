@@ -1,7 +1,7 @@
 {
   "name": "Learning With Samara AI",
   "short_name": "Samara AI",
-  "description": "AI-powered learning for every child — ages 0 to 17.",
+  "description": "AI-powered learning for every child — ages 0 to 17. Explore, learn and grow with your tutor Samara!",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,15 +9,97 @@
   "background_color": "#0f0c29",
   "theme_color": "#302b63",
   "categories": ["education", "kids"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/icons/icon-144.png", "sizes": "144x144", "type": "image/png" },
-    { "src": "/icons/icon-96.png",  "sizes": "96x96",  "type": "image/png" }
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home screen — pick your age and subject"
+    },
+    {
+      "src": "/screenshots/quiz.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Quiz screen with AI tutor Samara"
+    }
   ],
   "shortcuts": [
-    { "name": "Start Learning", "url": "/?action=learn", "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] },
-    { "name": "PEP Practice",   "url": "/?action=pep",    "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] },
-    { "name": "Research",       "url": "/?action=research","icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] }
-  ]
+    {
+      "name": "Start Learning",
+      "short_name": "Learn",
+      "description": "Jump straight into a quiz",
+      "url": "/?action=learn",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "PEP Practice",
+      "short_name": "PEP",
+      "description": "Practise for your PEP exam",
+      "url": "/?action=pep",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Research Anything",
+      "short_name": "Research",
+      "description": "Ask Samara anything",
+      "url": "/?action=research",
+      "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }
