@@ -321,6 +321,42 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .baby-celebrate-inner{background:linear-gradient(135deg,#FFD93D,#FF9B3F);border-radius:28px;padding:36px;text-align:center;animation:pop-in 0.4s cubic-bezier(0.34,1.56,0.64,1);}
 .baby-celebrate-emoji{font-size:4.5rem;display:block;margin-bottom:8px;}
 .baby-celebrate-text{font-family:'Fredoka One',cursive;font-size:1.8rem;color:#fff;}
+/* ── PLAYHOUSE STYLES ── */
+.playhouse-wrap{max-width:600px;width:100%;margin:0 auto;padding:0 16px 24px;}
+.playhouse-house{position:relative;text-align:center;margin-bottom:8px;}
+.playhouse-title{font-family:'Fredoka One',cursive;font-size:2rem;color:#FFD93D;text-shadow:0 3px 12px rgba(0,0,0,0.4);margin-bottom:4px;animation:bounce-text 0.6s ease;}
+.playhouse-subtitle{font-family:'Fredoka One',cursive;font-size:1rem;color:rgba(255,255,255,0.8);margin-bottom:20px;}
+.playhouse-rooms{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.playhouse-room{border-radius:24px;padding:20px 14px;text-align:center;cursor:pointer;border:3px solid rgba(255,255,255,0.3);transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,0.2);}
+.playhouse-room:active{transform:scale(0.95);}
+.playhouse-room:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 16px 40px rgba(0,0,0,0.3);}
+.playhouse-room-icon{font-size:3.5rem;display:block;margin-bottom:8px;animation:float-icon 3s ease-in-out infinite;}
+.playhouse-room:nth-child(2) .playhouse-room-icon{animation-delay:0.5s;}
+.playhouse-room:nth-child(3) .playhouse-room-icon{animation-delay:1s;}
+.playhouse-room:nth-child(4) .playhouse-room-icon{animation-delay:1.5s;}
+.playhouse-room:nth-child(5) .playhouse-room-icon{animation-delay:2s;}
+.playhouse-room:nth-child(6) .playhouse-room-icon{animation-delay:2.5s;}
+@keyframes float-icon{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.playhouse-room-name{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.playhouse-room-desc{font-size:0.75rem;color:rgba(255,255,255,0.85);margin-top:3px;font-weight:700;}
+/* Playhouse activity screens */
+.playhouse-activity{max-width:580px;width:100%;margin:0 auto;padding:0 16px;}
+.playhouse-back{background:rgba(255,255,255,0.15);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;margin-bottom:16px;display:inline-block;}
+/* Music room */
+.music-btn{background:rgba(255,255,255,0.97);border-radius:20px;padding:20px;text-align:center;cursor:pointer;border:4px solid transparent;transition:transform 0.15s,box-shadow 0.15s;box-shadow:0 6px 20px rgba(0,0,0,0.12);}
+.music-btn:hover{transform:scale(1.06);}
+.music-btn.playing{border-color:#FFD93D;background:linear-gradient(135deg,#FFD93D,#FF9B3F);animation:baby-pop 0.3s ease;}
+.music-btn-icon{font-size:3rem;display:block;margin-bottom:6px;}
+.music-btn-name{font-family:'Fredoka One',cursive;font-size:1rem;color:#1A1A2E;}
+/* Story corner */
+.story-page{background:rgba(255,255,255,0.97);border-radius:24px;padding:24px;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,0.14);}
+.story-illustration{font-size:5rem;margin-bottom:12px;display:block;animation:float-icon 2s ease-in-out infinite;}
+.story-text{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#1A1A2E;line-height:1.6;margin-bottom:16px;}
+.story-next-btn{background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(255,155,63,0.4);}
+/* Art room */
+.color-swatch{width:72px;height:72px;border-radius:50%;cursor:pointer;border:5px solid rgba(255,255,255,0.5);transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 6px 20px rgba(0,0,0,0.2);}
+.color-swatch:hover,.color-swatch.selected{transform:scale(1.2);border-color:#fff;box-shadow:0 8px 28px rgba(0,0,0,0.3);}
+.canvas-area{background:#fff;border-radius:20px;min-height:180px;display:flex;align-items:center;justify-content:center;font-size:5rem;cursor:pointer;transition:background 0.3s;box-shadow:0 6px 20px rgba(0,0,0,0.12);margin:16px 0;border:4px solid rgba(255,255,255,0.3);}
 /* PEP */
 .pep-header{background:linear-gradient(135deg,#1a1a3e,#2d1b69);padding:22px;text-align:center;border-bottom:2px solid rgba(199,125,255,0.3);position:relative;}
 .pep-badge{display:inline-block;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:4px 14px;border-radius:50px;margin-bottom:8px;}
@@ -699,6 +735,10 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
       <button class="baby-category-btn" onclick="BabyMode.start('shapes')"><span class="baby-category-icon">🔷</span><span class="baby-category-name">Shapes</span></button>
       <button class="baby-category-btn" onclick="BabyMode.start('numbers')"><span class="baby-category-icon">🔢</span><span class="baby-category-name">Numbers</span></button>
     </div>
+    <!-- Playhouse button -->
+    <button onclick="App.showScreen('screen-playhouse')" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 8px 24px rgba(255,155,63,0.5);animation:pulse-av 2s ease-in-out infinite;">
+      🏠 Samara's Playhouse ✨
+    </button>
     <!-- Watch Samara videos button -->
     <button onclick="App.showScreen('screen-videos')" style="background:linear-gradient(135deg,#FF6B6B,#FF416C);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 32px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 6px 20px rgba(255,0,0,0.4);">
       📺 Samara TV ⭐🧠
@@ -713,6 +753,62 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
         <button class="btn btn-outline" style="margin-left:10px;" onclick="BabyMode.backToCategories()">← Back</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ SAMARA'S PLAYHOUSE ══ -->
+<div id="screen-playhouse" class="screen">
+  <div class="stars"></div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-baby')">← Baby World</button>
+    <h2 class="screen-title small">🏠 Samara's Playhouse</h2>
+  </div>
+
+  <!-- Main Hub -->
+  <div id="playhouse-hub" class="playhouse-wrap">
+    <div class="playhouse-house">
+      <div style="font-size:4rem;margin-bottom:4px;animation:float-icon 2s ease-in-out infinite;">🏠</div>
+      <div class="playhouse-title">Samara's Playhouse!</div>
+      <div class="playhouse-subtitle">Pick a room to explore! 🌟</div>
+    </div>
+    <div class="playhouse-rooms">
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#FF6B6B,#FF9B3F);" onclick="Playhouse.enter('art')">
+        <span class="playhouse-room-icon">🎨</span>
+        <div class="playhouse-room-name">Art Room</div>
+        <div class="playhouse-room-desc">Colors & drawing!</div>
+      </div>
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="Playhouse.enter('animals')">
+        <span class="playhouse-room-icon">🐾</span>
+        <div class="playhouse-room-name">Animal Park</div>
+        <div class="playhouse-room-desc">Meet the animals!</div>
+      </div>
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="Playhouse.enter('story')">
+        <span class="playhouse-room-icon">📖</span>
+        <div class="playhouse-room-name">Story Corner</div>
+        <div class="playhouse-room-desc">Magical stories!</div>
+      </div>
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#C77DFF,#7928CA);" onclick="Playhouse.enter('counting')">
+        <span class="playhouse-room-icon">🔢</span>
+        <div class="playhouse-room-name">Counting Garden</div>
+        <div class="playhouse-room-desc">Count with Samara!</div>
+      </div>
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);" onclick="Playhouse.enter('music')">
+        <span class="playhouse-room-icon">🎵</span>
+        <div class="playhouse-room-name">Music Room</div>
+        <div class="playhouse-room-desc">Songs & sounds!</div>
+      </div>
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);" onclick="Playhouse.enter('rainbow')">
+        <span class="playhouse-room-icon">🌈</span>
+        <div class="playhouse-room-name">Rainbow World</div>
+        <div class="playhouse-room-desc">Shapes & colors!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Room Activity Area (hidden until room selected) -->
+  <div id="playhouse-room-area" class="hidden" style="max-width:600px;margin:0 auto;padding:0 16px 24px;width:100%;">
+    <button class="playhouse-back" onclick="Playhouse.backToHub()">← Back to Playhouse</button>
+    <div id="playhouse-room-content"></div>
   </div>
 </div>
 
@@ -2313,6 +2409,7 @@ const App = {
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
     if(id==='screen-getapp') AITutor.hideFloat();
+    if(id==='screen-playhouse'){ AITutor.hideFloat(); Playhouse.backToHub(); }
   },
 
   showProGate(message) {
@@ -2674,7 +2771,412 @@ const App = {
   toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);}
 };
 
-// ── BABY MODE ────────────────────────────────────────────────
+// ── SAMARA'S PLAYHOUSE ───────────────────────────────────────
+const Playhouse = {
+
+  currentRoom: null,
+  storyPage: 0,
+  selectedColor: '#FF6B6B',
+  canvasEmoji: '🎨',
+
+  STORIES: [
+    {
+      pages: [
+        {emoji:'🌟', text:'Once upon a time, a little star named Samara lived in the sky!'},
+        {emoji:'🌙', text:'Every night, Samara would twinkle and shine for all the children below.'},
+        {emoji:'👶', text:'One night, a little baby looked up and smiled at Samara!'},
+        {emoji:'💛', text:'Samara twinkled extra bright — because being kind makes you shine! The End! ⭐'},
+      ]
+    },
+    {
+      pages: [
+        {emoji:'🐛', text:'A tiny caterpillar named Sam was munching on a green leaf.'},
+        {emoji:'🍎', text:'Sam ate and ate — apples, pears, bananas and more!'},
+        {emoji:'🏠', text:'Then Sam made a cozy cocoon and went to sleep...'},
+        {emoji:'🦋', text:'When Sam woke up — surprise! Sam was a beautiful butterfly! The End! 🌸'},
+      ]
+    },
+    {
+      pages: [
+        {emoji:'🦁', text:'Leo the lion cub was afraid of the dark forest.'},
+        {emoji:'🌲', text:'"I\'m scared," said Leo. "The trees look so big!"'},
+        {emoji:'⭐', text:'But then Leo saw the stars twinkling between the leaves.'},
+        {emoji:'😊', text:'"The stars are my friends!" Leo smiled and felt brave. The End! 🌟'},
+      ]
+    },
+  ],
+
+  MUSIC: [
+    {name:'Drum', icon:'🥁', sound:'boom', color:'#FF6B6B', notes:[200,200,200,300]},
+    {name:'Bell', icon:'🔔', sound:'ding', color:'#FFD93D', notes:[800,900,1000,800]},
+    {name:'Piano', icon:'🎹', sound:'do re mi', color:'#7EC8E3', notes:[523,587,659,523]},
+    {name:'Trumpet', icon:'🎺', sound:'toot', color:'#FF9B3F', notes:[400,500,600,500]},
+    {name:'Guitar', icon:'🎸', sound:'strum', color:'#6BCB77', notes:[330,440,550,440]},
+    {name:'Flute', icon:'🪈', sound:'tweet', color:'#C77DFF', notes:[700,800,900,700]},
+  ],
+
+  ANIMALS: [
+    {name:'Lion',     emoji:'🦁', sound:'ROAR!',        fact:'Lions live in groups called prides!'},
+    {name:'Elephant', emoji:'🐘', sound:'TRUMPET!',     fact:'Elephants never forget their friends!'},
+    {name:'Monkey',   emoji:'🐒', sound:'OOH OOH!',     fact:'Monkeys love to swing in trees!'},
+    {name:'Duck',     emoji:'🦆', sound:'QUACK QUACK!', fact:'Baby ducks are called ducklings!'},
+    {name:'Frog',     emoji:'🐸', sound:'RIBBIT!',      fact:'Frogs can jump really far!'},
+    {name:'Cat',      emoji:'🐈', sound:'MEOW!',        fact:'Cats sleep up to 16 hours a day!'},
+    {name:'Dog',      emoji:'🐕', sound:'WOOF WOOF!',   fact:'Dogs are humans\' best friends!'},
+    {name:'Cow',      emoji:'🐄', sound:'MOO MOO!',     fact:'Cows give us milk for drinking!'},
+    {name:'Bird',     emoji:'🦜', sound:'TWEET TWEET!', fact:'Birds can fly using their wings!'},
+    {name:'Fish',     emoji:'🐠', sound:'BLUB BLUB!',   fact:'Fish breathe underwater through gills!'},
+  ],
+
+  COLORS: [
+    {name:'Red',    hex:'#FF4444', emoji:'🍎'},
+    {name:'Orange', hex:'#FF9B3F', emoji:'🍊'},
+    {name:'Yellow', hex:'#FFD93D', emoji:'🌟'},
+    {name:'Green',  hex:'#6BCB77', emoji:'🌿'},
+    {name:'Blue',   hex:'#4A90D9', emoji:'💧'},
+    {name:'Purple', hex:'#C77DFF', emoji:'🔮'},
+    {name:'Pink',   hex:'#FF69B4', emoji:'🌸'},
+    {name:'Brown',  hex:'#8B4513', emoji:'🍫'},
+  ],
+
+  DRAW_EMOJIS: ['🌸','⭐','🌈','🦋','🌻','🎈','🍦','🐝','🌙','❤️','🍭','🌺'],
+
+  COUNTING: [
+    {num:1, emoji:'🍎', word:'ONE',   things:'one big apple'},
+    {num:2, emoji:'🐱', word:'TWO',   things:'two cute cats'},
+    {num:3, emoji:'⭐', word:'THREE', things:'three shiny stars'},
+    {num:4, emoji:'🦋', word:'FOUR',  things:'four butterflies'},
+    {num:5, emoji:'🌸', word:'FIVE',  things:'five flowers'},
+    {num:6, emoji:'🐝', word:'SIX',   things:'six busy bees'},
+    {num:7, emoji:'🌈', word:'SEVEN', things:'seven rainbow colours'},
+    {num:8, emoji:'🎈', word:'EIGHT', things:'eight balloons'},
+    {num:9, emoji:'🍦', word:'NINE',  things:'nine ice creams'},
+    {num:10,emoji:'⭐', word:'TEN',   things:'ten golden stars'},
+  ],
+
+  enter(room) {
+    this.currentRoom = room;
+    document.getElementById('playhouse-hub').classList.add('hidden');
+    document.getElementById('playhouse-room-area').classList.remove('hidden');
+    SoundSystem.playTone('tap');
+
+    switch(room) {
+      case 'art':     this.renderArtRoom(); break;
+      case 'animals': this.renderAnimalPark(); break;
+      case 'story':   this.storyPage=0; this.renderStoryCorner(); break;
+      case 'counting':this.renderCountingGarden(); break;
+      case 'music':   this.renderMusicRoom(); break;
+      case 'rainbow': this.renderRainbowWorld(); break;
+    }
+  },
+
+  backToHub() {
+    this.currentRoom = null;
+    document.getElementById('playhouse-hub').classList.remove('hidden');
+    document.getElementById('playhouse-room-area').classList.add('hidden');
+    document.getElementById('playhouse-room-content').innerHTML = '';
+  },
+
+  // 🎨 ART ROOM
+  renderArtRoom() {
+    const c = document.getElementById('playhouse-room-content');
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;">🎨 Art Room</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Pick a color then tap the canvas!</div>
+      </div>
+      <!-- Color swatches -->
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px;">
+        ${this.COLORS.map(col=>`
+          <div class="color-swatch" id="swatch-${col.name}"
+            style="background:${col.hex};"
+            onclick="Playhouse.pickColor('${col.hex}','${col.name}','${col.emoji}','swatch-${col.name}')">
+          </div>
+        `).join('')}
+      </div>
+      <!-- Canvas -->
+      <div class="canvas-area" id="art-canvas" onclick="Playhouse.stampCanvas()" title="Tap to draw!">
+        <span id="canvas-display" style="font-size:4rem;">🎨</span>
+      </div>
+      <div style="text-align:center;margin-top:8px;">
+        <div id="art-color-label" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;margin-bottom:10px;">Pick a color! 🎨</div>
+        <button onclick="Playhouse.clearCanvas()" style="background:rgba(255,255,255,0.15);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 20px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;">🗑️ Clear</button>
+      </div>`;
+    SoundSystem.speakBaby('Welcome to the Art Room! Pick a color!');
+  },
+
+  pickColor(hex, name, emoji, swatchId) {
+    this.selectedColor = hex;
+    this.canvasEmoji = emoji;
+    document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('selected'));
+    document.getElementById(swatchId)?.classList.add('selected');
+    document.getElementById('art-canvas').style.background = hex + '22';
+    document.getElementById('art-color-label').textContent = `You picked ${name}! ${emoji}`;
+    SoundSystem.speakBaby(`${name}!`);
+    SoundSystem.playTone('tap');
+  },
+
+  stampCanvas() {
+    const display = document.getElementById('canvas-display');
+    const emojis = this.DRAW_EMOJIS;
+    const picked = emojis[Math.floor(Math.random()*emojis.length)];
+    if(display) display.textContent = picked;
+    SoundSystem.playTone('correct');
+    SoundSystem.speakBaby('Beautiful!');
+  },
+
+  clearCanvas() {
+    const display = document.getElementById('canvas-display');
+    if(display) display.textContent = '🎨';
+    const canvas = document.getElementById('art-canvas');
+    if(canvas) canvas.style.background = '#fff';
+    SoundSystem.playTone('tap');
+  },
+
+  // 🐾 ANIMAL PARK
+  renderAnimalPark() {
+    const c = document.getElementById('playhouse-room-content');
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.6rem;">🐾 Animal Park</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Tap an animal to hear its sound!</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;">
+        ${this.ANIMALS.map(a=>`
+          <div onclick="Playhouse.meetAnimal('${a.name}','${a.emoji}','${a.sound}','${a.fact}')"
+            style="background:rgba(255,255,255,0.97);border-radius:20px;padding:16px 10px;text-align:center;cursor:pointer;transition:transform 0.15s;box-shadow:0 6px 20px rgba(0,0,0,0.12);border:3px solid transparent;"
+            onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:3rem;margin-bottom:6px;">${a.emoji}</div>
+            <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#1A1A2E;">${a.name}</div>
+          </div>
+        `).join('')}
+      </div>`;
+    SoundSystem.speakBaby('Welcome to the Animal Park! Tap an animal!');
+  },
+
+  meetAnimal(name, emoji, sound, fact) {
+    SoundSystem.playTone('celebrate');
+    SoundSystem.speakBaby(`${name}! ${sound} ${fact}`);
+    // Flash a popup
+    const div = document.createElement('div');
+    div.className = 'baby-celebrate';
+    div.innerHTML = `<div class="baby-celebrate-inner" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);">
+      <span class="baby-celebrate-emoji">${emoji}</span>
+      <div class="baby-celebrate-text">${name}!</div>
+      <div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin-top:6px;">${sound}</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.8);margin-top:6px;max-width:200px;">${fact}</div>
+    </div>`;
+    document.body.appendChild(div);
+    setTimeout(()=>div.remove(), 2500);
+  },
+
+  // 📖 STORY CORNER
+  renderStoryCorner() {
+    const c = document.getElementById('playhouse-room-content');
+    const stories = this.STORIES;
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Fredoka One',cursive;color:#7EC8E3;font-size:1.6rem;">📖 Story Corner</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Choose a story!</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        ${stories.map((s,i)=>`
+          <div onclick="Playhouse.startStory(${i})"
+            style="background:rgba(255,255,255,0.97);border-radius:20px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform 0.15s;box-shadow:0 6px 20px rgba(0,0,0,0.12);"
+            onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:2.5rem;">${s.pages[0].emoji}</div>
+            <div style="flex:1;">
+              <div style="font-family:'Fredoka One',cursive;font-size:1.05rem;color:#1A1A2E;">Story ${i+1}</div>
+              <div style="font-size:0.8rem;color:#7A7A9D;margin-top:2px;">${s.pages.length} pages · Tap to read!</div>
+            </div>
+            <div style="font-size:1.5rem;">▶️</div>
+          </div>
+        `).join('')}
+      </div>`;
+    SoundSystem.speakBaby('Welcome to the Story Corner! Pick a story!');
+  },
+
+  startStory(idx) {
+    this.currentStory = idx;
+    this.storyPage = 0;
+    this.renderStoryPage();
+  },
+
+  renderStoryPage() {
+    const story = this.STORIES[this.currentStory];
+    const page = story.pages[this.storyPage];
+    const isLast = this.storyPage >= story.pages.length - 1;
+    const c = document.getElementById('playhouse-room-content');
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:12px;">
+        <div style="font-family:'Fredoka One',cursive;color:#7EC8E3;font-size:1rem;">📖 Page ${this.storyPage+1} of ${story.pages.length}</div>
+      </div>
+      <div class="story-page">
+        <span class="story-illustration">${page.emoji}</span>
+        <div class="story-text">${page.text}</div>
+        ${isLast
+          ? `<button class="story-next-btn" onclick="Playhouse.renderStoryCorner()">🏠 Choose Another Story</button>`
+          : `<button class="story-next-btn" onclick="Playhouse.nextPage()">Next Page ▶</button>`
+        }
+      </div>`;
+    SoundSystem.speakBaby(page.text);
+  },
+
+  nextPage() {
+    this.storyPage++;
+    SoundSystem.playTone('tap');
+    this.renderStoryPage();
+  },
+
+  // 🔢 COUNTING GARDEN
+  renderCountingGarden() {
+    const c = document.getElementById('playhouse-room-content');
+    const item = this.COUNTING[Math.floor(Math.random()*this.COUNTING.length)];
+    this.currentCount = item;
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.6rem;">🔢 Counting Garden</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Tap the right number!</div>
+      </div>
+      <!-- Show the items to count -->
+      <div style="background:rgba(255,255,255,0.97);border-radius:24px;padding:24px;text-align:center;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,0.12);">
+        <div style="font-size:1.1rem;font-weight:800;color:#7A7A9D;margin-bottom:10px;">How many ${item.emoji} can you count?</div>
+        <div style="font-size:3rem;letter-spacing:6px;margin-bottom:10px;">${item.emoji.repeat(item.num)}</div>
+        <div style="font-family:'Fredoka One',cursive;color:#1A1A2E;font-size:1rem;">${item.things}</div>
+      </div>
+      <!-- Number buttons -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
+        ${this.getCountOptions(item.num).map(n=>`
+          <button onclick="Playhouse.checkCount(${n},${item.num},'${item.emoji}','${item.word}')"
+            style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:1.6rem;padding:18px 8px;border-radius:16px;border:none;cursor:pointer;box-shadow:0 6px 16px rgba(121,40,202,0.3);transition:transform 0.15s;"
+            onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+            ${n}
+          </button>
+        `).join('')}
+      </div>`;
+    SoundSystem.speakBaby(`Count the ${item.emoji.replace(/\uFE0F/g,'')}! How many are there?`);
+  },
+
+  getCountOptions(correct) {
+    const opts = new Set([correct]);
+    while(opts.size < 4) {
+      const n = Math.max(1, correct + Math.floor(Math.random()*5)-2);
+      if(n !== correct && n > 0) opts.add(n);
+    }
+    return [...opts].sort(()=>Math.random()-0.5);
+  },
+
+  checkCount(picked, correct, emoji, word) {
+    if(picked === correct) {
+      SoundSystem.playTone('celebrate');
+      SoundSystem.speakBaby(`Yes! ${word}! ${correct}! Amazing counting!`);
+      const div = document.createElement('div');
+      div.className = 'baby-celebrate';
+      div.innerHTML = `<div class="baby-celebrate-inner">
+        <span class="baby-celebrate-emoji">🌟</span>
+        <div class="baby-celebrate-text">${correct} ${word}! ⭐</div>
+        <div style="font-size:2rem;margin-top:8px;">${emoji.repeat(correct)}</div>
+      </div>`;
+      document.body.appendChild(div);
+      setTimeout(()=>{ div.remove(); this.renderCountingGarden(); }, 2500);
+    } else {
+      SoundSystem.playTone('wrong');
+      SoundSystem.speakBaby(`Try again! Count carefully!`);
+    }
+  },
+
+  // 🎵 MUSIC ROOM
+  renderMusicRoom() {
+    const c = document.getElementById('playhouse-room-content');
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;">🎵 Music Room</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Tap the instruments to play!</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+        ${this.MUSIC.map((m,i)=>`
+          <div class="music-btn" id="music-${i}" onclick="Playhouse.playInstrument(${i})">
+            <span class="music-btn-icon">${m.icon}</span>
+            <div class="music-btn-name">${m.name}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div id="music-feedback" style="text-align:center;margin-top:16px;font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.2rem;min-height:32px;"></div>`;
+    SoundSystem.speakBaby('Welcome to the Music Room! Tap an instrument!');
+  },
+
+  playInstrument(idx) {
+    const m = this.MUSIC[idx];
+    const btn = document.getElementById(`music-${idx}`);
+    if(btn){ btn.classList.add('playing'); setTimeout(()=>btn.classList.remove('playing'),400); }
+    // Play notes sequence
+    try {
+      const ctx = new(window.AudioContext||window.webkitAudioContext)();
+      m.notes.forEach((freq,i)=>{
+        const osc=ctx.createOscillator();
+        const gain=ctx.createGain();
+        osc.connect(gain);gain.connect(ctx.destination);
+        osc.frequency.value=freq;
+        osc.type=idx<=1?'square':'sine';
+        gain.gain.setValueAtTime(0.3,ctx.currentTime+i*0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.15+0.25);
+        osc.start(ctx.currentTime+i*0.15);
+        osc.stop(ctx.currentTime+i*0.15+0.25);
+      });
+    } catch(e){}
+    const fb = document.getElementById('music-feedback');
+    if(fb) fb.textContent = `${m.icon} ${m.name}! ${m.sound}! 🎵`;
+    SoundSystem.speakBaby(`${m.name}! ${m.sound}!`);
+  },
+
+  // 🌈 RAINBOW WORLD
+  renderRainbowWorld() {
+    const c = document.getElementById('playhouse-room-content');
+    const shapes = [
+      {name:'Circle',   emoji:'⭕', fact:'A circle is perfectly round!'},
+      {name:'Square',   emoji:'🟥', fact:'A square has 4 equal sides!'},
+      {name:'Triangle', emoji:'🔺', fact:'A triangle has 3 corners!'},
+      {name:'Star',     emoji:'⭐', fact:'Stars have 5 shiny points!'},
+      {name:'Heart',    emoji:'❤️', fact:'Hearts mean love and kindness!'},
+      {name:'Diamond',  emoji:'💎', fact:'A diamond has 4 sides!'},
+    ];
+    this.rainbowShapes = shapes;
+    c.innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FF9B3F;font-size:1.6rem;">🌈 Rainbow World</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Tap a shape to learn about it!</div>
+      </div>
+      <!-- Rainbow -->
+      <div style="text-align:center;font-size:3rem;margin-bottom:16px;animation:float-icon 2s ease-in-out infinite;">🌈</div>
+      <!-- Shapes grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+        ${shapes.map((s,i)=>`
+          <div onclick="Playhouse.learnShape('${s.name}','${s.emoji}','${s.fact}')"
+            style="background:rgba(255,255,255,0.97);border-radius:20px;padding:20px 10px;text-align:center;cursor:pointer;transition:transform 0.15s;box-shadow:0 6px 20px rgba(0,0,0,0.12);border:3px solid transparent;"
+            onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:3rem;margin-bottom:6px;">${s.emoji}</div>
+            <div style="font-family:'Fredoka One',cursive;font-size:0.95rem;color:#1A1A2E;">${s.name}</div>
+          </div>
+        `).join('')}
+      </div>`;
+    SoundSystem.speakBaby('Welcome to Rainbow World! Tap a shape!');
+  },
+
+  learnShape(name, emoji, fact) {
+    SoundSystem.playTone('celebrate');
+    SoundSystem.speakBaby(`${name}! ${fact}`);
+    const div = document.createElement('div');
+    div.className = 'baby-celebrate';
+    div.innerHTML = `<div class="baby-celebrate-inner" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);">
+      <span class="baby-celebrate-emoji">${emoji}</span>
+      <div class="baby-celebrate-text">${name}!</div>
+      <div style="font-size:0.95rem;color:rgba(255,255,255,0.9);margin-top:8px;max-width:200px;">${fact}</div>
+    </div>`;
+    document.body.appendChild(div);
+    setTimeout(()=>div.remove(), 2500);
+  },
+};
+window.Playhouse = Playhouse;
 const BabyMode = {
   score:0,current:null,category:null,
   content:{
