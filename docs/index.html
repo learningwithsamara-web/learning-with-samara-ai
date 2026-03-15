@@ -1072,20 +1072,41 @@ const Payments = {
 };
 
 // ── CLAUDE AI ────────────────────────────────────────────────
-// ── CLAUDE AI — via Cloudflare Worker (free, secure) ─────────
+// ── CLAUDE AI — via Cloudflare Worker ────────────────────────
 const AI_WORKER = 'https://samara-proxy.learningwithsamara.workers.dev';
 
 async function callClaudeAI(userMessage, ageGroup, systemOverride, maxTokens=350) {
   const sys = systemOverride || `You are Samara AI, an expert tutor for a ${ageGroup}-year-old. Be encouraging, age-appropriate, fun. Add 1-2 emojis. Answer directly and completely.`;
   try {
     const r = await fetch(AI_WORKER, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:maxTokens, system:sys, messages:[{role:'user',content:userMessage}]})
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: maxTokens,
+        system: sys,
+        messages: [{ role: 'user', content: userMessage }]
+      })
     });
+    if(!r.ok) {
+      console.error('[AI] HTTP error:', r.status, await r.text());
+      return null;
+    }
     const d = await r.json();
-    return d.content?.[0]?.text || null;
-  } catch(e) { console.error('AI error:',e); return null; }
+    if(d.error) {
+      console.error('[AI] API error:', d.error);
+      return null;
+    }
+    const text = d.content?.[0]?.text;
+    if(!text) {
+      console.error('[AI] No text in response:', JSON.stringify(d));
+      return null;
+    }
+    return text;
+  } catch(e) {
+    console.error('[AI] Fetch error:', e.message);
+    return null;
+  }
 }
 
 // ── AI QUESTION GENERATOR ────────────────────────────────────
@@ -1184,73 +1205,140 @@ const Adaptive = {
 
 // ── SOUND SYSTEM ─────────────────────────────────────────────
 const SoundSystem = {
-  enabled: true, voices: [], selectedVoice: null,
-  VOICE_PRIORITY: ['Samantha','Google US English','Ava','Zira','Google UK English Female','Karen','Moira','Victoria','Allison','Susan'],
+  enabled: true,
+  voices: [],
+  selectedVoice: null,
+  _speaking: false,
+
   init() {
     if(!('speechSynthesis' in window)) return;
+    // Cancel anything leftover from previous page
+    window.speechSynthesis.cancel();
     const load = () => {
-      this.voices = window.speechSynthesis.getVoices();
-      if(this.voices.length > 0) {
-        this.selectedVoice = this._pickBestVoice();
-        console.log('[Voice] Selected:', this.selectedVoice?.name || 'none');
+      const v = window.speechSynthesis.getVoices();
+      if(v.length > 0) {
+        this.voices = v;
+        this.selectedVoice = this._pickGirlVoice();
+        console.log('[Voice] Using:', this.selectedVoice?.name || 'default');
       }
     };
-    // Try multiple times — mobile browsers load voices async
     window.speechSynthesis.onvoiceschanged = load;
     load();
-    setTimeout(load, 200);
-    setTimeout(load, 500);
-    setTimeout(load, 1500);
-    setTimeout(load, 3000);
-    // Reload voices when app comes back into focus
+    [100, 300, 600, 1000, 2000, 4000].forEach(t => setTimeout(load, t));
     document.addEventListener('visibilitychange', () => {
-      if(!document.hidden) { load(); }
+      if(!document.hidden) {
+        window.speechSynthesis.cancel();
+        load();
+      }
     });
   },
-  _pickBestVoice() {
+
+  _pickGirlVoice() {
     if(!this.voices.length) return null;
-    // Priority: natural sounding voices first
-    const priority = ['Samantha','Google US English','Ava','Zira','Google UK English Female','Karen','Moira','Victoria','Allison','Susan','Aria','Jenny','Siri'];
-    for(const name of priority){
-      const v = this.voices.find(v=>v.name===name);
-      if(v) return v;
+
+    // 1. Best natural girl/child voices by exact name
+    const girlNames = [
+      'Samantha',           // iPhone/Mac — best natural female
+      'Karen',              // Australian female — very natural
+      'Moira',              // Irish female — natural
+      'Tessa',              // South African female
+      'Veena',              // Indian English female
+      'Fiona',              // Scottish female
+      'Victoria',           // macOS female
+      'Allison',            // macOS female
+      'Ava',                // macOS/iOS female
+      'Susan',              // Windows female
+      'Zira',               // Windows female — good quality
+      'Google US English',  // Android — best available
+      'Google UK English Female',
+      'Microsoft Aria',
+      'Microsoft Jenny',
+      'Microsoft Zira',
+    ];
+    for(const name of girlNames) {
+      const found = this.voices.find(v => v.name === name);
+      if(found) return found;
     }
-    // Try any English female voice
-    const enUS = this.voices.filter(v=>v.lang==='en-US'||v.lang==='en-GB'||v.lang==='en_US');
-    // Avoid voices with "David", "Mark", "Richard" — they sound robotic
-    const notRobotic = enUS.filter(v=>!v.name.match(/david|mark|richard|fred|albert|bad|junior/i));
-    if(notRobotic.length) return notRobotic[0];
-    if(enUS.length) return enUS[0];
-    return this.voices.find(v=>v.lang.startsWith('en')) || this.voices[0] || null;
+
+    // 2. Any voice with female-sounding name
+    const femaleHints = ['female','woman','girl','samantha','karen','ava','zira','aria','jenny','alice','emily','lisa','amy','kate','susan','victoria','allison','moira','fiona'];
+    const femaleVoice = this.voices.find(v =>
+      femaleHints.some(hint => v.name.toLowerCase().includes(hint))
+    );
+    if(femaleVoice) return femaleVoice;
+
+    // 3. Any English voice that's NOT a known male/robotic voice
+    const maleNames = /david|mark|richard|fred|albert|jorge|daniel|thomas|james|george|alex|bruce|bad news|hysterical|junior|whisper|organ|cellos|bells|boing/i;
+    const englishVoices = this.voices.filter(v =>
+      (v.lang.startsWith('en')) && !maleNames.test(v.name)
+    );
+    if(englishVoices.length) return englishVoices[0];
+
+    return this.voices[0] || null;
   },
-  toggle() { this.enabled=!this.enabled;const btn=document.getElementById('sound-toggle-btn');if(btn)btn.textContent=this.enabled?'🔊 Sound ON':'🔇 Sound OFF'; },
-  speak(text, rate=0.88, pitch=1.15) {
-    if(!this.enabled||!('speechSynthesis' in window))return;
-    // Cancel any current speech
+
+  toggle() {
+    this.enabled = !this.enabled;
+    if(!this.enabled) window.speechSynthesis.cancel();
+    const btn = document.getElementById('sound-toggle-btn');
+    if(btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+  },
+
+  // Main speak function — splits text to prevent Chrome cutoff
+  speak(text, rate=0.9, pitch=1.2) {
+    if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     window.speechSynthesis.cancel();
-    // Split into short sentences to avoid Chrome cutting off
-    const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
-    let i = 0;
-    const speakNext = () => {
-      if(i >= sentences.length) return;
-      const chunk = sentences[i].trim();
-      if(!chunk){ i++; speakNext(); return; }
+    this._speaking = false;
+
+    // Clean text — remove emojis and special chars that cause static
+    const clean = text
+      .replace(/[\u{1F300}-\u{1FFFF}\u{2600}-\u{27BF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}]/gu, '')
+      .replace(/[🌟⭐🎉🎊🏆🎯🚀💪🌈]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if(!clean) return;
+
+    // Split into sentences — Chrome cuts off long text
+    const sentences = clean.match(/[^.!?]+[.!?]*/g) || [clean];
+    let idx = 0;
+
+    const next = () => {
+      if(idx >= sentences.length || !this._speaking) return;
+      const chunk = sentences[idx].trim();
+      idx++;
+      if(!chunk) { next(); return; }
+
       const utt = new SpeechSynthesisUtterance(chunk);
       utt.rate = rate;
       utt.pitch = pitch;
       utt.volume = 1.0;
-      if(!this.selectedVoice) this.selectedVoice = this._pickBestVoice();
+
+      // Always re-check voice in case it loaded late
+      if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
-      utt.onend = () => { i++; speakNext(); };
-      utt.onerror = () => { i++; speakNext(); };
+
+      utt.onend = next;
+      utt.onerror = () => { idx++; next(); };
       window.speechSynthesis.speak(utt);
     };
-    // Small delay after cancel prevents "lik..." cutoff
-    setTimeout(speakNext, 150);
+
+    // Delay prevents the "lik..." cutoff from rapid cancel→speak
+    setTimeout(() => {
+      this._speaking = true;
+      next();
+    }, 180);
   },
-  speakBaby(text){this.speak(text,0.72,1.35);},
-  speakPraise(text){this.speak(text,0.95,1.25);},
-  speakHint(text){this.speak(text,0.80,1.05);},
+
+  // Child-friendly voices — higher pitch, slower rate for babies
+  speakBaby(text)  { this.speak(text, 0.75, 1.4); },
+  speakPraise(text){ this.speak(text, 0.95, 1.3); },
+  speakHint(text)  { this.speak(text, 0.82, 1.15); },
+
+  stop() {
+    this._speaking = false;
+    window.speechSynthesis.cancel();
+  },
   playTone(type) {
     if(!this.enabled)return;
     try{
@@ -1424,8 +1512,10 @@ Rules:
 
     try {
       const messages = [...this.conversationHistory.slice(-8), {role:'user',content:txt}];
-      const r=await fetch(AI_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:sys,messages})});
+      const r=await fetch(AI_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:400,system:sys,messages})});
+      if(!r.ok) throw new Error(`HTTP ${r.status}`);
       const d=await r.json();
+      if(d.error) throw new Error(d.error.message||'API error');
       const reply=d.content?.[0]?.text;
       this.hideTyping();
       if(reply){
@@ -1929,6 +2019,7 @@ const App = {
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     const sc=el(id);if(!sc)return;
     sc.classList.add('active');window.scrollTo(0,0);
+    SoundSystem.stop(); // stop any speaking when changing screens
     if(id==='screen-auth'&&param)App.switchTab(param);
     if(id==='screen-dashboard')App.renderDash();
     if(id==='screen-parent')App.renderParent();  // open to all — upsell inside
@@ -2100,30 +2191,49 @@ const App = {
   },
 
   answer(ans, q, btn) {
-    if(S.answered) return; S.answered=true;
-    document.querySelectorAll('.answer-btn').forEach(b=>{b.disabled=true;b.onclick=null;});
-    if(ans.isCorrect){
-      btn.classList.add('correct');S.correct++;S.score+=10;
-      AITutor.trackCorrect();SoundSystem.playTone('correct');PersonalAlgo.trackAnswer(S.subject,true);
-      const msg=AITutor.tutorMsg('correct','');
-      const fb=el('quiz-feedback');if(fb){fb.textContent=msg;fb.className='quiz-feedback correct-fb';}
+    if(S.answered) return;
+    S.answered = true;
+    // Immediately remove ALL onclick handlers to prevent any double firing
+    document.querySelectorAll('.answer-btn').forEach(b => {
+      b.disabled = true;
+      b.onclick = null;
+      b.style.pointerEvents = 'none';
+    });
+    if(ans.isCorrect) {
+      btn.classList.add('correct');
+      S.correct++;
+      S.score += 10;
+      AITutor.trackCorrect();
+      SoundSystem.playTone('correct');
+      PersonalAlgo.trackAnswer(S.subject, true);
+      const msg = AITutor.tutorMsg('correct', '');
+      const fb = el('quiz-feedback');
+      if(fb){ fb.textContent = msg; fb.className = 'quiz-feedback correct-fb'; }
     } else {
       btn.classList.add('wrong');
-      document.querySelectorAll('.answer-btn').forEach(b=>{if(b.textContent===String(q.answers.find(a=>a.isCorrect)?.label))b.classList.add('correct');});
-      AITutor.trackWrong(q,S.ageGroup);SoundSystem.playTone('wrong');PersonalAlgo.trackAnswer(S.subject,false);
-      const msg=AITutor.tutorMsg('wrong',q.hint);
-      const fb=el('quiz-feedback');if(fb){fb.textContent=msg;fb.className='quiz-feedback wrong-fb';}
+      document.querySelectorAll('.answer-btn').forEach(b => {
+        if(b.textContent === String(q.answers.find(a=>a.isCorrect)?.label)) b.classList.add('correct');
+      });
+      AITutor.trackWrong(q, S.ageGroup);
+      SoundSystem.playTone('wrong');
+      PersonalAlgo.trackAnswer(S.subject, false);
+      const msg = AITutor.tutorMsg('wrong', q.hint);
+      const fb = el('quiz-feedback');
+      if(fb){ fb.textContent = msg; fb.className = 'quiz-feedback wrong-fb'; }
     }
-    App.updateScores();setTimeout(()=>App.nextQ(),2200);
+    App.updateScores();
+    // Single timeout — no possibility of double call
+    setTimeout(() => App.nextQ(), 2200);
   },
 
-  nextQ(){
-    if(S._finishing) return; // prevent double-call
+  nextQ() {
+    if(S._finishing) return;
     S.qIndex++;
     if(S.qIndex >= S.questions.length) {
       S._finishing = true;
       App.finishStage();
     } else {
+      S.answered = false;
       App.renderQ();
     }
   },
