@@ -1536,50 +1536,54 @@ const SoundSystem = {
     if(btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
 
-  // Main speak function — splits text to prevent Chrome cutoff
+  // Main speak function
   speak(text, rate=0.9, pitch=1.2) {
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
-    window.speechSynthesis.cancel();
-    this._speaking = false;
 
-    // Clean text — remove emojis and special chars that cause static
+    // Stop anything currently speaking
+    this._speaking = false;
+    window.speechSynthesis.cancel();
+
+    // Strip emojis and special chars that cause static/glitches
     const clean = text
-      .replace(/[\u{1F300}-\u{1FFFF}\u{2600}-\u{27BF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}]/gu, '')
-      .replace(/[🌟⭐🎉🎊🏆🎯🚀💪🌈]/g, '')
+      .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
+      .replace(/[\u2600-\u27BF]/g, '')
+      .replace(/[⭐🌟🎉🎊🏆🎯🚀💪🌈✨💛🔥]/g, '')
       .replace(/\s+/g, ' ')
       .trim();
 
     if(!clean) return;
 
-    // Split into sentences — Chrome cuts off long text
-    const sentences = clean.match(/[^.!?]+[.!?]*/g) || [clean];
-    let idx = 0;
+    // Split into short chunks — Chrome cuts off long speech
+    const chunks = clean.match(/[^.!?,;]+[.!?,;]*/g) || [clean];
 
-    const next = () => {
-      if(idx >= sentences.length || !this._speaking) return;
-      const chunk = sentences[idx].trim();
+    let idx = 0;
+    this._speaking = true;
+
+    const speakChunk = () => {
+      if(!this._speaking || idx >= chunks.length) return;
+      const chunk = chunks[idx].trim();
       idx++;
-      if(!chunk) { next(); return; }
+      if(!chunk || chunk.length < 2) { speakChunk(); return; }
 
       const utt = new SpeechSynthesisUtterance(chunk);
       utt.rate = rate;
       utt.pitch = pitch;
       utt.volume = 1.0;
+      utt.lang = 'en-US';
 
-      // Always re-check voice in case it loaded late
+      // Pick voice fresh each time in case it loaded late
       if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
 
-      utt.onend = next;
-      utt.onerror = () => { idx++; next(); };
+      utt.onend = speakChunk;
+      utt.onerror = () => { idx++; speakChunk(); };
+
       window.speechSynthesis.speak(utt);
     };
 
-    // Delay prevents the "lik..." cutoff from rapid cancel→speak
-    setTimeout(() => {
-      this._speaking = true;
-      next();
-    }, 180);
+    // 200ms delay prevents Chrome "lik..." cutoff bug
+    setTimeout(speakChunk, 200);
   },
 
   // Child-friendly voices — higher pitch, slower rate for babies
@@ -2369,12 +2373,18 @@ const App = {
   renderStages(world) {
     const c=el('stages-list');if(!c)return;c.innerHTML='';
     for(let i=0;i<SPW;i++){
-      const sid=i+1;const rec=S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid);
-      const prev=i===0||S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid-1&&p.completed);
-      const unlocked=!!prev;const done=!!(rec&&rec.completed);const stars=done?(rec.stars||1):0;
-      const diff=i===0?'Easy':i===1?'Medium':'Hard';const dc=i===0?'diff-1':i===1?'diff-2':'diff-3';
+      const sid=i+1;
+      const rec=S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid);
+      // Unlock: first stage always open, otherwise just need previous stage completed
+      const prevDone=i===0||!!S.progress.find(p=>p.subject===S.subject&&p.world===world.id&&p.stage===sid-1&&p.completed);
+      const unlocked=prevDone;
+      const done=!!(rec&&rec.completed);
+      const stars=done?(rec.stars||1):0;
+      const acc=done?`· ${Math.round((rec.accuracy||0)*100)}% accuracy`:'';
+      const diff=i===0?'Easy':i===1?'Medium':'Hard';
+      const dc=i===0?'diff-1':i===1?'diff-2':'diff-3';
       const d=document.createElement('div');d.className=`stage-card ${unlocked?'':'locked'}`;
-      d.innerHTML=`<div class="stage-icon">${done?'🌟':unlocked?'▶️':'🔒'}</div><div><div class="stage-name">Stage ${sid}: ${diff} <span class="difficulty-badge ${dc}">${Adaptive.label(Adaptive.get(S.subject))}</span></div><div class="stage-meta">5 AI-powered questions${Plan.isPro()?'':' (pre-built for free)'}</div></div><div class="stage-stars">${done?'⭐'.repeat(stars):''}</div>`;
+      d.innerHTML=`<div class="stage-icon">${done?'🌟':unlocked?'▶️':'🔒'}</div><div><div class="stage-name">Stage ${sid}: ${diff} <span class="difficulty-badge ${dc}">${Adaptive.label(Adaptive.get(S.subject))}</span></div><div class="stage-meta">5 questions ${acc}</div></div><div class="stage-stars">${done?'⭐'.repeat(stars):''}</div>`;
       d.onclick=unlocked?()=>App.startStage(i,world):()=>App.toast('Complete previous stage first! 🔒');
       c.appendChild(d);
     }
@@ -2432,16 +2442,26 @@ const App = {
   },
 
   renderQ() {
-    const q=S.questions[S.qIndex];if(!q)return;S.answered=false;AITutor.hideHint();
+    const q=S.questions[S.qIndex];if(!q)return;
+    S.answered=false;
+    AITutor.hideHint();
     setText('quiz-q-num',`Q${S.qIndex+1}`);
-    const pbar=el('quiz-progress-bar');if(pbar)pbar.style.width=`${(S.qIndex/S.questions.length)*100}%`;
+    const pbar=el('quiz-progress-bar');
+    if(pbar)pbar.style.width=`${(S.qIndex/S.questions.length)*100}%`;
     el('quiz-question').textContent=q.text;
     const ae=el('quiz-answers');if(!ae)return;ae.innerHTML='';
     q.answers.forEach(a=>{
-      const b=document.createElement('button');b.className='answer-btn';b.textContent=a.label;
-      b.onclick=()=>App.answer(a,q,b);ae.appendChild(b);
+      const b=document.createElement('button');
+      b.className='answer-btn';
+      b.textContent=a.label;
+      b.disabled=false;
+      b.style.pointerEvents='auto';
+      b.style.opacity='1';
+      b.onclick=()=>App.answer(a,q,b);
+      ae.appendChild(b);
     });
-    const fb=el('quiz-feedback');if(fb)fb.className='quiz-feedback hidden';
+    const fb=el('quiz-feedback');
+    if(fb)fb.className='quiz-feedback hidden';
     setTimeout(()=>{if(SoundSystem.enabled)SoundSystem.speak(q.text,0.85,1.05);},300);
   },
 
@@ -2612,7 +2632,16 @@ const App = {
   },
 
   calcStreak(scores){if(!scores.length)return 0;const days=new Set(scores.map(s=>s.created_at?.slice(0,10)));let streak=0;const d=new Date();while(days.has(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1);}return streak;},
-  worldUnlocked(sid,idx,worlds){if(idx===0)return true;const prev=worlds[idx-1];for(let s=1;s<=SPW;s++){const r=S.progress.find(p=>p.subject===sid&&p.world===prev.id&&p.stage===s);if(!r||!r.completed||r.accuracy<0.8)return false;}return true;},
+  worldUnlocked(sid,idx,worlds){
+    if(idx===0) return true;
+    const prev=worlds[idx-1];
+    // Just need all stages of previous world completed — any score
+    for(let s=1;s<=SPW;s++){
+      const r=S.progress.find(p=>p.subject===sid&&p.world===prev.id&&p.stage===s&&p.completed);
+      if(!r) return false;
+    }
+    return true;
+  },
   stagesDone(sid,wid){let c=0;for(let s=1;s<=SPW;s++){if(S.progress.find(p=>p.subject===sid&&p.world===wid&&p.stage===s&&p.completed))c++;}return c;},
   updateScores(){['worlds-score','stages-score','quiz-score'].forEach(id=>{const e=el(id);if(e)e.textContent=S.score;});},
   toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);}
