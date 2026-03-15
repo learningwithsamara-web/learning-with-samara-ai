@@ -1157,26 +1157,45 @@ const SoundSystem = {
     window.speechSynthesis.onvoiceschanged=load;load();setTimeout(load,500);
   },
   _pickBestVoice() {
-    if(!this.voices.length)return null;
-    for(const name of this.VOICE_PRIORITY){const v=this.voices.find(v=>v.name===name);if(v)return v;}
-    const enUS=this.voices.filter(v=>v.lang==='en-US');
-    for(const hint of['Female','Samantha','Ava','Zira','Karen','Susan','Lisa','Amy']){const v=enUS.find(v=>v.name.includes(hint));if(v)return v;}
-    return enUS[0]||this.voices.find(v=>v.lang.startsWith('en'))||null;
+    if(!this.voices.length) return null;
+    // Priority: natural sounding voices first
+    const priority = ['Samantha','Google US English','Ava','Zira','Google UK English Female','Karen','Moira','Victoria','Allison','Susan','Aria','Jenny','Siri'];
+    for(const name of priority){
+      const v = this.voices.find(v=>v.name===name);
+      if(v) return v;
+    }
+    // Try any English female voice
+    const enUS = this.voices.filter(v=>v.lang==='en-US'||v.lang==='en-GB'||v.lang==='en_US');
+    // Avoid voices with "David", "Mark", "Richard" — they sound robotic
+    const notRobotic = enUS.filter(v=>!v.name.match(/david|mark|richard|fred|albert|bad|junior/i));
+    if(notRobotic.length) return notRobotic[0];
+    if(enUS.length) return enUS[0];
+    return this.voices.find(v=>v.lang.startsWith('en')) || this.voices[0] || null;
   },
   toggle() { this.enabled=!this.enabled;const btn=document.getElementById('sound-toggle-btn');if(btn)btn.textContent=this.enabled?'🔊 Sound ON':'🔇 Sound OFF'; },
-  speak(text,rate=0.88,pitch=1.15) {
+  speak(text, rate=0.88, pitch=1.15) {
     if(!this.enabled||!('speechSynthesis' in window))return;
+    // Cancel any current speech
     window.speechSynthesis.cancel();
-    // 120ms delay after cancel fixes the "lik..." cutoff bug in Chrome
-    setTimeout(()=>{
-      const utt=new SpeechSynthesisUtterance(text);utt.rate=rate;utt.pitch=pitch;utt.volume=1.0;
-      if(!this.selectedVoice)this.selectedVoice=this._pickBestVoice();
-      if(this.selectedVoice)utt.voice=this.selectedVoice;
-      // Chrome bug: long speech pauses — keep it alive
-      const t=setInterval(()=>{if(!window.speechSynthesis.speaking){clearInterval(t);return;}window.speechSynthesis.pause();window.speechSynthesis.resume();},8000);
-      utt.onend=()=>clearInterval(t);utt.onerror=()=>clearInterval(t);
+    // Split into short sentences to avoid Chrome cutting off
+    const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
+    let i = 0;
+    const speakNext = () => {
+      if(i >= sentences.length) return;
+      const chunk = sentences[i].trim();
+      if(!chunk){ i++; speakNext(); return; }
+      const utt = new SpeechSynthesisUtterance(chunk);
+      utt.rate = rate;
+      utt.pitch = pitch;
+      utt.volume = 1.0;
+      if(!this.selectedVoice) this.selectedVoice = this._pickBestVoice();
+      if(this.selectedVoice) utt.voice = this.selectedVoice;
+      utt.onend = () => { i++; speakNext(); };
+      utt.onerror = () => { i++; speakNext(); };
       window.speechSynthesis.speak(utt);
-    },120);
+    };
+    // Small delay after cancel prevents "lik..." cutoff
+    setTimeout(speakNext, 150);
   },
   speakBaby(text){this.speak(text,0.72,1.35);},
   speakPraise(text){this.speak(text,0.95,1.25);},
@@ -2029,8 +2048,8 @@ const App = {
   },
 
   answer(ans, q, btn) {
-    if(S.answered)return;S.answered=true;
-    document.querySelectorAll('.answer-btn').forEach(b=>b.disabled=true);
+    if(S.answered) return; S.answered=true;
+    document.querySelectorAll('.answer-btn').forEach(b=>{b.disabled=true;b.onclick=null;});
     if(ans.isCorrect){
       btn.classList.add('correct');S.correct++;S.score+=10;
       AITutor.trackCorrect();SoundSystem.playTone('correct');PersonalAlgo.trackAnswer(S.subject,true);
@@ -2280,7 +2299,7 @@ Return ONLY valid JSON array (no markdown):
       questions = this._fallbackQuestions(subject);
     }
 
-    S.questions=questions;S.qIndex=0;S.correct=0;S.answered=false;
+    S.questions=questions;S.qIndex=0;S.correct=0;S.answered=false;S._finishing=false;
     S.subject='pep-'+subject;S.currentWorld={id:1,name:'PEP '+subject};S.stageIndex=0;S.worldIndex=0;
     setText('quiz-q-total',S.questions.length);
     el('quiz-loading')?.classList.add('hidden');
