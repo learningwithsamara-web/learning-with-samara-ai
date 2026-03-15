@@ -514,7 +514,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
         <li><span class="check">✓</span> 7-day free trial</li>
       </ul>
       <button class="btn btn-gold big" style="width:100%;" onclick="Payments.checkout('monthly')">Start Free Trial 🚀</button>
-      <div class="trial-note">7 days free, then $4.99/month</div>
+      <div class="trial-note">✅ 7 days full Pro access free · No payment needed to start trial · Subscribe after to keep access</div>
     </div>
   </div>
   <!-- ANNUAL OPTION -->
@@ -822,22 +822,24 @@ const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 // ── FREE PLAN LIMITS ─────────────────────────────────────────
 // ── HOOK & CONVERT FREEMIUM MODEL ───────────────────────────
-// Strategy: everyone gets a TASTE of every premium feature.
-// They hit a soft daily limit, see a warm upgrade prompt, and convert.
-// No hard walls — soft gates with encouragement.
+// 7-day FREE TRIAL: starts when user signs up. Full Pro access.
+// After 7 days → drops to free tier with daily limits.
+// Paying via Shopify → activate manually in Supabase or via webhook.
+
+const TRIAL_DAYS = 7;
 
 const LIMITS = {
-  // Free daily limits — enough to get hooked, not enough to be satisfied
-  quizzes:      10,   // 10 quizzes/day free (generous — habit forming)
-  aiChat:        3,   // 3 AI chat messages/day — they'll want more after 1
-  aiHints:       3,   // 3 avatar popup hints/day — kids LOVE these
-  research:      1,   // 1 Research topic/day — one taste is all it takes
-  aiQuestions:   5,   // 5 AI-generated questions/day, rest are pre-built
-  pepSubjects:   1,   // 1 PEP subject free — enough to see the value
+  quizzes:      10,  // 10 quizzes/day free
+  aiChat:        3,  // 3 AI chat messages/day
+  aiHints:       3,  // 3 avatar popup hints/day
+  research:      1,  // 1 Research topic/day
+  aiQuestions:   5,  // 5 AI questions/day, rest pre-built
+  pepSubjects:   1,  // 1 PEP subject free
 };
 
 const Plan = {
-  isPro() { return localStorage.getItem('samara_pro') === 'true'; },
+  // ── Pro (paid) ─────────────────────────────────────────────
+  isRealPro() { return localStorage.getItem('samara_pro') === 'true'; },
   activate(plan) {
     localStorage.setItem('samara_pro', 'true');
     localStorage.setItem('samara_plan', plan);
@@ -845,7 +847,40 @@ const Plan = {
   },
   deactivate() { localStorage.removeItem('samara_pro'); },
 
-  // ── Daily usage tracking ──
+  // ── Trial ──────────────────────────────────────────────────
+  isTrialActive() {
+    const start = localStorage.getItem('samara_trial_start');
+    if (!start) return false;
+    const days = (Date.now() - parseInt(start)) / 86400000;
+    return days < TRIAL_DAYS;
+  },
+  hasUsedTrial() { return !!localStorage.getItem('samara_trial_start'); },
+  trialDaysLeft() {
+    const start = localStorage.getItem('samara_trial_start');
+    if (!start) return 0;
+    const days = (Date.now() - parseInt(start)) / 86400000;
+    return Math.max(0, Math.ceil(TRIAL_DAYS - days));
+  },
+  startTrial() {
+    if (this.hasUsedTrial()) return false;
+    localStorage.setItem('samara_trial_start', Date.now().toString());
+    return true;
+  },
+
+  // ── Combined check ─────────────────────────────────────────
+  isPro() { return this.isRealPro() || this.isTrialActive(); },
+
+  getPlanLabel() {
+    if (this.isRealPro()) {
+      const p = localStorage.getItem('samara_plan')||'monthly';
+      return p==='family'?'👨‍👩‍👧 Family Plan':p==='annual'?'⭐ Pro Annual':'⭐ Pro Monthly';
+    }
+    if (this.isTrialActive()) return `🎁 Free Trial — ${this.trialDaysLeft()} day${this.trialDaysLeft()===1?'':'s'} left`;
+    if (this.hasUsedTrial()) return 'Free (trial ended)';
+    return 'Free';
+  },
+
+  // ── Daily limits (only apply on free tier) ─────────────────
   _getDay() { return new Date().toISOString().slice(0,10); },
   _getData() {
     try {
@@ -856,16 +891,13 @@ const Plan = {
   },
   _saveData(d) { localStorage.setItem('samara_daily', JSON.stringify(d)); },
   _count(key) { return this._getData()[key] || 0; },
-  _bump(key) {
-    const d = this._getData(); d[key] = (d[key]||0) + 1; this._saveData(d);
-  },
+  _bump(key) { const d=this._getData(); d[key]=(d[key]||0)+1; this._saveData(d); },
 
-  // ── Check + consume each feature ──
   canStartQuiz() {
     if (this.isPro()) return { ok:true };
     const used = this._count('quizzes');
     if (used < LIMITS.quizzes) return { ok:true };
-    return { ok:false, msg:`You've used all ${LIMITS.quizzes} free quizzes today! 🎯 Upgrade for unlimited quizzes.` };
+    return { ok:false, msg:`You've used all ${LIMITS.quizzes} free quizzes today! 🎯` };
   },
   useQuiz() { if (!this.isPro()) this._bump('quizzes'); },
 
@@ -873,15 +905,14 @@ const Plan = {
     if (this.isPro()) return { ok:true };
     const used = this._count('aiChat');
     if (used < LIMITS.aiChat) return { ok:true, remaining: LIMITS.aiChat - used };
-    return { ok:false, msg:`You've used your ${LIMITS.aiChat} free AI messages today! 💬 Upgrade to chat with Samara all day, every day.` };
+    return { ok:false, msg:`You've used your ${LIMITS.aiChat} free AI messages today! 💬` };
   },
   useAIChat() { if (!this.isPro()) this._bump('aiChat'); },
 
   canUseAIHint() {
     if (this.isPro()) return { ok:true };
     const used = this._count('aiHints');
-    if (used < LIMITS.aiHints) return { ok:true };
-    return { ok:false };  // silently fall back to local hint — no hard wall
+    return used < LIMITS.aiHints ? { ok:true } : { ok:false };
   },
   useAIHint() { if (!this.isPro()) this._bump('aiHints'); },
 
@@ -889,7 +920,7 @@ const Plan = {
     if (this.isPro()) return { ok:true };
     const used = this._count('research');
     if (used < LIMITS.research) return { ok:true };
-    return { ok:false, msg:`You've used your ${LIMITS.research} free research today! 🔭 Upgrade to explore ANY topic, any time.` };
+    return { ok:false, msg:`You've used your ${LIMITS.research} free research today! 🔭` };
   },
   useResearch() { if (!this.isPro()) this._bump('research'); },
 
@@ -902,19 +933,19 @@ const Plan = {
 
   canUsePEPSubject(subjectIndex) {
     if (this.isPro()) return { ok:true };
-    if (subjectIndex === 0) return { ok:true };  // first subject always free
-    return { ok:false, msg:`Full PEP Jamaica prep is a Pro feature! 🇯🇲 Upgrade to practise all subjects.` };
+    if (subjectIndex === 0) return { ok:true };
+    return { ok:false, msg:`Full PEP Jamaica prep is a Pro feature! 🇯🇲` };
   },
 
   getUsageSummary() {
     if (this.isPro()) return null;
     const d = this._getData();
     return {
-      quizzes:     { used: d.quizzes||0,     limit: LIMITS.quizzes },
-      aiChat:      { used: d.aiChat||0,       limit: LIMITS.aiChat },
-      aiHints:     { used: d.aiHints||0,      limit: LIMITS.aiHints },
-      research:    { used: d.research||0,     limit: LIMITS.research },
-      aiQuestions: { used: d.aiQuestions||0,  limit: LIMITS.aiQuestions },
+      quizzes:     { used: d.quizzes||0,    limit: LIMITS.quizzes },
+      aiChat:      { used: d.aiChat||0,      limit: LIMITS.aiChat },
+      aiHints:     { used: d.aiHints||0,     limit: LIMITS.aiHints },
+      research:    { used: d.research||0,    limit: LIMITS.research },
+      aiQuestions: { used: d.aiQuestions||0, limit: LIMITS.aiQuestions },
     };
   }
 };
@@ -1764,12 +1795,55 @@ const App = {
 
   updatePlanUI() {
     const isPro = Plan.isPro();
-    // Show/hide upgrade banner
+    const isRealPro = Plan.isRealPro();
+    const trialActive = Plan.isTrialActive();
+    const trialExpired = Plan.hasUsedTrial() && !trialActive && !isRealPro;
+
+    // Hide upgrade banner for Pro & active trial users
     document.getElementById('upgrade-banner')?.classList.toggle('hidden', isPro);
-    // Show study plan button if enough data
+
+    // Show trial countdown banner during trial
+    let trialBanner = document.getElementById('trial-banner');
+    if (trialActive) {
+      if (!trialBanner) {
+        trialBanner = document.createElement('div');
+        trialBanner.id = 'trial-banner';
+        trialBanner.style.cssText = 'max-width:860px;margin:0 auto 12px;padding:10px 18px;background:linear-gradient(135deg,rgba(107,203,119,0.2),rgba(61,170,69,0.2));border-radius:14px;border:1px solid rgba(107,203,119,0.4);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;';
+        const upgradeEl = document.getElementById('upgrade-banner');
+        upgradeEl?.parentNode?.insertBefore(trialBanner, upgradeEl?.nextSibling);
+      }
+      trialBanner.innerHTML = `<div style="display:flex;align-items:center;gap:10px;"><span style="font-size:1.3rem;">🎁</span><div><div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">Free Trial — ${Plan.trialDaysLeft()} day${Plan.trialDaysLeft()===1?'':'s'} remaining</div><div style="color:rgba(255,255,255,0.65);font-size:0.78rem;">Full Pro access — enjoy every feature!</div></div></div><button class="btn btn-gold" style="font-size:0.8rem;padding:7px 16px;" onclick="App.showScreen('screen-pricing')">Subscribe to keep Pro ⭐</button>`;
+    } else if (trialBanner) {
+      trialBanner.remove();
+    }
+
+    // Show trial-expired popup once
+    if (trialExpired && !localStorage.getItem('samara_trial_expired_shown')) {
+      localStorage.setItem('samara_trial_expired_shown', '1');
+      setTimeout(() => App._showTrialExpiredPopup(), 1000);
+    }
+
+    // Study plan button
     PersonalAlgo.load();
-    const total=Object.values(PersonalAlgo.data).reduce((s,d)=>s+(d.correct||0)+(d.wrong||0),0);
-    if(total>=5||isPro) document.getElementById('btn-studyplan')?.classList.remove('hidden');
+    const total = Object.values(PersonalAlgo.data).reduce((s,d)=>s+(d.correct||0)+(d.wrong||0),0);
+    if (total >= 5 || isPro) document.getElementById('btn-studyplan')?.classList.remove('hidden');
+  },
+
+  _showTrialExpiredPopup() {
+    const div = document.createElement('div');
+    div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    div.innerHTML = `
+      <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:32px;max-width:400px;width:100%;text-align:center;border:2px solid rgba(199,125,255,0.4);">
+        <div style="font-size:3rem;margin-bottom:10px;">⏰</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:#fff;margin-bottom:8px;">Your free trial has ended!</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:20px;line-height:1.6;">Hope you loved learning with Samara AI! 🌟<br>Subscribe now to keep unlimited access to all subjects, AI tutor, PEP Jamaica and more.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button onclick="App.showScreen('screen-pricing');this.closest('[style]').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">⭐ See Plans &amp; Pricing</button>
+          <button onclick="this.closest('[style]').remove();" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Continue with free plan</button>
+        </div>
+        <div style="margin-top:14px;font-size:0.75rem;color:rgba(255,255,255,0.4);">Questions? <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;">edu@learningwithsamara.com</a></div>
+      </div>`;
+    document.body.appendChild(div);
   },
 
   showScreen(id, param) {
@@ -1999,7 +2073,13 @@ const App = {
       msg.textContent='Creating account...';
       const{error}=await DB.signUp(email,pw,name,S.ageGroup);
       if(error){msg.textContent=error.message;msg.classList.add('error');}
-      else{msg.textContent='🎉 Account created! You can now log in.';msg.classList.add('success');App.switchTab('login');}
+      else{
+        // Start 7-day free trial on sign-up
+        Plan.startTrial();
+        msg.textContent='🎉 Account created! Your 7-day free trial has started!';
+        msg.classList.add('success');
+        App.switchTab('login');
+      }
     } else {
       msg.textContent='Logging in...';
       const{data,error}=await DB.login(email,pw);
@@ -2014,7 +2094,7 @@ const App = {
     const user=await DB.getUser();if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
     const name=user.user_metadata?.full_name||user.email.split('@')[0];setText('dash-name',name);
     const ageLbl={'4-6':'Junior','7-10':'Explorer','11-14':'Pro','15-17':'Senior'};
-    setText('dash-age-badge',`${ageLbl[S.ageGroup]||'Explorer'} · ${Plan.isPro()?'⭐ Pro':'Free'}`);
+    setText('dash-age-badge', `${ageLbl[S.ageGroup]||'Explorer'} · ${Plan.getPlanLabel()}`);
     const progress=await DB.loadProgress();const recent=await DB.loadScores(10);
     setText('dash-total-score',recent.reduce((s,r)=>s+r.score,0));
     setText('dash-worlds-done',new Set(progress.filter(p=>p.completed).map(p=>`${p.subject}-${p.world}`)).size);
@@ -2052,8 +2132,9 @@ const App = {
           ${makeBar(usage.aiQuestions.used,usage.aiQuestions.limit,'AI-generated questions','✨')}
           ${allUsed?`<div style="text-align:center;margin-top:12px;color:rgba(255,255,255,0.7);font-size:0.85rem;">Resets tomorrow — or <span style="color:#FFD93D;cursor:pointer;font-weight:800;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">upgrade for unlimited</span></div>`:''}
         </div>`);
+    } else if (Plan.isTrialActive()) {
+      el('dash-activity').insertAdjacentHTML('beforebegin',`<div style="background:rgba(107,203,119,0.12);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid rgba(107,203,119,0.25);flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:1.3rem;">🎁</span><div><div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:0.92rem;">Free Trial Active</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.55);">${Plan.trialDaysLeft()} day${Plan.trialDaysLeft()===1?'':'s'} left · Full Pro access</div></div></div><button class="btn btn-gold" style="font-size:0.78rem;padding:6px 14px;" onclick="App.showScreen('screen-pricing')">Subscribe ⭐</button></div>`);
     } else {
-      // Pro users — show plan badge
       el('dash-activity').insertAdjacentHTML('beforebegin',`<div style="background:rgba(199,125,255,0.12);border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;border:1px solid rgba(199,125,255,0.25);"><span style="font-size:1.4rem;">⭐</span><span style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;">Samara Pro — Unlimited everything!</span></div>`);
     }
   },
