@@ -2278,7 +2278,7 @@ const App = {
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
     if(id==='screen-research')setTimeout(()=>Research.init(),100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
-    if(id==='screen-videos')setTimeout(()=>Videos.init(),100);
+    if(id==='screen-videos') Videos.init();
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
     if(id==='screen-getapp') AITutor.hideFloat();
@@ -2978,7 +2978,54 @@ const Videos = {
     },
   ],
 
-  filter(age) {
+  // Fetch live videos from YouTube via Cloudflare Worker
+  async fetchPlaylist(playlistId) {
+    try {
+      const r = await fetch(`${AI_WORKER}?playlist=${playlistId}`);
+      if(!r.ok) return null;
+      const d = await r.json();
+      if(d.error || !d.videos) return null;
+      return d.videos; // [{id, title, thumbnail}]
+    } catch(e) {
+      console.error('[YouTube] fetch error:', e);
+      return null;
+    }
+  },
+
+  // Load all playlists from YouTube — called on init
+  async loadAllPlaylists() {
+    const cached = localStorage.getItem('samara_yt_cache');
+    const cacheTime = localStorage.getItem('samara_yt_cache_time');
+    const oneHour = 60 * 60 * 1000;
+
+    // Use cache if less than 1 hour old
+    if(cached && cacheTime && (Date.now() - parseInt(cacheTime)) < oneHour) {
+      const data = JSON.parse(cached);
+      this.PLAYLISTS.forEach((p, i) => {
+        if(data[p.id] && data[p.id].length > 0) p.videos = data[p.id];
+      });
+      console.log('[YouTube] Using cached playlist data');
+      return;
+    }
+
+    // Fetch fresh from YouTube
+    console.log('[YouTube] Fetching live playlist data...');
+    const cache = {};
+    await Promise.all(this.PLAYLISTS.map(async (p) => {
+      const videos = await this.fetchPlaylist(p.id);
+      if(videos && videos.length > 0) {
+        p.videos = videos;
+        cache[p.id] = videos;
+        console.log(`[YouTube] ${p.title}: ${videos.length} videos loaded`);
+      }
+    }));
+
+    // Save to cache
+    try {
+      localStorage.setItem('samara_yt_cache', JSON.stringify(cache));
+      localStorage.setItem('samara_yt_cache_time', Date.now().toString());
+    } catch(e) {}
+  },
     this.currentFilter = age;
     this.activePlaylist = null;
     this.activeVideo = null;
@@ -3152,11 +3199,18 @@ const Videos = {
     `;
   },
 
-  init() {
+  async init() {
     const ageMap = {'0-3':'baby','4-6':'junior','7-10':'all-ages','11-14':'all-ages','15-17':'all-ages'};
     const autoFilter = ageMap[S.ageGroup] || 'all';
     this.activePlaylist = null;
     this.activeVideo = null;
+
+    // Show loading state
+    const grid = document.getElementById('videos-grid');
+    if(grid) grid.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:1.1rem;">🎬 Loading your videos...</div>`;
+
+    // Fetch live from YouTube then render
+    await this.loadAllPlaylists();
     this.filter(autoFilter);
   }
 };
