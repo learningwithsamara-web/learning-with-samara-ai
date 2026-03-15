@@ -1187,9 +1187,25 @@ const SoundSystem = {
   enabled: true, voices: [], selectedVoice: null,
   VOICE_PRIORITY: ['Samantha','Google US English','Ava','Zira','Google UK English Female','Karen','Moira','Victoria','Allison','Susan'],
   init() {
-    if(!('speechSynthesis' in window))return;
-    const load=()=>{this.voices=window.speechSynthesis.getVoices();this.selectedVoice=this._pickBestVoice();};
-    window.speechSynthesis.onvoiceschanged=load;load();setTimeout(load,500);
+    if(!('speechSynthesis' in window)) return;
+    const load = () => {
+      this.voices = window.speechSynthesis.getVoices();
+      if(this.voices.length > 0) {
+        this.selectedVoice = this._pickBestVoice();
+        console.log('[Voice] Selected:', this.selectedVoice?.name || 'none');
+      }
+    };
+    // Try multiple times — mobile browsers load voices async
+    window.speechSynthesis.onvoiceschanged = load;
+    load();
+    setTimeout(load, 200);
+    setTimeout(load, 500);
+    setTimeout(load, 1500);
+    setTimeout(load, 3000);
+    // Reload voices when app comes back into focus
+    document.addEventListener('visibilitychange', () => {
+      if(!document.hidden) { load(); }
+    });
   },
   _pickBestVoice() {
     if(!this.voices.length) return null;
@@ -2466,7 +2482,8 @@ const PersonalAlgo = {
 // ── VIDEOS MODULE ────────────────────────────────────────────
 const Videos = {
   currentFilter: 'all',
-  currentVideo: null,
+  activePlaylist: null,
+  activeVideo: null,
 
   PLAYLISTS: [
     {
@@ -2476,7 +2493,9 @@ const Videos = {
       desc: 'Fun learning songs with Samara!',
       ages: ['baby','junior','all-ages'],
       color: 'linear-gradient(135deg,#FF9B3F,#FFD93D)',
-      firstVideo: 'EiIJvnuPl1c'
+      videos: [
+        {id:'EiIJvnuPl1c', title:'Nursery Rhymes with Samara'},
+      ]
     },
     {
       id: 'PLOFC4G2392_HDD2i0GoQ6ctOUeQYePMJv',
@@ -2485,7 +2504,9 @@ const Videos = {
       desc: 'Learn numbers and counting with Samara!',
       ages: ['baby','junior'],
       color: 'linear-gradient(135deg,#7EC8E3,#4A90D9)',
-      firstVideo: '0GEz1QF2pxY'
+      videos: [
+        {id:'0GEz1QF2pxY', title:'Counting Adventure with Samara'},
+      ]
     },
     {
       id: 'PLOFC4G2392_G8NkhSvX3ZCMj5k7_M6wOs',
@@ -2494,7 +2515,9 @@ const Videos = {
       desc: 'Healthy eating, exercise and good habits!',
       ages: ['junior','all-ages'],
       color: 'linear-gradient(135deg,#6BCB77,#3DAA45)',
-      firstVideo: 'xkS6XVaI-Dk'
+      videos: [
+        {id:'xkS6XVaI-Dk', title:'Healthy Habits with Samara'},
+      ]
     },
     {
       id: 'PLOFC4G2392_EeQv0L4Wnyfuev1-QrqhEg',
@@ -2503,7 +2526,9 @@ const Videos = {
       desc: 'Friendship, kindness and social skills!',
       ages: ['junior','all-ages'],
       color: 'linear-gradient(135deg,#C77DFF,#7928CA)',
-      firstVideo: 'c4BIQ3azSgk'
+      videos: [
+        {id:'c4BIQ3azSgk', title:'Social Learning with Samara'},
+      ]
     },
     {
       id: 'PLOFC4G2392_FZphrWjpJcJDAJq3vgrTyR',
@@ -2512,7 +2537,9 @@ const Videos = {
       desc: 'Animated stories and adventures!',
       ages: ['baby','junior','all-ages'],
       color: 'linear-gradient(135deg,#FF6B6B,#FF416C)',
-      firstVideo: 'BYhlvUQakcg'
+      videos: [
+        {id:'BYhlvUQakcg', title:'Story Time with Samara'},
+      ]
     },
     {
       id: 'PLOFC4G2392_HQRRnsWS-JHcSiTNrdxH8A',
@@ -2521,7 +2548,9 @@ const Videos = {
       desc: 'Circles, squares, triangles and more!',
       ages: ['baby'],
       color: 'linear-gradient(135deg,#FFD93D,#FF9B3F)',
-      firstVideo: 'NkRQXKj0TSU'
+      videos: [
+        {id:'NkRQXKj0TSU', title:'Shape Adventure with Samara'},
+      ]
     },
     {
       id: 'PLOFC4G2392_Ech68f7mHRWvafaJ6ov2_F',
@@ -2530,13 +2559,16 @@ const Videos = {
       desc: 'Letters A-Z with Samara!',
       ages: ['baby','junior'],
       color: 'linear-gradient(135deg,#7928CA,#FF0080)',
-      firstVideo: 'elYpWAriHj4'
+      videos: [
+        {id:'elYpWAriHj4', title:'Alphabet Learning with Samara'},
+      ]
     },
   ],
 
   filter(age) {
     this.currentFilter = age;
-    // Update tab buttons
+    this.activePlaylist = null;
+    this.activeVideo = null;
     ['all','baby','junior','all-ages'].forEach(f => {
       const btn = document.getElementById(`vf-${f}`);
       if(!btn) return;
@@ -2544,6 +2576,113 @@ const Videos = {
       if(f !== age) btn.style.color = '#fff';
     });
     this.render();
+  },
+
+  // Opens a playlist and shows all its videos as thumbnails
+  openPlaylist(idx) {
+    this.activePlaylist = idx;
+    this.activeVideo = null;
+    this.renderPlaylist();
+  },
+
+  // Plays a specific video
+  playVideo(playlistIdx, videoId, title) {
+    this.activePlaylist = playlistIdx;
+    this.activeVideo = {id: videoId, title: title};
+    this.renderPlayer();
+  },
+
+  renderPlayer() {
+    const grid = document.getElementById('videos-grid');
+    if(!grid) return;
+    const p = this.PLAYLISTS[this.activePlaylist];
+    grid.innerHTML = `
+      <!-- Back button -->
+      <button onclick="Videos.openPlaylist(${this.activePlaylist})"
+        style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 18px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:4px;display:inline-flex;align-items:center;gap:8px;">
+        ← Back to ${p.title}
+      </button>
+
+      <!-- Video title -->
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin-bottom:10px;">${this.activeVideo.title}</div>
+
+      <!-- Full video player -->
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;overflow:hidden;">
+        <iframe
+          src="https://www.youtube.com/embed/${this.activeVideo.id}?autoplay=1&rel=0&modestbranding=1"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="${this.activeVideo.title}">
+        </iframe>
+      </div>
+
+      <!-- Other videos in playlist -->
+      <div style="margin-top:18px;">
+        <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:1rem;margin-bottom:12px;">More from ${p.title}:</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+          ${p.videos.filter(v=>v.id!==this.activeVideo.id).map(v=>`
+            <div onclick="Videos.playVideo(${this.activePlaylist},'${v.id}','${v.title.replace(/'/g,"\\'")}'')"
+              style="cursor:pointer;border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.1);transition:transform 0.2s;"
+              onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+              <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"
+                style="width:100%;display:block;" alt="${v.title}" loading="lazy"/>
+              <div style="padding:7px 9px;font-size:0.78rem;color:rgba(255,255,255,0.85);font-weight:700;line-height:1.3;">${v.title}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  },
+
+  renderPlaylist() {
+    const grid = document.getElementById('videos-grid');
+    if(!grid) return;
+    const p = this.PLAYLISTS[this.activePlaylist];
+    grid.innerHTML = `
+      <!-- Back to all playlists -->
+      <button onclick="Videos.filter('${this.currentFilter}')"
+        style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 18px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:4px;display:inline-flex;align-items:center;gap:8px;">
+        ← All Playlists
+      </button>
+
+      <!-- Playlist header -->
+      <div style="background:${p.color};border-radius:18px;padding:16px 20px;display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="font-size:2.2rem;">${p.icon}</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;">${p.title}</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.82rem;">${p.desc} · ${p.videos.length} video${p.videos.length===1?'':'s'}</div>
+        </div>
+      </div>
+
+      <!-- All videos grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
+        ${p.videos.map(v=>`
+          <div onclick="Videos.playVideo(${this.activePlaylist},'${v.id}','${v.title.replace(/'/g,"\\'")}'')"
+            style="cursor:pointer;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.12);transition:transform 0.2s;"
+            onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="position:relative;">
+              <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"
+                style="width:100%;display:block;" alt="${v.title}" loading="lazy"/>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);">
+                <div style="width:44px;height:44px;background:rgba(255,0,0,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                  <div style="color:#fff;font-size:1.2rem;margin-left:3px;">▶</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:9px 11px;font-size:0.8rem;color:rgba(255,255,255,0.9);font-weight:700;line-height:1.4;">${v.title}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Full playlist on YouTube -->
+      <div style="margin-top:18px;text-align:center;">
+        <a href="https://www.youtube.com/playlist?list=${p.id}" target="_blank"
+          style="background:#FF0000;color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:11px 24px;border-radius:50px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+          ▶ See full playlist on YouTube
+        </a>
+      </div>
+    `;
   },
 
   render() {
@@ -2555,56 +2694,56 @@ const Videos = {
       : this.PLAYLISTS.filter(p => p.ages.includes(this.currentFilter));
 
     if(filtered.length === 0) {
-      grid.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.6);">No videos in this category yet — check back soon! 🎬</div>`;
+      grid.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.6);">No videos in this category yet! 🎬</div>`;
       return;
     }
 
-    grid.innerHTML = filtered.map(p => `
-      <div style="background:rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.1);">
+    // Show playlist cards — tap to open and see ALL videos
+    grid.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
+        ${filtered.map((p, idx) => {
+          const realIdx = this.PLAYLISTS.indexOf(p);
+          return `
+          <div onclick="Videos.openPlaylist(${realIdx})"
+            style="cursor:pointer;background:rgba(255,255,255,0.06);border-radius:18px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.1);transition:transform 0.2s;"
+            onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
 
-        <!-- Playlist header -->
-        <div style="background:${p.color};padding:14px 18px;display:flex;align-items:center;gap:12px;">
-          <div style="font-size:2rem;">${p.icon}</div>
-          <div style="flex:1;">
-            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">${p.title}</div>
-            <div style="color:rgba(255,255,255,0.85);font-size:0.8rem;">${p.desc}</div>
-          </div>
-          <a href="https://www.youtube.com/playlist?list=${p.id}" target="_blank"
-             style="background:rgba(255,255,255,0.25);color:#fff;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:6px 13px;border-radius:50px;text-decoration:none;white-space:nowrap;">
-            Full playlist ▶
-          </a>
-        </div>
+            <!-- Thumbnail -->
+            <div style="position:relative;">
+              <img src="https://img.youtube.com/vi/${p.videos[0].id}/mqdefault.jpg"
+                style="width:100%;display:block;" alt="${p.title}" loading="lazy"/>
+              <div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.75);color:#fff;font-size:0.72rem;font-weight:800;padding:3px 8px;border-radius:50px;">
+                ${p.videos.length} video${p.videos.length===1?'':'s'}
+              </div>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                <div style="width:50px;height:50px;background:rgba(255,0,0,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                  <div style="color:#fff;font-size:1.4rem;margin-left:4px;">▶</div>
+                </div>
+              </div>
+            </div>
 
-        <!-- Embedded player -->
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-          <iframe
-            src="https://www.youtube.com/embed/${p.firstVideo}?list=${p.id}&rel=0&modestbranding=1"
-            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-            title="${p.title}">
-          </iframe>
-        </div>
+            <!-- Info -->
+            <div style="padding:12px 14px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                <span style="font-size:1.4rem;">${p.icon}</span>
+                <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${p.title}</div>
+              </div>
+              <div style="color:rgba(255,255,255,0.65);font-size:0.78rem;">${p.desc}</div>
+            </div>
 
-        <!-- Watch on YouTube button -->
-        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <div style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Tap video to play · Swipe for more episodes</div>
-          <a href="https://www.youtube.com/playlist?list=${p.id}" target="_blank"
-             style="background:#FF0000;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:7px 16px;border-radius:50px;text-decoration:none;display:flex;align-items:center;gap:6px;">
-            ▶ Watch on YouTube
-          </a>
-        </div>
-
+            <!-- Colour bar -->
+            <div style="height:4px;background:${p.color};"></div>
+          </div>`;
+        }).join('')}
       </div>
-    `).join('');
+    `;
   },
 
-  // Called when entering video screen
   init() {
-    // Auto-filter based on current age group
     const ageMap = {'0-3':'baby','4-6':'junior','7-10':'all-ages','11-14':'all-ages','15-17':'all-ages'};
     const autoFilter = ageMap[S.ageGroup] || 'all';
+    this.activePlaylist = null;
+    this.activeVideo = null;
     this.filter(autoFilter);
   }
 };
