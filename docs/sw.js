@@ -1,12 +1,9 @@
-
-Copy
-
 // ── Samara AI Service Worker ─────────────────────────────────
 // Version — bump this to force cache refresh on update
 const CACHE_VERSION = 'samara-v1.0.0';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
- 
+
 // Files cached immediately on install — app works offline after first load
 const PRECACHE_URLS = [
   '/',
@@ -17,14 +14,14 @@ const PRECACHE_URLS = [
   // Google Fonts (cached after first online load)
   'https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap',
 ];
- 
+
 // These origins are NEVER cached — always need live data
 const NETWORK_ONLY = [
   'https://api.anthropic.com',       // AI calls always need internet
   'https://bfivpvlzehtmksnmgnzb.supabase.co', // Auth + database
   'https://www.paypal.com',          // Payment processing
 ];
- 
+
 // ── INSTALL — cache static assets ───────────────────────────
 self.addEventListener('install', event => {
   console.log('[SW] Installing Samara AI v' + CACHE_VERSION);
@@ -36,7 +33,7 @@ self.addEventListener('install', event => {
     }).then(() => self.skipWaiting())
   );
 });
- 
+
 // ── ACTIVATE — clean up old caches ──────────────────────────
 self.addEventListener('activate', event => {
   console.log('[SW] Activating Samara AI');
@@ -53,46 +50,46 @@ self.addEventListener('activate', event => {
     ).then(() => self.clients.claim())
   );
 });
- 
+
 // ── FETCH — smart caching strategy ──────────────────────────
 self.addEventListener('fetch', event => {
   const url = event.request.url;
- 
+
   // Network-only: AI, auth, payments — always fresh
   if (NETWORK_ONLY.some(origin => url.startsWith(origin))) {
     event.respondWith(fetch(event.request));
     return;
   }
- 
+
   // Google Fonts CSS — network first, fall back to cache
   if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
     event.respondWith(networkFirstWithCache(event.request, DYNAMIC_CACHE));
     return;
   }
- 
+
   // CDN scripts (Supabase JS) — cache first, refresh in background
   if (url.includes('cdn.jsdelivr.net') || url.includes('unpkg.com')) {
     event.respondWith(cacheFirstWithNetworkUpdate(event.request, DYNAMIC_CACHE));
     return;
   }
- 
+
   // App shell (HTML, CSS, images from our own domain) — cache first
   if (url.startsWith(self.location.origin)) {
     event.respondWith(cacheFirstWithNetworkUpdate(event.request, STATIC_CACHE));
     return;
   }
- 
+
   // Everything else — network first
   event.respondWith(networkFirstWithCache(event.request, DYNAMIC_CACHE));
 });
- 
+
 // ── Cache strategies ─────────────────────────────────────────
- 
+
 // Cache first — great for app shell; updates silently in background
 async function cacheFirstWithNetworkUpdate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
- 
+
   // Fetch fresh version in background regardless
   const networkFetch = fetch(request).then(response => {
     if (response && response.status === 200) {
@@ -100,10 +97,10 @@ async function cacheFirstWithNetworkUpdate(request, cacheName) {
     }
     return response;
   }).catch(() => null);
- 
+
   return cached || await networkFetch || offlineFallback();
 }
- 
+
 // Network first — good for content that changes; falls back to cache
 async function networkFirstWithCache(request, cacheName) {
   try {
@@ -118,7 +115,7 @@ async function networkFirstWithCache(request, cacheName) {
     return cached || offlineFallback();
   }
 }
- 
+
 // Offline fallback page
 function offlineFallback() {
   return new Response(
@@ -151,20 +148,20 @@ function offlineFallback() {
     { headers: { 'Content-Type': 'text/html' } }
   );
 }
- 
+
 // ── BACKGROUND SYNC — retry failed score saves ───────────────
 self.addEventListener('sync', event => {
   if (event.tag === 'sync-scores') {
     event.waitUntil(syncPendingScores());
   }
 });
- 
+
 async function syncPendingScores() {
   // Scores that failed to save while offline get retried here
   // The app stores them in localStorage under 'samara_pending_scores'
   console.log('[SW] Background sync: retrying pending score saves');
 }
- 
+
 // ── PUSH NOTIFICATIONS (optional, for future study reminders) ─
 self.addEventListener('push', event => {
   if (!event.data) return;
@@ -180,12 +177,12 @@ self.addEventListener('push', event => {
     })
   );
 });
- 
+
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
     clients.openWindow(event.notification.data?.url || '/')
   );
 });
- 
+
 console.log('[SW] Samara AI Service Worker loaded ✅');
