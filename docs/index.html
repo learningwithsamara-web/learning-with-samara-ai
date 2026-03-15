@@ -402,6 +402,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     <button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 My Progress</button>
     <button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
     <button id="btn-pep" class="btn btn-primary" style="background:linear-gradient(135deg,#C77DFF,#7928CA);" onclick="App.showScreen('screen-pep')">🇯🇲 PEP</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#FF6B6B,#FF416C);" onclick="App.showScreen('screen-videos')">🎬 Watch</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="App.showScreen('screen-research')">🔭 Research</button>
     <button id="btn-studyplan" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="PersonalAlgo.openPlan()">🧠 My Plan</button>
     <button class="btn btn-gold" onclick="App.showScreen('screen-pricing')">⭐ Go Pro</button>
@@ -685,6 +686,10 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
       <button class="baby-category-btn" onclick="BabyMode.start('shapes')"><span class="baby-category-icon">🔷</span><span class="baby-category-name">Shapes</span></button>
       <button class="baby-category-btn" onclick="BabyMode.start('numbers')"><span class="baby-category-icon">🔢</span><span class="baby-category-name">Numbers</span></button>
     </div>
+    <!-- Watch Samara videos button -->
+    <button onclick="App.showScreen('screen-videos')" style="background:linear-gradient(135deg,#FF0000,#CC0000);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 32px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 6px 20px rgba(255,0,0,0.4);">
+      🎬 Watch Samara Videos!
+    </button>
   </div>
   <div id="baby-activity" class="baby-screen hidden">
     <div class="baby-activity-wrap">
@@ -779,7 +784,37 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
   </div>
 </div>
 
-<!-- ══ FLOATING AI TUTOR ══ -->
+<!-- ══ VIDEOS ══ -->
+<div id="screen-videos" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🎬 Watch & Learn</h2>
+  </div>
+  <div style="max-width:860px;margin:0 auto;padding:18px 22px;">
+
+    <!-- Channel banner -->
+    <div style="background:linear-gradient(135deg,#FF0000,#CC0000);border-radius:18px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:2.8rem;">🎬</div>
+      <div style="flex:1;">
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;">Learning With Samara</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.88rem;margin-top:3px;">Animated learning videos · Songs · Stories</div>
+      </div>
+      <a href="https://www.youtube.com/@learningwithsamara" target="_blank" style="background:#fff;color:#CC0000;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 18px;border-radius:50px;text-decoration:none;font-weight:800;">▶ YouTube Channel</a>
+    </div>
+
+    <!-- Age filter tabs -->
+    <div style="display:flex;gap:9px;margin-bottom:20px;flex-wrap:wrap;">
+      <button onclick="Videos.filter('all')" id="vf-all" class="btn btn-primary" style="font-size:0.85rem;padding:7px 16px;">All Videos</button>
+      <button onclick="Videos.filter('baby')" id="vf-baby" class="btn btn-outline" style="font-size:0.85rem;padding:7px 16px;color:#fff;">🍼 Baby (0-3)</button>
+      <button onclick="Videos.filter('junior')" id="vf-junior" class="btn btn-outline" style="font-size:0.85rem;padding:7px 16px;color:#fff;">🌱 Junior (4-6)</button>
+      <button onclick="Videos.filter('all-ages')" id="vf-all-ages" class="btn btn-outline" style="font-size:0.85rem;padding:7px 16px;color:#fff;">⭐ All Ages</button>
+    </div>
+
+    <!-- Video playlists grid -->
+    <div id="videos-grid" style="display:flex;flex-direction:column;gap:28px;"></div>
+
+  </div>
+</div>
 <div class="ai-tutor-float hidden" id="ai-tutor-float">
   <div class="ai-chat-window hidden" id="ai-chat-window">
     <div class="ai-chat-header">
@@ -1882,8 +1917,9 @@ const App = {
     if(id==='screen-dashboard')App.renderDash();
     if(id==='screen-parent')App.renderParent();  // open to all — upsell inside
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
-    if(id==='screen-research')setTimeout(()=>Research.init(),100);  // open to all — limit inside
+    if(id==='screen-research')setTimeout(()=>Research.init(),100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
+    if(id==='screen-videos')setTimeout(()=>Videos.init(),100);
   },
 
   showProGate(message) {
@@ -2427,7 +2463,153 @@ const PersonalAlgo = {
   }
 };
 
-// ── SEARCH DB ────────────────────────────────────────────────
+// ── VIDEOS MODULE ────────────────────────────────────────────
+const Videos = {
+  currentFilter: 'all',
+  currentVideo: null,
+
+  PLAYLISTS: [
+    {
+      id: 'PLOFC4G2392_EWRKpZEotkH-14FTPvqb9t',
+      title: 'Nursery Rhymes & Songs',
+      icon: '🎵',
+      desc: 'Fun learning songs with Samara!',
+      ages: ['baby','junior','all-ages'],
+      color: 'linear-gradient(135deg,#FF9B3F,#FFD93D)',
+      firstVideo: 'EiIJvnuPl1c'
+    },
+    {
+      id: 'PLOFC4G2392_HDD2i0GoQ6ctOUeQYePMJv',
+      title: 'Counting Adventure',
+      icon: '🔢',
+      desc: 'Learn numbers and counting with Samara!',
+      ages: ['baby','junior'],
+      color: 'linear-gradient(135deg,#7EC8E3,#4A90D9)',
+      firstVideo: '0GEz1QF2pxY'
+    },
+    {
+      id: 'PLOFC4G2392_G8NkhSvX3ZCMj5k7_M6wOs',
+      title: 'Healthy Habits with Samara',
+      icon: '🥦',
+      desc: 'Healthy eating, exercise and good habits!',
+      ages: ['junior','all-ages'],
+      color: 'linear-gradient(135deg,#6BCB77,#3DAA45)',
+      firstVideo: 'xkS6XVaI-Dk'
+    },
+    {
+      id: 'PLOFC4G2392_EeQv0L4Wnyfuev1-QrqhEg',
+      title: 'Social Learning',
+      icon: '🤝',
+      desc: 'Friendship, kindness and social skills!',
+      ages: ['junior','all-ages'],
+      color: 'linear-gradient(135deg,#C77DFF,#7928CA)',
+      firstVideo: 'c4BIQ3azSgk'
+    },
+    {
+      id: 'PLOFC4G2392_FZphrWjpJcJDAJq3vgrTyR',
+      title: 'Story Time with Samara',
+      icon: '📖',
+      desc: 'Animated stories and adventures!',
+      ages: ['baby','junior','all-ages'],
+      color: 'linear-gradient(135deg,#FF6B6B,#FF416C)',
+      firstVideo: 'BYhlvUQakcg'
+    },
+    {
+      id: 'PLOFC4G2392_HQRRnsWS-JHcSiTNrdxH8A',
+      title: 'Shape Adventure',
+      icon: '🔷',
+      desc: 'Circles, squares, triangles and more!',
+      ages: ['baby'],
+      color: 'linear-gradient(135deg,#FFD93D,#FF9B3F)',
+      firstVideo: 'NkRQXKj0TSU'
+    },
+    {
+      id: 'PLOFC4G2392_Ech68f7mHRWvafaJ6ov2_F',
+      title: 'Alphabet Learning',
+      icon: '🔤',
+      desc: 'Letters A-Z with Samara!',
+      ages: ['baby','junior'],
+      color: 'linear-gradient(135deg,#7928CA,#FF0080)',
+      firstVideo: 'elYpWAriHj4'
+    },
+  ],
+
+  filter(age) {
+    this.currentFilter = age;
+    // Update tab buttons
+    ['all','baby','junior','all-ages'].forEach(f => {
+      const btn = document.getElementById(`vf-${f}`);
+      if(!btn) return;
+      btn.className = f === age ? 'btn btn-primary' : 'btn btn-outline';
+      if(f !== age) btn.style.color = '#fff';
+    });
+    this.render();
+  },
+
+  render() {
+    const grid = document.getElementById('videos-grid');
+    if(!grid) return;
+
+    const filtered = this.currentFilter === 'all'
+      ? this.PLAYLISTS
+      : this.PLAYLISTS.filter(p => p.ages.includes(this.currentFilter));
+
+    if(filtered.length === 0) {
+      grid.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.6);">No videos in this category yet — check back soon! 🎬</div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => `
+      <div style="background:rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.1);">
+
+        <!-- Playlist header -->
+        <div style="background:${p.color};padding:14px 18px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:2rem;">${p.icon}</div>
+          <div style="flex:1;">
+            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">${p.title}</div>
+            <div style="color:rgba(255,255,255,0.85);font-size:0.8rem;">${p.desc}</div>
+          </div>
+          <a href="https://www.youtube.com/playlist?list=${p.id}" target="_blank"
+             style="background:rgba(255,255,255,0.25);color:#fff;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:6px 13px;border-radius:50px;text-decoration:none;white-space:nowrap;">
+            Full playlist ▶
+          </a>
+        </div>
+
+        <!-- Embedded player -->
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+          <iframe
+            src="https://www.youtube.com/embed/${p.firstVideo}?list=${p.id}&rel=0&modestbranding=1"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+            title="${p.title}">
+          </iframe>
+        </div>
+
+        <!-- Watch on YouTube button -->
+        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Tap video to play · Swipe for more episodes</div>
+          <a href="https://www.youtube.com/playlist?list=${p.id}" target="_blank"
+             style="background:#FF0000;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:7px 16px;border-radius:50px;text-decoration:none;display:flex;align-items:center;gap:6px;">
+            ▶ Watch on YouTube
+          </a>
+        </div>
+
+      </div>
+    `).join('');
+  },
+
+  // Called when entering video screen
+  init() {
+    // Auto-filter based on current age group
+    const ageMap = {'0-3':'baby','4-6':'junior','7-10':'all-ages','11-14':'all-ages','15-17':'all-ages'};
+    const autoFilter = ageMap[S.ageGroup] || 'all';
+    this.filter(autoFilter);
+  }
+};
+
+window.Videos = Videos;
 const SearchDB=[
   {k:['add','addition','plus','sum'],s:'math',label:'Addition',icon:'➕'},
   {k:['subtract','minus','take away'],s:'math',label:'Subtraction',icon:'➖'},
