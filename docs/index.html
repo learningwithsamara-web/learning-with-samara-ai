@@ -403,6 +403,8 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     <button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
     <button id="btn-pep" class="btn btn-primary" style="background:linear-gradient(135deg,#C77DFF,#7928CA);" onclick="App.showScreen('screen-pep')">🇯🇲 PEP</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#FF6B6B,#FF416C);" onclick="App.showScreen('screen-videos')">📺 Samara TV ⭐🧠</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#7928CA,#FF0080);" onclick="App.showScreen('screen-shop')">🛍️📖✨ Samara Edu Store</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#302b63,#6BCB77);" onclick="App.showScreen('screen-getapp')">📲 Get the App</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="App.showScreen('screen-research')">🔭 Research</button>
     <button id="btn-studyplan" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="PersonalAlgo.openPlan()">🧠 My Plan</button>
     <button class="btn btn-gold" onclick="App.showScreen('screen-pricing')">⭐ Go Pro</button>
@@ -793,13 +795,23 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
   <div style="max-width:860px;margin:0 auto;padding:18px 22px;">
 
     <!-- Channel banner -->
-    <div style="background:linear-gradient(135deg,#FF0000,#CC0000);border-radius:18px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div style="background:linear-gradient(135deg,#FF0000,#CC0000);border-radius:18px;padding:18px 22px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
       <div style="font-size:2.8rem;">📺</div>
       <div style="flex:1;">
         <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;">Samara TV ⭐🧠</div>
         <div style="color:rgba(255,255,255,0.8);font-size:0.88rem;margin-top:3px;">Animated learning videos · Songs · Stories</div>
       </div>
       <a href="https://www.youtube.com/@learningwithsamara" target="_blank" style="background:#fff;color:#CC0000;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 18px;border-radius:50px;text-decoration:none;font-weight:800;">▶ YouTube Channel</a>
+    </div>
+
+    <!-- Baby TV autoplay banner -->
+    <div onclick="BabyTV.start()" style="cursor:pointer;background:linear-gradient(135deg,#FF9B3F,#FFD93D);border-radius:18px;padding:16px 22px;margin-bottom:20px;display:flex;align-items:center;gap:14px;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+      <div style="font-size:2.5rem;">🍼</div>
+      <div style="flex:1;">
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.15rem;">Baby TV — Autoplay Mode</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.82rem;margin-top:2px;">All baby videos play one after another · 3s countdown · Hands-free for babies!</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.3);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 16px;border-radius:50px;">▶ Start</div>
     </div>
 
     <!-- Age filter tabs -->
@@ -812,6 +824,246 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 
     <!-- Video playlists grid -->
     <div id="videos-grid" style="display:flex;flex-direction:column;gap:28px;"></div>
+
+  </div>
+</div>
+
+<!-- ══ BABY TV AUTOPLAY ══ -->
+<div id="screen-babytv" class="screen">
+  <div style="position:relative;background:#000;min-height:100vh;display:flex;flex-direction:column;">
+
+    <!-- Exit button — top left, small so baby won't find it -->
+    <button onclick="BabyTV.stop()" style="position:fixed;top:12px;left:12px;z-index:9999;background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50px;padding:6px 14px;font-size:0.78rem;cursor:pointer;font-family:'Fredoka One',cursive;">✕ Exit</button>
+
+    <!-- Now playing label -->
+    <div style="padding:12px 20px 0 60px;display:flex;align-items:center;gap:10px;">
+      <div style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:3px 10px;border-radius:50px;">🍼 Baby TV</div>
+      <div id="babytv-title" style="color:rgba(255,255,255,0.8);font-family:'Fredoka One',cursive;font-size:0.85rem;">Loading...</div>
+    </div>
+
+    <!-- Video player — full width -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:8px;">
+      <div style="width:100%;max-width:860px;">
+        <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;background:#111;">
+          <iframe id="babytv-iframe"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Countdown bar -->
+    <div id="babytv-countdown" style="display:none;padding:16px 20px;text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:8px;" id="babytv-countdown-text">Next video in 3...</div>
+      <div style="height:8px;background:rgba(255,255,255,0.15);border-radius:50px;overflow:hidden;max-width:400px;margin:0 auto;">
+        <div id="babytv-countdown-bar" style="height:100%;background:linear-gradient(90deg,#FFD93D,#FF9B3F);border-radius:50px;width:100%;transition:width 1s linear;"></div>
+      </div>
+    </div>
+
+    <!-- Video counter + skip -->
+    <div style="padding:8px 20px 16px;display:flex;align-items:center;justify-content:center;gap:16px;">
+      <div id="babytv-counter" style="color:rgba(255,255,255,0.5);font-size:0.78rem;font-family:'Fredoka One',cursive;"></div>
+      <button onclick="BabyTV.skip()" style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);border:none;border-radius:50px;padding:5px 14px;font-size:0.78rem;font-family:'Fredoka One',cursive;cursor:pointer;">Skip ▶▶</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SHOP ══ -->
+<div id="screen-shop" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🛍️📖✨ Samara Edu Store</h2>
+  </div>
+  <div style="max-width:860px;margin:0 auto;padding:28px 22px;text-align:center;">
+
+    <!-- Coming soon banner -->
+    <div style="background:linear-gradient(135deg,#7928CA,#FF0080);border-radius:24px;padding:48px 32px;margin-bottom:28px;">
+      <div style="font-size:4rem;margin-bottom:16px;">🛍️</div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:2.2rem;margin-bottom:10px;">🛍️📖✨ Samara Edu Store</div>
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:16px;">Coming Soon! ✨</div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.95rem;max-width:480px;margin:0 auto;line-height:1.7;">
+        Amazing learning materials are on their way! Colouring books, worksheets, reading books, activity packs and educational eBooks — all made with love by Samara! 💛
+      </div>
+    </div>
+
+    <!-- Product preview cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px;">
+      <div style="background:rgba(255,255,255,0.08);border-radius:18px;padding:22px 16px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-size:2.8rem;margin-bottom:10px;">🎨</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;margin-bottom:4px;">Colouring Books</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-bottom:10px;">Fun printable colouring pages</div>
+        <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:5px 14px;border-radius:50px;display:inline-block;">$2.99</div>
+        <div style="margin-top:10px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:0.75rem;padding:5px 12px;border-radius:50px;display:inline-block;">Coming Soon</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border-radius:18px;padding:22px 16px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-size:2.8rem;margin-bottom:10px;">📝</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;margin-bottom:4px;">Worksheets</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-bottom:10px;">Activity & learning packs</div>
+        <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:5px 14px;border-radius:50px;display:inline-block;">$3.99</div>
+        <div style="margin-top:10px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:0.75rem;padding:5px 12px;border-radius:50px;display:inline-block;">Coming Soon</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border-radius:18px;padding:22px 16px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-size:2.8rem;margin-bottom:10px;">📖</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;margin-bottom:4px;">Reading Books</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-bottom:10px;">Story & reading books</div>
+        <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:5px 14px;border-radius:50px;display:inline-block;">$3.99–$4.99</div>
+        <div style="margin-top:10px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:0.75rem;padding:5px 12px;border-radius:50px;display:inline-block;">Coming Soon</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border-radius:18px;padding:22px 16px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-size:2.8rem;margin-bottom:10px;">📚</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;margin-bottom:4px;">eBooks</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-bottom:10px;">Educational digital books</div>
+        <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:5px 14px;border-radius:50px;display:inline-block;">$4.99–$6.99</div>
+        <div style="margin-top:10px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:0.75rem;padding:5px 12px;border-radius:50px;display:inline-block;">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- Notify me -->
+    <div style="background:rgba(255,255,255,0.07);border-radius:18px;padding:24px;border:1.5px solid rgba(255,255,255,0.12);">
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-bottom:6px;">🔔 Want to know when the shop opens?</div>
+      <div style="color:rgba(255,255,255,0.65);font-size:0.85rem;margin-bottom:16px;">Follow our YouTube channel for updates!</div>
+      <a href="https://www.youtube.com/@learningwithsamara" target="_blank" style="background:#FF0000;color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:11px 24px;border-radius:50px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+        ▶ Follow on YouTube
+      </a>
+      <div style="margin-top:12px;color:rgba(255,255,255,0.5);font-size:0.8rem;">Or email us: <a href="mailto:edu@learningwithsamara.com" style="color:#FFD93D;text-decoration:none;">edu@learningwithsamara.com</a></div>
+    </div>
+
+  </div>
+</div>
+<!-- ══ GET THE APP ══ -->
+<div id="screen-getapp" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">📲 Get the App</h2>
+  </div>
+  <div style="max-width:700px;margin:0 auto;padding:24px 22px;">
+
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:24px;padding:32px 24px;text-align:center;margin-bottom:24px;border:1.5px solid rgba(199,125,255,0.3);">
+      <div style="font-size:3.5rem;margin-bottom:12px;">📱</div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.8rem;margin-bottom:8px;">Install Samara AI</div>
+      <div style="color:rgba(255,255,255,0.75);font-size:0.95rem;margin-bottom:18px;line-height:1.6;">Get the full app experience on your phone or tablet!<br>Works on Android, iPhone, iPad and Windows — completely free to install.</div>
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <div style="background:rgba(107,203,119,0.2);border:1px solid rgba(107,203,119,0.4);border-radius:50px;padding:6px 16px;color:#6BCB77;font-weight:800;font-size:0.82rem;">✅ No App Store needed</div>
+        <div style="background:rgba(107,203,119,0.2);border:1px solid rgba(107,203,119,0.4);border-radius:50px;padding:6px 16px;color:#6BCB77;font-weight:800;font-size:0.82rem;">✅ Always up to date</div>
+        <div style="background:rgba(107,203,119,0.2);border:1px solid rgba(107,203,119,0.4);border-radius:50px;padding:6px 16px;color:#6BCB77;font-weight:800;font-size:0.82rem;">✅ Works offline</div>
+      </div>
+    </div>
+
+    <!-- Direct link box -->
+    <div style="background:rgba(255,217,61,0.12);border-radius:18px;padding:18px 22px;margin-bottom:24px;border:1.5px solid rgba(255,217,61,0.3);text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;margin-bottom:8px;">🔗 Direct App Link</div>
+      <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:12px 16px;font-family:monospace;color:#fff;font-size:1rem;letter-spacing:1px;margin-bottom:12px;">ai.learningwithsamara.com</div>
+      <div style="color:rgba(255,255,255,0.65);font-size:0.82rem;">Open this link in your browser then follow the steps below for your device</div>
+    </div>
+
+    <!-- iPhone / iPad -->
+    <div style="background:rgba(255,255,255,0.06);border-radius:20px;padding:22px;margin-bottom:16px;border:1.5px solid rgba(255,255,255,0.1);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="font-size:2.2rem;"></div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.15rem;">iPhone &amp; iPad</div>
+          <div style="color:rgba(255,255,255,0.55);font-size:0.78rem;">Using Safari browser</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Open <b style="color:#FFD93D;">Safari</b> on your iPhone or iPad — must be Safari, not Chrome</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Go to <b style="color:#FFD93D;">ai.learningwithsamara.com</b></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Tap the <b style="color:#FFD93D;">Share button ⎙</b> at the bottom — the box with an arrow pointing up</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Scroll down and tap <b style="color:#FFD93D;">"Add to Home Screen"</b> 📲</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Tap <b style="color:#FFD93D;">"Add"</b> — Samara AI icon appears on your home screen! 🎉</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Android -->
+    <div style="background:rgba(255,255,255,0.06);border-radius:20px;padding:22px;margin-bottom:16px;border:1.5px solid rgba(255,255,255,0.1);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="font-size:2.2rem;">🤖</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.15rem;">Android Phone &amp; Tablet</div>
+          <div style="color:rgba(255,255,255,0.55);font-size:0.78rem;">Using Chrome browser</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Open <b style="color:#FFD93D;">Chrome</b> on your Android phone or tablet</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Go to <b style="color:#FFD93D;">ai.learningwithsamara.com</b></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">A banner may appear at the bottom saying <b style="color:#FFD93D;">"Add Samara AI to Home Screen"</b> — tap it! If not, go to step 4</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Tap the <b style="color:#FFD93D;">three dots ⋮</b> at the top right of Chrome</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Tap <b style="color:#FFD93D;">"Add to Home Screen"</b> or <b style="color:#FFD93D;">"Install App"</b> → tap <b style="color:#FFD93D;">Install</b> 🎉</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Windows / PC -->
+    <div style="background:rgba(255,255,255,0.06);border-radius:20px;padding:22px;margin-bottom:24px;border:1.5px solid rgba(255,255,255,0.1);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="font-size:2.2rem;">💻</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.15rem;">Windows / Mac / Chromebook</div>
+          <div style="color:rgba(255,255,255,0.55);font-size:0.78rem;">Using Chrome or Edge browser</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Open <b style="color:#FFD93D;">Chrome</b> or <b style="color:#FFD93D;">Edge</b> on your computer</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Go to <b style="color:#FFD93D;">ai.learningwithsamara.com</b></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Look for an <b style="color:#FFD93D;">install icon ⊕</b> in the address bar — click it</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.5;">Click <b style="color:#FFD93D;">"Install"</b> — Samara AI opens as its own app window! 🎉</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share button -->
+    <div style="text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.95rem;margin-bottom:14px;">Share with friends and family! 💛</div>
+      <button onclick="navigator.share ? navigator.share({title:'Samara AI Learning App',text:'Install the free Samara AI learning app for kids!',url:'https://ai.learningwithsamara.com'}) : App.toast('Share this link: ai.learningwithsamara.com 🔗')"
+        style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(255,155,63,0.4);">
+        📤 Share the App Link
+      </button>
+      <div style="margin-top:14px;color:rgba(255,255,255,0.45);font-size:0.78rem;">Only available at ai.learningwithsamara.com · Not on App Store or Google Play</div>
+    </div>
 
   </div>
 </div>
@@ -2027,6 +2279,9 @@ const App = {
     if(id==='screen-research')setTimeout(()=>Research.init(),100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos')setTimeout(()=>Videos.init(),100);
+    if(id==='screen-babytv') AITutor.hideFloat();
+    if(id==='screen-shop') AITutor.hideFloat();
+    if(id==='screen-getapp') AITutor.hideFloat();
   },
 
   showProGate(message) {
@@ -2907,6 +3162,93 @@ const Videos = {
 };
 
 window.Videos = Videos;
+
+// ── BABY TV — Autoplay Mode ──────────────────────────────────
+const BabyTV = {
+  queue: [], currentIdx: 0, countdownTimer: null, countdownSecs: 3,
+
+  buildQueue() {
+    this.queue = [];
+    Videos.PLAYLISTS.filter(p=>p.ages.includes('baby')).forEach(p=>{
+      p.videos.forEach(v=>this.queue.push({id:v.id,title:v.title,playlist:p.title}));
+    });
+  },
+
+  start() {
+    this.buildQueue();
+    if(!this.queue.length){App.toast('No baby videos yet! 🍼');return;}
+    this.currentIdx = 0;
+    App.showScreen('screen-babytv');
+    this.playCurrentVideo();
+  },
+
+  stop() {
+    clearInterval(this.countdownTimer);
+    const iframe=document.getElementById('babytv-iframe');
+    if(iframe) iframe.src='';
+    const cd=document.getElementById('babytv-countdown');
+    if(cd) cd.style.display='none';
+    App.showScreen('screen-videos');
+  },
+
+  playCurrentVideo() {
+    if(this.currentIdx >= this.queue.length) this.currentIdx = 0;
+    clearInterval(this.countdownTimer);
+    const cd=document.getElementById('babytv-countdown');
+    if(cd) cd.style.display='none';
+
+    const video = this.queue[this.currentIdx];
+    const iframe=document.getElementById('babytv-iframe');
+    const title=document.getElementById('babytv-title');
+    const counter=document.getElementById('babytv-counter');
+
+    if(title) title.textContent = video.title;
+    if(counter) counter.textContent = `Video ${this.currentIdx+1} of ${this.queue.length} · ${video.playlist}`;
+    if(iframe) iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
+
+    this._listenForEnd();
+  },
+
+  _listenForEnd() {
+    const handler = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if(data.event==='onStateChange' && data.info===0) {
+          window.removeEventListener('message', handler);
+          this.startCountdown();
+        }
+      } catch(e){}
+    };
+    window.addEventListener('message', handler);
+  },
+
+  startCountdown() {
+    const cd=document.getElementById('babytv-countdown');
+    const cdText=document.getElementById('babytv-countdown-text');
+    const cdBar=document.getElementById('babytv-countdown-bar');
+    if(!cd) return;
+    cd.style.display='block';
+    let secs = this.countdownSecs;
+    if(cdBar){
+      cdBar.style.transition='none';
+      cdBar.style.width='100%';
+      setTimeout(()=>{cdBar.style.transition=`width ${this.countdownSecs}s linear`;cdBar.style.width='0%';},50);
+    }
+    if(cdText) cdText.textContent=`Next video in ${secs}...`;
+    this.countdownTimer = setInterval(()=>{
+      secs--;
+      if(cdText) cdText.textContent = secs>0?`Next video in ${secs}...`:'Loading next video! 🎬';
+      if(secs<=0){clearInterval(this.countdownTimer);this.currentIdx++;this.playCurrentVideo();}
+    },1000);
+  },
+
+  skip() {
+    clearInterval(this.countdownTimer);
+    this.currentIdx++;
+    this.playCurrentVideo();
+  }
+};
+window.BabyTV = BabyTV;
 const SearchDB=[
   {k:['add','addition','plus','sum'],s:'math',label:'Addition',icon:'➕'},
   {k:['subtract','minus','take away'],s:'math',label:'Subtraction',icon:'➖'},
