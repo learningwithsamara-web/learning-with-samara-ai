@@ -1954,32 +1954,48 @@ const Avatars = {
 const QGen = {
 
   // Track used questions across sessions — persisted to localStorage
-  _usedKey(sid, wid) { return `sq_${sid}_${wid}`; },
-  _getUsed(sid, wid) {
-    try { return new Set(JSON.parse(localStorage.getItem(this._usedKey(sid,wid))||'[]')); }
+  // Track used questions per SUBJECT globally — not per world
+  // This means the same question never repeats across any world or stage
+  _usedKey(sid) { return `sq_${sid}`; },
+  _getUsed(sid) {
+    try { return new Set(JSON.parse(localStorage.getItem(this._usedKey(sid))||'[]')); }
     catch(e) { return new Set(); }
   },
-  _saveUsed(sid, wid, usedSet) {
-    // Keep last 50 used — stops the set growing forever
-    const arr = [...usedSet].slice(-50);
-    try { localStorage.setItem(this._usedKey(sid,wid), JSON.stringify(arr)); } catch(e){}
+  _saveUsed(sid, usedSet) {
+    // Keep last 200 used questions per subject
+    const arr = [...usedSet].slice(-200);
+    try { localStorage.setItem(this._usedKey(sid), JSON.stringify(arr)); } catch(e){}
   },
-  _resetUsed(sid, wid) {
-    try { localStorage.removeItem(this._usedKey(sid,wid)); } catch(e){}
+  _resetUsed(sid) {
+    try { localStorage.removeItem(this._usedKey(sid)); } catch(e){}
   },
 
   generate(sid, wid, stid, ag, count=5) {
     // Math & numbers = infinite random, never repeats
     if(sid==='math'||sid==='numbers') return this._mathRandom(wid, stid, ag, count);
 
-    const bank = this._getBank(sid, wid, ag);
-    const used = this._getUsed(sid, wid);
+    // Spelling — use level-specific bank, tracked per subject+level
+    if(sid==='spelling') {
+      const bank = this._spellingBank(wid, ag);
+      return this._pickUnused(sid+`_spell_${wid}`, bank, count);
+    }
+
+    // ALL other subjects — use the FULL question bank regardless of world
+    // This maximises variety and prevents repeating
+    const fullBank = this._getFullBank(sid, ag);
+    return this._pickUnused(sid, fullBank, count);
+  },
+
+  // Pick unused questions from a bank — tracks globally per subject
+  _pickUnused(key, bank, count) {
+    if(!bank || bank.length === 0) return [];
+    const used = this._getUsed(key);
     const newUsed = new Set(used);
 
-    // Shuffle the bank
+    // Shuffle entire bank
     const shuffled = [...bank].sort(()=>Math.random()-0.5);
 
-    // Pick unused questions first
+    // Pick questions not yet seen
     const result = [];
     for(const q of shuffled) {
       if(result.length >= count) break;
@@ -1989,18 +2005,22 @@ const QGen = {
       }
     }
 
-    // If not enough unused, reset the used set and pick from the rest
+    // If we've used all questions — reset and start fresh
     if(result.length < count) {
-      this._resetUsed(sid, wid);
-      const remaining = shuffled.filter(q=>!result.some(r=>r.text===q.text));
-      for(const q of remaining) {
+      this._resetUsed(key);
+      const newUsedFresh = new Set();
+      const freshShuffled = [...bank].sort(()=>Math.random()-0.5);
+      for(const q of freshShuffled) {
         if(result.length >= count) break;
-        result.push(q);
-        newUsed.add(q.text);
+        if(!result.some(r=>r.text===q.text)) {
+          result.push(q);
+          newUsedFresh.add(q.text);
+        }
       }
+      this._saveUsed(key, newUsedFresh);
+    } else {
+      this._saveUsed(key, newUsed);
     }
-
-    this._saveUsed(sid, wid, newUsed);
 
     return result.map(q=>({
       text: q.text,
@@ -2008,6 +2028,25 @@ const QGen = {
       correctValue: q.correct,
       hint: q.hint
     }));
+  },
+
+  // Get the FULL bank for a subject — all worlds combined, no slicing
+  _getFullBank(sid, ag) {
+    if(sid==='literature') return this._litBank(0);
+    if(sid==='science') return this._sciBank(0);
+    if(sid==='biology') return this._bioBank(0);
+    if(sid==='social'||sid==='history') return this._socialBank(0);
+    if(sid==='algebra') return this._algebraBank(0);
+    if(sid==='finance') return this._financeBank(0);
+    if(sid==='compsci') return this._csBank(0);
+    if(sid==='quantum') return this._quantumBank(0);
+    if(sid==='reading'||sid==='phonics') return this._readingBank(0);
+    if(sid==='shapes') return this._shapesBank();
+    if(sid==='colors') return this._colorsBank();
+    if(sid==='animals') return this._animalsBank(0);
+    if(sid==='physics') return this._physicsBank(0);
+    if(sid==='critical') return this._criticalBank(0);
+    return this._sciBank(0);
   },
 
   // Infinite random math — numbers are always different
@@ -2081,6 +2120,7 @@ const QGen = {
       {text:'What is a "foil" character?',correct:'A character whose traits contrast with the protagonist to highlight their qualities',wrong:['A villain','A narrator','A minor character with no purpose'],hint:'Sherlock Holmes and Dr. Watson are a classic foil pair'},
     ];
     // Literature worlds target different aspects
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,10), 2:all.slice(5,15), 3:all.slice(10,20), 4:all.slice(15,25), 5:all};
     return byWorld[wid]||all;
   },
@@ -2150,6 +2190,7 @@ const QGen = {
       {text:'What is a mutation?',correct:'A change in the DNA sequence',wrong:['A type of viral infection','A hormone response','Cell death'],hint:'Can be caused by UV radiation, chemicals, or copying errors'},
       {text:'What is the role of the nucleus?',correct:'Controls cell activities and contains the genetic material (DNA)',wrong:['Produces energy','Breaks down waste','Transports materials around the cell'],hint:'The "brain" of the cell'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,8), 2:all.slice(4,12), 3:all.slice(8,15), 4:all.slice(10,15), 5:all};
     return byWorld[wid]||all;
   },
@@ -2172,6 +2213,7 @@ const QGen = {
       {text:'What is globalisation?',correct:'The increasing interconnection of economies, cultures and people worldwide',wrong:['A type of government','The spread of one language globally','The process of forming new countries'],hint:'Your phone was designed in the USA, made in China, sold in Jamaica'},
       {text:'What was the significance of the printing press (1440s)?',correct:'It enabled mass production of books, spreading knowledge and literacy across Europe',wrong:['It allowed newspapers to replace books','It enabled governments to spread propaganda','It created the first written alphabet'],hint:'Gutenberg\'s invention helped spark the Renaissance and Reformation'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,6), 2:all.slice(3,10), 3:all.slice(7,13), 4:all.slice(9,15), 5:all};
     return byWorld[wid]||all;
   },
@@ -2194,6 +2236,7 @@ const QGen = {
       {text:'Solve: x² = 25',correct:'x = ±5',wrong:['x = 5','x = 12.5','x = 625'],hint:'Both +5 and -5 squared equal 25'},
       {text:'Expand and simplify: (x+2)(x+3)',correct:'x² + 5x + 6',wrong:['x² + 6','x² + 5x','x² + 6x + 6'],hint:'FOIL: x²+3x+2x+6 = x²+5x+6'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,7), 2:all.slice(4,11), 3:all.slice(8,15), 4:all.slice(10,15), 5:all};
     return byWorld[wid]||all;
   },
@@ -2213,6 +2256,7 @@ const QGen = {
       {text:'What is a recession?',correct:'A period of economic decline — negative GDP growth for two or more consecutive quarters',wrong:['When inflation rises above 10%','When unemployment falls below 5%','A boom period of high growth'],hint:'Businesses cut costs, unemployment rises, spending falls'},
       {text:'What is an emergency fund?',correct:'Savings set aside for unexpected expenses — typically 3–6 months of living costs',wrong:['A government benefit payment','Insurance for medical emergencies','A type of pension'],hint:'Financial experts recommend 3-6 months of expenses in cash'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,6), 2:all.slice(3,9), 3:all.slice(6,12), 4:all.slice(8,12), 5:all};
     return byWorld[wid]||all;
   },
@@ -2234,6 +2278,7 @@ const QGen = {
       {text:'What is "debugging"?',correct:'The process of finding and fixing errors in code',wrong:['Writing new code','Testing a program for speed','Compiling code'],hint:'The term comes from a literal bug found in an early computer in 1947'},
       {text:'What is a "loop" in programming?',correct:'A structure that repeats a block of code while a condition is true',wrong:['A type of error','A function that calls itself','A data structure'],hint:'for loops and while loops are the most common types'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,6), 2:all.slice(3,10), 3:all.slice(7,14), 4:all.slice(9,14), 5:all};
     return byWorld[wid]||all;
   },
@@ -2290,6 +2335,7 @@ const QGen = {
       {text:"What is Hubble's Law?",correct:'Galaxies are moving away from us at a speed proportional to their distance — the universe is expanding',wrong:['The universe is contracting','Stars orbit the centre of the universe','Galaxies move in fixed orbits'],hint:'Evidence for the Big Bang theory'},
       {text:'What is escape velocity on Earth?',correct:'About 11.2 km/s — the minimum speed needed to escape Earth\'s gravity',wrong:['The speed of sound','The orbital speed of the ISS','The speed of light'],hint:'Rockets must reach this speed to leave Earth\'s atmosphere'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,8),2:all.slice(7,15),3:all.slice(14,22),4:all.slice(18,27),5:all};
     return byWorld[wid]||all;
   },
@@ -2524,6 +2570,7 @@ const QGen = {
       {text:'What is a "hasty generalisation"?',correct:'Drawing a broad conclusion from too few examples',wrong:['A very fast conclusion that is correct','Summarising an argument briefly','Using a specific example to prove a rule'],hint:'"I met two rude people from that city — everyone there must be rude"'},
       {text:'What is "Occam\'s Razor"?',correct:'The principle that the simplest explanation is usually the correct one',wrong:['A sharp tool used in science labs','The idea that all theories are equal','The rule that complex problems need complex solutions'],hint:'Named after William of Ockham — "entities should not be multiplied unnecessarily"'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,8),2:all.slice(6,16),3:all.slice(14,24),4:all.slice(20,32),5:all};
     return byWorld[wid]||all;
   },
@@ -2546,6 +2593,7 @@ const QGen = {
       {text:'Antonym of "ancient"?',correct:'modern',wrong:['old','historic','past'],hint:'Ancient = very old; opposite = new/modern'},
       {text:'Which sentence is a simile?',correct:'"She ran as fast as a cheetah."',wrong:['"The wind is a wolf."','"The stars danced."','"He was furious."'],hint:'Similes compare using "like" or "as"'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,7), 2:all.slice(4,11), 3:all.slice(8,15), 4:all.slice(10,15), 5:all};
     return byWorld[wid]||all;
   },
@@ -2589,6 +2637,7 @@ const QGen = {
       {text:'Which bird cannot fly?',correct:'Penguin',wrong:['Eagle','Parrot','Sparrow'],hint:'Lives in Antarctica and swims brilliantly'},
       {text:'What is a baby frog called?',correct:'Tadpole',wrong:['Froglet','Spawn','Larvae'],hint:'Lives in water before growing legs'},
     ];
+    if(!wid) return all;
     const byWorld = {1:all.slice(0,5), 2:all.slice(4,9), 3:all.slice(5,10), 4:all, 5:all};
     return byWorld[wid]||all;
   }
@@ -3334,7 +3383,11 @@ const Playhouse = {
   // 🔢 COUNTING GARDEN
   renderCountingGarden() {
     const c = document.getElementById('playhouse-room-content');
-    const item = this.COUNTING[Math.floor(Math.random()*this.COUNTING.length)];
+    if(!this.usedCounts) this.usedCounts = new Set();
+    if(this.usedCounts.size >= this.COUNTING.length) this.usedCounts = new Set();
+    const unused = this.COUNTING.filter(i=>!this.usedCounts.has(i.num));
+    const item = unused[Math.floor(Math.random()*unused.length)];
+    this.usedCounts.add(item.num);
     this.currentCount = item;
     c.innerHTML = `
       <div style="text-align:center;margin-bottom:16px;">
@@ -3488,9 +3541,24 @@ const BabyMode = {
     shapes:[{name:'Circle',emoji:'⭕',sound:'Circle! Round and round!'},{name:'Square',emoji:'🟥',sound:'Square! Four sides!'},{name:'Triangle',emoji:'🔺',sound:'Triangle! Three corners!'},{name:'Star',emoji:'⭐',sound:'Star! You are a star!'},{name:'Heart',emoji:'❤️',sound:'Heart! Full of love!'}],
     numbers:[{name:'One',emoji:'1️⃣',sound:'One! Count: 1!'},{name:'Two',emoji:'2️⃣',sound:'Two! 1, 2!'},{name:'Three',emoji:'3️⃣',sound:'Three! 1, 2, 3!'},{name:'Four',emoji:'4️⃣',sound:'Four! Amazing!'},{name:'Five',emoji:'5️⃣',sound:'Five! You did it!'}]
   },
-  start(cat){this.category=cat;this.score=0;setText('baby-score','0');el('baby-categories').classList.add('hidden');el('baby-activity').classList.remove('hidden');const labels={animals:'Animals 🐾',colors:'Colors 🎨',shapes:'Shapes 🔷',numbers:'Numbers 🔢'};setText('baby-screen-title',labels[cat]);this.nextQuestion();},
+  start(cat){
+    this.category=cat;this.score=0;this.usedItems=new Set();
+    setText('baby-score','0');
+    el('baby-categories').classList.add('hidden');
+    el('baby-activity').classList.remove('hidden');
+    const labels={animals:'Animals 🐾',colors:'Colors 🎨',shapes:'Shapes 🔷',numbers:'Numbers 🔢'};
+    setText('baby-screen-title',labels[cat]);
+    this.nextQuestion();
+  },
   nextQuestion(){
-    const items=this.content[this.category];const correct=items[Math.floor(Math.random()*items.length)];this.current=correct;
+    const items=this.content[this.category];
+    // Reset used items if all have been shown
+    if(this.usedItems.size >= items.length) this.usedItems=new Set();
+    // Pick an unused item
+    const unused=items.filter(i=>!this.usedItems.has(i.name));
+    const correct=unused[Math.floor(Math.random()*unused.length)];
+    this.usedItems.add(correct.name);
+    this.current=correct;
     const others=items.filter(i=>i.name!==correct.name).sort(()=>Math.random()-0.5).slice(0,3);
     const all=[correct,...others].sort(()=>Math.random()-0.5);
     const qText={animals:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,colors:`Tap ${correct.name.toUpperCase()}! ${correct.emoji}`,shapes:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,numbers:`Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`};
