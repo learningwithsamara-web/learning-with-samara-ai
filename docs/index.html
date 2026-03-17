@@ -3088,10 +3088,10 @@ const App = {
     if(id==='screen-dashboard')App.renderDash();
     if(id==='screen-parent')App.renderParent();  // open to all — upsell inside
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
-    if(id==='screen-research')setTimeout(()=>Research.init(),100);
+    if(id==='screen-research')setTimeout(()=>{try{Research.init();}catch(e){console.error('Research init error:',e);}},100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos') Videos.init();
-    if(id==='screen-learn') setTimeout(()=>LearnDB.init(),100);
+    if(id==='screen-learn') setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
     if(id==='screen-getapp') AITutor.hideFloat();
@@ -3142,22 +3142,14 @@ const App = {
   selectAvatar(id){Avatars.select(id);App.toast(`${Avatars.names[id]} is your tutor! ${Avatars.emojis[id]}`);},
 
   searchTopic() {
-    const v=el('topic-input')?.value.trim();if(!v){App.toast('Type a topic first! 🔍');return;}
-    // Route to research for broad queries if Pro
-    if(Plan.isPro()){
+    try {
+      const v=el('topic-input')?.value.trim();if(!v){App.toast('Type a topic first! 🔍');return;}
+      // Route to research screen — works for all users now
       const inp=document.getElementById('research-input');if(inp)inp.value=v;
-      App.showScreen('screen-research');setTimeout(()=>Research.search(),200);
-      return;
-    }
-    // Free search — route to subject
-    const result=SearchDB.find(e=>e.k?.some(k=>v.toLowerCase().includes(k)));
-    if(result?.s==='pep'){App.showScreen('screen-pep');return;}
-    if(result?.s==='baby'){App.showScreen('screen-baby');return;}
-    const card=el('search-result-card');if(!card)return;
-    if(result){
-      card.innerHTML=`<div style="background:rgba(255,255,255,0.97);border-radius:18px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(0,0,0,0.14);animation:pop-in 0.3s ease;"><div style="font-size:2rem;">${result.icon}</div><div style="flex:1;"><div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#1A1A2E;">${result.label}</div></div><button class="btn btn-primary" onclick="App.openSubject('${result.s}');el('search-result-card').innerHTML=''">Go! 🚀</button></div>`;
-    } else {
-      card.innerHTML=`<div style="text-align:center;color:rgba(255,255,255,0.7);padding:10px;font-weight:700;">Try: volcano, fractions, planets, coding... <button class="btn btn-gold" style="margin-left:10px;font-size:0.82rem;padding:6px 14px;" onclick="App.showScreen('screen-pricing')">⭐ Upgrade to research anything!</button></div>`;
+      App.showScreen('screen-research');setTimeout(()=>{ try{Research.search();}catch(e){console.error('Research error:',e);} },300);
+    } catch(e) {
+      console.error('Search error:',e);
+      App.toast('Search error — try the Research button instead! 🔍');
     }
   },
 
