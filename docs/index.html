@@ -654,6 +654,8 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   </div>
 </div>
 
+</div><!-- end screen-home -->
+
 <!-- ══ PRICING ══ -->
 <div id="screen-pricing" class="screen">
 <div class="top-bar">
@@ -989,30 +991,6 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   </div>
 </div>
 
-<!-- ══ LEARN ══ -->
-<div id="screen-learn" class="screen">
-  <div class="top-bar">
-    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
-    <h2 class="screen-title small">📚 Learn</h2>
-  </div>
-  <div style="max-width:860px;margin:0 auto;padding:18px 22px;">
-
-    <!-- Subject picker -->
-    <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-bottom:12px;text-align:center;">Pick a subject to learn! 🎯</div>
-    <div id="learn-subject-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-bottom:22px;"></div>
-
-    <!-- Topic list for selected subject -->
-    <div id="learn-topic-area" style="display:none;">
-      <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:1rem;margin-bottom:12px;" id="learn-topic-title">Choose a topic:</div>
-      <div id="learn-topic-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:22px;"></div>
-    </div>
-
-    <!-- Lesson card -->
-    <div id="learn-lesson-area" style="display:none;"></div>
-
-  </div>
-</div>
-
 <!-- ══ RESEARCH ══ -->
 <div id="screen-research" class="screen">
   <div class="top-bar">
@@ -1049,35 +1027,6 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
       </div>
     </div>
     <div id="research-history" style="margin-top:22px;"></div>
-  </div>
-</div>
-
-<!-- ══ LEARN ══ -->
-<div id="screen-learn" class="screen">
-  <div class="top-bar">
-    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
-    <h2 class="screen-title small">📚 Learn with Samara</h2>
-  </div>
-  <div style="max-width:860px;margin:0 auto;padding:18px 22px;">
-
-    <!-- Search -->
-    <div style="background:rgba(255,255,255,0.08);border-radius:18px;padding:16px 20px;margin-bottom:20px;border:1.5px solid rgba(255,255,255,0.12);">
-      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:10px;">🔍 What do you want to learn?</div>
-      <div style="display:flex;gap:8px;">
-        <input id="learn-search" class="topic-input" type="text" placeholder="e.g. photosynthesis, fractions, gravity..." onkeydown="if(event.key==='Enter')LearnDB.search()" style="flex:1;" />
-        <button class="btn btn-primary" onclick="LearnDB.search()">Search 🚀</button>
-      </div>
-    </div>
-
-    <!-- Subject filter tabs -->
-    <div id="learn-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;"></div>
-
-    <!-- Lesson cards grid -->
-    <div id="learn-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-
-    <!-- Lesson detail view (hidden) -->
-    <div id="learn-detail" class="hidden"></div>
-
   </div>
 </div>
 
@@ -1394,7 +1343,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div style="position:relative;margin-bottom:18px;">
       <input id="learn-search" type="text" placeholder="🔍 Search topics — gravity, fractions, Shakespeare..."
         style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:12px 20px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;outline:none;"
-        oninput="LearnLib.search(this.value)" />
+        oninput="LearnDB.search()" />
     </div>
 
     <!-- Subject filter tabs -->
@@ -4136,148 +4085,6 @@ const LearnDB = {
 window.LearnDB = LearnDB;
 
 // ── LEARN LIBRARY — Knowledge Base ──────────────────────────
-const LearnLib = {
-  activeSubject: 'all',
-  searchQuery: '',
-
-  LESSONS: [
-    {id:'photosynthesis',subject:'Science',icon:'🌿',title:'Photosynthesis',tags:['plants','biology','food','oxygen'],diagram:['☀️','➕','💧','➕','🌬️','➡️','🍬','➕','💨'],diagramLabel:'Sun + Water + CO₂ → Sugar + Oxygen',explanation:'Plants are like tiny solar-powered factories! They capture energy from sunlight and use it to turn water (from soil) and carbon dioxide (from air) into glucose — their food. The leftover product? Oxygen — the air we breathe!',steps:['Roots absorb water from the soil','Leaves absorb CO₂ from the air','Chlorophyll (green pigment) captures sunlight','Plant converts CO₂ + H₂O + light into glucose + oxygen','Glucose powers the plant; oxygen is released'],memory:'Remember: SUN + WATER + AIR = FOOD + OXYGEN. Plants eat sunlight!',fact:'A single large tree produces enough oxygen for 4 people to breathe for a whole year! 🌳',realWorld:'Farmers use glass greenhouses to give plants more CO₂ and light — bigger, faster harvests!'},
-    {id:'gravity',subject:'Science',icon:'🍎',title:'Gravity',tags:['forces','physics','Newton','planets'],diagram:['🌍','⬇️','🍎','⬇️','🌕','🔄','🌍'],diagramLabel:'Earth pulls apple down · Moon orbits Earth',explanation:'Gravity is the invisible force that pulls everything with mass towards everything else. The bigger the mass, the stronger the pull. Earth\'s gravity keeps you on the ground, keeps the Moon orbiting Earth, and keeps Earth orbiting the Sun.',steps:['All objects with mass have gravity','Bigger mass = stronger gravity','Closer distance = stronger gravity','Earth\'s gravity = 9.8 m/s² acceleration downward','On the Moon (smaller mass), you\'d weigh 6× less!'],memory:'GRAVITY: Gets Really Annoying — Very Important To You!',fact:'A feather and bowling ball dropped in a vacuum (no air) hit the ground at EXACTLY the same time! Galileo proved this. 🪶',realWorld:'GPS satellites must account for gravity\'s effect on time or your navigation would be wrong by miles!'},
-    {id:'water-cycle',subject:'Science',icon:'💧',title:'The Water Cycle',tags:['weather','earth','rain','clouds'],diagram:['☀️','→','💧','→','☁️','→','🌧️','→','🌊'],diagramLabel:'Sun evaporates water → clouds form → rain falls → repeats',explanation:'Water constantly recycles! Sun heats water turning it to vapour (evaporation). Vapour rises, cools, forms clouds (condensation). Then falls as rain or snow (precipitation) and flows back to sea.',steps:['Evaporation: Sun heats water → vapour rises','Condensation: Vapour cools → forms clouds','Precipitation: Droplets combine → fall as rain/snow','Collection: Water flows into rivers, lakes, oceans','Infiltration: Some water soaks into ground'],memory:'Every Cloud Produces Constant — Evaporation, Condensation, Precipitation, Collection!',fact:'The same water molecules have cycled on Earth for 4.5 billion years. You might drink water dinosaurs once swam in! 🦕',realWorld:'The Amazon rainforest creates its own rainfall — trees release water vapour that generates clouds!'},
-    {id:'human-body',subject:'Science',icon:'🫀',title:'Human Body Systems',tags:['biology','health','organs','body'],diagram:['🧠','Brain','🫀','Heart','🫁','Lungs','🦴','Skeleton','💪','Muscles'],diagramLabel:'Key body systems',explanation:'Your body has 11 major systems all working together! Each has a specific job and they all communicate and depend on each other.',steps:['🧠 Nervous: brain + nerves control everything','🫀 Circulatory: heart pumps blood carrying oxygen','🫁 Respiratory: lungs exchange O₂ and CO₂','🦷 Digestive: breaks food into energy and nutrients','🦴 Skeletal: 206 bones support and protect','💪 Muscular: 600+ muscles allow movement'],memory:'No Carefully Rehearsed Dish Should Make Everyone Eat — Nervous, Circulatory, Respiratory, Digestive, Skeletal, Muscular, Excretory!',fact:'Your heart beats 100,000 times per day — pumping 7,500 litres of blood, enough to fill 40 bathtubs! 🛁',realWorld:'Surgeons can now transplant hearts, kidneys and lungs from one person to save another\'s life!'},
-    {id:'fractions',subject:'Mathematics',icon:'🍕',title:'Fractions',tags:['math','division','parts','numbers'],diagram:['🍕','÷4','=','¼','¼','¼','¼'],diagramLabel:'1 pizza ÷ 4 slices = ¼ each',explanation:'A fraction shows a PART of a whole. The bottom number (denominator) tells how many equal parts the whole is cut into. The top number (numerator) tells how many parts you have.',steps:['Write as numerator/denominator — e.g. 3/4','Denominator = total equal parts (bottom — D for Down)','Numerator = parts you have (top)','Same denominator → just add the tops: 1/5 + 2/5 = 3/5','To compare fractions: convert to same denominator first'],memory:'DEN is DOWN — the Denominator is the Down number! Num = Number of parts you have.',fact:'Ancient Egyptians only used fractions with 1 on top! They\'d write ¾ as ½ + ¼.',realWorld:'Recipes use fractions constantly: ¾ cup of sugar, ½ tsp salt. Medicine doses are measured in fractions!'},
-    {id:'multiplication',subject:'Mathematics',icon:'✖️',title:'Multiplication',tags:['math','times tables','groups','repeated addition'],diagram:['3','✖️','4','=','●●●●','➕','●●●●','➕','●●●●','=','12'],diagramLabel:'3 groups of 4 = 12',explanation:'Multiplication is fast addition of equal groups. Instead of 4+4+4, we say 3×4=12. Times tables are shortcuts — once you know them, huge calculations become easy!',steps:['Understand: 3×4 means "3 groups of 4"','Learn times tables 1–12 by heart','9× trick: hold up 10 fingers, fold down the nth finger','For big numbers: break apart (23×4 = 20×4 + 3×4 = 80+12 = 92)','Check: if 6×7=42, then 42÷6=7 and 42÷7=6'],memory:'9× TABLE FINGERS: fold down finger N for 9×N — digits left and right of folded finger give the answer!',fact:'A computer performs billions of multiplications per second. The fastest supercomputers do more calculations in 1 second than a human could in millions of years!',realWorld:'Architects multiply constantly — room area = length × width. A 5m×4m room needs 5×4=20 floor tiles!'},
-    {id:'algebra-basics',subject:'Mathematics',icon:'📐',title:'Algebra Basics',tags:['algebra','equations','variables','solving'],diagram:['x','➕','3','=','7','→','x','=','7','➖','3','=','4'],diagramLabel:'Find the mystery number: x + 3 = 7 → x = 4',explanation:'Algebra uses letters (variables) for unknown numbers. An equation is like a balanced scale — whatever you do to one side, you MUST do to the other. Goal: isolate the variable.',steps:['Identify the variable (unknown letter)','Do the OPPOSITE operation to both sides','Addition ↔ Subtraction are opposites','Multiplication ↔ Division are opposites','Check by substituting your answer back in','Example: 2x + 4 = 10 → 2x = 6 → x = 3'],memory:'BALANCE like a seesaw! Same operation on BOTH sides. Opposite operations cancel out.',fact:'The word "algebra" comes from Arabic "al-jabr" — from a 9th-century Persian mathematician\'s book!',realWorld:'Engineers use algebra to calculate bridge loads, rocket fuel and medicine dosages.'},
-    {id:'pythagoras',subject:'Mathematics',icon:'📐',title:"Pythagoras' Theorem",tags:['geometry','triangles','right angle'],diagram:['📐','a²','➕','b²','=','c²'],diagramLabel:'a² + b² = c² (right-angled triangle)',explanation:"Pythagoras' theorem: in a right-angled triangle, the square of the hypotenuse equals the sum of squares of the other two sides. The hypotenuse is ALWAYS the longest side, opposite the right angle.",steps:['Identify the right angle (90°) and hypotenuse (c)','Square both shorter sides: a² and b²','Add: a² + b² = c²','Find c: take the square root','Example: a=3, b=4 → 9+16=25 → c=√25=5'],memory:'Famous 3-4-5 triple: 3²+4²=9+16=25=5². Also 5-12-13 and 8-15-17!',fact:'Egyptian builders used knotted ropes with 3-4-5 triangles to make perfect right angles for pyramids — 4,000 years before Pythagoras!',realWorld:'GPS uses Pythagoras in 3D form to calculate your exact position from satellite signals.'},
-    {id:'cell-structure',subject:'Biology',icon:'🔬',title:'Cell Structure',tags:['cells','biology','organelles','DNA'],diagram:['🧫','Membrane','→','Nucleus','→','Mitochondria','→','Ribosomes','→','Cytoplasm'],diagramLabel:'Key cell organelles',explanation:'Cells are the building blocks of all life. Your body has 37 trillion cells! Each organelle works like a tiny organ with a specific job.',steps:['Membrane: controls what enters/exits (security guard)','Nucleus: contains DNA, controls the cell (brain)','Mitochondria: produces ATP energy (powerhouse)','Ribosomes: builds proteins from DNA instructions (factory)','Cytoplasm: jelly-like fluid holding everything together','Vacuole: stores water, waste and nutrients (storage)'],memory:'My Nana Rarely Cooks Vegetables — Membrane, Nucleus, Ribosomes, Cytoplasm, Vacuole!',fact:'Mitochondria have their OWN DNA — scientists believe they were once separate bacteria absorbed billions of years ago!',realWorld:'Cancer happens when cells lose control of their division and multiply uncontrollably.'},
-    {id:'dna-genetics',subject:'Biology',icon:'🧬',title:'DNA & Genetics',tags:['DNA','genes','inheritance','chromosomes'],diagram:['👨','➕','👩','→','👶','50% mum','➕','50% dad'],diagramLabel:'You inherit half your DNA from each parent',explanation:'DNA is the instruction manual for life. Stored in every cell nucleus, it contains genes — sections that code for traits like eye colour, height and blood type.',steps:['DNA is shaped like a twisted ladder (double helix)','4 bases: A-T pairs, G-C pairs — always!','Genes = sections coding for specific proteins/traits','Humans have 46 chromosomes = 23 pairs','You get 23 from mum + 23 from dad'],memory:'AT the GC (Golf Club): A always pairs with T, G always pairs with C!',fact:'Uncoiled, the DNA from ONE cell stretches 2 metres. Your 37 trillion cells contain enough DNA to reach the Sun and back 600 times! ☀️',realWorld:'DNA fingerprinting solves crimes, identifies disaster victims and traces family ancestry.'},
-    {id:'world-war-2',subject:'History',icon:'🌍',title:'World War II',tags:['WWII','history','1939','Holocaust'],diagram:['1939','Germany invades Poland','→','1941','USA joins','→','1944','D-Day','→','1945','Victory'],diagramLabel:'WWII Key Timeline',explanation:'WWII (1939-1945) was the deadliest conflict in history, killing 70-85 million people. It started when Nazi Germany invaded Poland and spread to involve most of the world.',steps:['1939: Germany invades Poland → UK/France declare war','1940: France falls; Battle of Britain (RAF vs Luftwaffe)','1941: Germany invades USSR; Japan attacks Pearl Harbor → USA joins','1944: D-Day — Allied invasion of Normandy, France','1945: Germany surrenders May; Japan surrenders September'],memory:'WWII Key Dates: 39 Started, 41 America, 44 D-Day, 45 Done!',fact:'The Holocaust saw the Nazi genocide of 6 million Jewish people. Remembering this is essential to preventing it ever happening again.',realWorld:'The United Nations was founded in 1945 directly because of WWII — to prevent future world wars.'},
-    {id:'ancient-egypt',subject:'History',icon:'🏛️',title:'Ancient Egypt',tags:['Egypt','pharaoh','pyramids','Nile'],diagram:['👑','Pharaoh','⬇️','🏛️','Nobles/Priests','⬇️','✍️','Scribes','⬇️','🌾','Farmers'],diagramLabel:'Egyptian social hierarchy pyramid',explanation:'Ancient Egypt lasted over 3,000 years (3100 BCE–30 BCE). Built along the Nile, they developed hieroglyphics, mathematics, medicine, and the iconic pyramids.',steps:['Pharaoh ruled as a god-king with absolute power','Nile floods deposited rich soil for farming each year','Hieroglyphics: 3,000+ picture symbols for writing','Great Pyramid at Giza = 2.3 million stone blocks!','Mummification preserved bodies for the afterlife','Rosetta Stone (1799) finally decoded hieroglyphics'],memory:'Pharaohs Needed Writing, Mummies — Pharaoh, Nile, Writing, Mummification!',fact:'The Great Pyramid was the tallest man-made structure for 3,800 years. We still don\'t fully understand how they built it!',realWorld:'Modern medicine owes much to ancient Egypt — they had specialist doctors, performed surgery and used 800+ plant medicines.'},
-    {id:'shakespeare',subject:'Literature',icon:'🎭',title:'Shakespeare',tags:['Shakespeare','plays','tragedy','sonnets'],diagram:['😂','Comedy','⬅️','🎭','Shakespeare','➡️','😢','Tragedy','⬇️','📜','History'],diagramLabel:'Shakespeare\'s three play types',explanation:'William Shakespeare (1564–1616) wrote 37 plays, 154 sonnets and several poems. His work explores universal themes — love, jealousy, ambition, betrayal — still relevant today.',steps:['Born Stratford-upon-Avon, England, 1564','Tragedies: Hamlet, Macbeth, Romeo & Juliet, Othello','Comedies: A Midsummer Night\'s Dream, Much Ado About Nothing','Histories: Richard III, Henry V, Julius Caesar','Performed at the Globe Theatre, London','Invented 1,700+ words we still use today!'],memory:'To analyse Shakespeare — SCAT: Setting, Characters, Action, Themes!',fact:'Shakespeare invented "bedroom", "lonely", "generous", "gossip", "hurry" and 1,700+ other words and phrases we use every day!',realWorld:'"All the world\'s a stage" — his idea that life involves playing different roles still influences psychology and sociology.'},
-    {id:'literary-devices',subject:'Literature',icon:'✍️',title:'Literary Devices',tags:['metaphor','simile','alliteration','personification','irony'],diagram:['🌹','="fast as lightning"','Simile','🌹','="life is a journey"','Metaphor','🌿','="wind screamed"','Personification'],diagramLabel:'Three key literary device examples',explanation:'Literary devices are tools that make writing more powerful and vivid. Recognising them helps you understand authors\' intentions — and using them makes YOUR writing stronger!',steps:['Simile: comparison using "like" or "as" — "fast as lightning"','Metaphor: saying something IS something else — "life is a journey"','Personification: human qualities to non-human things — "the wind screamed"','Alliteration: repeated consonant sounds — "Peter Piper picked"','Irony: saying the opposite of what you mean','Foreshadowing: hints at future events — builds suspense'],memory:'Super Monkeys Play All Instruments Fabulously — Simile, Metaphor, Personification, Alliteration, Irony, Foreshadowing!',fact:'The most analysed English sentence ever: Dickens\' "It was the best of times, it was the worst of times" — perfect paradox and antithesis!',realWorld:'Advertisers use metaphor constantly — "Red Bull gives you wings", "Melt in your mouth, not in your hands"!'},
-    {id:'newtons-laws',subject:'Physics',icon:'⚡',title:"Newton's Three Laws",tags:['Newton','forces','motion','physics'],diagram:['😴','1st: Inertia','💪','2nd: F=ma','🔄','3rd: Action=Reaction'],diagramLabel:'Newton\'s 3 Laws of Motion',explanation:"Newton's Three Laws describe how forces affect motion. Published in 1687, they explained everything from falling apples to planetary orbits.",steps:["1st Law (Inertia): Objects stay still or keep moving UNLESS a force acts","2nd Law (F=ma): Bigger force = bigger acceleration; heavier object needs more force","3rd Law: Every force has an equal and opposite reaction — ALWAYS in pairs","Example 1st: Hockey puck slides forever on frictionless ice","Example 2nd: Push a trolley twice as hard = twice the acceleration","Example 3rd: Rocket exhaust pushes down → rocket goes up"],memory:'I Feel Fine! — 1st=Inertia, 2nd=F=ma, 3rd=Force pairs!',fact:'Newton developed these laws during the 1665 Great Plague when Cambridge closed — one of the most productive periods in scientific history!',realWorld:'Car seatbelts exist because of Newton\'s 1st Law — in a crash, your body keeps moving forward while the car stops.'},
-    {id:'electricity',subject:'Physics',icon:'💡',title:'Electricity & Circuits',tags:['electricity','circuits','voltage','Ohms Law'],diagram:['🔋','Voltage','→','💡','Current','→','🔌','Resistance','=','V=IR'],diagramLabel:"Ohm's Law: V = I × R",explanation:"Electricity is the flow of electrons through a conductor. Voltage is the 'push', current is the 'flow', resistance slows it down — connected by Ohm's Law: V = IR.",steps:["Voltage (V): electrical pressure measured in Volts","Current (I): electron flow measured in Amperes","Resistance (R): opposition to flow measured in Ohms (Ω)","Ohm's Law: V = I × R","Series circuit: one path — same current, voltage shared","Parallel circuit: multiple paths — same voltage, current splits"],memory:'VIR triangle: cover what you need to find! V = I×R; I = V/R; R = V/I',fact:'Lightning is a massive electrical discharge — one bolt has enough energy to power a 100-watt bulb for 3 months! ⚡',realWorld:'Your home uses parallel circuits so if one light blows, the rest stay on!'},
-    {id:'algorithms',subject:'Computer Science',icon:'🔁',title:'Algorithms',tags:['algorithms','coding','logic','programming'],diagram:['Problem','→','Input','→','⚙️','Algorithm','→','Output','→','Solution'],diagramLabel:'Algorithm: turns any input into the right output',explanation:'An algorithm is a precise step-by-step process to solve a problem. Algorithms are in cooking recipes, GPS directions and every app you use. Good algorithms are precise, finite and efficient.',steps:['Define the problem clearly','Break into smaller steps','Each step must be precise and unambiguous','Must eventually end (be finite)','Test with different inputs','Optimise for speed and memory'],memory:'PERFECT algorithm: Precise, Ends, Replicable, Finite, Efficient, Clear, Tested!',fact:'Google\'s search algorithm processes 8.5 billion searches daily — deciding in milliseconds which of billions of pages is most relevant!',realWorld:'The algorithm compressing MP3 audio files lets you store thousands of songs. Without it, streaming would use 10× more data!'},
-    {id:'binary',subject:'Computer Science',icon:'💻',title:'Binary — How Computers Think',tags:['binary','computers','bits','bytes','data'],diagram:['0','1','=','bit','×8','=','byte','→','KB','→','MB','→','GB'],diagramLabel:'From bits → bytes → kilobytes → megabytes',explanation:'Computers only understand ON (1) and OFF (0). Everything — photos, music, messages, games — is stored as billions of 1s and 0s. Binary is base-2 counting.',steps:['Decimal (base 10): digits 0-9','Binary (base 2): only 0 and 1','Each binary digit = 1 bit','8 bits = 1 byte (stores one character)','1,000 bytes = 1 KB; 1,000 KB = 1 MB; 1,000 MB = 1 GB','Binary 1010 = 1×8 + 0×4 + 1×2 + 0×1 = 10 in decimal'],memory:'Powers of 2 from right: 1, 2, 4, 8, 16, 32, 64, 128... double each time!',fact:'The word "bug" in computing comes from 1947 when a real moth was found stuck in a Harvard computer! Grace Hopper removed it and wrote "First actual bug found"! 🐛',realWorld:'A 12-megapixel phone photo = 36 million bits = 4.5 MB of data. Binary makes this all possible!'},
-    {id:'compound-interest',subject:'Finance',icon:'📈',title:'Compound Interest',tags:['finance','investing','savings','interest'],diagram:['💵','$1000','→','Year 1: $1100','→','Year 5: $1610','→','Year 20: $6727'],diagramLabel:'$1000 at 10% compound interest over 20 years',explanation:"Compound interest earns interest ON your interest — making money grow exponentially. Einstein called it 'the 8th wonder of the world'. Start investing early and it does most of the work!",steps:['Simple interest: only earns on original amount','Compound: earns on original AND all previous interest','Formula: A = P(1 + r)^t','Rule of 72: 72 ÷ interest rate = years to double','At 8%: 72÷8 = 9 years to double','At 12%: 72÷12 = 6 years to double!'],memory:'Rule of 72! Divide 72 by the interest rate to find years to double. 72 ÷ 8% = 9 years!',fact:'Warren Buffett made 99% of his wealth AFTER age 50 — purely from decades of compound growth. He started investing at age 11!',realWorld:'Starting to invest $200/month at age 22 vs age 32 can mean $500,000 MORE at retirement — starting early is the secret!'},
-    {id:'budgeting',subject:'Finance',icon:'💰',title:'Budgeting & Money Management',tags:['budget','spending','saving','money'],diagram:['💵','Income','→','50%','Needs','➕','30%','Wants','➕','20%','Savings'],diagramLabel:'The 50/30/20 budgeting rule',explanation:'A budget is a plan for your money. The 50/30/20 rule: 50% on needs (rent, food), 30% on wants (fun), 20% on savings. Financial freedom starts with knowing where every dollar goes.',steps:['Track all income (money in)','List all expenses (money out)','Categorise: needs vs wants','Apply 50/30/20 framework','Build 3-6 month emergency fund in cash','Review and adjust monthly'],memory:'50 Needs, 30 Wants, 20 Wealth! Needs first, always save 20!',fact:'People who write down their financial goals are 42% more likely to achieve them. A budget is literally a written financial plan!',realWorld:'Many millionaires drive modest cars — they got rich by consistently spending LESS than they earn and investing the difference.'},
-    {id:'logical-fallacies',subject:'Critical Thinking',icon:'🧩',title:'Logical Fallacies',tags:['logic','arguments','reasoning','fallacies'],diagram:['❌','Ad Hominem','❌','Straw Man','❌','False Dichotomy','❌','Bandwagon'],diagramLabel:'Common fallacies that weaken arguments',explanation:'A logical fallacy is an error in reasoning that makes an argument invalid — even if the conclusion might be true. Spotting them makes you very hard to manipulate!',steps:['Ad Hominem: attack the PERSON not their argument','Straw Man: misrepresent opponent\'s view to attack it easily','False Dichotomy: present only 2 options when more exist','Slippery Slope: claim one event inevitably leads to extremes','Appeal to Authority: use fame/status instead of evidence','Bandwagon: "Everyone believes it, so it must be true"'],memory:'ASFSAB — Ad hominem, Straw man, False dichotomy, Slippery slope, Authority, Bandwagon!',fact:'Politicians and advertisers use logical fallacies constantly. Knowing them makes you much harder to manipulate!',realWorld:'In any debate, pointing out a logical fallacy is more powerful than an emotional counter-argument.'},
-    {id:'spelling-rules',subject:'Reading & Spelling',icon:'✏️',title:'Key Spelling Rules',tags:['spelling','grammar','English','rules'],diagram:['i','before','e','(believe)','EXCEPT','after','c','(receive)'],diagramLabel:'The classic "i before e" rule',explanation:'English spelling has rules that help you spell thousands of words correctly — even ones you\'ve never seen before!',steps:['"i before e except after c": believe, achieve BUT receive, deceive','Silent e = long vowel: cap→cape, hop→hope','CVC + vowel suffix → double consonant: run→running','Drop silent e for vowel suffix: make→making','Words ending in y → ies for plural: babies, countries','s/x/z/sh/ch + es for plural: boxes, churches'],memory:'Big Elephants Can Always Understand Small Elephants — B-E-C-A-U-S-E! Create silly sentences for hard words!',fact:'English has 170,000+ words in use, but the 100 most common words make up 50% of everything we read and write!',realWorld:'Strong spelling improves reading speed, writing quality and exam performance across ALL subjects.'},
-  ],
-
-  activeLesson: null,
-
-  init() {
-    this.renderSubjectTabs();
-    this.renderCards();
-  },
-
-  renderSubjectTabs() {
-    const tabs = document.getElementById('learn-subject-tabs');
-    if(!tabs) return;
-    const subjects = ['All', ...new Set(this.LESSONS.map(l=>l.subject))];
-    tabs.innerHTML = subjects.map(s=>`
-      <button onclick="LearnLib.filterSubject('${s}')"
-        style="background:${s==='All'&&this.activeSubject==='all'||this.activeSubject===s?'linear-gradient(135deg,#7928CA,#FF0080)':'rgba(255,255,255,0.1)'};color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:7px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;white-space:nowrap;">
-        ${s}
-      </button>`).join('');
-  },
-
-  filterSubject(subject) {
-    this.activeSubject = subject === 'All' ? 'all' : subject;
-    this.searchQuery = '';
-    const inp = document.getElementById('learn-search');
-    if(inp) inp.value = '';
-    this.renderSubjectTabs();
-    this.renderCards();
-  },
-
-  search(query) {
-    this.searchQuery = query.toLowerCase();
-    this.renderCards();
-  },
-
-  renderCards() {
-    const grid = document.getElementById('learn-cards-grid');
-    if(!grid) return;
-    let lessons = this.LESSONS;
-    if(this.activeSubject !== 'all') lessons = lessons.filter(l=>l.subject===this.activeSubject);
-    if(this.searchQuery) lessons = lessons.filter(l=>
-      l.title.toLowerCase().includes(this.searchQuery)||
-      l.subject.toLowerCase().includes(this.searchQuery)||
-      l.tags.some(t=>t.includes(this.searchQuery))
-    );
-    if(lessons.length===0){
-      grid.innerHTML=`<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;">No lessons found! Try a different search 🔍</div>`;
-      return;
-    }
-    grid.innerHTML = lessons.map(l=>`
-      <div class="learn-card" id="lcard-${l.id}">
-        <div class="learn-card-header" onclick="LearnLib.toggleCard('${l.id}')" style="cursor:pointer;">
-          <div class="learn-card-icon">${l.icon}</div>
-          <div style="flex:1;">
-            <div class="learn-card-title">${l.title}</div>
-            <div class="learn-card-subject">${l.subject}</div>
-            <div style="margin-top:4px;">${l.tags.map(t=>`<span class="learn-tag">#${t}</span>`).join('')}</div>
-          </div>
-          <div id="larrow-${l.id}" style="font-size:1.3rem;color:#7928CA;transition:transform 0.3s;">▼</div>
-        </div>
-        <div id="lbody-${l.id}" class="learn-card-body" style="display:none;">
-          <div class="learn-section">
-            <div class="learn-section-title">🖼️ Visual Overview</div>
-            <div class="learn-emoji-diagram">${l.diagram.join(' ')}</div>
-            <div style="text-align:center;font-size:0.78rem;color:#7A7A9D;font-weight:700;margin-top:4px;">${l.diagramLabel}</div>
-          </div>
-          <div class="learn-section">
-            <div class="learn-section-title">💬 What is it?</div>
-            <div class="learn-section-content">${l.explanation}</div>
-          </div>
-          <div class="learn-section">
-            <div class="learn-section-title">📋 Step by Step</div>
-            <div class="learn-steps">${l.steps.map((s,i)=>`<div class="learn-step"><div class="learn-step-num">${i+1}</div><div class="learn-step-text">${s}</div></div>`).join('')}</div>
-          </div>
-          <div class="learn-section">
-            <div class="learn-section-title">🧠 Memory Trick</div>
-            <div class="learn-memory-box">💡 ${l.memory}</div>
-          </div>
-          <div class="learn-section">
-            <div class="learn-section-title">🤩 Did You Know?</div>
-            <div class="learn-fact-box">⭐ ${l.fact}</div>
-          </div>
-          <div class="learn-section">
-            <div class="learn-section-title">🌍 Real World Connection</div>
-            <div class="learn-realworld-box">🔗 ${l.realWorld}</div>
-          </div>
-          <div style="text-align:center;padding:8px 0 4px;">
-            <button onclick="LearnLib.quizTopic('${l.subject}','${l.title}')"
-              style="background:linear-gradient(135deg,#7928CA,#FF0080);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:11px 28px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(121,40,202,0.4);">
-              🎯 Quiz me on ${l.title}!
-            </button>
-          </div>
-        </div>
-      </div>`).join('');
-  },
-
-  toggleCard(id) {
-    const body=document.getElementById(`lbody-${id}`);
-    const arrow=document.getElementById(`larrow-${id}`);
-    if(!body) return;
-    const isOpen=body.style.display!=='none';
-    body.style.display=isOpen?'none':'block';
-    if(arrow) arrow.style.transform=isOpen?'rotate(0deg)':'rotate(180deg)';
-    if(!isOpen) SoundSystem.playTone('tap');
-  },
-
-  quizTopic(subject, title) {
-    const map={'Science':'science','Mathematics':'math','Biology':'biology','History':'history','Literature':'literature','Physics':'physics','Computer Science':'compsci','Finance':'finance','Critical Thinking':'critical','Reading & Spelling':'spelling'};
-    const sid=map[subject]||'science';
-    S.subject=sid;
-    App.toast(`Opening ${title} quiz! 🎯`);
-    App.openSubject(sid);
-  }
-};
-window.LearnLib = LearnLib;
-
 // ── SAMARA'S PLAYHOUSE ───────────────────────────────────────
 const Playhouse = {
 
