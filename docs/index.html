@@ -4343,27 +4343,427 @@ window.HomeworkHelper = HomeworkHelper;
 const LearnDB = {
   currentFilter: 'all',
   currentLesson: null,
+  quizMode: false,
+  quizIdx: 0,
+  quizScore: 0,
 
+  // ── SUBJECT MAP ───────────────────────────────────────────
+  SUBJECTS: {
+    math:      { label:'🔢 Maths',         color:'linear-gradient(135deg,#7EC8E3,#4A90D9)' },
+    science:   { label:'🔬 Science',        color:'linear-gradient(135deg,#6BCB77,#3DAA45)' },
+    history:   { label:'🏛️ History',        color:'linear-gradient(135deg,#FF9B3F,#8B6914)' },
+    geography: { label:'🌍 Geography',      color:'linear-gradient(135deg,#4A90D9,#1565C0)' },
+    literature:{ label:'📖 Literature',     color:'linear-gradient(135deg,#C77DFF,#7928CA)' },
+    algebra:   { label:'📐 Algebra',        color:'linear-gradient(135deg,#FF6B6B,#FFD93D)' },
+    biology:   { label:'🧬 Biology',        color:'linear-gradient(135deg,#6BCB77,#7EC8E3)' },
+    physics:   { label:'⚡ Physics',        color:'linear-gradient(135deg,#FFD93D,#4A90D9)' },
+    compsci:   { label:'💻 Computer Sci',   color:'linear-gradient(135deg,#302b63,#7EC8E3)' },
+    finance:   { label:'💰 Finance',        color:'linear-gradient(135deg,#6BCB77,#FFD93D)' },
+    critical:  { label:'🧩 Critical Thinking', color:'linear-gradient(135deg,#FFD93D,#C77DFF)' },
+    spelling:  { label:'✏️ Spelling',       color:'linear-gradient(135deg,#FF9B3F,#C77DFF)' },
+    quantum:   { label:'⚛️ Quantum',        color:'linear-gradient(135deg,#302b63,#C77DFF)' },
+    pep_math:  { label:'🇯🇲 PEP Maths',    color:'linear-gradient(135deg,#FFD700,#009B3A)' },
+    pep_lang:  { label:'🇯🇲 PEP Language', color:'linear-gradient(135deg,#009B3A,#FFD700)' },
+    pep_sci:   { label:'🇯🇲 PEP Science',  color:'linear-gradient(135deg,#FFD700,#1565C0)' },
+    pep_soc:   { label:'🇯🇲 PEP Social',   color:'linear-gradient(135deg,#009B3A,#1565C0)' },
+    pep_ability:{ label:'🇯🇲 PEP Ability', color:'linear-gradient(135deg,#8B0000,#FFD700)' },
+  },
+
+  // ── LESSONS ───────────────────────────────────────────────
   LESSONS: [
-    {id:'photosynthesis',subject:'science',title:'Photosynthesis',icon:'🌱',age:['4-6','7-10','11-14'],tagline:'How plants make their own food using sunlight!',explanation:'Plants are like tiny solar-powered food factories! 🌞 They take in sunlight through their leaves, water through their roots, and carbon dioxide from the air. Using these three ingredients, they produce glucose (sugar) for energy AND release oxygen — the very oxygen we breathe!',diagram:['☀️ Sunlight','💧 Water (roots)','💨 CO₂ (air)','↓','🌿 Glucose (food) + O₂ (oxygen released)'],memory:'SWC → GO! Sun + Water + CO₂ → Glucose + Oxygen. Remember: plants EAT sunlight and BREATHE carbon dioxide!',steps:['1️⃣ Roots absorb water from soil','2️⃣ Leaves absorb sunlight through chlorophyll','3️⃣ Tiny pores (stomata) absorb CO₂ from air','4️⃣ Chlorophyll converts these into glucose (food)','5️⃣ Oxygen is released as a by-product through leaves'],realWorld:'🌳 Every breath you take was made possible by photosynthesis! The Amazon rainforest produces about 20% of Earth\'s oxygen.',funFact:'🤯 One large tree produces enough oxygen for 2 people per year. A single acre of trees absorbs as much CO₂ as a car driven 26,000 miles!',color:'linear-gradient(135deg,#6BCB77,#3DAA45)'},
-    {id:'gravity',subject:'science',title:'Gravity',icon:'🍎',age:['7-10','11-14','15-17'],tagline:'The invisible force that pulls everything together!',explanation:'Gravity is a force of attraction between ANY two objects with mass. The more mass an object has and the closer you are to it, the stronger its gravitational pull. Earth\'s gravity keeps us on the ground, keeps the Moon orbiting us, and keeps Earth orbiting the Sun.',diagram:['🌍 Earth (large mass)','↕️ Gravitational pull (F = Gm₁m₂/r²)','🍎 Apple falls DOWN toward Earth','🌙 Moon orbits Earth (gravity = centripetal force)'],memory:'More MASS = More PULL. Less DISTANCE = More PULL. G = Gm₁m₂/r² — bigger masses and closer distance = stronger gravity!',steps:['1️⃣ Every object with mass has gravity','2️⃣ Bigger mass = stronger gravitational field','3️⃣ Closer distance = stronger pull (inverse square law)','4️⃣ On Earth: g = 9.8 m/s² (acceleration due to gravity)','5️⃣ Gravity weakens with distance but never fully disappears'],realWorld:'🚀 Rockets need 11.2 km/s (40,320 km/h!) to escape Earth\'s gravity — called escape velocity.',funFact:'🌙 You would weigh 6× less on the Moon! Same MASS but less gravitational FORCE because the Moon has less mass than Earth.',color:'linear-gradient(135deg,#4A90D9,#302b63)'},
-    {id:'food-chains',subject:'science',title:'Food Chains & Webs',icon:'🦁',age:['4-6','7-10'],tagline:'Who eats who in the natural world!',explanation:'A food chain shows how energy flows from one living thing to another. It always starts with a PRODUCER (plant) and ends with a top predator. Energy is lost at each step — only about 10% passes up the chain.',diagram:['☀️ Sun (energy source)','↓','🌿 Grass (Producer — makes own food)','↓','🐰 Rabbit (Primary consumer — eats plants)','↓','🦊 Fox (Secondary consumer — eats herbivores)','↓','🦅 Eagle (Top predator)'],memory:'SUN → PLANTS → HERBIVORES → CARNIVORES. Only 10% energy passes each level — why there are more plants than animals!',steps:['1️⃣ Producers use sunlight to make food (photosynthesis)','2️⃣ Herbivores eat only plants (primary consumers)','3️⃣ Carnivores eat herbivores (secondary consumers)','4️⃣ Top predators eat carnivores','5️⃣ Decomposers break down dead things → nutrients return to soil'],realWorld:'🌊 Ocean chain: Algae → Shrimp → Small fish → Tuna → Shark. Remove any link and the whole ecosystem is affected!',funFact:'🤯 Only about 10% of energy passes to each new level! That\'s why massive amounts of plants are needed to support just a few lions.',color:'linear-gradient(135deg,#FF9B3F,#6BCB77)'},
-    {id:'water-cycle',subject:'science',title:'The Water Cycle',icon:'💧',age:['4-6','7-10','11-14'],tagline:'Water\'s never-ending journey around our planet!',explanation:'Water constantly moves between the ocean, atmosphere and land in a continuous cycle. The same water molecules have been cycling for billions of years — the water you drink today may have been in a dinosaur!',diagram:['🌊 Ocean/Lakes (Collection)','↑ Evaporation (Sun heats water → vapour rises)','☁️ Condensation (vapour cools → forms clouds)','🌧️ Precipitation (rain/snow/hail falls)','🏔️ Runoff/infiltration returns to ocean'],memory:'Every Cloud Produces Rain: Evaporation → Condensation → Precipitation → Runoff (ECPR)',steps:['1️⃣ EVAPORATION: Sun heats surface water → turns to vapour','2️⃣ TRANSPIRATION: Plants release water vapour through leaves','3️⃣ CONDENSATION: Water vapour cools and forms clouds','4️⃣ PRECIPITATION: Water falls as rain, snow, sleet or hail','5️⃣ COLLECTION/RUNOFF: Water flows into rivers, lakes, oceans'],realWorld:'🌧️ The Amazon creates its own rain! Trees release so much water vapour they create "flying rivers" — aerial rivers of moisture.',funFact:'💧 97% of Earth\'s water is salt water. Only 3% is fresh — and 2% of that is frozen in glaciers. Less than 1% is liquid fresh water!',color:'linear-gradient(135deg,#7EC8E3,#4A90D9)'},
-    {id:'fractions',subject:'math',title:'Fractions',icon:'🍕',age:['4-6','7-10'],tagline:'Equal parts of a whole — easy as pizza!',explanation:'A fraction shows a PART of a whole thing. The DENOMINATOR (bottom number) tells you how many equal parts the whole is divided into. The NUMERATOR (top number) tells you how many parts you have.',diagram:['🍕 Whole pizza = 1','Cut into 4 equal slices → denominator = 4','Take 1 slice → numerator = 1 → fraction = 1/4','Take 3 slices → 3/4 of the pizza','All 4 slices = 4/4 = 1 whole'],memory:'Denominator DOWN at the BOTTOM (D for Down). Numerator at the top (N for uNder the vinculum). "1 over 4" = 1 ÷ 4!',steps:['1️⃣ Divide into equal parts (denominator = total parts)','2️⃣ Shade or take some parts (numerator = parts taken)','3️⃣ Write as numerator/denominator e.g. 3/8','4️⃣ Equivalent fractions: 1/2 = 2/4 = 4/8 (multiply top AND bottom by same number)','5️⃣ To compare fractions: find a common denominator first'],realWorld:'🎂 Cutting a cake into 8 pieces — you eat 3 slices = 3/8 of the cake. Recipe calls for 3/4 cup — that\'s 3 out of 4 equal quarter-cups!',funFact:'✨ ½ = 2/4 = 4/8 = 50/100 — they all mean EXACTLY the same thing! These are equivalent fractions.',color:'linear-gradient(135deg,#FFD93D,#FF9B3F)'},
-    {id:'multiplication',subject:'math',title:'Multiplication',icon:'✖️',age:['4-6','7-10'],tagline:'Fast addition — groups of the same number!',explanation:'Multiplication is FAST ADDITION! 3 × 4 means "3 groups of 4" — it\'s a shortcut for repeated adding. Once you memorise your times tables, calculations that would take minutes can be done in seconds!',diagram:['3 × 4 = ?','🍎🍎🍎🍎  ← Group 1 (4 apples)','🍎🍎🍎🍎  ← Group 2 (4 apples)','🍎🍎🍎🍎  ← Group 3 (4 apples)','Total = 12 ✅ (same as 4+4+4=12)'],memory:'TIMES = GROUPS OF. Any number × 9: digits of answer always add to 9! (9×7=63, 6+3=9). Any number × 10: add a zero!',steps:['1️⃣ Think "× means groups of"','2️⃣ 4 × 5 = 4 groups of 5 = 20','3️⃣ Commutativity: 4×5 = 5×4 (order doesn\'t matter)','4️⃣ Any number × 0 = 0. Any number × 1 = itself','5️⃣ Learn times tables 1-12 — saves time FOREVER'],realWorld:'🛒 Shop: 6 packs of biscuits, 8 per pack. 6 × 8 = 48 biscuits. Much faster than 8+8+8+8+8+8!',funFact:'✨ The 9 times table trick: for 9×n, the tens digit is (n-1) and the units digit is (10-n). Try it: 9×7 = tens digit 6, units digit 3 = 63!',color:'linear-gradient(135deg,#FF6B6B,#FF9B3F)'},
-    {id:'pythagoras',subject:'math',title:'Pythagoras\' Theorem',icon:'📐',age:['11-14','15-17'],tagline:'The most famous triangle rule in mathematics!',explanation:'In any RIGHT-ANGLED triangle, the square of the HYPOTENUSE (longest side) equals the sum of squares of the other two sides. Written as: a² + b² = c² where c is always the hypotenuse (opposite the right angle).',diagram:['📐 Right-angled triangle:','Side a = 3 units','Side b = 4 units','Hypotenuse c = ?','a² + b² = c²','3² + 4² = c²','9 + 16 = 25','c = √25 = 5 ✅ (the famous 3-4-5 triple!)'],memory:'"The square on the hypotenuse equals the sum of the squares on the other two sides." Classic triple: 3-4-5. Also: 5-12-13 and 8-15-17!',steps:['1️⃣ Identify the right angle (90°) in the triangle','2️⃣ Hypotenuse = longest side, always opposite the right angle','3️⃣ Label shorter sides a and b, hypotenuse as c','4️⃣ Apply: a² + b² = c²','5️⃣ Finding a side: c = √(a²+b²) or a = √(c²-b²)'],realWorld:'🏗️ Builders use 3-4-5 triangles to check corners are exactly 90°. Surveyors, architects, GPS systems all use this!',funFact:'🤯 Pythagoras didn\'t actually discover this theorem! Babylonian mathematicians knew it 1,000 years before him. But he (possibly) proved WHY it works.',color:'linear-gradient(135deg,#C77DFF,#7928CA)'},
-    {id:'algebra-basics',subject:'algebra',title:'Algebra Basics',icon:'🔤',age:['11-14','15-17'],tagline:'Using letters to solve mathematical mysteries!',explanation:'Algebra uses letters (variables) to represent unknown numbers. An equation is like a BALANCED SCALE — whatever you do to one side, you MUST do to the other to keep it balanced. Your goal: isolate the variable.',diagram:['⚖️ Equation = balanced scale','2x + 4 = 10','Subtract 4 from BOTH sides:','2x + 4 - 4 = 10 - 4','2x = 6','Divide BOTH sides by 2:','x = 3 ✅','Check: 2(3) + 4 = 10 ✓'],memory:'BALANCE: Do the same to BOTH sides! Undo operations in REVERSE BODMAS order (÷ before −). "Keep It Balanced Always" = KIB-A.',steps:['1️⃣ Write the equation','2️⃣ Get all variable terms on one side','3️⃣ Get all number terms on the other side','4️⃣ Divide to make the coefficient 1','5️⃣ ALWAYS check by substituting your answer back in'],realWorld:'📱 Phone plan: £20 + £0.10 per text = £35 total. 20 + 0.10t = 35 → 0.10t = 15 → t = 150 texts!',funFact:'📜 "Algebra" comes from Arabic "al-jabr" — from Al-Khwarizmi\'s 9th century book. His name also gave us the word "algorithm"!',color:'linear-gradient(135deg,#FFD93D,#FF6B6B)'},
-    {id:'cells',subject:'biology',title:'The Cell — Building Block of Life',icon:'🔬',age:['11-14','15-17'],tagline:'Every living thing is made of these incredible tiny structures!',explanation:'A cell is the smallest unit of life. Your body contains about 37 TRILLION cells! Each cell is like a tiny city — with different organelles performing specific jobs to keep it alive. Plant and animal cells share some organelles but have important differences.',diagram:['🏙️ Animal Cell = Tiny City:','🧠 Nucleus = City Hall (DNA, control centre)','⚡ Mitochondria = Power plant (makes ATP energy)','🏭 Ribosomes = Factories (make proteins)','🚛 Endoplasmic Reticulum = Roads (transport)','🚪 Cell membrane = City walls (selective entry)','🌿 PLANT CELLS ALSO HAVE:','🧱 Cell wall (rigid outer layer)','☀️ Chloroplasts (photosynthesis)','💧 Large vacuole (water storage)'],memory:'MR MEN: Membrane, Ribosomes, Mitochondria, Endoplasmic reticulum, Nucleus. Plant cells also have: VAC-WALL-CHLOR',steps:['1️⃣ Cell membrane: phospholipid bilayer — controls entry/exit','2️⃣ Nucleus: contains DNA — the instruction manual for the cell','3️⃣ Mitochondria: cellular respiration → produces ATP energy','4️⃣ Ribosomes: translate mRNA into proteins','5️⃣ Plant only: chloroplasts (photosynthesis), cell wall (rigidity), vacuole (storage)'],realWorld:'🩸 Red blood cells have NO nucleus to carry maximum oxygen. They live only 120 days then are broken down by the liver and spleen.',funFact:'🤯 If you uncoiled all the DNA from your body and laid it end to end, it would stretch from Earth to Pluto and BACK — 17 times!',color:'linear-gradient(135deg,#6BCB77,#7EC8E3)'},
-    {id:'dna',subject:'biology',title:'DNA & Genetics',icon:'🧬',age:['11-14','15-17'],tagline:'The code of life written in just 4 letters!',explanation:'DNA (deoxyribonucleic acid) is a double helix — like a twisted ladder. It carries ALL genetic instructions for building, running and reproducing every living thing. The sequence of 4 chemical bases (A, T, G, C) spells out every protein your body makes.',diagram:['🧬 DNA Double Helix Structure:','Two sugar-phosphate strands (the "sides" of the ladder)','Base pairs = the "rungs" of the ladder','A always pairs with T (adenine-thymine)','G always pairs with C (guanine-cytosine)','Gene = section of DNA coding for one protein','Genome = ALL your DNA (3 billion base pairs in humans)'],memory:'AT the GC concert: Adenine-Thymine, Guanine-Cytosine. These pairs NEVER change! A-T and G-C always.',steps:['1️⃣ DNA consists of 4 bases: Adenine, Thymine, Guanine, Cytosine','2️⃣ Base pairing rules: A-T and G-C (always)','3️⃣ A gene = a section of DNA that codes for one specific protein','4️⃣ Your genome = all ~20,000 genes','5️⃣ DNA replication occurs before cell division — copies itself exactly'],realWorld:'🔬 DNA fingerprinting is used in criminal investigations, paternity tests, identifying disease risk and tracing ancestry.',funFact:'🤯 You share 50% DNA with a banana, 85% with a mouse, 96% with a gorilla and 99.9% with every other human on Earth!',color:'linear-gradient(135deg,#C77DFF,#FF0080)'},
-    {id:'world-war-2',subject:'history',title:'World War II (1939-1945)',icon:'🌍',age:['11-14','15-17'],tagline:'The conflict that reshaped the entire world!',explanation:'WWII was the deadliest conflict in history — 70-85 million people died, including 6 million Jewish people in the Holocaust. It began with Germany invading Poland in 1939 and ended with Germany surrendering in May 1945 and Japan in September 1945.',diagram:['🗓️ Key Timeline:','Sept 1939: Germany invades Poland → War declared','1940: Battle of Britain (RAF defeats Luftwaffe)','Dec 1941: Japan bombs Pearl Harbor → USA joins war','1942-43: Battle of Stalingrad — turning point','June 1944: D-Day — Allied invasion of Normandy','May 1945: VE Day — Germany surrenders','Aug 1945: Atomic bombs on Japan → VJ Day'],memory:'HIPPO: Hitler, Italy, Pacific (Japan), Pearl Harbor, Operation Overlord (D-Day). "Hitler Is Particularly Partial to Omelettes"',steps:['1️⃣ CAUSES: Treaty of Versailles humiliated Germany, Great Depression, rise of fascism','2️⃣ AXIS: Germany (Hitler), Italy (Mussolini), Japan','3️⃣ ALLIES: UK, USA, USSR, France, Commonwealth nations','4️⃣ TURNING POINTS: Battle of Britain, Stalingrad, D-Day','5️⃣ AFTERMATH: Holocaust, UN founded, Cold War begins, decolonisation accelerates'],realWorld:'🕊️ The UN was founded in 1945 to prevent future wars. The Geneva Conventions were strengthened. NATO formed in 1949.',funFact:'📻 Alan Turing\'s codebreaking of the Enigma machine is estimated to have shortened the war by 2-4 years, potentially saving 14 million lives.',color:'linear-gradient(135deg,#1a1a3e,#FF6B6B)'},
-    {id:'newtons-laws',subject:'physics',title:'Newton\'s Three Laws of Motion',icon:'⚡',age:['11-14','15-17'],tagline:'The three rules that govern ALL movement in the universe!',explanation:'Isaac Newton published his three laws of motion in 1687. These laws explain how objects move and interact with forces. They apply everywhere from a rolling ball to a rocket in space — forming the foundation of classical mechanics.',diagram:['⚖️ LAW 1 — Inertia:','Object at rest stays at rest; moving object stays moving (unless a force acts)','💪 LAW 2 — F = ma:','Force = Mass × Acceleration','Bigger force OR less mass = greater acceleration','🚀 LAW 3 — Action-Reaction:','Every action has equal and opposite reaction'],memory:'INERTIA, F=ma, ACTION-REACTION. "I Finally Appreciate Newton" = Inertia, F=ma, Action-Reaction, Newton\'s Laws!',steps:['1️⃣ LAW 1: Inertia — objects resist changes in motion (seatbelts use this)','2️⃣ LAW 2: F=ma — the equation that links force, mass and acceleration','3️⃣ LAW 3: Action-Reaction — rocket exhaust pushes down → rocket goes up','4️⃣ LAW 2 rearranged: a = F/m (more force or less mass = more acceleration)','5️⃣ All three laws work TOGETHER in real situations'],realWorld:'🚗 Car braking: Law 1 (body lurches forward). Heavier car = more force to stop (Law 2). Rocket propulsion (Law 3).',funFact:'🌌 Newton\'s laws work perfectly at everyday speeds but break down near the speed of light — that\'s where Einstein\'s Special Relativity takes over!',color:'linear-gradient(135deg,#FFD93D,#4A90D9)'},
-    {id:'literary-devices',subject:'literature',title:'Literary Devices',icon:'✍️',age:['7-10','11-14','15-17'],tagline:'The tools writers use to create powerful, vivid writing!',explanation:'Literary devices are techniques writers use to create meaning, emotion and impact beyond the literal words. Understanding them helps you analyse literature AND use them in your own writing to make it more powerful.',diagram:['🖊️ Key Devices:','💬 Metaphor: "Life is a journey" (X IS Y)','🔍 Simile: "Fast as lightning" (using like/as)','👁️ Personification: "The wind whispered"','🔁 Alliteration: "Peter Piper picked"','📢 Hyperbole: "I\'ve told you a million times!"','🎵 Onomatopoeia: buzz, crash, sizzle'],memory:'My Sister Pets Alligators Happily On Sundays = Metaphor, Simile, Personification, Alliteration, Hyperbole, Onomatopoeia, Symbolism',steps:['1️⃣ METAPHOR: Direct comparison — saying one thing IS another (no like/as)','2️⃣ SIMILE: Comparison using "like" or "as"','3️⃣ PERSONIFICATION: Giving human qualities to non-human things','4️⃣ ALLITERATION: Repeating consonant sounds at word starts','5️⃣ FORESHADOWING: Hints at future events to build tension'],realWorld:'📰 Advertisers use these constantly: "Red Bull gives you wings" (metaphor), "Smooth as silk" (simile), "So hungry I could eat a horse" (hyperbole).',funFact:'📖 Shakespeare invented over 1,700 English words we still use including: bedroom, lonely, generous, hurry, eyeball, bedroom and even "swagger"!',color:'linear-gradient(135deg,#C77DFF,#7EC8E3)'},
-    {id:'logical-fallacies',subject:'critical',title:'Logical Fallacies',icon:'🧩',age:['11-14','15-17'],tagline:'The tricks that make bad arguments sound convincing!',explanation:'A logical fallacy is an error in reasoning that makes a flawed argument SEEM valid. Politicians, advertisers and social media use them constantly. Learning to spot them helps you think critically and make stronger arguments yourself.',diagram:['🚩 The 5 Most Common Fallacies:','👤 Ad Hominem: attack the PERSON not the argument','🌾 Straw Man: misrepresent opponent\'s argument','🐟 Red Herring: distract with irrelevant point','📊 False Dichotomy: "only two options" when more exist','🔄 Circular Reasoning: conclusion used as evidence'],memory:'Students Are Really Fooled Constantly = Straw man, Ad hominem, Red herring, False dichotomy, Circular reasoning. Spot the SARF-C!',steps:['1️⃣ AD HOMINEM: "You can\'t trust his climate science — he dropped out of school!"','2️⃣ STRAW MAN: Distorting someone\'s argument to make it easier to attack','3️⃣ RED HERRING: "Why worry about climate change when there\'s crime?"','4️⃣ FALSE DICHOTOMY: "You\'re either with us or against us" (ignores middle ground)','5️⃣ SLIPPERY SLOPE: "If we allow X, then inevitably Y and Z will follow"'],realWorld:'📺 Once you know these, you\'ll spot them in political speeches, news articles and social media constantly. It\'s impossible to "unsee" them!',funFact:'🤔 Aristotle identified 13 logical fallacies around 350 BC in his work Sophistical Refutations. Over 2,000 years later, people still use the same tricks!',color:'linear-gradient(135deg,#FFD93D,#C77DFF)'},
-    {id:'algorithms',subject:'compsci',title:'Algorithms',icon:'💻',age:['11-14','15-17'],tagline:'Step-by-step instructions that solve any problem!',explanation:'An algorithm is a precise, finite set of instructions to solve a problem or accomplish a task. Every app, website and computer program is built from algorithms. Good algorithms are correct, efficient and work for ALL valid inputs — not just some.',diagram:['📝 Algorithm Flowchart:','START','↓ INPUT (receive data)','↓ PROCESS (execute instructions)','↓ DECISION (if condition, branch)','↓ LOOP (repeat while condition true)','↓ OUTPUT (produce result)','END'],memory:'FIVE essential properties: Finiteness, Input, Validity, Effectiveness, Output = F.I.V.E. + Output. Every great algorithm has all FIVE!',steps:['1️⃣ Define the problem clearly and precisely','2️⃣ Identify all required inputs','3️⃣ Break solution into exact, unambiguous steps','4️⃣ Handle edge cases and decisions (if/else branches)','5️⃣ Test with multiple inputs including extreme cases'],realWorld:'📱 Google Maps (shortest path), Spotify recommendations, Facebook newsfeed, face ID — all algorithms running millions of times per second.',funFact:'🤯 Ada Lovelace wrote the first algorithm in 1843 — for a machine that hadn\'t been built yet! She is considered the world\'s first computer programmer.',color:'linear-gradient(135deg,#302b63,#7EC8E3)'},
-    {id:'compound-interest',subject:'finance',title:'Compound Interest',icon:'💰',age:['11-14','15-17'],tagline:'The most powerful force in personal finance!',explanation:'Compound interest means earning interest on BOTH your original money AND the interest already accumulated. Unlike simple interest (only on original), compound interest grows exponentially — it snowballs. Time is the most powerful factor.',diagram:['💵 $1,000 at 10% annual compound interest:','Year 1: $1,000 → $1,100','Year 2: $1,100 → $1,210 (+$110, not $100!)','Year 5: → $1,611','Year 10: → $2,594','Year 20: → $6,727','Year 30: → $17,449 🤯'],memory:'RULE OF 72: Divide 72 by interest rate = years to DOUBLE. At 8% interest: 72÷8 = 9 years to double! At 6%: 72÷6 = 12 years.',steps:['1️⃣ Simple interest: P × r × t (only on original amount)','2️⃣ Compound interest: A = P(1 + r/n)^(nt)','3️⃣ P = principal, r = rate, n = compounds per year, t = time','4️⃣ More frequent compounding = faster growth','5️⃣ Start EARLY — a 10-year head start can double your final amount!'],realWorld:'🏦 $200/month at 8% from age 25 → $702,000 by 65. Same investment starting at 35 → only $299,000. Time matters MORE than amount!',funFact:'💡 Compound interest also works AGAINST you with debt. A $5,000 credit card at 20% interest paying minimums could take 47 years and cost $30,000 to clear!',color:'linear-gradient(135deg,#6BCB77,#FFD93D)'},
-    {id:'quantum-superposition',subject:'quantum',title:'Quantum Superposition',icon:'⚛️',age:['15-17'],tagline:'The bizarre quantum rule that makes computers of the future possible!',explanation:'In quantum mechanics, a particle exists in multiple states simultaneously until measured. This "superposition" is not just theoretical — it has been experimentally proven repeatedly. The act of observing forces the particle to "choose" one definite state. Einstein called it "spooky action".',diagram:['🐱 Schrödinger\'s Cat Experiment:','Cat in sealed box + quantum poison trigger','Quantum particle = 50/50 chance of decay','BEFORE opening box → cat is BOTH alive AND dead (superposition)','AFTER opening (measuring) → cat is EITHER alive OR dead','Key insight: observation COLLAPSES the quantum state!'],memory:'"Until you LOOK, it\'s EVERYTHING. Once you LOOK, it\'s ONE THING." Superposition ends when measured. Qubits exploit this: 0 AND 1 simultaneously.',steps:['1️⃣ Classical bits: either 0 OR 1','2️⃣ Quantum bits (qubits): 0 AND 1 simultaneously (superposition)','3️⃣ Measurement collapses superposition to one definite state','4️⃣ Wave function ψ describes all possible states and their probabilities','5️⃣ Quantum computers use superposition for exponential parallel processing'],realWorld:'💻 Quantum computers could crack current encryption, model drug molecules, optimise logistics and solve climate models in minutes vs years for classical computers.',funFact:'🤯 Schrödinger created the cat thought experiment to show how ABSURD quantum mechanics seemed — he was being sarcastic! But the physics is real at quantum scale.',color:'linear-gradient(135deg,#302b63,#C77DFF)'},
-    {id:'spelling-rules',subject:'spelling',title:'Golden Rules of English Spelling',icon:'✏️',age:['4-6','7-10','11-14'],tagline:'Learn the rules and spell thousands of words correctly!',explanation:'English spelling seems random but there are patterns and rules! Once you learn these golden rules, you can spell thousands of words correctly — even ones you\'ve never seen before. These rules apply across the entire language.',diagram:['📏 The 5 Golden Rules:','1️⃣ I before E except after C','2️⃣ Drop the E before vowel suffixes (-ing, -ed)','3️⃣ Double consonant for short vowels (CVC pattern)','4️⃣ Change Y to I before -es or -ed','5️⃣ Q is ALWAYS followed by U'],memory:'"Necessary: 1 Collar 2 Socks" = 1C, 2S. "Big Elephants Can Always Understand Small Elephants" = B-E-C-A-U-S-E. "I before E except after C".',steps:['1️⃣ I before E: believe, achieve, relief (EXCEPT: receive, ceiling, deceive)','2️⃣ Drop E: bake→baking, hope→hoping (but: race→racial keeps E)','3️⃣ Double consonant: run→running, sit→sitting (CVC pattern)','4️⃣ Y to I: baby→babies, carry→carried (but keep Y if adding -ing: carry→carrying)','5️⃣ Silent letters to remember: know, write, knight, psychology, Wednesday'],realWorld:'📝 These rules help spell words you\'ve never seen! If a word has a short vowel sound + consonant + suffix, double the consonant. Simple!',funFact:'🤯 English has 44 distinct sounds but only 26 letters! That\'s why spelling is tricky. The word "ghoti" could theoretically spell "fish" (gh=f, o=i, ti=sh).',color:'linear-gradient(135deg,#FF9B3F,#C77DFF)'},
+
+    // ══ MATHEMATICS ══
+    { id:'place-value', subject:'math', title:'Place Value & Number Systems', icon:'🔢', age:['4-6','7-10','11-14'],
+      tagline:'Understanding what every digit really means!',
+      explanation:'Every digit in a number has a place value — its worth depends on where it sits. In 3,456 the digit 3 = 3,000 (thousands), 4 = 400 (hundreds), 5 = 50 (tens) and 6 = 6 (ones). This is the foundation of all arithmetic!',
+      diagram:['NUMBER: 3,456','Thousands | Hundreds | Tens | Ones','    3     |    4     |  5   |  6 ','3,000 + 400 + 50 + 6 = 3,456','10× rule: each column is 10× the column to its right','Billions → Millions → Thousands → Hundreds → Tens → Ones'],
+      memory:'THTO — Thousands, Hundreds, Tens, Ones. "The Horse Trotted On" — biggest column to smallest, left to right!',
+      steps:['1️⃣ Write the number and identify each digit','2️⃣ Count columns from the RIGHT: 1st = Ones, 2nd = Tens, 3rd = Hundreds','3️⃣ Each column is exactly 10 times larger than the one to its right','4️⃣ To expand: write each digit × its place value and add them','5️⃣ Example: 5,302 = 5,000 + 300 + 0 + 2'],
+      realWorld:'🏦 Every price, bank balance and distance uses place value. $2,499 means 2 thousands + 4 hundreds + 9 tens + 9 ones.',
+      funFact:'🤯 Zero was invented in India around 500 AD — before that most cultures had no way to write "nothing" and arithmetic was incredibly difficult!',
+      notes:'Key terms: digit, place value, expanded form, standard form. Rules: moving a digit one place LEFT multiplies its value by 10. Moving RIGHT divides by 10.',
+      quiz:[
+        {q:'In the number 4,728 what is the value of the digit 7?',a:'700',w:['7','70','7,000'],h:'Count from the right: 8=ones, 2=tens, 7=hundreds'},
+        {q:'What is 6,045 in expanded form?',a:'6,000 + 40 + 5',w:['6+0+4+5','600+40+5','6,000+400+5'],h:'Each digit × its place value position'},
+        {q:'Which digit is in the thousands place in 12,376?',a:'2',w:['1','3','7'],h:'Count 4 places from the right'},
+      ],
+      color:'linear-gradient(135deg,#7EC8E3,#4A90D9)' },
+
+    { id:'fractions', subject:'math', title:'Fractions', icon:'🍕', age:['4-6','7-10'],
+      tagline:'Equal parts of a whole — easy as pizza!',
+      explanation:'A fraction shows a PART of a whole. The DENOMINATOR (bottom) = total equal parts. The NUMERATOR (top) = parts you have. ¾ means 3 out of 4 equal parts.',
+      diagram:['🍕 1 pizza cut into 4 slices = denominator 4','Take 1 slice → 1/4','Take 3 slices → 3/4','All 4 slices → 4/4 = 1 whole','1/2 = 2/4 = 4/8 (equivalent fractions)','Proper: top < bottom (¾) | Improper: top > bottom (5/3)'],
+      memory:'Denominator = Down at the bottom. Numerator = Number of parts you have. "Never Disturb" — Numerator on top, Denominator at the bottom!',
+      steps:['1️⃣ Denominator = how many equal pieces total (bottom number)','2️⃣ Numerator = how many pieces you have (top number)','3️⃣ Equivalent fractions: multiply top AND bottom by the same number','4️⃣ To compare: find a common denominator first','5️⃣ To add fractions: same denominator → just add tops'],
+      realWorld:'🎂 Cutting cake into 8 pieces — eat 3 = 3/8. Recipe calls for ¾ cup = 3 out of 4 equal quarter-cups.',
+      funFact:'🏺 Ancient Egyptians only used unit fractions (1 on top). They wrote ¾ as ½ + ¼. Their entire fraction system was different from ours!',
+      notes:'Key terms: numerator, denominator, equivalent fractions, proper fraction, improper fraction, mixed number. To convert improper to mixed: divide top by bottom.',
+      quiz:[
+        {q:'In the fraction 5/8 what is the denominator?',a:'8',w:['5','3','13'],h:'Denominator is always the BOTTOM number'},
+        {q:'Which fraction is equivalent to 1/2?',a:'4/8',w:['2/8','3/8','1/4'],h:'Multiply numerator AND denominator by the same number'},
+        {q:'What is 1/4 + 2/4?',a:'3/4',w:['3/8','2/4','1/2'],h:'Same denominator — add only the tops'},
+      ],
+      color:'linear-gradient(135deg,#FFD93D,#FF9B3F)' },
+
+    { id:'percentages', subject:'math', title:'Percentages', icon:'💯', age:['7-10','11-14'],
+      tagline:'Parts per hundred — used in everyday life!',
+      explanation:'Percent means "per hundred". 50% = 50 out of 100 = ½. Percentages are used for discounts, exam scores, interest rates, nutrition labels, taxes and statistics everywhere.',
+      diagram:['100% = the whole thing','50% = half','25% = one quarter','75% = three quarters','10% = one tenth (÷10)','1% = one hundredth (÷100)'],
+      memory:'To find 10%: divide by 10. Build up: 20% = 2×10%, 5% = half of 10%, 15% = 10%+5%, 1% = divide by 100.',
+      steps:['1️⃣ 10% of any number: divide by 10','2️⃣ 1% of any number: divide by 100','3️⃣ 20% = 2 × 10%, 5% = ½ × 10%','4️⃣ % of a number: multiply by decimal (30% × 50 = 0.30 × 50 = 15)','5️⃣ Percentage increase: (new−old)/old × 100'],
+      realWorld:'🛍️ $200 jacket, 30% off: 10%=$20, 30%=$60 off. Pay $140. Bank interest, VAT/GCT, exam scores — percentages everywhere!',
+      funFact:'📊 If something grows by 100% it doubles. Growing by 200% means it triples (original + 200% more). The word percent comes from Latin per centum = per hundred.',
+      notes:'Key terms: percent, percentage, rate, base, amount. Formula: Amount = Rate × Base. To find rate: Amount ÷ Base × 100.',
+      quiz:[
+        {q:'What is 10% of 80?',a:'8',w:['0.8','18','800'],h:'Divide by 10 to find 10%'},
+        {q:'A shirt costs $50. There is a 20% discount. What is the discount amount?',a:'$10',w:['$20','$5','$30'],h:'10% of $50 = $5, so 20% = $10'},
+        {q:'If you score 18 out of 20, what is your percentage?',a:'90%',w:['80%','85%','95%'],h:'18 ÷ 20 × 100 = 90%'},
+      ],
+      color:'linear-gradient(135deg,#FF6B6B,#FFD93D)' },
+
+    { id:'geometry', subject:'math', title:'Geometry — Shapes & Angles', icon:'📐', age:['4-6','7-10','11-14'],
+      tagline:'The mathematics of shapes, space and angles!',
+      explanation:'Geometry studies shapes, sizes, angles and positions. Every 2D shape has sides and angles. Every 3D shape has faces, edges and vertices. Angles are measured in degrees.',
+      diagram:['2D SHAPES (flat):','Triangle: 3 sides · angles add to 180°','Rectangle: 2 pairs equal sides · 4×90° angles','Circle: all points equal distance from centre (radius)','ANGLES: Acute<90° · Right=90° · Obtuse 90-180° · Straight=180°','3D: Cube (6 faces) · Sphere · Cylinder · Cone · Pyramid'],
+      memory:'Angles in any triangle = 180°. Angles in quadrilateral = 360°. Tri=3, Quad=4, Pent=5, Hex=6, Hept=7, Oct=8 sides.',
+      steps:['1️⃣ Area of rectangle = length × width','2️⃣ Area of triangle = ½ × base × height','3️⃣ Perimeter = add ALL sides','4️⃣ Area of circle = π × r² (r = radius)','5️⃣ Volume of cuboid = length × width × height'],
+      realWorld:'🏗️ Architects design every building using geometry. GPS uses geometry in 3D space. Footballs, wheels, bridges — all geometric shapes.',
+      funFact:'🐝 Honeycombs are hexagonal because hexagons pack together with no gaps and use the minimum wax — nature is a geometry expert!',
+      notes:'Formulas to memorise: Area rectangle=l×w, triangle=½bh, circle=πr². Perimeter rectangle=2(l+w). Circumference=2πr.',
+      quiz:[
+        {q:'What is the area of a rectangle 8cm long and 5cm wide?',a:'40cm²',w:['26cm²','13cm²','80cm²'],h:'Area = length × width'},
+        {q:'What do angles in a triangle always add up to?',a:'180°',w:['90°','360°','270°'],h:'This is a fundamental rule of triangles'},
+        {q:'What type of angle is exactly 90°?',a:'Right angle',w:['Acute angle','Obtuse angle','Straight angle'],h:'A right angle looks like the corner of a square'},
+      ],
+      color:'linear-gradient(135deg,#C77DFF,#4A90D9)' },
+
+    // ══ SCIENCE ══
+    { id:'photosynthesis', subject:'science', title:'Photosynthesis', icon:'🌱', age:['4-6','7-10','11-14'],
+      tagline:'How plants make their own food using sunlight!',
+      explanation:'Plants are like solar-powered food factories. They absorb sunlight through chlorophyll in leaves, water from roots, and CO₂ from air — converting them into glucose (food) and releasing oxygen as a by-product.',
+      diagram:['INPUTS → OUTPUTS:','☀️ Sunlight (energy source)','💧 Water H₂O (from roots)','💨 Carbon dioxide CO₂ (from air through stomata)','↓↓↓↓','🍬 Glucose C₆H₁₂O₆ (food for the plant)','🌬️ Oxygen O₂ (released — we breathe this!)'],
+      memory:'SWC → GO! Sun + Water + CO₂ → Glucose + Oxygen. "Some Wonderful Cooks Give Outstanding food!" Formula: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂',
+      steps:['1️⃣ Roots absorb water from soil','2️⃣ Stomata (pores in leaves) absorb CO₂ from air','3️⃣ Chlorophyll in leaves captures sunlight','4️⃣ Glucose is produced and stored for energy','5️⃣ Oxygen is released through the stomata'],
+      realWorld:'🌳 Every breath you take depends on photosynthesis. Without plants we would have no oxygen. The Amazon produces ~20% of Earth\'s oxygen.',
+      funFact:'🤯 One large oak tree can absorb 48 pounds of CO₂ per year and produce enough oxygen for 2 people. Plants are literally keeping us alive!',
+      notes:'Chlorophyll = green pigment that absorbs light. Stomata = tiny pores on leaves. Equation: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂',
+      quiz:[
+        {q:'What gas do plants release during photosynthesis?',a:'Oxygen',w:['Carbon dioxide','Nitrogen','Hydrogen'],h:'This is the gas we breathe in'},
+        {q:'Which part of the plant absorbs water from the soil?',a:'Roots',w:['Leaves','Stem','Flowers'],h:'Roots grow underground for a reason!'},
+        {q:'What is the green pigment in plants that captures sunlight?',a:'Chlorophyll',w:['Glucose','Stomata','Cellulose'],h:'Chlorophyll is also why plants are green'},
+      ],
+      color:'linear-gradient(135deg,#6BCB77,#3DAA45)' },
+
+    { id:'states-matter', subject:'science', title:'States of Matter', icon:'🧪', age:['7-10','11-14'],
+      tagline:'Everything is solid, liquid or gas — and can change!',
+      explanation:'All matter exists in three main states determined by how tightly particles are packed. Solids hold their shape, liquids take the shape of their container, gases fill any space. Heat energy causes changes between states.',
+      diagram:['🧊 SOLID: tightly packed particles, fixed shape & volume','💧 LIQUID: loosely packed, fixed volume, no fixed shape','💨 GAS: spread out particles, no fixed shape or volume','Heating changes: Solid→Liquid (melting) Liquid→Gas (evaporation)','Cooling changes: Gas→Liquid (condensation) Liquid→Solid (freezing)','Melting: 0°C (ice) · Boiling: 100°C (water) at sea level'],
+      memory:'SLG — Solid keeps Shape, Liquid Lies in container, Gas Goes everywhere! Heat: melt→evaporate. Cool: condense→freeze.',
+      steps:['1️⃣ Solid = definite shape AND definite volume','2️⃣ Liquid = definite volume but NO definite shape','3️⃣ Gas = NO definite shape AND NO definite volume','4️⃣ Adding heat increases particle movement → changes state','5️⃣ Removing heat slows particles → changes to lower state'],
+      realWorld:'🍦 Ice cream melts from solid to liquid in your hand. Steam from a kettle is liquid → gas. Dew on grass is gas → liquid (condensation). Weather depends on state changes!',
+      funFact:'🔬 There is a FOURTH state of matter — plasma! It is the most common in the universe. Stars, lightning, neon signs and aurora borealis are all plasma.',
+      notes:'Key terms: melting point, boiling point, condensation, evaporation, freezing point, sublimation (solid→gas, e.g. dry ice). Plasma = 4th state.',
+      quiz:[
+        {q:'What state of matter has a definite volume but no definite shape?',a:'Liquid',w:['Solid','Gas','Plasma'],h:'Think about water in a glass'},
+        {q:'What is it called when a liquid turns into a gas?',a:'Evaporation',w:['Condensation','Freezing','Melting'],h:'Puddles disappear through this process'},
+        {q:'At what temperature does water freeze (at sea level)?',a:'0°C',w:['100°C','32°F','4°C'],h:'This is the melting point of ice'},
+      ],
+      color:'linear-gradient(135deg,#4A90D9,#C77DFF)' },
+
+    { id:'human-body', subject:'science', title:'Human Body Systems', icon:'🫀', age:['7-10','11-14'],
+      tagline:'Your body — an incredible system of 11 systems!',
+      explanation:'Your body has 11 major organ systems all working together every second. Each has a specific role and they communicate constantly. Understanding these systems helps us understand health, medicine and biology.',
+      diagram:['🧠 Nervous: brain + nerves = control centre','🫀 Circulatory: heart + blood vessels = delivery system','🫁 Respiratory: lungs = gas exchange (O₂ in, CO₂ out)','🦴 Skeletal: 206 bones = structure & protection','💪 Muscular: 600+ muscles = all movement','🦷 Digestive: stomach + intestines = food processing'],
+      memory:'No Carefully Rehearsed Dance Steps Make Every Expert = Nervous, Circulatory, Respiratory, Digestive, Skeletal, Muscular, Excretory. First letters: NCRDMSE',
+      steps:['1️⃣ Heart pumps blood through 60,000 miles of blood vessels','2️⃣ Lungs exchange gases 15 times per minute (breathing)','3️⃣ Brain processes information and controls all body functions','4️⃣ Digestive system breaks food into nutrients in 24-72 hours','5️⃣ Skin is the largest organ — 2 square metres of protection'],
+      realWorld:'🩺 Doctors study all 11 systems because they interact. Heart disease affects kidneys. Diabetes affects eyes, nerves and kidneys. The body is one connected system.',
+      funFact:'❤️ Your heart beats ~100,000 times per day. In a 70-year lifetime that is over 2.5 BILLION heartbeats — never stopping to rest for even one second!',
+      notes:'Key systems: nervous, circulatory, respiratory, digestive, skeletal, muscular, excretory, endocrine, reproductive, immune, integumentary (skin).',
+      quiz:[
+        {q:'Which organ pumps blood around the body?',a:'Heart',w:['Lungs','Brain','Kidneys'],h:'Located slightly left of centre in your chest'},
+        {q:'How many bones are in the adult human body?',a:'206',w:['180','250','212'],h:'Babies are born with about 270 — some fuse as we grow'},
+        {q:'What do the lungs do?',a:'Exchange oxygen and carbon dioxide',w:['Pump blood','Digest food','Filter waste'],h:'We breathe IN oxygen and OUT carbon dioxide'},
+      ],
+      color:'linear-gradient(135deg,#FF6B6B,#C77DFF)' },
+
+    { id:'water-cycle', subject:'science', title:'The Water Cycle', icon:'💧', age:['4-6','7-10','11-14'],
+      tagline:'Water\'s never-ending journey around our planet!',
+      explanation:'Water constantly moves between Earth\'s surface and atmosphere in a continuous cycle driven by solar energy. The same water molecules have been cycling for billions of years.',
+      diagram:['1️⃣ EVAPORATION: Sun heats water → vapour rises','2️⃣ TRANSPIRATION: Plants release water vapour','3️⃣ CONDENSATION: Vapour cools → forms clouds','4️⃣ PRECIPITATION: Water falls as rain, snow or hail','5️⃣ COLLECTION: Rivers, lakes, oceans collect water','6️⃣ INFILTRATION: Some soaks into groundwater'],
+      memory:'Every Cloud Produces Constant Rainfall = Evaporation, Condensation, Precipitation, Collection, Runoff. ECPCR — "Every Caribbean Person Can Run"!',
+      steps:['1️⃣ Sun heats surface water → liquid turns to vapour (evaporation)','2️⃣ Warm vapour rises and cools → tiny droplets form clouds (condensation)','3️⃣ Droplets combine and fall as precipitation (rain/snow/hail)','4️⃣ Water flows into rivers, lakes and oceans (collection)','5️⃣ Cycle repeats continuously — the same water forever'],
+      realWorld:'🌧️ Caribbean weather is heavily driven by the water cycle. The rainy season, hurricanes and droughts are all connected to how much water evaporates from the warm Caribbean Sea.',
+      funFact:'💧 The water you drink today may have been dinosaur saliva, part of an ancient glacier or inside a volcano. The Earth recycles ALL its water — none is created or destroyed!',
+      notes:'Key terms: evaporation, condensation, precipitation, transpiration, infiltration, surface runoff, groundwater. The water cycle is also called the hydrological cycle.',
+      quiz:[
+        {q:'What is it called when water vapour cools and forms clouds?',a:'Condensation',w:['Evaporation','Precipitation','Transpiration'],h:'The opposite of evaporation'},
+        {q:'What drives the water cycle?',a:'Energy from the Sun',w:['The Moon\'s gravity','Wind','Earth\'s rotation'],h:'Heat is needed to evaporate water'},
+        {q:'What is precipitation?',a:'Water falling from clouds as rain, snow or hail',w:['Water vapour rising','Water soaking into ground','Water collecting in rivers'],h:'Any form of water falling from the sky'},
+      ],
+      color:'linear-gradient(135deg,#7EC8E3,#4A90D9)' },
+
+    // ══ HISTORY & GEOGRAPHY ══
+    { id:'caribbean-history', subject:'history', title:'Caribbean History & Heritage', icon:'🌴', age:['7-10','11-14'],
+      tagline:'The powerful story of Caribbean people!',
+      explanation:'The Caribbean has one of the world\'s most complex and powerful histories — from indigenous peoples through European colonisation, the transatlantic slave trade, and emancipation to independence and modern nationhood.',
+      diagram:['Pre-1492: Taino, Arawak and Carib indigenous peoples','1492: Columbus arrives → European colonisation begins','1500s-1800s: Transatlantic slave trade (millions transported)','1834-1838: Emancipation in British Caribbean colonies','1962: Jamaica + Trinidad & Tobago independence','Today: 13 independent Caribbean nations'],
+      memory:'Three Eras: INDIGENOUS → COLONIAL (slavery) → INDEPENDENCE. Three struggles: survival, freedom, self-determination.',
+      steps:['1️⃣ Taino, Arawak and Carib peoples were the first Caribbeans','2️⃣ Columbus arrived 1492 → Spain, Britain, France, Netherlands colonised','3️⃣ Millions of Africans enslaved and transported to work plantations','4️⃣ Emancipation 1834-38 — freedom from slavery in British colonies','5️⃣ 20th century independence movements led to self-governance'],
+      realWorld:'🏃 Usain Bolt, Bob Marley, Rihanna, Marcus Garvey, CLR James, Toussaint Louverture — Caribbean people have changed sport, music, literature and politics globally.',
+      funFact:'🌺 Jamaica\'s name comes from the Taino word Xaymaca — meaning "Land of Wood and Water". The Caribbean is named after the Carib indigenous people.',
+      notes:'Key dates: 1492 Columbus, 1834 Abolition Act, 1838 Full Emancipation, 1962 Jamaican Independence. National heroes vary by country.',
+      quiz:[
+        {q:'What was the name of the indigenous people who first lived in Jamaica?',a:'Taino',w:['Arawak','Carib','Aztec'],h:'Their word for Jamaica means "Land of Wood and Water"'},
+        {q:'When did Jamaica gain independence?',a:'1962',w:['1838','1948','1972'],h:'Jamaica gained independence from Britain in August 1962'},
+        {q:'What is the word used for the abolition of slavery in the British Caribbean?',a:'Emancipation',w:['Independence','Liberation','Revolution'],h:'The Emancipation Act was passed in 1834'},
+      ],
+      color:'linear-gradient(135deg,#FFD700,#009B3A)' },
+
+    { id:'world-geography', subject:'geography', title:'World Geography', icon:'🌍', age:['7-10','11-14'],
+      tagline:'Understanding our planet — continents, oceans and nations!',
+      explanation:'Earth has 7 continents and 5 major oceans. Each continent has distinct physical features, climates, cultures and populations. Geography explains WHY people live where they do and HOW the environment shapes human life.',
+      diagram:['7 CONTINENTS (largest to smallest):','Africa · Asia · North America · South America','Antarctica · Europe · Australia/Oceania','5 OCEANS: Pacific · Atlantic · Indian · Southern · Arctic','Pacific Ocean = largest (covers 1/3 of Earth\'s surface)','Equator divides North/South hemispheres · Prime Meridian = East/West'],
+      memory:'A NAMED SA EA = Africa, North America, South America, Europe, Asia, Antarctica. Or eat an aspirin. 7 continents. PAIASA oceans = Pacific, Atlantic, Indian, Arctic, Southern.',
+      steps:['1️⃣ The 7 continents contain all of Earth\'s landmass','2️⃣ Asia is the largest continent (44% of land area)','3️⃣ Oceans cover 71% of Earth\'s surface','4️⃣ Latitude lines run east-west (measure north/south position)','5️⃣ Longitude lines run north-south (measure east/west position)'],
+      realWorld:'📍 GPS uses a grid of latitude and longitude to pinpoint any location on Earth. Every map, navigation app and shipping route relies on this system.',
+      funFact:'🗺️ Until the 1500s Europeans did not know North and South America existed. The world map has been redrawn many times as explorers discovered new lands.',
+      notes:'Key terms: continent, hemisphere, latitude, longitude, equator, Prime Meridian, tropic, climate zone, biome. Caribbean = part of North America geographically.',
+      quiz:[
+        {q:'How many continents does Earth have?',a:'7',w:['5','6','8'],h:'Africa, Asia, North America, South America, Europe, Antarctica, Australia'},
+        {q:'Which is the largest ocean?',a:'Pacific Ocean',w:['Atlantic Ocean','Indian Ocean','Arctic Ocean'],h:'It covers about one third of Earth\'s surface'},
+        {q:'What imaginary line divides Earth into Northern and Southern hemispheres?',a:'The Equator',w:['The Prime Meridian','The Tropic of Cancer','The Arctic Circle'],h:'It runs horizontally around the middle of Earth'},
+      ],
+      color:'linear-gradient(135deg,#4A90D9,#1565C0)' },
+
+    // ══ LITERATURE ══
+    { id:'literary-devices', subject:'literature', title:'Literary Devices', icon:'✍️', age:['7-10','11-14','15-17'],
+      tagline:'The tools writers use to make their work powerful!',
+      explanation:'Literary devices are techniques writers use to create meaning, emotion and impact. Recognising them helps you analyse literature more deeply and use them in your own writing.',
+      diagram:['💬 Metaphor: saying X IS Y ("Life is a journey")','🔍 Simile: comparing using like/as ("brave as a lion")','👁️ Personification: human qualities to non-human things','🔁 Alliteration: same sound at word starts ("Peter Piper")','📢 Hyperbole: extreme exaggeration ("I\'ve told you a million times!")','🎵 Onomatopoeia: words that sound like their meaning (buzz, crash)'],
+      memory:'My Sister Pets Alligators Happily On Sundays = Metaphor, Simile, Personification, Alliteration, Hyperbole, Onomatopoeia, Symbolism.',
+      steps:['1️⃣ METAPHOR: direct comparison — X IS Y (no like/as)','2️⃣ SIMILE: comparison using "like" or "as"','3️⃣ PERSONIFICATION: non-human thing has human qualities','4️⃣ ALLITERATION: same consonant at start of nearby words','5️⃣ SYMBOLISM: an object represents an idea (dove = peace)'],
+      realWorld:'📺 Advertisers use devices constantly: "Red Bull gives you wings" (metaphor). "Smooth as silk" (simile). "I\'ve told you a billion times" (hyperbole). Now you can identify the tricks!',
+      funFact:'📖 Shakespeare invented over 1,700 English words we still use today: bedroom, lonely, generous, hurry, eyeball, bedroom, swagger, rant and many more!',
+      notes:'PEEL paragraph for analysis: Point (device name) → Evidence (quote) → Explanation (effect on reader) → Link (to theme/character).',
+      quiz:[
+        {q:'Which literary device compares two things using "like" or "as"?',a:'Simile',w:['Metaphor','Personification','Alliteration'],h:'"Brave as a lion" uses this device'},
+        {q:'"The wind whispered through the trees" is an example of:',a:'Personification',w:['Metaphor','Simile','Onomatopoeia'],h:'Wind cannot whisper — that is a human quality'},
+        {q:'What literary device is used in "Peter Piper picked a peck"?',a:'Alliteration',w:['Hyperbole','Symbolism','Metaphor'],h:'Listen for the repeated P sound at the start of words'},
+      ],
+      color:'linear-gradient(135deg,#C77DFF,#7EC8E3)' },
+
+    { id:'essay-writing', subject:'literature', title:'Essay Writing & Structure', icon:'📝', age:['7-10','11-14','15-17'],
+      tagline:'The formula for clear, convincing writing every time!',
+      explanation:'A well-structured essay has three parts: an introduction (states your argument), body paragraphs (prove it with evidence) and a conclusion (summarises your case). Every professional document follows this structure.',
+      diagram:['INTRODUCTION: Hook → Background context → Thesis statement','BODY ¶1: Topic sentence → Evidence/quote → Analysis → Link','BODY ¶2: Topic sentence → Evidence/quote → Analysis → Link','BODY ¶3: Topic sentence → Evidence/quote → Analysis → Link','CONCLUSION: Restate thesis → Summarise points → Wider reflection','Total structure: 5 paragraphs minimum for a complete essay'],
+      memory:'PEEL paragraphs: Point → Evidence → Explanation → Link. "People Enjoy Excellent Literature" — makes every body paragraph strong.',
+      steps:['1️⃣ PLAN first — spider diagram or bullet outline','2️⃣ HOOK: open with a question, fact or powerful statement','3️⃣ THESIS: one clear sentence stating your main argument','4️⃣ Each body paragraph = ONE point + evidence + analysis','5️⃣ CONCLUSION: synthesise — no new information'],
+      realWorld:'💼 Every professional writes structured documents — reports, proposals, emails, legal arguments, job applications. The essay structure you learn now is used in every career.',
+      funFact:'✏️ The word essay comes from French essai meaning "attempt" or "trial". The philosopher Montaigne invented the essay form in 1580 — we still use his exact structure today!',
+      notes:'Transitions between paragraphs: Furthermore, Moreover, However, In contrast, As a result, Therefore, Consequently. Avoid starting sentences with "I" in formal essays.',
+      quiz:[
+        {q:'What is the purpose of a THESIS statement?',a:'To state the main argument of the essay clearly',w:['To introduce the topic generally','To summarise the conclusion','To list evidence'],h:'It appears at the end of the introduction'},
+        {q:'In PEEL what does the E stand for?',a:'Evidence',w:['Example','Explanation','Extension'],h:'After your point you need to support it with proof'},
+        {q:'Which of these should NOT appear in a conclusion?',a:'New information and arguments',w:['Restatement of thesis','Summary of main points','Wider reflection'],h:'Conclusions summarise — they do not introduce new ideas'},
+      ],
+      color:'linear-gradient(135deg,#FF9B3F,#FF6B6B)' },
+
+    // ══ PEP JAMAICA — MINISTRY OF EDUCATION GRADES 4-6 ══
+    { id:'pep-number-operations', subject:'pep_math', title:'PEP Maths: Number & Operations', icon:'🔢', age:['7-10'],
+      tagline:'Jamaica MOE Grade 4-6 — Numbers, operations and problem solving!',
+      explanation:'The Jamaica Ministry of Education Grades 4-6 Mathematics curriculum covers the four operations (addition, subtraction, multiplication, division), fractions, decimals, percentages and word problems. Number sense is the foundation.',
+      diagram:['ADDITION: carrying (regrouping) for multi-digit','SUBTRACTION: borrowing (decomposing) across columns','MULTIPLICATION: times tables 1-12 + long multiplication','DIVISION: short division + long division with remainders','FRACTIONS: equivalent, simplest form, add/subtract','DECIMALS: place value, adding, subtracting, multiplying'],
+      memory:'BODMAS/PEMDAS: Brackets, Orders (powers), Division, Multiplication, Addition, Subtraction — always follow this order for calculations.',
+      steps:['1️⃣ Always estimate first — check if answer is reasonable','2️⃣ Set up columns carefully: units under units, tens under tens','3️⃣ BODMAS for multi-operation problems — brackets first','4️⃣ Word problems: identify operation words (total=add, left=subtract)','5️⃣ Check answers by using inverse operation'],
+      realWorld:'🛒 Every shopping trip uses these skills — adding prices, calculating change, working out discounts. PEP tests your ability to apply maths to real life.',
+      funFact:'🇯🇲 Jamaica uses the same number system as the rest of the world — Hindu-Arabic numerals developed in India around 500 AD and spread via Arab traders.',
+      notes:'Jamaica MOE Strands: Number, Measurement, Geometry, Algebra, Statistics. PEP tests all five strands. Calculators NOT allowed in PEP examination.',
+      quiz:[
+        {q:'What does BODMAS stand for in the order of operations?',a:'Brackets, Orders, Division, Multiplication, Addition, Subtraction',w:['Base, Operation, Divide, Minus, Add, Sum','Brackets, Other, Decimals, Multiply, Add, Subtract','Big Orange Dogs Make Animals Scared'],h:'Always follow BODMAS to get the correct answer'},
+        {q:'Maria has $450. She buys a book for $125 and a pen for $35. How much does she have left?',a:'$290',w:['$260','$310','$280'],h:'450 − 125 − 35 = 290'},
+        {q:'What is 3/4 written as a decimal?',a:'0.75',w:['0.34','0.43','0.3'],h:'3 ÷ 4 = 0.75'},
+      ],
+      color:'linear-gradient(135deg,#FFD700,#009B3A)' },
+
+    { id:'pep-measurement', subject:'pep_math', title:'PEP Maths: Measurement', icon:'📏', age:['7-10'],
+      tagline:'Jamaica MOE Grade 4-6 — Length, mass, capacity, time and money!',
+      explanation:'Measurement is one of the most practical areas of mathematics. The Jamaica MOE curriculum covers metric and imperial units, conversion, perimeter, area, volume, time calculations and money problems in Jamaican dollars.',
+      diagram:['LENGTH: mm → cm → m → km (×10, ×100, ×1000)','MASS: g → kg → tonne (×1000 each)','CAPACITY: mL → L (×1000)','TIME: seconds→minutes(×60)→hours(×60)→days(×24)','MONEY: cents→dollars (×100) · JMD currency','AREA: square cm (cm²) square m (m²) hectares (ha)'],
+      memory:'King Henry Died By Drinking Cold Milk = Kilo, Hecto, Deca, Base, Deci, Centi, Milli. The metric prefixes in order from largest to smallest.',
+      steps:['1️⃣ To convert to smaller unit: MULTIPLY','2️⃣ To convert to larger unit: DIVIDE','3️⃣ Perimeter = add all sides','4️⃣ Area of rectangle = length × width','5️⃣ Time: add hours separately from minutes, regroup at 60'],
+      realWorld:'🏗️ Building a house in Jamaica requires measuring land area in square metres, calculating materials by weight (kg), and budgeting in JMD. Measurement is essential.',
+      funFact:'🇯🇲 Jamaica uses metric measurement in most contexts (km, kg, L) but road distances are sometimes still given in miles — a legacy of British colonial rule.',
+      notes:'Common conversions to memorise: 1km=1,000m, 1m=100cm, 1kg=1,000g, 1L=1,000mL, 1 hour=60min, $1=100cents. PEP often tests unit conversion in context.',
+      quiz:[
+        {q:'How many centimetres are in 3.5 metres?',a:'350 cm',w:['35 cm','3,500 cm','305 cm'],h:'1 metre = 100 centimetres, so multiply by 100'},
+        {q:'A recipe needs 750 mL of milk. How many litres is that?',a:'0.75 L',w:['7.5 L','75 L','0.075 L'],h:'1 litre = 1,000 mL, so divide by 1,000'},
+        {q:'A rectangle is 12 cm long and 7 cm wide. What is its perimeter?',a:'38 cm',w:['84 cm','19 cm','26 cm'],h:'Perimeter = 2×(length + width) = 2×19 = 38'},
+      ],
+      color:'linear-gradient(135deg,#009B3A,#FFD700)' },
+
+    { id:'pep-language-arts', subject:'pep_lang', title:'PEP Language Arts: Reading & Comprehension', icon:'📚', age:['7-10'],
+      tagline:'Jamaica MOE Grade 4-6 — Reading, understanding and responding to text!',
+      explanation:'Language Arts is one of the most important PEP subjects. It tests reading comprehension, vocabulary, grammar, writing and oral communication. Strong reading skills underpin success in ALL subjects.',
+      diagram:['COMPREHENSION SKILLS:','Literal: finding information directly stated in text','Inferential: reading between the lines — implied meaning','Critical: evaluating, questioning and judging the text','QUESTION TYPES in PEP:','Multiple choice · Short answer · Extended response'],
+      memory:'SIR method: Skim first (get the main idea) → Identify the question type → Read carefully for the answer. For inference: look for CLUES not direct statements.',
+      steps:['1️⃣ Read the WHOLE passage before looking at questions','2️⃣ Skim for main idea and topic of each paragraph','3️⃣ For literal questions: find the exact words in the text','4️⃣ For inference: look for clues and combine with your knowledge','5️⃣ Answer in complete sentences and use evidence from the text'],
+      realWorld:'📰 Reading comprehension skills help you understand news, instructions, job descriptions, contracts and any written communication you will encounter in life.',
+      funFact:'📖 The average adult reads about 200-300 words per minute. A skilled reader can reach 500+ wpm. Practising with different text types dramatically improves reading speed and comprehension.',
+      notes:'Text types tested in PEP: narrative, expository, persuasive, descriptive, procedural. Know the features of each. Vocabulary in context questions: use surrounding text for clues.',
+      quiz:[
+        {q:'What type of comprehension question requires you to "read between the lines"?',a:'Inferential',w:['Literal','Critical','Evaluative'],h:'The answer is not stated directly — you must use clues'},
+        {q:'What is the main difference between a narrative and an expository text?',a:'Narrative tells a story; expository explains or informs',w:['Narrative is longer; expository is shorter','Narrative uses facts; expository uses feelings','They are the same type of text'],h:'Think about the PURPOSE of each text type'},
+        {q:'When answering a comprehension question you should:',a:'Use evidence from the text in your answer',w:['Write only your personal opinion','Guess if you are not sure','Copy entire paragraphs from the text'],h:'Always support your answer with proof from the passage'},
+      ],
+      color:'linear-gradient(135deg,#009B3A,#FFD700)' },
+
+    { id:'pep-grammar', subject:'pep_lang', title:'PEP Language Arts: Grammar & Usage', icon:'✏️', age:['7-10'],
+      tagline:'Jamaica MOE Grade 4-6 — The rules that make English work!',
+      explanation:'Grammar is the system of rules that governs how we use language. The Jamaica MOE curriculum covers parts of speech, sentence structure, punctuation, tense and vocabulary. Strong grammar makes writing clear and effective.',
+      diagram:['PARTS OF SPEECH:','Noun: person, place, thing or idea (Jamaica, book, love)','Verb: action or state (run, is, think, jumped)','Adjective: describes a noun (beautiful, three, red)','Adverb: describes a verb (quickly, very, never)','Pronoun: replaces a noun (he, she, it, they, we)'],
+      memory:'NVAAdP — Noun, Verb, Adjective, Adverb, Pronoun. "Never Venture Along A Precarious Path" — the five main parts of speech.',
+      steps:['1️⃣ NOUNS: common (table) proper (Jamaica) abstract (happiness)','2️⃣ VERBS: action (jump) linking (is/was) helping (have/will)','3️⃣ ADJECTIVES answer: What kind? How many? Which one?','4️⃣ ADVERBS answer: How? When? Where? How often?','5️⃣ TENSE: past (walked), present (walks), future (will walk)'],
+      realWorld:'📝 Good grammar skills are essential for PEP, high school entrance, job applications and professional communication. Clear writing opens doors throughout your life.',
+      funFact:'🌍 English has over 1 million words — more than any other language. Shakespeare alone invented about 1,700 words that are still in common use today.',
+      notes:'Common errors: subject-verb agreement (She run ✗ / She runs ✓), apostrophes (it\'s = it is; its = belonging to it), capital letters for proper nouns.',
+      quiz:[
+        {q:'In the sentence "The tall girl ran quickly" — what is the adjective?',a:'tall',w:['girl','ran','quickly'],h:'Adjectives describe nouns — what kind of girl?'},
+        {q:'Which sentence is in the PAST tense?',a:'She walked to school yesterday.',w:['She walks to school.','She will walk to school.','She is walking to school.'],h:'Past tense tells about something that already happened'},
+        {q:'What punctuation mark shows possession (ownership)?',a:'Apostrophe ( \' )',w:['Comma ( , )','Colon ( : )','Hyphen ( - )'],h:'Marcus\'s book — the apostrophe shows the book belongs to Marcus'},
+      ],
+      color:'linear-gradient(135deg,#FFD700,#009B3A)' },
+
+    { id:'pep-science-living', subject:'pep_sci', title:'PEP Science: Living Things', icon:'🌿', age:['7-10'],
+      tagline:'Jamaica MOE Grade 4-6 — Life, plants, animals and ecosystems!',
+      explanation:'The Jamaica MOE Science curriculum covers the characteristics of living things, classification, plant and animal systems, ecosystems and environmental science. Understanding life science helps us care for our environment.',
+      diagram:['CHARACTERISTICS OF LIVING THINGS (MRS GREN):','Movement · Respiration · Sensitivity','Growth · Reproduction · Excretion · Nutrition','CLASSIFICATION: Animals → Vertebrates / Invertebrates','Vertebrates: Mammals, Birds, Reptiles, Amphibians, Fish','Plants: Flowering (angiosperms) / Non-flowering (gymnosperms)'],
+      memory:'MRS GREN = Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition. All 7 must be present for something to be alive.',
+      steps:['1️⃣ All living things share all 7 MRS GREN characteristics','2️⃣ Vertebrates have a backbone; invertebrates do not','3️⃣ Food chains show energy flow: producer → consumer → predator','4️⃣ Habitat = where an organism lives; niche = its role there','5️⃣ Environmental changes affect all organisms in an ecosystem'],
+      realWorld:'🌴 Jamaica\'s Blue Mountains and coral reefs are biodiversity hotspots. Understanding ecosystems helps protect them. The Jamaican iguana was thought extinct — conservation brought it back!',
+      funFact:'🦎 Jamaica has many endemic species — animals found NOWHERE else on Earth, including the Jamaican boa (yellow snake), the streamertail hummingbird (national bird) and the Jamaican iguana.',
+      notes:'Key Jamaica MOE topics: food webs, adaptation, life cycles, habitats, classification, photosynthesis, respiration, environmental conservation.',
+      quiz:[
+        {q:'What does the R in MRS GREN stand for?',a:'Reproduction and Respiration',w:['Running','Reading','Reacting'],h:'All living things must be able to reproduce and respire'},
+        {q:'Which of these is a vertebrate?',a:'Fish',w:['Spider','Earthworm','Crab'],h:'Vertebrates have a backbone — fish have a spine'},
+        {q:'In a food chain grass → rabbit → fox → eagle, what is the grass?',a:'Producer',w:['Consumer','Predator','Decomposer'],h:'Producers make their own food using sunlight'},
+      ],
+      color:'linear-gradient(135deg,#6BCB77,#FFD700)' },
+
+    { id:'pep-social-studies', subject:'pep_soc', title:'PEP Social Studies: Jamaica & Caribbean', icon:'🌴', age:['7-10'],
+      tagline:'Jamaica MOE Grade 4-6 — Our island, our region, our world!',
+      explanation:'Social Studies covers Jamaican geography, history, culture, civics and Caribbean regional studies. The MOE curriculum develops citizenship, national pride and regional awareness in Grades 4-6.',
+      diagram:['JAMAICA GEOGRAPHY:','Location: Greater Antilles, Caribbean Sea, 18°N 77°W','Size: 10,990 km² (3rd largest Caribbean island)','Parishes: 14 parishes (Kingston is capital & largest city)','Climate: tropical, rainy season May-October','Resources: bauxite, tourism, agriculture (sugarcane, coffee, banana)'],
+      memory:'Jamaica\'s 14 parishes start with: Kingston, St. Andrew, St. Thomas, Portland, St. Mary, St. Ann, Trelawny, St. James, Hanover, Westmoreland, St. Elizabeth, Manchester, Clarendon, St. Catherine.',
+      steps:['1️⃣ Jamaica is part of the Greater Antilles in the Caribbean Sea','2️⃣ Capital: Kingston. National motto: "Out of Many, One People"','3️⃣ Independence: August 6, 1962 from Britain','4️⃣ Caribbean Community (CARICOM) promotes regional integration','5️⃣ Climate and geography shape Jamaica\'s economy and lifestyle'],
+      realWorld:'🏝️ Understanding Jamaica\'s geography helps explain why certain crops grow in certain areas, why some parishes are more developed, and how tourism shapes the economy.',
+      funFact:'☕ Jamaican Blue Mountain coffee is one of the most expensive in the world — grown at over 900m altitude. It is legally protected and can only be called Blue Mountain if grown in that specific area.',
+      notes:'National symbols: Flag (black, gold, green), Coat of Arms (motto: Out of Many, One People), National bird (streamertail/doctor bird), National flower (lignum vitae), National tree (blue mahoe).',
+      quiz:[
+        {q:'What is Jamaica\'s national motto?',a:'Out of Many, One People',w:['Land of Wood and Water','One Love, One Heart','Pride and Strength'],h:'It reflects Jamaica\'s diverse cultural heritage'},
+        {q:'How many parishes does Jamaica have?',a:'14',w:['12','16','10'],h:'Each parish has its own capital town'},
+        {q:'When did Jamaica gain independence?',a:'August 6, 1962',w:['January 1, 1838','October 3, 1944','September 16, 1968'],h:'Independence Day is a national public holiday in Jamaica'},
+      ],
+      color:'linear-gradient(135deg,#009B3A,#1565C0)' },
+
+    { id:'pep-ability-verbal', subject:'pep_ability', title:'PEP Ability Test: Verbal Reasoning', icon:'🧠', age:['7-10'],
+      tagline:'Jamaica MOE — Think logically with words and language!',
+      explanation:'The PEP Ability Test measures reasoning ability rather than curriculum knowledge. Verbal Reasoning tests your ability to understand and reason with language — analogies, word relationships, classification and logical deduction.',
+      diagram:['ANALOGY: Hot is to Cold as Day is to ___? (Night)','CLASSIFICATION: Find the odd one out','WORD RELATIONSHIP: synonym, antonym, part-whole','SENTENCE COMPLETION: choose the best word','DEDUCTION: If A then B... what follows?','Strategy: eliminate wrong answers first'],
+      memory:'CARE strategy: Clarify the question type → Analyse the pattern → Remove wrong options → Enter the best answer. Works for all verbal reasoning questions.',
+      steps:['1️⃣ ANALOGY: find the RELATIONSHIP between the first pair, apply to second','2️⃣ ODD ONE OUT: identify what makes 3 similar and 1 different','3️⃣ WORD MEANING: use the sentence context to infer meaning','4️⃣ CLASSIFICATION: group by one clear characteristic','5️⃣ Always eliminate obviously wrong answers first to narrow choices'],
+      realWorld:'💼 Verbal reasoning tests are used by employers, universities and selective schools worldwide. They measure how quickly and accurately you can think — a skill that transfers to every area of life.',
+      funFact:'🧠 Research shows verbal reasoning ability can be significantly improved with practice. Students who practise past PEP ability papers typically improve their scores by 15-25%.',
+      notes:'Common question types: analogies (A:B::C:?), odd one out, word relationships (synonyms/antonyms), logical deduction. Time management is crucial — do not spend too long on one question.',
+      quiz:[
+        {q:'Complete the analogy: Bird is to nest as bee is to ___?',a:'Hive',w:['Honey','Tree','Flower'],h:'A bird lives in a nest. Where does a bee live?'},
+        {q:'Which word is the ODD ONE OUT? Cat · Dog · Eagle · Hamster',a:'Eagle',w:['Cat','Dog','Hamster'],h:'Three are common pets. One is a bird of prey.'},
+        {q:'COLD is the ANTONYM (opposite) of:',a:'Hot',w:['Warm','Cool','Chilly'],h:'An antonym is a word with the OPPOSITE meaning'},
+      ],
+      color:'linear-gradient(135deg,#8B0000,#FFD700)' },
+
+    { id:'pep-ability-nonverbal', subject:'pep_ability', title:'PEP Ability Test: Non-Verbal Reasoning', icon:'🔷', age:['7-10'],
+      tagline:'Jamaica MOE — Think logically with shapes and patterns!',
+      explanation:'Non-Verbal Reasoning tests your ability to identify patterns, sequences and relationships using shapes and diagrams rather than words. It measures spatial reasoning and pattern recognition.',
+      diagram:['PATTERN SEQUENCES: what comes next in the series?','MATRIX PROBLEMS: complete the 3×3 grid','ROTATION: how does a shape look when turned?','REFLECTION: mirror image of a shape','SIMILARITY/DIFFERENCE: which shape is different?','FOLDING: what does a paper look like when unfolded?'],
+      memory:'ROSS strategy: Recognise the shape → Observe the transformation → Spot the pattern → Select the answer. Practice makes this feel natural!',
+      steps:['1️⃣ Identify WHAT is changing: size, rotation, colour, number','2️⃣ SEQUENCE questions: find the rule then apply it','3️⃣ MATRIX questions: check row AND column patterns','4️⃣ ROTATION: imagine physically turning the shape','5️⃣ Count elements carefully — detail matters in non-verbal'],
+      realWorld:'🏗️ Engineers, architects, designers, surgeons and pilots all use spatial reasoning daily. The ability to mentally rotate and visualise shapes is a highly valuable skill.',
+      funFact:'🎮 Playing certain video games (Tetris, Minecraft) genuinely improves non-verbal reasoning and spatial awareness. Research shows measurable improvements after just 10 hours of practice.',
+      notes:'Practice tips: use online PEP ability test papers, draw shapes on squared paper, practise folding real paper, play pattern and sequence games. Timed practice builds speed.',
+      quiz:[
+        {q:'In a shape sequence ○ △ □ ○ △ ___, what comes next?',a:'□',w:['○','△','⬟'],h:'The pattern repeats every 3 shapes: circle, triangle, square'},
+        {q:'What is it called when a shape is flipped to create a mirror image?',a:'Reflection',w:['Rotation','Translation','Enlargement'],h:'A reflection is like a mirror image across a line'},
+        {q:'Which type of problem requires you to find the missing piece in a 3×3 grid?',a:'Matrix',w:['Sequence','Analogy','Classification'],h:'Matrix problems require you to find patterns in rows AND columns'},
+      ],
+      color:'linear-gradient(135deg,#FFD700,#8B0000)' },
+
+    // ══ ADVANCED SUBJECTS ══
+    { id:'newtons-laws', subject:'physics', title:'Newton\'s Three Laws of Motion', icon:'⚡', age:['11-14','15-17'],
+      tagline:'The rules that govern ALL movement in the universe!',
+      explanation:'Isaac Newton published three laws in 1687 that describe how objects move. They apply from rolling balls to rockets in space and form the foundation of classical mechanics.',
+      diagram:['LAW 1 — INERTIA: object at rest stays at rest; moving stays moving (unless force acts)','LAW 2 — F = ma: Force = Mass × Acceleration','LAW 3 — ACTION/REACTION: every action has equal & opposite reaction','Examples: Law 1=seatbelts, Law 2=pushing heavy vs light object, Law 3=rocket thrust'],
+      memory:'I Finally Appreciate Newton = Inertia (Law 1), F=ma (Law 2), Action-Reaction (Law 3). Three laws, three applications.',
+      steps:['1️⃣ Law 1: Inertia — tendency to resist change in motion','2️⃣ Law 2: F=ma — bigger force OR less mass = more acceleration','3️⃣ Law 3: Forces ALWAYS come in pairs — equal and opposite','4️⃣ Rearrange: a = F/m or m = F/a','5️⃣ Units: Force in Newtons (N), mass in kg, acceleration in m/s²'],
+      realWorld:'🚗 Car braking: Law 1 explains why you lurch forward. Law 2 explains why heavier cars need more braking force. Rockets use Law 3 — exhaust pushes down, rocket goes up.',
+      funFact:'🌌 Newton\'s laws work perfectly at everyday speeds but BREAK DOWN near the speed of light. Einstein\'s Relativity replaces them at extreme speeds and strong gravity.',
+      notes:'Key equations: F=ma, Weight=mg (g=9.8m/s²). Momentum p=mv. Impulse=FΔt. Conservation of momentum applies when no external forces act.',
+      quiz:[
+        {q:'What does Newton\'s Second Law state?',a:'Force equals mass multiplied by acceleration (F=ma)',w:['Every action has an equal and opposite reaction','Objects at rest stay at rest','Gravity decreases with distance'],h:'F=ma is perhaps the most famous equation in physics'},
+        {q:'A 2kg object accelerates at 5 m/s². What force is acting on it?',a:'10 N',w:['2.5 N','7 N','15 N'],h:'F = m × a = 2 × 5 = 10 Newtons'},
+        {q:'Which of Newton\'s laws explains why a rocket can travel in space?',a:'Third Law — action and reaction',w:['First Law — inertia','Second Law — F=ma','Law of Universal Gravitation'],h:'Exhaust gases pushed out the back push the rocket forward'},
+      ],
+      color:'linear-gradient(135deg,#FFD93D,#4A90D9)' },
+
+    { id:'dna-genetics', subject:'biology', title:'DNA & Genetics', icon:'🧬', age:['11-14','15-17'],
+      tagline:'The code of life — written in just 4 letters!',
+      explanation:'DNA is a double helix containing the genetic instructions for every living thing. It is made of 4 chemical bases (A, T, G, C) that pair specifically: A with T and G with C. Genes are sections of DNA that code for proteins.',
+      diagram:['DNA STRUCTURE:','Double helix = two strands twisted like a ladder','Base pairs (the rungs): A-T and G-C always paired','Gene = section of DNA coding for ONE protein','Chromosome = tightly coiled DNA + proteins','Human genome = ~3 billion base pairs across 46 chromosomes'],
+      memory:'AT the GC concert: Adenine pairs with Thymine (A-T), Guanine pairs with Cytosine (G-C). These rules NEVER change.',
+      steps:['1️⃣ DNA = deoxyribonucleic acid — double helix structure','2️⃣ 4 bases: Adenine, Thymine, Guanine, Cytosine','3️⃣ Base pairing rules: A-T and G-C (complementary pairs)','4️⃣ Gene = sequence of bases coding for one protein','5️⃣ DNA replicates before cell division — semi-conservative replication'],
+      realWorld:'🔬 DNA fingerprinting identifies criminals, verifies paternity, traces ancestry and diagnoses genetic diseases. Every cell in your body contains your complete genome.',
+      funFact:'🤯 You share 50% of your DNA with a banana, 85% with a mouse and 96% with a chimpanzee. The differences are mostly in regulatory regions — HOW genes are expressed.',
+      notes:'DNA → mRNA (transcription) → protein (translation). Mutation = change in DNA sequence. Dominant allele always expressed; recessive only when both alleles recessive.',
+      quiz:[
+        {q:'Which base does Adenine always pair with in DNA?',a:'Thymine',w:['Cytosine','Guanine','Uracil'],h:'Remember: AT the GC concert — A pairs with T'},
+        {q:'What is a gene?',a:'A section of DNA that codes for a specific protein',w:['The entire DNA molecule','A type of chromosome','A cell in the body'],h:'Humans have approximately 20,000 genes'},
+        {q:'What is the shape of a DNA molecule?',a:'Double helix',w:['Single strand','Circular loop','Triple helix'],h:'Like a twisted ladder — Watson and Crick described this in 1953'},
+      ],
+      color:'linear-gradient(135deg,#C77DFF,#FF0080)' },
+
+    { id:'compound-interest', subject:'finance', title:'Compound Interest', icon:'💰', age:['11-14','15-17'],
+      tagline:'The most powerful force in personal finance!',
+      explanation:'Compound interest earns interest on BOTH your original money AND previously accumulated interest. Unlike simple interest, it grows exponentially. Starting early is the single most powerful financial decision a young person can make.',
+      diagram:['Simple interest: always × original amount only','Compound interest: interest added, then earns MORE interest','$1,000 at 10% annual compound interest:','Year 1: $1,100 | Year 2: $1,210 | Year 5: $1,611','Year 10: $2,594 | Year 20: $6,727 | Year 30: $17,449','RULE OF 72: 72 ÷ interest rate = years to DOUBLE money'],
+      memory:'Rule of 72: divide 72 by the rate to find doubling time. At 8%: 72÷8=9 years to double. At 6%: 72÷6=12 years. At 12%: 72÷12=6 years.',
+      steps:['1️⃣ Simple interest: I = PRT (Principal × Rate × Time)','2️⃣ Compound interest: A = P(1 + r/n)^(nt)','3️⃣ P=principal, r=rate, n=compounds per year, t=time in years','4️⃣ More frequent compounding = faster growth','5️⃣ Start EARLY — a 10-year head start can double your final amount'],
+      realWorld:'🏦 $200/month from age 25 at 8% = $702,000 by age 65. Starting at 35 = only $299,000. Time is worth more than amount when compound interest is involved.',
+      funFact:'💳 Compound interest works AGAINST you with debt too! A $5,000 credit card balance at 20% interest, making minimum payments, could take 47 years to pay off and cost over $30,000!',
+      notes:'Key terms: principal, interest rate, compound period, future value, present value. Annual=once/year, semi-annual=twice, quarterly=4×, monthly=12×, daily=365×.',
+      quiz:[
+        {q:'Using the Rule of 72, how many years does it take to double money at 9% interest?',a:'8 years',w:['9 years','12 years','6 years'],h:'72 ÷ 9 = 8 years'},
+        {q:'What is the KEY difference between simple and compound interest?',a:'Compound interest earns interest on previously accumulated interest too',w:['Compound interest has a higher rate','Simple interest grows faster','They are the same thing'],h:'Compound interest "snowballs" — it keeps growing faster and faster'},
+        {q:'You invest $500 at 10% simple interest per year. After 2 years your interest earned is:',a:'$100',w:['$110','$55','$150'],h:'Simple interest: I = P × R × T = 500 × 0.10 × 2 = $100'},
+      ],
+      color:'linear-gradient(135deg,#6BCB77,#FFD93D)' },
+
+    { id:'logical-fallacies', subject:'critical', title:'Logical Fallacies', icon:'🧩', age:['11-14','15-17'],
+      tagline:'The tricks that make bad arguments sound convincing!',
+      explanation:'A logical fallacy is a flaw in reasoning that makes an argument seem valid when it is not. Politicians, advertisers and social media use them constantly. Learning to spot them makes you a much stronger critical thinker.',
+      diagram:['AD HOMINEM: attack the person not the argument','STRAW MAN: misrepresent opponent\'s view to attack it easily','RED HERRING: distract with an irrelevant point','FALSE DICHOTOMY: "only two options" when more exist','SLIPPERY SLOPE: if X then inevitably catastrophic Y','APPEAL TO AUTHORITY: X is true because an expert said so'],
+      memory:'Students Are Really Fooled Constantly and Sincerely = Straw man, Ad hominem, Red herring, False dichotomy, Circular reasoning, Slippery slope.',
+      steps:['1️⃣ AD HOMINEM: attacking the speaker not the argument','2️⃣ STRAW MAN: distorting the other view to win easily','3️⃣ RED HERRING: introducing irrelevant distraction','4️⃣ FALSE DICHOTOMY: presenting only 2 options when more exist','5️⃣ CIRCULAR REASONING: using conclusion as evidence'],
+      realWorld:'📺 Once you know fallacies, you see them everywhere: political speeches, news media, arguments on social media, adverts. You become impossible to manipulate once you can name the trick.',
+      funFact:'🤔 Aristotle identified 13 logical fallacies in 350 BC in his work Sophistical Refutations. Over 2,000 years later politicians and advertisers still use exactly the same tricks!',
+      notes:'Key fallacies: ad hominem, straw man, red herring, false dichotomy, circular reasoning, slippery slope, appeal to authority, hasty generalisation, post hoc ergo propter hoc.',
+      quiz:[
+        {q:'"You can\'t trust his views on climate — he failed science at school!" — which fallacy is this?',a:'Ad hominem',w:['Straw man','Red herring','False dichotomy'],h:'Attacking the PERSON instead of the argument itself'},
+        {q:'"If we allow students to use calculators, next they\'ll want computers, and eventually they won\'t be able to add at all." This is a:',a:'Slippery slope',w:['Red herring','Ad hominem','False dichotomy'],h:'Assuming one small step leads inevitably to extreme consequences'},
+        {q:'What is a "red herring" in an argument?',a:'An irrelevant point introduced to distract from the real issue',w:['A very strong piece of evidence','A false statement about facts','Attacking the speaker personally'],h:'Like a smelly fish dragged across a trail to confuse hunting dogs'},
+      ],
+      color:'linear-gradient(135deg,#FFD93D,#C77DFF)' },
   ],
+
+  // ── METHODS ───────────────────────────────────────────────
 
   getFilteredLessons(filter) {
     const ag = S.ageGroup || '7-10';
@@ -4388,8 +4788,8 @@ const LearnDB = {
     );
     document.getElementById('learn-filters').style.display = 'none';
     this.renderGrid(results);
-    document.getElementById('learn-detail').classList.add('hidden');
-    document.getElementById('learn-grid').classList.remove('hidden');
+    document.getElementById('learn-detail')?.classList.add('hidden');
+    document.getElementById('learn-grid')?.classList.remove('hidden');
   },
 
   render(filter) {
@@ -4409,10 +4809,10 @@ const LearnDB = {
     const wrap = document.getElementById('learn-filters');
     if(!wrap) return;
     const subjects = this.getSubjects();
-    const labels = {science:'🔬 Science',math:'🔢 Math',biology:'🧬 Biology',history:'🏛️ History',physics:'⚡ Physics',literature:'📖 Literature',algebra:'📐 Algebra',finance:'💰 Finance',compsci:'💻 Coding',critical:'🧩 Thinking',spelling:'✏️ Spelling',quantum:'⚛️ Quantum'};
+    const subj = this.SUBJECTS;
     wrap.innerHTML = [
-      `<button onclick="LearnDB.render('all')" style="background:${this.currentFilter==='all'?'linear-gradient(135deg,#FFD93D,#FF9B3F)':'rgba(255,255,255,0.1)'};color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:7px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">All Topics</button>`,
-      ...subjects.map(s=>`<button onclick="LearnDB.render('${s}')" style="background:${this.currentFilter===s?'linear-gradient(135deg,#7928CA,#FF0080)':'rgba(255,255,255,0.1)'};color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:7px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">${labels[s]||s}</button>`)
+      `<button onclick="LearnDB.render('all')" style="background:${this.currentFilter==='all'?'linear-gradient(135deg,#FFD93D,#FF9B3F)':'rgba(255,255,255,0.1)'};color:#fff;font-family:'Fredoka One',cursive;font-size:0.8rem;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;white-space:nowrap;">All Topics</button>`,
+      ...subjects.map(s=>`<button onclick="LearnDB.render('${s}')" style="background:${this.currentFilter===s?(subj[s]?.color||'linear-gradient(135deg,#7928CA,#FF0080)'):'rgba(255,255,255,0.1)'};color:#fff;font-family:'Fredoka One',cursive;font-size:0.8rem;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;white-space:nowrap;">${subj[s]?.label||s}</button>`)
     ].join('');
   },
 
@@ -4427,20 +4827,20 @@ const LearnDB = {
       <div onclick="LearnDB.openLesson('${l.id}')"
         style="background:rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.12);cursor:pointer;transition:transform 0.2s;"
         onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-        <div style="background:${l.color};padding:18px 20px;display:flex;align-items:center;gap:12px;">
-          <div style="font-size:2.4rem;">${l.icon}</div>
+        <div style="background:${l.color};padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:2.2rem;">${l.icon}</div>
           <div style="flex:1;">
-            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">${l.title}</div>
-            <div style="color:rgba(255,255,255,0.85);font-size:0.78rem;margin-top:2px;">${l.tagline}</div>
+            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${l.title}</div>
+            <div style="color:rgba(255,255,255,0.85);font-size:0.75rem;margin-top:2px;">${l.tagline}</div>
           </div>
         </div>
-        <div style="padding:14px 18px;">
-          <div style="color:rgba(255,255,255,0.7);font-size:0.82rem;line-height:1.5;margin-bottom:10px;">${l.explanation.slice(0,110)}...</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <span style="background:rgba(255,217,61,0.15);color:#FFD93D;font-size:0.7rem;padding:3px 9px;border-radius:50px;">🧠 Memory trick</span>
-            <span style="background:rgba(107,203,119,0.15);color:#6BCB77;font-size:0.7rem;padding:3px 9px;border-radius:50px;">📊 Diagram</span>
-            <span style="background:rgba(126,200,227,0.15);color:#7EC8E3;font-size:0.7rem;padding:3px 9px;border-radius:50px;">🌍 Real world</span>
-            <span style="background:rgba(199,125,255,0.15);color:#C77DFF;font-size:0.7rem;padding:3px 9px;border-radius:50px;">🤯 Fun fact</span>
+        <div style="padding:12px 16px;">
+          <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;line-height:1.5;margin-bottom:8px;">${l.explanation.slice(0,90)}...</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            <span style="background:rgba(255,217,61,0.15);color:#FFD93D;font-size:0.68rem;padding:2px 8px;border-radius:50px;">🧠 Memory trick</span>
+            <span style="background:rgba(107,203,119,0.15);color:#6BCB77;font-size:0.68rem;padding:2px 8px;border-radius:50px;">📊 Diagram</span>
+            ${l.quiz?'<span style="background:rgba(199,125,255,0.15);color:#C77DFF;font-size:0.68rem;padding:2px 8px;border-radius:50px;">✅ Mini quiz</span>':''}
+            ${l.notes?'<span style="background:rgba(126,200,227,0.15);color:#7EC8E3;font-size:0.68rem;padding:2px 8px;border-radius:50px;">📋 Notes</span>':''}
           </div>
         </div>
         <div style="height:3px;background:${l.color};"></div>
@@ -4451,51 +4851,195 @@ const LearnDB = {
     const lesson = this.LESSONS.find(l=>l.id===id);
     if(!lesson) return;
     this.currentLesson = lesson;
+    this.quizMode = false;
+    this.quizIdx = 0;
+    this.quizScore = 0;
     document.getElementById('learn-grid').classList.add('hidden');
     const detail = document.getElementById('learn-detail');
     detail.classList.remove('hidden');
     SoundSystem.stop();
-    detail.innerHTML = `
-      <button onclick="LearnDB.render('${lesson.subject}')" style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 18px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:16px;display:inline-flex;align-items:center;gap:8px;">← Back to Lessons</button>
-      <div style="background:${lesson.color};border-radius:20px;padding:22px 24px;margin-bottom:16px;">
-        <div style="font-size:3rem;margin-bottom:8px;">${lesson.icon}</div>
-        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.7rem;margin-bottom:6px;">${lesson.title}</div>
-        <div style="color:rgba(255,255,255,0.9);font-size:0.95rem;">${lesson.tagline}</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.07);border-radius:18px;padding:20px 22px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,0.12);">
-        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;margin-bottom:10px;">📖 What is it?</div>
-        <div style="color:rgba(255,255,255,0.88);font-size:0.92rem;line-height:1.8;">${lesson.explanation}</div>
-        <button onclick="SoundSystem.speak(this.dataset.text)" data-text="${lesson.explanation.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:6px 14px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-top:10px;">🔊 Read aloud</button>
-      </div>
-      <div style="background:rgba(255,255,255,0.07);border-radius:18px;padding:20px 22px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,0.12);">
-        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1rem;margin-bottom:12px;">📊 Visual Diagram</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">${lesson.diagram.map(line=>`<div style="padding:7px 12px;background:rgba(255,255,255,0.06);border-radius:10px;color:rgba(255,255,255,0.9);font-size:0.88rem;font-weight:700;">${line}</div>`).join('')}</div>
-      </div>
-      <div style="background:linear-gradient(135deg,rgba(255,217,61,0.12),rgba(255,155,63,0.12));border-radius:18px;padding:20px 22px;margin-bottom:12px;border:1.5px solid rgba(255,217,61,0.25);">
-        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;margin-bottom:8px;">🧠 Memory Trick</div>
-        <div style="color:rgba(255,255,255,0.92);font-size:0.92rem;line-height:1.7;font-weight:700;">${lesson.memory}</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.07);border-radius:18px;padding:20px 22px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,0.12);">
-        <div style="font-family:'Fredoka One',cursive;color:#7EC8E3;font-size:1rem;margin-bottom:12px;">📋 Step by Step</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">${lesson.steps.map(s=>`<div style="color:rgba(255,255,255,0.88);font-size:0.88rem;line-height:1.6;padding:8px 12px;background:rgba(255,255,255,0.05);border-radius:10px;">${s}</div>`).join('')}</div>
-      </div>
-      <div style="background:linear-gradient(135deg,rgba(107,203,119,0.12),rgba(61,170,69,0.12));border-radius:18px;padding:20px 22px;margin-bottom:12px;border:1.5px solid rgba(107,203,119,0.25);">
-        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1rem;margin-bottom:8px;">🌍 Real World Connection</div>
-        <div style="color:rgba(255,255,255,0.88);font-size:0.92rem;line-height:1.7;">${lesson.realWorld}</div>
-      </div>
-      <div style="background:linear-gradient(135deg,rgba(199,125,255,0.12),rgba(121,40,202,0.12));border-radius:18px;padding:20px 22px;margin-bottom:20px;border:1.5px solid rgba(199,125,255,0.25);">
-        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1rem;margin-bottom:8px;">🤯 Did You Know?</div>
-        <div style="color:rgba(255,255,255,0.88);font-size:0.92rem;line-height:1.7;">${lesson.funFact}</div>
-      </div>
-      <div style="text-align:center;padding-bottom:8px;">
-        <button onclick="App.openSubject('${lesson.subject}')" style="background:${lesson.color};color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;padding:13px 32px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.3);">✅ Now Practice ${lesson.title}!</button>
-      </div>`;
+    this.renderLessonDetail(lesson);
     detail.scrollIntoView({behavior:'smooth',block:'start'});
+  },
+
+  renderLessonDetail(lesson) {
+    const detail = document.getElementById('learn-detail');
+    if(!detail) return;
+    detail.innerHTML = `
+      <button onclick="LearnDB.render('${lesson.subject}')" style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.88rem;padding:8px 16px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:14px;">← Back to Lessons</button>
+
+      <div style="background:${lesson.color};border-radius:20px;padding:20px 22px;margin-bottom:14px;">
+        <div style="font-size:2.8rem;margin-bottom:6px;">${lesson.icon}</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.6rem;margin-bottom:4px;">${lesson.title}</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.9rem;">${lesson.tagline}</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.07);border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;margin-bottom:8px;">📖 What is it?</div>
+        <div style="color:rgba(255,255,255,0.88);font-size:0.9rem;line-height:1.8;">${lesson.explanation}</div>
+        <button onclick="SoundSystem.speakLearn(this.dataset.t)" data-t="${lesson.explanation.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.76rem;padding:5px 12px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-top:8px;">🔊 Read aloud</button>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.07);border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:0.95rem;margin-bottom:10px;">📊 Visual Diagram</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">${lesson.diagram.map(line=>`<div style="padding:6px 10px;background:rgba(255,255,255,0.06);border-radius:8px;color:rgba(255,255,255,0.9);font-size:0.85rem;font-weight:700;">${line}</div>`).join('')}</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(255,217,61,0.12),rgba(255,155,63,0.12));border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(255,217,61,0.25);">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;margin-bottom:6px;">🧠 Memory Trick</div>
+        <div style="color:rgba(255,255,255,0.92);font-size:0.88rem;line-height:1.7;font-weight:700;">${lesson.memory}</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.07);border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-family:'Fredoka One',cursive;color:#7EC8E3;font-size:0.95rem;margin-bottom:10px;">📋 Step by Step</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">${lesson.steps.map(s=>`<div style="color:rgba(255,255,255,0.88);font-size:0.85rem;line-height:1.6;padding:7px 10px;background:rgba(255,255,255,0.05);border-radius:8px;">${s}</div>`).join('')}</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(107,203,119,0.12),rgba(61,170,69,0.12));border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(107,203,119,0.25);">
+        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:0.95rem;margin-bottom:6px;">🌍 Real World Connection</div>
+        <div style="color:rgba(255,255,255,0.88);font-size:0.88rem;line-height:1.7;">${lesson.realWorld}</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(199,125,255,0.12),rgba(121,40,202,0.12));border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(199,125,255,0.25);">
+        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;margin-bottom:6px;">🤯 Did You Know?</div>
+        <div style="color:rgba(255,255,255,0.88);font-size:0.88rem;line-height:1.7;">${lesson.funFact}</div>
+      </div>
+
+      ${lesson.notes ? `
+      <div style="background:linear-gradient(135deg,rgba(126,200,227,0.12),rgba(74,144,217,0.12));border-radius:16px;padding:18px 20px;margin-bottom:12px;border:1.5px solid rgba(126,200,227,0.25);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="font-family:'Fredoka One',cursive;color:#7EC8E3;font-size:0.95rem;">📋 Key Notes</div>
+          <button onclick="LearnDB.downloadNotes('${lesson.id}')" style="background:rgba(126,200,227,0.2);color:#7EC8E3;font-family:'Fredoka One',cursive;font-size:0.72rem;padding:4px 10px;border-radius:50px;border:1px solid rgba(126,200,227,0.3);cursor:pointer;">⬇️ Download Notes</button>
+        </div>
+        <div style="color:rgba(255,255,255,0.88);font-size:0.85rem;line-height:1.7;">${lesson.notes}</div>
+      </div>` : ''}
+
+      ${lesson.quiz ? `
+      <div style="background:linear-gradient(135deg,rgba(255,107,107,0.12),rgba(199,125,255,0.12));border-radius:16px;padding:18px 20px;margin-bottom:16px;border:1.5px solid rgba(255,107,107,0.25);">
+        <div style="font-family:'Fredoka One',cursive;color:#FF6B6B;font-size:0.95rem;margin-bottom:10px;">✅ Mini Quiz — Test yourself!</div>
+        <div id="lesson-quiz-area">
+          <button onclick="LearnDB.startQuiz()" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">Start 3-Question Quiz 🚀</button>
+        </div>
+      </div>` : ''}
+
+      <div style="text-align:center;padding-bottom:8px;">
+        <button onclick="App.openSubject('${lesson.subject.replace('pep_','').replace('pep','math')}')" style="background:${lesson.color};color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.3);">✅ Practice ${lesson.title}!</button>
+      </div>`;
+  },
+
+  startQuiz() {
+    this.quizMode = true;
+    this.quizIdx = 0;
+    this.quizScore = 0;
+    this.renderQuizQ();
+  },
+
+  renderQuizQ() {
+    const lesson = this.currentLesson;
+    if(!lesson || !lesson.quiz) return;
+    const q = lesson.quiz[this.quizIdx];
+    const answers = [q.a, ...q.w].sort(() => Math.random() - 0.5);
+    const area = document.getElementById('lesson-quiz-area');
+    if(!area) return;
+    area.innerHTML = `
+      <div style="margin-bottom:10px;">
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-bottom:6px;">Question ${this.quizIdx+1} of ${lesson.quiz.length}</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;margin-bottom:12px;">${q.q}</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${answers.map(ans=>`
+            <button onclick="LearnDB.checkQuizAnswer('${ans.replace(/'/g,"\\'")}','${q.a.replace(/'/g,"\\'")}')" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.88rem;padding:10px 14px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;text-align:left;transition:background 0.15s;">${ans}</button>
+          `).join('')}
+        </div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-top:8px;">💡 Hint: ${q.h}</div>
+      </div>`;
+    SoundSystem.speakBaby(q.q);
+  },
+
+  checkQuizAnswer(selected, correct) {
+    const isCorrect = selected.trim() === correct.trim();
+    if(isCorrect) {
+      this.quizScore++;
+      SoundSystem.playTone('correct');
+    } else {
+      SoundSystem.playTone('wrong');
+    }
+    const lesson = this.currentLesson;
+    this.quizIdx++;
+    if(this.quizIdx >= lesson.quiz.length) {
+      // Show result
+      const area = document.getElementById('lesson-quiz-area');
+      if(area) {
+        const pct = Math.round((this.quizScore/lesson.quiz.length)*100);
+        SoundSystem.speakPraise(pct===100 ? 'Perfect score! Amazing!' : pct >= 66 ? 'Great job!' : 'Good try! Review the lesson and try again!');
+        area.innerHTML = `
+          <div style="text-align:center;padding:12px 0;">
+            <div style="font-size:2.5rem;margin-bottom:8px;">${pct===100?'🏆':pct>=66?'⭐':'💪'}</div>
+            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin-bottom:4px;">Quiz Complete!</div>
+            <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.5rem;">${this.quizScore}/${lesson.quiz.length} — ${pct}%</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin:8px 0;">${pct===100?'Perfect! You mastered this topic!':pct>=66?'Great work! Keep practising!':'Review the lesson then try again!'}</div>
+            <button onclick="LearnDB.startQuiz()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.88rem;padding:9px 20px;border-radius:50px;border:none;cursor:pointer;">Try Again 🔄</button>
+          </div>`;
+      }
+    } else {
+      // Show feedback then next question
+      const area = document.getElementById('lesson-quiz-area');
+      if(area) {
+        const fb = document.createElement('div');
+        fb.style.cssText = `padding:8px 12px;border-radius:10px;margin-bottom:8px;font-family:'Fredoka One',cursive;font-size:0.9rem;background:${isCorrect?'rgba(107,203,119,0.2)':'rgba(255,107,107,0.2)'};color:${isCorrect?'#6BCB77':'#FF6B6B'};`;
+        fb.textContent = isCorrect ? `✅ Correct! ${selected}` : `❌ The answer was: ${correct}`;
+        area.innerHTML = '';
+        area.appendChild(fb);
+        setTimeout(() => this.renderQuizQ(), 1800);
+      }
+    }
+  },
+
+  downloadNotes(id) {
+    const lesson = this.LESSONS.find(l=>l.id===id);
+    if(!lesson) return;
+    const text = [
+      `LEARNING WITH SAMARA AI — LESSON NOTES`,
+      `=======================================`,
+      ``,
+      `SUBJECT: ${lesson.title}`,
+      `Topic: ${lesson.tagline}`,
+      ``,
+      `EXPLANATION:`,
+      lesson.explanation,
+      ``,
+      `DIAGRAM:`,
+      lesson.diagram.join('\n'),
+      ``,
+      `MEMORY TRICK:`,
+      lesson.memory,
+      ``,
+      `STEP BY STEP:`,
+      lesson.steps.join('\n'),
+      ``,
+      `REAL WORLD CONNECTION:`,
+      lesson.realWorld,
+      ``,
+      `DID YOU KNOW?`,
+      lesson.funFact,
+      ``,
+      `KEY NOTES:`,
+      lesson.notes || 'See lesson for full details.',
+      ``,
+      `---`,
+      `ai.learningwithsamara.com | edu@learningwithsamara.com`
+    ].join('\n');
+    const blob = new Blob([text], {type:'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Samara-Notes-${lesson.title.replace(/[^a-z0-9]/gi,'-')}.txt`;
+    a.click();
+    App.toast('Notes downloaded! 📋');
   },
 
   init() { this.render('all'); }
 };
 window.LearnDB = LearnDB;
+
 
 // ── LEARN LIBRARY — Knowledge Base ──────────────────────────
 // ── SAMARA'S PLAYHOUSE ───────────────────────────────────────
@@ -5006,12 +5550,12 @@ const PEP = {
     setText('quiz-subject-badge', labels[subject]||'PEP');
 
     const topicMap = {
-      math: 'Caribbean primary school mathematics — fractions, percentages, geometry, word problems at PEP level',
-      language: 'Caribbean primary school language arts — grammar, comprehension, vocabulary, composition at PEP level',
-      science: 'Caribbean primary school science — living things, earth science, matter and energy at PEP level',
-      social: 'Caribbean social studies — Jamaican and Caribbean history, geography, civics at PEP level',
-      general: 'Jamaican general knowledge — national symbols, culture, history, current affairs',
-      practice: 'mixed PEP primary exit profile questions across all subjects at Grade 6 level'
+      math: 'Jamaica Ministry of Education Grade 4-6 Mathematics: number operations, fractions, percentages, decimals, geometry (area, perimeter, angles), measurement, data handling, ratio, profit and loss, simple interest',
+      language: 'Jamaica Ministry of Education Grade 4-6 Language Arts: grammar (parts of speech, sentence types, punctuation), comprehension, vocabulary (synonyms, antonyms, homophones), composition, figurative language, reading strategies',
+      science: 'Jamaica Ministry of Education Grade 4-6 Science: living and non-living things, plant and animal life, human body systems, matter and its properties, forces and energy, earth science, weather, space, environmental science',
+      social: 'Jamaica Ministry of Education Grade 4-6 Social Studies: Jamaican history and heritage, Caribbean history, geography (physical and human), civics and government, Jamaican National Heroes, independence, community life, natural resources',
+      general: 'Jamaica Grade 6 PEP General Knowledge: Jamaican national symbols and culture, Caribbean geography and history, world geography, current affairs, science and technology, arts and culture, sports (especially Caribbean achievements)',
+      practice: 'Mixed Jamaica PEP Primary Exit Profile exam questions at Grade 6 level across all subjects: mathematics, language arts, science, social studies and general knowledge'
     };
 
     const count = subject==='practice'?12:10;
@@ -5028,7 +5572,7 @@ Requirements:
 Return ONLY valid JSON array (no markdown):
 [{"text":"...","correct":"...","wrong":["...","...","..."],"hint":"..."}]`;
 
-    const result = await callClaudeAI(prompt, '11-14', 'You are a Caribbean education expert creating PEP exam questions. Return only valid JSON. No markdown.', 1500);
+    const result = await callClaudeAI(prompt, '11-14', 'You are a Jamaica Ministry of Education curriculum expert specialising in the Primary Exit Profile (PEP) exam for Grades 4-6. Create questions that exactly match the PEP exam style, difficulty and curriculum content. Return ONLY valid JSON with no markdown, no preamble, no explanation.', 1500);
 
     let questions = [];
     if(result){
@@ -5052,19 +5596,85 @@ Return ONLY valid JSON array (no markdown):
   },
 
   _fallbackQuestions(subject) {
+    // Aligned with Jamaica Ministry of Education Grade 4-6 curriculum
     const banks = {
       math:[
-        {q:'What is 15% of 200?',c:'30',w:['25','35','15'],h:'15/100 × 200 = 30'},
-        {q:'A rectangle is 8cm × 5cm. What is its area?',c:'40cm²',w:['26cm²','13cm²','80cm²'],h:'Area = length × width'},
-        {q:'What is 3/4 + 1/4?',c:'1',w:['¾','½','1¼'],h:'Same denominator: 3+1=4, 4/4=1'},
+        // Number & Operations
+        {q:'What is the place value of the digit 7 in 4,730?',c:'Hundreds',w:['Tens','Thousands','Ones'],h:'Count from right: ones, tens, HUNDREDS — 7 is in the hundreds place'},
+        {q:'What is 3/4 expressed as a percentage?',c:'75%',w:['34%','25%','70%'],h:'3 ÷ 4 = 0.75 = 75%'},
+        {q:'A shopkeeper buys goods for $450 and sells them for $600. What is the profit?',c:'$150',w:['$200','$100','$250'],h:'Profit = Selling price − Cost price = 600 − 450 = 150'},
+        {q:'What is 2/3 + 1/4?',c:'11/12',w:['3/7','3/12','1/2'],h:'Common denominator is 12: 8/12 + 3/12 = 11/12'},
+        {q:'A rectangle has length 9 cm and width 5 cm. What is its perimeter?',c:'28 cm',w:['45 cm','14 cm','18 cm'],h:'Perimeter = 2 × (length + width) = 2 × (9+5) = 28 cm'},
+        {q:'What is 15% of 80?',c:'12',w:['15','8','20'],h:'10% of 80 = 8, 5% = 4, so 15% = 8+4 = 12'},
+        {q:'Arrange in ascending order: 3/4, 2/5, 7/10',c:'2/5, 3/4, 7/10',w:['3/4, 7/10, 2/5','7/10, 3/4, 2/5','2/5, 7/10, 3/4'],h:'Convert to tenths: 4/10, 7.5/10, 7/10 → 4/10 < 7/10 < 7.5/10'},
+        {q:'What is the area of a triangle with base 10 cm and height 6 cm?',c:'30 cm²',w:['60 cm²','16 cm²','30 cm'],h:'Area = ½ × base × height = ½ × 10 × 6 = 30 cm²'},
+        {q:'If 3 pens cost $18, what is the cost of 7 pens?',c:'$42',w:['$35','$54','$28'],h:'Cost per pen = $18 ÷ 3 = $6. Cost of 7 = 7 × $6 = $42'},
+        {q:'What is the LCM of 4 and 6?',c:'12',w:['24','8','6'],h:'Multiples of 4: 4,8,12... Multiples of 6: 6,12... First common = 12'},
+      ],
+      language:[
+        // Grammar, Comprehension, Vocabulary
+        {q:'Which word is a NOUN in this sentence: "The brave dog barked loudly."',c:'dog',w:['brave','barked','loudly'],h:'A noun names a person, place, animal or thing. Dog is the animal/thing.'},
+        {q:'Which sentence uses the CORRECT punctuation?',c:'"Where are you going?" she asked.',w:['"Where are you going." she asked.','Where are you going? She asked.','Where are you going, she asked'],h:'Direct speech uses inverted commas. Questions end with a question mark inside the quotes.'},
+        {q:'What is the SYNONYM of "courageous"?',c:'brave',w:['afraid','weak','foolish'],h:'Synonyms are words with similar meanings. Courageous = brave, bold, fearless.'},
+        {q:'Identify the ADJECTIVE: "The small, red kite flew high."',c:'small and red',w:['kite','flew','high'],h:'Adjectives describe nouns. Small and red both describe the kite.'},
+        {q:'Which is the COMPOUND word?',c:'sunshine',w:['running','beautiful','quickly'],h:'A compound word joins two complete words. Sun + shine = sunshine'},
+        {q:'What is the ANTONYM of "ancient"?',c:'modern',w:['old','historic','classic'],h:'Antonyms are opposites. Ancient means very old; modern means new/current.'},
+        {q:'Which sentence is in the PASSIVE voice?',c:'The ball was kicked by Maria.',w:['Maria kicked the ball.','Maria was kicking hard.','The ball rolled away.'],h:'Passive voice: subject receives the action. "Ball was kicked" — ball is receiving the action.'},
+        {q:'Select the CORRECT homophone: "The students were told to ____ down."',c:'sit',w:['set','sat','sate'],h:'Homophones sound alike but have different spellings/meanings. Sit = take a seat.'},
+        {q:'Which word correctly completes: "Yesterday, she ___ to school early."',c:'went',w:['goes','go','gone'],h:'Past tense of "go" is "went." Yesterday signals past tense.'},
+        {q:'What type of figurative language is: "The thunder roared like an angry lion"?',c:'Simile',w:['Metaphor','Personification','Alliteration'],h:'A simile compares using LIKE or AS. This compares thunder to a lion using "like."'},
+      ],
+      science:[
+        // Jamaica MOE Science Grade 4-6
+        {q:'Which part of the plant absorbs water and minerals from the soil?',c:'Roots',w:['Stem','Leaves','Petals'],h:'Roots anchor the plant and absorb water and dissolved minerals from soil'},
+        {q:'What gas do plants absorb from the air during photosynthesis?',c:'Carbon dioxide',w:['Oxygen','Nitrogen','Hydrogen'],h:'Plants absorb CO₂ and release O₂ — the opposite of what animals do'},
+        {q:'Which of these is a characteristic of LIVING things?',c:'Growth and reproduction',w:['Made of metal','Cannot move','Has no cells'],h:'All living things: move, grow, reproduce, respond to stimuli, need nutrition and respiration'},
+        {q:'What type of rock is formed from cooled magma?',c:'Igneous rock',w:['Sedimentary rock','Metamorphic rock','Limestone'],h:'Igneous comes from Latin "ignis" meaning fire. Formed when lava or magma cools and solidifies.'},
+        {q:'Which force pulls objects toward the centre of the Earth?',c:'Gravity',w:['Magnetism','Friction','Electricity'],h:'Gravity is the force of attraction between Earth and all objects. It gives objects their weight.'},
+        {q:'What is the function of the heart in the human body?',c:'Pump blood throughout the body',w:['Filter waste from blood','Exchange gases in the lungs','Digest food'],h:'The heart is a muscle that pumps blood. Blood carries oxygen, nutrients and waste.'},
+        {q:'Which planet is known as the "Red Planet"?',c:'Mars',w:['Jupiter','Venus','Mercury'],h:'Mars appears red because its surface is covered in iron oxide (rust)'},
+        {q:'What are the three states of matter?',c:'Solid, liquid and gas',w:['Hot, cold and warm','Hard, soft and liquid','Earth, water and air'],h:'All matter exists as solid (fixed shape), liquid (flows) or gas (fills any space)'},
+        {q:'Which of the following is a RENEWABLE source of energy?',c:'Solar energy',w:['Coal','Natural gas','Oil'],h:'Renewable energy comes from sources that are naturally replenished — sun, wind, water.'},
+        {q:'What causes day and night on Earth?',c:'Earth rotating on its axis every 24 hours',w:['The Moon blocking the Sun','Earth moving around the Sun','The Sun rising and setting'],h:'Earth spins on its axis — one full rotation every 24 hours. The side facing the Sun has day.'},
       ],
       social:[
-        {q:'Capital of Jamaica?',c:'Kingston',w:['Montego Bay','Spanish Town','Mandeville'],h:'Kingston is the capital and largest city'},
-        {q:'When did Jamaica gain independence?',c:'1962',w:['1958','1970','1944'],h:'August 6, 1962'},
+        // Jamaica MOE Social Studies/History Grade 4-6
+        {q:'What is the capital city of Jamaica?',c:'Kingston',w:['Montego Bay','Spanish Town','Mandeville'],h:'Kingston is Jamaica\'s capital and largest city, located on the south-east coast'},
+        {q:'When did Jamaica gain its independence from Britain?',c:'August 6, 1962',w:['August 6, 1958','December 1, 1970','October 1, 1944'],h:'Jamaica gained independence on August 6, 1962 — now celebrated as Independence Day'},
+        {q:'Who was the first Prime Minister of independent Jamaica?',c:'Sir Alexander Bustamante',w:['Norman Manley','Hugh Shearer','Michael Manley'],h:'Sir Alexander Bustamante led Jamaica to independence and became the first Prime Minister in 1962'},
+        {q:'What is the name of Jamaica\'s national motto?',c:'Out of Many, One People',w:['Land of Wood and Water','Forward Together','Unity is Strength'],h:'The motto reflects Jamaica\'s diverse cultural heritage from many nations and peoples'},
+        {q:'Which of these is a natural resource found in Jamaica?',c:'Bauxite',w:['Gold','Oil','Diamonds'],h:'Jamaica has significant bauxite deposits — it is the raw material used to make aluminium'},
+        {q:'What are the two houses of Jamaica\'s Parliament?',c:'The Senate and the House of Representatives',w:['The Council and the Assembly','The Lords and Commons','The Upper and Lower Courts'],h:'Jamaica\'s Parliament has the Senate (upper house) and the House of Representatives (lower house)'},
+        {q:'The Taino people were the indigenous inhabitants of Jamaica. What does "Xaymaca" (their name for Jamaica) mean?',c:'Land of Wood and Water',w:['Island of the Sun','Place of Many Rivers','Home of the Brave'],h:'"Xaymaca" is the Taino name for Jamaica, meaning Land of Wood and Water — now an informal national nickname'},
+        {q:'Which mountain is the highest point in Jamaica?',c:'Blue Mountain Peak',w:['Don Figuerero Mountains','Santa Cruz Mountains','John Crow Mountains'],h:'Blue Mountain Peak at 2,256 metres (7,402 ft) is the highest point in Jamaica — in the Blue Mountains of eastern Jamaica'},
+        {q:'What is the main function of a COMMUNITY?',c:'A group of people living in the same area sharing common services and bonds',w:['A place with only businesses','A group of people sharing the same family name','A government building where laws are made'],h:'A community is a group of people living together in an area, sharing services, facilities and social bonds'},
+        {q:'Marcus Garvey is a Jamaican National Hero. What was his most significant contribution?',c:'Pan-Africanism — promoting unity and pride among people of African descent worldwide',w:['Fighting in World War I','Building the first railway in Jamaica','Becoming Jamaica\'s first Prime Minister'],h:'Marcus Garvey founded the UNIA and promoted Black pride, Pan-Africanism and self-reliance globally'},
       ],
       general:[
-        {q:"Jamaica's national motto?",c:'Out of Many, One People',w:['Land of Wood and Water','Unity is Strength','Forward Ever'],h:"Reflects Jamaica's multicultural heritage"},
-        {q:'Fastest man in history?',c:'Usain Bolt',w:['Asafa Powell','Yohan Blake','Michael Frater'],h:'World records in 100m and 200m'},
+        // General Knowledge relevant to Grade 6 Jamaican students — global + Caribbean
+        {q:'What is the largest ocean on Earth?',c:'Pacific Ocean',w:['Atlantic Ocean','Indian Ocean','Arctic Ocean'],h:'The Pacific Ocean covers more than 30% of Earth\'s surface — larger than all land masses combined!'},
+        {q:'How many continents are there on Earth?',c:'7',w:['5','6','8'],h:'Africa, Antarctica, Asia, Australia/Oceania, Europe, North America, South America = 7 continents'},
+        {q:'Which planet is closest to the Sun?',c:'Mercury',w:['Venus','Earth','Mars'],h:'Mercury is the innermost planet — just 58 million km from the Sun. It has no atmosphere.'},
+        {q:"Jamaica's national bird is the Doctor Bird. What is its scientific feature?",c:'It has a long forked tail and feeds on nectar',w:['It can speak human words','It only lives underground','It swims better than it flies'],h:'The Doctor Bird (Red-billed Streamertail hummingbird) is unique to Jamaica, known for its spectacular long tail feathers'},
+        {q:'What is the name of the process by which water vapour turns into liquid water?',c:'Condensation',w:['Evaporation','Precipitation','Transpiration'],h:'Condensation is vapour cooling and becoming liquid — like the drops on a cold glass of water'},
+        {q:'In which year did Christopher Columbus first arrive in the Caribbean?',c:'1492',w:['1592','1392','1542'],h:'Columbus sailed west from Spain in 1492 and arrived in the Bahamas, then explored Cuba, Haiti and Jamaica'},
+        {q:'What is the name of the treaty that ended World War I?',c:'Treaty of Versailles',w:['Treaty of Paris','Treaty of Tordesillas','Treaty of Westphalia'],h:'The Treaty of Versailles was signed in 1919, ending WWI and imposing harsh terms on Germany'},
+        {q:'Which gas makes up the largest proportion of Earth\'s atmosphere?',c:'Nitrogen (about 78%)',w:['Oxygen (about 78%)','Carbon dioxide (about 78%)','Argon (about 78%)'],h:'Earth\'s atmosphere is approximately 78% nitrogen, 21% oxygen, and 1% other gases including argon and CO₂'},
+        {q:'What does "democracy" mean?',c:'Government by the people, where citizens vote for their representatives',w:['Rule by one powerful leader','Government by the army','Rule by the wealthiest citizens'],h:'From Greek: demos (people) + kratos (power/rule). In a democracy citizens choose their government.'},
+        {q:'Reggae music originated in Jamaica. Which Jamaican artist made it famous worldwide?',c:'Bob Marley',w:['Buju Banton','Shaggy','Sean Paul'],h:'Bob Marley (1945-1981) took reggae to the world stage. His music spread messages of peace, love and freedom globally.'},
+      ],
+      practice:[
+        // Mixed Grade 6 PEP-style across all subjects
+        {q:'A train travels 240 km in 3 hours. What is its average speed?',c:'80 km/h',w:['60 km/h','720 km/h','40 km/h'],h:'Speed = Distance ÷ Time = 240 ÷ 3 = 80 km/h'},
+        {q:'Which part of speech is the underlined word? She ran QUICKLY.',c:'Adverb',w:['Adjective','Verb','Noun'],h:'Adverbs modify verbs. "Quickly" tells us HOW she ran.'},
+        {q:'What process converts sugar and oxygen into energy in living cells?',c:'Respiration',w:['Photosynthesis','Digestion','Fermentation'],h:'Cellular respiration: glucose + oxygen → energy + water + CO₂ — happens in mitochondria'},
+        {q:'Which Jamaican National Hero was known as the "Mother of the Nation"?',c:'Nanny of the Maroons',w:['Mary Seacole','Louise Bennett','Edna Manley'],h:'Queen Nanny led Maroon warriors against the British in the early 1700s. She was declared a National Hero in 1976.'},
+        {q:'What fraction of 60 is 15?',c:'1/4',w:['1/3','1/5','1/6'],h:'15/60 = 1/4. Divide both by 15. Or: 60 ÷ 4 = 15, so 15 is 1/4 of 60.'},
+        {q:'Select the word that BEST completes the sentence: "The scientist made an important ____."',c:'discovery',w:['discoverer','discovers','discovering'],h:'A noun is needed here. Discovery is the noun form; the others are verbs or adjective forms.'},
+        {q:'Which layer of the atmosphere protects Earth from harmful ultraviolet radiation?',c:'Ozone layer',w:['Troposphere','Stratosphere (ozone layer)','Mesosphere'],h:'The ozone layer in the stratosphere absorbs 97-99% of the Sun\'s harmful UV radiation'},
+        {q:'Jamaica is part of which group of Caribbean islands?',c:'The Greater Antilles',w:['The Lesser Antilles','The Windward Islands','The Leeward Islands'],h:'The Greater Antilles: Jamaica, Cuba, Hispaniola (Haiti/Dominican Republic) and Puerto Rico — the largest Caribbean islands'},
+        {q:'If the simple interest on $500 for 2 years is $60, what is the annual rate?',c:'6%',w:['12%','3%','60%'],h:'Rate = (Interest × 100) ÷ (Principal × Time) = (60 × 100) ÷ (500 × 2) = 6000/1000 = 6%'},
+        {q:'What is the term for a word that sounds the same as another but has a different meaning?',c:'Homophone',w:['Synonym','Antonym','Homograph'],h:'Homophones: there/their/they\'re, to/too/two, sea/see, bare/bear — same sound, different meaning/spelling'},
       ]
     };
     const bank = banks[subject] || banks['social'];
