@@ -896,6 +896,9 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <button onclick="App.showScreen('screen-playhouse')" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 8px 24px rgba(255,155,63,0.5);animation:pulse-av 2s ease-in-out infinite;">
       🏠 Samara's Playhouse ✨
     </button>
+    <button onclick="App.showScreen('screen-trace')" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 8px 24px rgba(74,144,217,0.5);">
+      ✏️ Trace & Match
+    </button>
     <!-- Watch Samara videos button -->
     <button onclick="App.showScreen('screen-videos')" style="background:linear-gradient(135deg,#FF6B6B,#FF416C);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 32px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 6px 20px rgba(255,0,0,0.4);">
       📺 Samara TV ⭐🧠
@@ -910,6 +913,45 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
         <button class="btn btn-outline" style="margin-left:10px;" onclick="BabyMode.backToCategories()">← Back</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ TRACE & MATCH ══ -->
+<div id="screen-trace" class="screen">
+  <div class="stars"></div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-baby')">← Baby World</button>
+    <h2 class="screen-title small">✏️ Trace & Match</h2>
+  </div>
+  <div style="max-width:640px;margin:0 auto;padding:16px 20px;">
+    <!-- Mode selector -->
+    <div id="trace-hub" style="text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.5rem;margin-bottom:6px;">What do you want to do? ✨</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;">
+        <div onclick="TraceMatch.startMode('trace-letters')" style="background:linear-gradient(135deg,#FF6B6B,#FF9B3F);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size:3rem;margin-bottom:8px;">🔤</div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">Trace Letters</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.78rem;margin-top:4px;">Ages 4–6 · A to Z</div>
+        </div>
+        <div onclick="TraceMatch.startMode('trace-numbers')" style="background:linear-gradient(135deg,#C77DFF,#7928CA);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size:3rem;margin-bottom:8px;">🔢</div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">Trace Numbers</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.78rem;margin-top:4px;">Ages 4–6 · 1 to 10</div>
+        </div>
+        <div onclick="TraceMatch.startMode('match-letters')" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size:3rem;margin-bottom:8px;">🔡</div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">Match Letters</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.78rem;margin-top:4px;">Upper to Lowercase</div>
+        </div>
+        <div onclick="TraceMatch.startMode('match-animals')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size:3rem;margin-bottom:8px;">🐾</div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;">Match Animals</div>
+          <div style="color:rgba(255,255,255,0.85);font-size:0.78rem;margin-top:4px;">Animal to its name</div>
+        </div>
+      </div>
+    </div>
+    <!-- Activity area -->
+    <div id="trace-activity" style="display:none;"></div>
   </div>
 </div>
 
@@ -1942,8 +1984,8 @@ const SoundSystem = {
     if(btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
 
-  // Main speak function
-  speak(text, rate=0.9, pitch=1.2) {
+  // Main speak function — tuned for natural girl child voice
+  speak(text, rate=0.88, pitch=1.35) {
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
 
     // Stop anything currently speaking
@@ -1993,9 +2035,10 @@ const SoundSystem = {
   },
 
   // Child-friendly voices — higher pitch, slower rate for babies
-  speakBaby(text)  { this.speak(text, 0.75, 1.4); },
-  speakPraise(text){ this.speak(text, 0.95, 1.3); },
-  speakHint(text)  { this.speak(text, 0.82, 1.15); },
+  speakBaby(text)   { this.speak(text, 0.72, 1.45); },
+  speakPraise(text) { this.speak(text, 0.92, 1.4);  },
+  speakHint(text)   { this.speak(text, 0.80, 1.3);  },
+  speakLearn(text)  { this.speak(text, 0.82, 1.3);  },
 
   stop() {
     this._speaking = false;
@@ -3045,6 +3088,7 @@ const App = {
     if(id==='screen-shop') AITutor.hideFloat();
     if(id==='screen-getapp') AITutor.hideFloat();
     if(id==='screen-playhouse'){ AITutor.hideFloat(); Playhouse.backToHub(); }
+    if(id==='screen-trace'){ AITutor.hideFloat(); document.getElementById('trace-hub').style.display='block'; document.getElementById('trace-activity').style.display='none'; }
     if(id==='screen-family'){ AITutor.hideFloat(); FamilyMode.render(); }
     if(id==='screen-coinshop'){ AITutor.hideFloat(); CoinShop.render(); }
     if(id==='screen-homework'){ AITutor.hideFloat(); HomeworkHelper.init(); }
@@ -3514,7 +3558,326 @@ const App = {
   toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);}
 };
 
-// ── SAMARA COINS ─────────────────────────────────────────────
+// ── TRACE & MATCH ────────────────────────────────────────────
+const TraceMatch = {
+  currentMode: null,
+  currentIdx: 0,
+  isDrawing: false,
+  lastX: 0, lastY: 0,
+  selectedCard: null,
+
+  LETTERS: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+  NUMBERS: ['1','2','3','4','5','6','7','8','9','10'],
+  LETTER_WORDS: {A:'Apple 🍎',B:'Ball ⚽',C:'Cat 🐈',D:'Dog 🐕',E:'Egg 🥚',F:'Fish 🐠',G:'Grape 🍇',H:'Hat 🎩',I:'Ice 🧊',J:'Jar 🫙',K:'Kite 🪁',L:'Lion 🦁',M:'Moon 🌙',N:'Net 🥅',O:'Orange 🍊',P:'Pig 🐷',Q:'Queen 👑',R:'Rain 🌧️',S:'Sun ☀️',T:'Tree 🌳',U:'Umbrella ☂️',V:'Violin 🎻',W:'Water 💧',X:'X-ray 🩻',Y:'Yellow ⭐',Z:'Zebra 🦓'},
+  ANIMALS: [
+    {emoji:'🐕',name:'Dog'},{emoji:'🐈',name:'Cat'},{emoji:'🐄',name:'Cow'},
+    {emoji:'🦁',name:'Lion'},{emoji:'🐘',name:'Elephant'},{emoji:'🦋',name:'Butterfly'},
+    {emoji:'🐸',name:'Frog'},{emoji:'🐦',name:'Bird'},{emoji:'🐠',name:'Fish'},
+    {emoji:'🐰',name:'Rabbit'},{emoji:'🐧',name:'Penguin'},{emoji:'🦊',name:'Fox'}
+  ],
+
+  startMode(mode) {
+    this.currentMode = mode;
+    this.currentIdx = 0;
+    document.getElementById('trace-hub').style.display = 'none';
+    document.getElementById('trace-activity').style.display = 'block';
+    if(mode === 'trace-letters') this.renderTracer('letter', this.LETTERS[0]);
+    else if(mode === 'trace-numbers') this.renderTracer('number', this.NUMBERS[0]);
+    else if(mode === 'match-letters') this.renderLetterMatch();
+    else if(mode === 'match-animals') this.renderAnimalMatch();
+  },
+
+  backToHub() {
+    document.getElementById('trace-hub').style.display = 'block';
+    document.getElementById('trace-activity').style.display = 'none';
+    this.currentIdx = 0;
+  },
+
+  // ── TRACER ──────────────────────────────────────────────────
+  renderTracer(type, char) {
+    const isLetter = type === 'letter';
+    const word = isLetter ? (this.LETTER_WORDS[char] || '') : '';
+    const items = isLetter ? this.LETTERS : this.NUMBERS;
+    const total = items.length;
+    const current = this.currentIdx + 1;
+
+    const activity = document.getElementById('trace-activity');
+    activity.innerHTML = `
+      <button onclick="TraceMatch.backToHub()" style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:7px 16px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:14px;">← Back</button>
+      <div style="text-align:center;margin-bottom:12px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;">${type === 'letter' ? 'Trace the Letter' : 'Trace the Number'} · ${current} of ${total}</div>
+        ${word ? `<div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:3px;">${char} is for ${word}</div>` : ''}
+      </div>
+      <!-- Canvas -->
+      <div style="position:relative;background:rgba(255,255,255,0.97);border-radius:20px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,0.2);margin-bottom:14px;">
+        <!-- Ghost letter to trace over -->
+        <div id="trace-ghost" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:200px;font-weight:900;color:rgba(0,0,0,0.07);font-family:'Fredoka One',cursive;pointer-events:none;user-select:none;line-height:1;">${char}</div>
+        <!-- Dotted path guide -->
+        <canvas id="trace-guide" width="400" height="280" style="position:absolute;top:0;left:0;width:100%;pointer-events:none;"></canvas>
+        <!-- Drawing canvas -->
+        <canvas id="trace-canvas" width="400" height="280" style="display:block;width:100%;height:280px;cursor:crosshair;touch-action:none;"></canvas>
+      </div>
+      <div style="text-align:center;color:rgba(255,255,255,0.75);font-size:0.85rem;margin-bottom:12px;">Use your finger to trace the letter! ✏️</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="TraceMatch.clearCanvas()" style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 20px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.25);cursor:pointer;">🗑️ Clear</button>
+        <button onclick="TraceMatch.nextChar()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">Next ${type === 'letter' ? 'Letter' : 'Number'} ▶</button>
+      </div>`;
+
+    SoundSystem.speakBaby(`Trace the ${type} ${char}! ${word ? word : ''}`);
+    this.initCanvas();
+    this.drawDottedGuide(char);
+  },
+
+  initCanvas() {
+    const canvas = document.getElementById('trace-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#FF6B6B';
+    ctx.lineWidth = 12;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    const getPos = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+    };
+
+    canvas.onmousedown = canvas.ontouchstart = (e) => {
+      e.preventDefault();
+      this.isDrawing = true;
+      const {x,y} = getPos(e);
+      this.lastX = x; this.lastY = y;
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI*2);
+      ctx.fillStyle = '#FF6B6B';
+      ctx.fill();
+    };
+
+    canvas.onmousemove = canvas.ontouchmove = (e) => {
+      e.preventDefault();
+      if(!this.isDrawing) return;
+      const {x,y} = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(this.lastX, this.lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      this.lastX = x; this.lastY = y;
+    };
+
+    canvas.onmouseup = canvas.ontouchend = () => { this.isDrawing = false; };
+    canvas.onmouseleave = () => { this.isDrawing = false; };
+  },
+
+  drawDottedGuide(char) {
+    // Draw dotted border around the ghost character area
+    const guide = document.getElementById('trace-guide');
+    if(!guide) return;
+    const ctx = guide.getContext('2d');
+    ctx.clearRect(0, 0, guide.width, guide.height);
+    // Draw starting dot indicator
+    ctx.beginPath();
+    ctx.arc(guide.width/2 - 80, guide.height/2 - 60, 8, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,107,107,0.5)';
+    ctx.fill();
+    // "Start here" label
+    ctx.font = '14px Nunito';
+    ctx.fillStyle = 'rgba(255,107,107,0.7)';
+    ctx.fillText('Start here ▼', guide.width/2 - 110, guide.height/2 - 70);
+  },
+
+  clearCanvas() {
+    const canvas = document.getElementById('trace-canvas');
+    if(!canvas) return;
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    SoundSystem.speakBaby('Try again!');
+  },
+
+  nextChar() {
+    const items = this.currentMode === 'trace-letters' ? this.LETTERS : this.NUMBERS;
+    this.currentIdx = (this.currentIdx + 1) % items.length;
+    const char = items[this.currentIdx];
+    const type = this.currentMode === 'trace-letters' ? 'letter' : 'number';
+    SoundSystem.playTone('correct');
+    this.renderTracer(type, char);
+  },
+
+  // ── LETTER MATCH ─────────────────────────────────────────────
+  renderLetterMatch() {
+    const pairs = ['A','B','C','D','E','F','G','H'].slice(0,6);
+    const upperCards = [...pairs].sort(() => Math.random() - 0.5);
+    const lowerCards = [...pairs].sort(() => Math.random() - 0.5);
+    this.selectedCard = null;
+    this.matched = new Set();
+
+    const activity = document.getElementById('trace-activity');
+    activity.innerHTML = `
+      <button onclick="TraceMatch.backToHub()" style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:7px 16px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:14px;">← Back</button>
+      <div style="text-align:center;margin-bottom:14px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;">Match big to small letters! 🔡</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.82rem;margin-top:3px;">Tap an UPPERCASE letter, then its lowercase match</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.82rem;text-align:center;margin-bottom:8px;">BIG letters</div>
+          <div style="display:flex;flex-direction:column;gap:8px;" id="upper-col">
+            ${upperCards.map(l=>`
+              <div class="match-card" id="upper-${l}" data-letter="${l}" data-type="upper"
+                onclick="TraceMatch.selectCard('upper','${l}',this)"
+                style="background:linear-gradient(135deg,#FF6B6B,#FF9B3F);border-radius:14px;padding:16px;text-align:center;cursor:pointer;font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,0.15);transition:transform 0.15s;border:3px solid transparent;">
+                ${l}
+              </div>`).join('')}
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.82rem;text-align:center;margin-bottom:8px;">small letters</div>
+          <div style="display:flex;flex-direction:column;gap:8px;" id="lower-col">
+            ${lowerCards.map(l=>`
+              <div class="match-card" id="lower-${l}" data-letter="${l}" data-type="lower"
+                onclick="TraceMatch.selectCard('lower','${l}',this)"
+                style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);border-radius:14px;padding:16px;text-align:center;cursor:pointer;font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,0.15);transition:transform 0.15s;border:3px solid transparent;">
+                ${l.toLowerCase()}
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div id="match-feedback" style="text-align:center;margin-top:14px;font-family:'Fredoka One',cursive;font-size:1.1rem;min-height:28px;"></div>`;
+
+    SoundSystem.speakBaby('Match the big letter to the small letter!');
+  },
+
+  selectCard(type, letter, el) {
+    if(this.matched.has(letter)) return;
+    if(type === 'upper') {
+      // Select uppercase
+      document.querySelectorAll('.match-card').forEach(c => {
+        if(c.dataset.type === 'upper') c.style.borderColor = 'transparent';
+      });
+      this.selectedCard = { type:'upper', letter };
+      el.style.borderColor = '#FFD93D';
+      el.style.transform = 'scale(1.08)';
+      SoundSystem.speakBaby(letter);
+    } else if(type === 'lower' && this.selectedCard?.type === 'upper') {
+      // Check match
+      if(this.selectedCard.letter === letter) {
+        // Correct!
+        SoundSystem.playTone('correct');
+        SoundSystem.speakBaby(`Yes! Big ${letter} and small ${letter.toLowerCase()}! Amazing!`);
+        document.getElementById(`upper-${letter}`).style.background = 'linear-gradient(135deg,#6BCB77,#3DAA45)';
+        document.getElementById(`lower-${letter}`).style.background = 'linear-gradient(135deg,#6BCB77,#3DAA45)';
+        document.getElementById(`upper-${letter}`).style.borderColor = '#FFD93D';
+        document.getElementById(`lower-${letter}`).style.borderColor = '#FFD93D';
+        document.getElementById(`upper-${letter}`).style.pointerEvents = 'none';
+        document.getElementById(`lower-${letter}`).style.pointerEvents = 'none';
+        this.matched = this.matched || new Set();
+        this.matched.add(letter);
+        this.selectedCard = null;
+        const fb = document.getElementById('match-feedback');
+        if(fb) fb.textContent = `✅ ${letter} = ${letter.toLowerCase()} — Great match! 🌟`;
+        // Check if all matched
+        if(this.matched.size >= 6) {
+          setTimeout(() => {
+            SoundSystem.playTone('celebrate');
+            SoundSystem.speakBaby('Amazing! You matched all the letters! You are so smart!');
+            const fb2 = document.getElementById('match-feedback');
+            if(fb2) fb2.innerHTML = `<div style="font-size:1.3rem;">🏆 All matched! Amazing! 🎉</div><button onclick="TraceMatch.renderLetterMatch()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;margin-top:10px;">Play Again ▶</button>`;
+          }, 600);
+        }
+      } else {
+        // Wrong
+        SoundSystem.playTone('wrong');
+        SoundSystem.speakBaby(`Try again! Find the small ${this.selectedCard.letter.toLowerCase()}!`);
+        el.style.animation = 'baby-shake 0.4s ease';
+        setTimeout(() => { el.style.animation = ''; }, 500);
+        const fb = document.getElementById('match-feedback');
+        if(fb) fb.textContent = `Keep trying! 💛`;
+      }
+    }
+  },
+
+  // ── ANIMAL MATCH ─────────────────────────────────────────────
+  renderAnimalMatch() {
+    const animals = [...this.ANIMALS].sort(() => Math.random()-0.5).slice(0, 5);
+    const emojiCol = [...animals].sort(() => Math.random()-0.5);
+    const nameCol = [...animals].sort(() => Math.random()-0.5);
+    this.selectedCard = null;
+    this.matched = new Set();
+    this.matchAnimals = animals;
+
+    const activity = document.getElementById('trace-activity');
+    activity.innerHTML = `
+      <button onclick="TraceMatch.backToHub()" style="background:rgba(255,255,255,0.12);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:7px 16px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:14px;">← Back</button>
+      <div style="text-align:center;margin-bottom:14px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;">Match the animal to its name! 🐾</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.82rem;margin-top:3px;">Tap an animal, then tap its name</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${emojiCol.map(a=>`
+            <div class="amatch-card" id="aemoji-${a.name}" data-name="${a.name}" data-atype="emoji"
+              onclick="TraceMatch.selectAnimal('emoji','${a.name}',this)"
+              style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);border-radius:14px;padding:14px;text-align:center;cursor:pointer;font-size:2.5rem;box-shadow:0 4px 14px rgba(0,0,0,0.15);transition:transform 0.15s;border:3px solid transparent;">
+              ${a.emoji}
+            </div>`).join('')}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${nameCol.map(a=>`
+            <div class="amatch-card" id="aname-${a.name}" data-name="${a.name}" data-atype="name"
+              onclick="TraceMatch.selectAnimal('name','${a.name}',this)"
+              style="background:linear-gradient(135deg,#6BCB77,#3DAA45);border-radius:14px;padding:14px;text-align:center;cursor:pointer;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,0.15);transition:transform 0.15s;border:3px solid transparent;">
+              ${a.name}
+            </div>`).join('')}
+        </div>
+      </div>
+      <div id="amatch-feedback" style="text-align:center;margin-top:14px;font-family:'Fredoka One',cursive;font-size:1.1rem;min-height:28px;"></div>`;
+
+    SoundSystem.speakBaby('Match the animal to its name!');
+  },
+
+  selectAnimal(type, name, el) {
+    if(this.matched?.has(name)) return;
+    if(type === 'emoji') {
+      document.querySelectorAll('.amatch-card').forEach(c => {
+        if(c.dataset.atype === 'emoji') c.style.borderColor = 'transparent';
+      });
+      this.selectedCard = { type:'emoji', name };
+      el.style.borderColor = '#FFD93D';
+      el.style.transform = 'scale(1.08)';
+      SoundSystem.speakBaby(`This animal!`);
+    } else if(type === 'name' && this.selectedCard?.type === 'emoji') {
+      if(this.selectedCard.name === name) {
+        SoundSystem.playTone('correct');
+        SoundSystem.speakBaby(`Yes! That is a ${name}! Wonderful!`);
+        document.getElementById(`aemoji-${name}`).style.background = 'linear-gradient(135deg,#C77DFF,#7928CA)';
+        document.getElementById(`aname-${name}`).style.background = 'linear-gradient(135deg,#C77DFF,#7928CA)';
+        document.getElementById(`aemoji-${name}`).style.pointerEvents = 'none';
+        document.getElementById(`aname-${name}`).style.pointerEvents = 'none';
+        if(!this.matched) this.matched = new Set();
+        this.matched.add(name);
+        this.selectedCard = null;
+        const fb = document.getElementById('amatch-feedback');
+        if(fb) fb.textContent = `✅ ${name}! Great job! 🌟`;
+        if(this.matched.size >= 5) {
+          setTimeout(() => {
+            SoundSystem.playTone('celebrate');
+            SoundSystem.speakBaby('Incredible! You matched all the animals! You are brilliant!');
+            const fb2 = document.getElementById('amatch-feedback');
+            if(fb2) fb2.innerHTML = `<div style="font-size:1.3rem;">🏆 All matched! Brilliant! 🎉</div><button onclick="TraceMatch.renderAnimalMatch()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;margin-top:10px;">Play Again ▶</button>`;
+          }, 600);
+        }
+      } else {
+        SoundSystem.playTone('wrong');
+        SoundSystem.speakBaby(`Try again! Find the name for this animal!`);
+        const fb = document.getElementById('amatch-feedback');
+        if(fb) fb.textContent = `Keep trying! You can do it! 💛`;
+      }
+    }
+  }
+};
+window.TraceMatch = TraceMatch;
 const SamaraCoins = {
   _key: 'samara_coins',
   _histKey: 'samara_coins_hist',
