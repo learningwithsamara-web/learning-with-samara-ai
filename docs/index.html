@@ -463,6 +463,27 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 .pricing-grid{grid-template-columns:1fr;}
 }
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+/* ── SAMARA COINS ── */
+.coin-display{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:5px 14px;border-radius:50px;box-shadow:0 4px 12px rgba(255,155,63,0.4);}
+.coin-icon{font-size:1.1rem;animation:spin-star 3s linear infinite;}
+.coin-earn{position:fixed;font-family:'Fredoka One',cursive;font-size:1.4rem;color:#FFD93D;text-shadow:0 2px 8px rgba(0,0,0,0.4);z-index:9999;pointer-events:none;animation:coin-float 1.5s ease forwards;}
+@keyframes coin-float{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-80px);opacity:0}}
+/* ── FAMILY MODE ── */
+.child-card{background:rgba(255,255,255,0.97);border-radius:20px;padding:18px 16px;text-align:center;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 6px 20px rgba(0,0,0,0.12);border:3px solid transparent;position:relative;}
+.child-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.18);}
+.child-card.active-child{border-color:var(--sun);}
+.child-avatar{width:64px;height:64px;border-radius:50%;font-size:2.5rem;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;border:3px solid rgba(255,255,255,0.5);}
+/* ── THEMES ── */
+body.theme-ocean{background:linear-gradient(135deg,#0a2a4a,#1a6b8a,#0e4d6e)!important;}
+body.theme-forest{background:linear-gradient(135deg,#0d2b0d,#1a4a1a,#2d6b2d)!important;}
+body.theme-sunset{background:linear-gradient(135deg,#4a0a0a,#8b2500,#c94f00)!important;}
+body.theme-space{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e)!important;}
+body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!important;}
+/* ── SHOP ── */
+.shop-item{background:rgba(255,255,255,0.97);border-radius:20px;padding:18px 14px;text-align:center;cursor:pointer;transition:transform 0.2s;box-shadow:0 6px 20px rgba(0,0,0,0.12);border:3px solid transparent;}
+.shop-item:hover{transform:scale(1.04);}
+.shop-item.owned{border-color:#6BCB77;background:linear-gradient(135deg,rgba(107,203,119,0.1),rgba(61,170,69,0.1));}
+.shop-item.equipped{border-color:#FFD93D;}
 </style>
 </head>
 <body>
@@ -482,15 +503,19 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
     <button id="btn-signup" class="btn btn-outline" onclick="App.showScreen('screen-auth','signup')">Sign Up</button>
     <button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 My Progress</button>
     <button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
+    <button id="btn-family" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);" onclick="App.showScreen('screen-family')">👨‍👩‍👧 Family</button>
     <button id="btn-pep" class="btn btn-primary" style="background:linear-gradient(135deg,#C77DFF,#7928CA);" onclick="App.showScreen('screen-pep')">🇯🇲 PEP</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#FF6B6B,#FF416C);" onclick="App.showScreen('screen-videos')">📺 Samara TV ⭐🧠</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#7928CA,#FF0080);" onclick="App.showScreen('screen-shop')">🛍️📖✨ Samara Edu Store</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#4A90D9,#7928CA);" onclick="App.showScreen('screen-learn')">📚 Learn</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#302b63,#6BCB77);" onclick="App.showScreen('screen-getapp')">📲 Get the App</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="App.showScreen('screen-research')">🔭 Research</button>
+    <button id="btn-homework" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);" onclick="App.showScreen('screen-homework')">📸 Homework Help</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);" onclick="App.showScreen('screen-coinshop')">🪙 Coin Shop</button>
     <button id="btn-studyplan" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="PersonalAlgo.openPlan()">🧠 My Plan</button>
     <button class="btn btn-gold" onclick="App.showScreen('screen-pricing')">⭐ Go Pro</button>
     <button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
+    <div class="coin-display" id="coins-display" style="display:none;"><span class="coin-icon">🪙</span><span id="coins-count">0</span></div>
   </div>
 </header>
 <div class="hero">
@@ -1297,7 +1322,111 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
 
   </div>
 </div>
-<div class="ai-tutor-float hidden" id="ai-tutor-float">
+<!-- ══ FAMILY MODE ══ -->
+<div id="screen-family" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">👨‍👩‍👧 Family Mode</h2>
+  </div>
+  <div style="max-width:700px;margin:0 auto;padding:24px 22px;">
+    <div style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);border-radius:20px;padding:20px 24px;margin-bottom:24px;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:6px;">👨‍👩‍👧</div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.4rem;">Family Learning Hub</div>
+      <div style="color:rgba(255,255,255,0.9);font-size:0.85rem;margin-top:4px;">Up to 4 children · Each with their own progress</div>
+    </div>
+    <!-- Child profiles -->
+    <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.05rem;margin-bottom:12px;">👶 Your Children</div>
+    <div id="family-children-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-bottom:20px;"></div>
+    <!-- Add child button -->
+    <div id="family-add-section"></div>
+    <!-- Family stats -->
+    <div id="family-stats" style="background:rgba(255,255,255,0.07);border-radius:18px;padding:18px 22px;margin-top:16px;border:1.5px solid rgba(255,255,255,0.12);">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;margin-bottom:12px;">📊 Family Stats This Week</div>
+      <div id="family-stats-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COIN SHOP ══ -->
+<div id="screen-coinshop" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">🪙 Coin Shop</h2>
+    <div class="coin-display" style="margin-left:auto;"><span class="coin-icon">🪙</span><span id="shop-coins-count">0</span> coins</div>
+  </div>
+  <div style="max-width:700px;margin:0 auto;padding:24px 22px;">
+    <!-- How to earn -->
+    <div style="background:rgba(255,217,61,0.12);border-radius:18px;padding:14px 18px;margin-bottom:20px;border:1.5px solid rgba(255,217,61,0.25);">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;margin-bottom:8px;">🪙 How to Earn Coins</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <span style="color:rgba(255,255,255,0.8);font-size:0.82rem;">✅ Complete a stage → <b style="color:#FFD93D;">10 coins</b></span>
+        <span style="color:rgba(255,255,255,0.8);font-size:0.82rem;">⭐ Perfect score → <b style="color:#FFD93D;">25 coins</b></span>
+        <span style="color:rgba(255,255,255,0.8);font-size:0.82rem;">🔥 7-day streak → <b style="color:#FFD93D;">50 coins</b></span>
+        <span style="color:rgba(255,255,255,0.8);font-size:0.82rem;">📚 Complete a subject → <b style="color:#FFD93D;">100 coins</b></span>
+      </div>
+    </div>
+    <!-- Shop tabs -->
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+      <button onclick="CoinShop.showTab('themes')" id="tab-themes" class="btn btn-primary" style="font-size:0.85rem;padding:7px 16px;">🎨 Themes</button>
+      <button onclick="CoinShop.showTab('effects')" id="tab-effects" class="btn btn-outline" style="font-size:0.85rem;padding:7px 16px;color:#fff;">✨ Effects</button>
+      <button onclick="CoinShop.showTab('avatars')" id="tab-avatars" class="btn btn-outline" style="font-size:0.85rem;padding:7px 16px;color:#fff;">🎭 Avatars</button>
+    </div>
+    <div id="coinshop-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;"></div>
+  </div>
+</div>
+
+<!-- ══ HOMEWORK HELPER ══ -->
+<div id="screen-homework" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-home')">← Home</button>
+    <h2 class="screen-title small">📸 Homework Helper</h2>
+  </div>
+  <div style="max-width:660px;margin:0 auto;padding:24px 22px;">
+    <!-- Pro gate -->
+    <div id="homework-pro-gate" class="hidden" style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px;padding:32px;text-align:center;border:2px solid rgba(199,125,255,0.4);">
+      <div style="font-size:3rem;margin-bottom:12px;">📸</div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.5rem;margin-bottom:8px;">Homework Helper</div>
+      <div style="color:rgba(255,255,255,0.75);font-size:0.9rem;margin-bottom:16px;line-height:1.6;">Take a photo of any homework question and Samara will explain exactly how to solve it step by step! Works for maths, science, English and more.</div>
+      <div style="background:rgba(255,255,255,0.08);border-radius:14px;padding:14px;margin-bottom:18px;text-align:left;">
+        <div style="color:#FFD93D;font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:8px;">✨ Free Preview — try one question:</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.82rem;">See how it works, then upgrade for unlimited homework help!</div>
+      </div>
+      <button onclick="HomeworkHelper.showUpload(true)" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;margin-bottom:10px;">📸 Try One Free Question</button><br>
+      <button onclick="App.showScreen('screen-pricing')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade for Unlimited</button>
+    </div>
+    <!-- Main homework UI (Pro) -->
+    <div id="homework-main">
+      <div style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);border-radius:20px;padding:20px 24px;margin-bottom:20px;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:6px;">📸</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;">Take a photo of your homework!</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.85rem;margin-top:4px;">Samara will explain how to solve it step by step</div>
+      </div>
+      <!-- Upload area -->
+      <div id="homework-upload" style="background:rgba(255,255,255,0.07);border-radius:18px;padding:32px;text-align:center;border:2px dashed rgba(255,255,255,0.3);margin-bottom:16px;cursor:pointer;" onclick="document.getElementById('homework-file').click()">
+        <div style="font-size:3rem;margin-bottom:12px;">📷</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-bottom:6px;">Tap to take or upload a photo</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;">Supports JPG, PNG — max 5MB</div>
+        <input type="file" id="homework-file" accept="image/*" capture="environment" style="display:none" onchange="HomeworkHelper.handlePhoto(this)" />
+      </div>
+      <!-- Or type question -->
+      <div style="text-align:center;margin-bottom:12px;color:rgba(255,255,255,0.5);font-size:0.85rem;">— or type your question —</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <input id="homework-text" class="topic-input" type="text" placeholder="e.g. How do I solve 3x + 5 = 14?" style="flex:1;" onkeydown="if(event.key==='Enter')HomeworkHelper.askText()" />
+        <button class="btn btn-primary" onclick="HomeworkHelper.askText()">Ask 🚀</button>
+      </div>
+      <!-- Preview & result -->
+      <div id="homework-preview" style="display:none;margin-bottom:16px;text-align:center;">
+        <img id="homework-img" style="max-width:100%;border-radius:14px;max-height:300px;object-fit:contain;" />
+        <button onclick="HomeworkHelper.analyzePhoto()" class="btn btn-primary big" style="margin-top:12px;width:100%;">🧠 Explain This for Me!</button>
+      </div>
+      <div id="homework-loading" style="display:none;text-align:center;padding:24px;">
+        <div style="font-size:2.5rem;animation:bounce 1s ease-in-out infinite;">🤔</div>
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-top:10px;">Samara is reading your homework...</div>
+      </div>
+      <div id="homework-result" style="display:none;"></div>
+    </div>
+  </div>
+</div>
   <div class="ai-chat-window hidden" id="ai-chat-window">
     <div class="ai-chat-header">
       <div class="ai-chat-avatar"><img src="samara.png.jpeg" alt="Samara" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='👧';" /></div>
@@ -1316,8 +1445,7 @@ body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#
   </button>
 </div>
 
-<!-- TOAST -->
-<div id="toast" class="toast hidden"></div>
+<div class="ai-tutor-float hidden" id="ai-tutor-float">
 <!-- MODAL -->
 <div id="modal-overlay" class="modal-overlay hidden">
 <div class="modal-box">
@@ -2886,6 +3014,9 @@ const App = {
     if(id==='screen-shop') AITutor.hideFloat();
     if(id==='screen-getapp') AITutor.hideFloat();
     if(id==='screen-playhouse'){ AITutor.hideFloat(); Playhouse.backToHub(); }
+    if(id==='screen-family'){ AITutor.hideFloat(); FamilyMode.render(); }
+    if(id==='screen-coinshop'){ AITutor.hideFloat(); CoinShop.render(); }
+    if(id==='screen-homework'){ AITutor.hideFloat(); HomeworkHelper.init(); }
     if(id==='screen-learn'){ AITutor.hideFloat(); setTimeout(()=>LearnLib.init(),100); }
   },
 
@@ -2899,6 +3030,10 @@ const App = {
     el('btn-login')?.classList.toggle('hidden',in_);el('btn-signup')?.classList.toggle('hidden',in_);
     el('btn-dashboard')?.classList.toggle('hidden',!in_);el('btn-parent')?.classList.toggle('hidden',!in_);
     el('btn-logout')?.classList.toggle('hidden',!in_);
+    el('btn-family')?.classList.toggle('hidden',!in_);
+    el('btn-homework')?.classList.toggle('hidden',!in_);
+    const cd=el('coins-display');if(cd)cd.style.display=in_?'inline-flex':'none';
+    SamaraCoins._updateDisplay();
   },
 
   selectAge(g, toast=true) {
@@ -3117,6 +3252,8 @@ const App = {
   async finishStage() {
     const total=S.questions.length;const acc=S.correct/total;const pct=Math.round(acc*100);
     const pts=S.correct*10;const world=S.currentWorld;const adaptive=Adaptive.update(S.subject,acc);
+    // Award Samara Coins
+    const coinsEarned = SamaraCoins.awardStage(acc);
     if(acc>=0.8){SoundSystem.playTone('celebrate');SoundSystem.speakPraise('Stage complete! Incredible work!');}
     if(S.user){const name=S.user.user_metadata?.full_name||S.user.email;await DB.saveScore({student:name,subject:S.subject,world:world.id,stage:S.stageIndex+1,score:pts,total:total*10,accuracy:acc});await DB.saveProgress(S.subject,world.id,S.stageIndex+1,acc);S.progress=await DB.loadProgress();}
     setText('result-star',pct>=90?'🌟':pct>=70?'⭐':'💪');
@@ -3297,7 +3434,465 @@ const App = {
   toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);}
 };
 
-// ── LEARN — Knowledge Base ───────────────────────────────────
+// ── SAMARA COINS ─────────────────────────────────────────────
+const SamaraCoins = {
+  _key: 'samara_coins',
+  _histKey: 'samara_coins_hist',
+
+  get() { return parseInt(localStorage.getItem(this._key)||'0'); },
+  set(n) { localStorage.setItem(this._key, Math.max(0,n).toString()); this._updateDisplay(); },
+  add(amount, reason) {
+    const prev = this.get();
+    this.set(prev + amount);
+    this._showEarnAnimation(amount, reason);
+    const hist = JSON.parse(localStorage.getItem(this._histKey)||'[]');
+    hist.unshift({amount, reason, date: new Date().toISOString().slice(0,10)});
+    localStorage.setItem(this._histKey, JSON.stringify(hist.slice(0,50)));
+  },
+  spend(amount) {
+    if(this.get() < amount) return false;
+    this.set(this.get() - amount);
+    return true;
+  },
+  canAfford(amount) { return this.get() >= amount; },
+
+  _updateDisplay() {
+    const n = this.get();
+    ['coins-count','shop-coins-count'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = n;
+    });
+    const disp = document.getElementById('coins-display');
+    if(disp) disp.style.display = S.user ? 'inline-flex' : 'none';
+  },
+
+  _showEarnAnimation(amount, reason) {
+    const div = document.createElement('div');
+    div.className = 'coin-earn';
+    div.textContent = `+${amount} 🪙`;
+    div.style.cssText = `top:${80 + Math.random()*40}px;right:${20 + Math.random()*100}px;`;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 1600);
+  },
+
+  // Award coins for completing a stage
+  awardStage(accuracy) {
+    const base = 10;
+    const bonus = accuracy >= 1.0 ? 25 : accuracy >= 0.8 ? 15 : 0;
+    const total = base + bonus;
+    this.add(total, `Stage complete${bonus > 0 ? ' (bonus!)' : ''}`);
+    return total;
+  },
+
+  init() { this._updateDisplay(); }
+};
+window.SamaraCoins = SamaraCoins;
+
+// ── FAMILY MODE ───────────────────────────────────────────────
+const FamilyMode = {
+  MAX_CHILDREN: 4,
+  AVATARS: ['🦁','🐰','🦊','🐼','🐨','🦋','🐸','⭐','🦄','🐶'],
+  COLORS: ['#FF6B6B','#FFD93D','#6BCB77','#7EC8E3','#C77DFF','#FF9B3F','#FF0080','#4A90D9'],
+
+  getProfiles() {
+    try { return JSON.parse(localStorage.getItem('samara_family')||'[]'); } catch(e) { return []; }
+  },
+  saveProfiles(profiles) {
+    localStorage.setItem('samara_family', JSON.stringify(profiles));
+  },
+  getActive() {
+    const id = localStorage.getItem('samara_active_child');
+    return this.getProfiles().find(p=>p.id===id) || null;
+  },
+  setActive(id) {
+    localStorage.setItem('samara_active_child', id);
+    const profile = this.getProfiles().find(p=>p.id===id);
+    if(profile) {
+      S.ageGroup = profile.age;
+      App.selectAge(profile.age, false);
+      App.renderSubjects();
+      App.toast(`Switched to ${profile.name}! ${profile.avatar}`);
+    }
+  },
+
+  addChild(name, age, avatar, color) {
+    const profiles = this.getProfiles();
+    if(profiles.length >= this.MAX_CHILDREN) {
+      App.toast(`Maximum ${this.MAX_CHILDREN} children per family!`);
+      return false;
+    }
+    const id = 'child_' + Date.now();
+    profiles.push({ id, name, age, avatar, color, coins: 0, created: new Date().toISOString() });
+    this.saveProfiles(profiles);
+    return id;
+  },
+
+  removeChild(id) {
+    const profiles = this.getProfiles().filter(p=>p.id!==id);
+    this.saveProfiles(profiles);
+    if(localStorage.getItem('samara_active_child')===id) {
+      localStorage.removeItem('samara_active_child');
+    }
+  },
+
+  render() {
+    const profiles = this.getProfiles();
+    const activeId = localStorage.getItem('samara_active_child');
+    const grid = document.getElementById('family-children-grid');
+    const addSection = document.getElementById('family-add-section');
+    if(!grid) return;
+
+    if(profiles.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:20px;color:rgba(255,255,255,0.6);">No children added yet! Add your first child below 👶</div>`;
+    } else {
+      grid.innerHTML = profiles.map(p=>`
+        <div class="child-card ${p.id===activeId?'active-child':''}" onclick="FamilyMode.setActive('${p.id}')">
+          <div class="child-avatar" style="background:${p.color};">${p.avatar}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#1A1A2E;">${p.name}</div>
+          <div style="font-size:0.75rem;color:#7A7A9D;margin-top:2px;">${p.age} yrs</div>
+          ${p.id===activeId?'<div style="margin-top:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.72rem;padding:2px 10px;border-radius:50px;display:inline-block;">Active ✓</div>':''}
+          <button onclick="event.stopPropagation();FamilyMode.removeChild('${p.id}');FamilyMode.render();" style="position:absolute;top:8px;right:8px;background:rgba(255,107,107,0.15);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.7rem;color:#FF6B6B;">✕</button>
+        </div>`).join('');
+    }
+
+    // Show add button if under limit
+    if(profiles.length < this.MAX_CHILDREN) {
+      addSection.innerHTML = `
+        <button onclick="FamilyMode.showAddForm()" style="background:rgba(255,255,255,0.08);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:12px 24px;border-radius:50px;border:2px dashed rgba(255,255,255,0.3);cursor:pointer;width:100%;">
+          ➕ Add Child (${profiles.length}/${this.MAX_CHILDREN})
+        </button>`;
+    } else {
+      addSection.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.5);font-size:0.85rem;">Maximum ${this.MAX_CHILDREN} children reached</div>`;
+    }
+
+    // Family stats
+    const stats = document.getElementById('family-stats-content');
+    if(stats) {
+      if(profiles.length === 0) {
+        stats.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Add children to see family stats!</div>';
+      } else {
+        stats.innerHTML = profiles.map(p=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:1.6rem;">${p.avatar}</div>
+            <div style="flex:1;">
+              <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${p.name}</div>
+              <div style="color:rgba(255,255,255,0.55);font-size:0.78rem;">Age ${p.age}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">🪙 ${SamaraCoins.get()} coins</div>
+            </div>
+          </div>`).join('');
+      }
+    }
+  },
+
+  showAddForm() {
+    const div = document.createElement('div');
+    div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    const avatars = this.AVATARS;
+    const colors = this.COLORS;
+    div.innerHTML = `
+      <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px;padding:28px;max-width:380px;width:100%;border:2px solid rgba(199,125,255,0.4);">
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.4rem;margin-bottom:16px;text-align:center;">👶 Add a Child</div>
+        <input id="new-child-name" type="text" placeholder="Child's name" maxlength="20"
+          style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;outline:none;margin-bottom:12px;box-sizing:border-box;" />
+        <select id="new-child-age" style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;outline:none;margin-bottom:14px;box-sizing:border-box;">
+          <option value="0-3" style="color:#000;">Ages 0–3 (Baby)</option>
+          <option value="4-6" style="color:#000;">Ages 4–6 (Junior)</option>
+          <option value="7-10" selected style="color:#000;">Ages 7–10 (Explorer)</option>
+          <option value="11-14" style="color:#000;">Ages 11–14 (Pro)</option>
+          <option value="15-17" style="color:#000;">Ages 15–17 (Senior)</option>
+        </select>
+        <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.8);font-size:0.88rem;margin-bottom:8px;">Pick an avatar:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;" id="avatar-picker">
+          ${avatars.map((a,i)=>`<div onclick="FamilyMode._pickAvatar('${a}','${colors[i%colors.length]}',this)" data-avatar="${a}" data-color="${colors[i%colors.length]}" style="width:40px;height:40px;border-radius:50%;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;border:3px solid transparent;transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${a}</div>`).join('')}
+        </div>
+        <input type="hidden" id="new-child-avatar" value="🦁" />
+        <input type="hidden" id="new-child-color" value="${colors[0]}" />
+        <div style="display:flex;gap:10px;margin-top:4px;">
+          <button onclick="FamilyMode._confirmAdd()" style="flex:1;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:11px;border-radius:50px;border:none;cursor:pointer;">Add Child ✅</button>
+          <button onclick="this.closest('[style]').remove()" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:11px 16px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Cancel</button>
+        </div>
+      </div>`;
+    document.body.appendChild(div);
+    // Select first avatar
+    document.querySelector('#avatar-picker div')?.click();
+  },
+
+  _pickAvatar(avatar, color, el) {
+    document.querySelectorAll('#avatar-picker div').forEach(d=>d.style.borderColor='transparent');
+    el.style.borderColor = '#FFD93D';
+    document.getElementById('new-child-avatar').value = avatar;
+    document.getElementById('new-child-color').value = color;
+  },
+
+  _confirmAdd() {
+    const name = document.getElementById('new-child-name')?.value.trim();
+    const age = document.getElementById('new-child-age')?.value;
+    const avatar = document.getElementById('new-child-avatar')?.value;
+    const color = document.getElementById('new-child-color')?.value;
+    if(!name) { App.toast('Please enter a name!'); return; }
+    const id = this.addChild(name, age, avatar, color);
+    if(id) {
+      document.querySelector('[style*="position:fixed"][style*="99999"]')?.remove();
+      this.render();
+      App.toast(`${avatar} ${name} added to your family! 🎉`);
+    }
+  },
+
+  init() {
+    const profiles = this.getProfiles();
+    if(S.user) {
+      document.getElementById('btn-family')?.classList.toggle('hidden', false);
+    }
+  }
+};
+window.FamilyMode = FamilyMode;
+
+// ── COIN SHOP ─────────────────────────────────────────────────
+const CoinShop = {
+  currentTab: 'themes',
+
+  ITEMS: {
+    themes: [
+      {id:'theme-space',   name:'Space Theme',   icon:'🚀', price:0,    preview:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)', desc:'Default deep space'},
+      {id:'theme-ocean',   name:'Ocean Theme',   icon:'🌊', price:50,   preview:'linear-gradient(135deg,#0a2a4a,#1a6b8a,#0e4d6e)', desc:'Deep blue ocean vibes'},
+      {id:'theme-forest',  name:'Forest Theme',  icon:'🌲', price:50,   preview:'linear-gradient(135deg,#0d2b0d,#1a4a1a,#2d6b2d)', desc:'Lush green forest'},
+      {id:'theme-sunset',  name:'Sunset Theme',  icon:'🌅', price:75,   preview:'linear-gradient(135deg,#4a0a0a,#8b2500,#c94f00)', desc:'Warm glowing sunset'},
+      {id:'theme-candy',   name:'Candy Theme',   icon:'🍭', price:100,  preview:'linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)', desc:'Sweet candy colours'},
+    ],
+    effects: [
+      {id:'effect-stars',    name:'Shooting Stars', icon:'⭐', price:30,  desc:'Stars fly across screen on correct answer'},
+      {id:'effect-confetti', name:'Confetti Blast',  icon:'🎊', price:50,  desc:'Confetti explosion on perfect score'},
+      {id:'effect-fireworks',name:'Fireworks',       icon:'🎆', price:75,  desc:'Fireworks when completing a world'},
+      {id:'effect-rainbow',  name:'Rainbow Flash',   icon:'🌈', price:60,  desc:'Rainbow colours flash on stage complete'},
+    ],
+    avatars: [
+      {id:'avatar-crown',   name:'Crown Samara',  icon:'👑', price:80,   desc:'Samara wearing a golden crown'},
+      {id:'avatar-cape',    name:'Cape Samara',   icon:'🦸', price:100,  desc:'Samara as a superhero'},
+      {id:'avatar-scientist',name:'Scientist',    icon:'🔬', price:80,   desc:'Samara in a lab coat'},
+      {id:'avatar-astronaut',name:'Astronaut',    icon:'🚀', price:120,  desc:'Samara in a space suit'},
+      {id:'avatar-chef',    name:'Chef Samara',   icon:'👨‍🍳', price:80,  desc:'Samara as a master chef'},
+    ]
+  },
+
+  getOwned() {
+    try { return JSON.parse(localStorage.getItem('samara_owned_items')||'[]'); } catch(e) { return []; }
+  },
+  getEquipped() {
+    try { return JSON.parse(localStorage.getItem('samara_equipped')||'{}'); } catch(e) { return {}; }
+  },
+  own(id) { return this.getOwned().includes(id); },
+  equip(id, category) {
+    const equipped = this.getEquipped();
+    equipped[category] = id;
+    localStorage.setItem('samara_equipped', JSON.stringify(equipped));
+    this.applyEquipped();
+  },
+  buy(id, price, category) {
+    if(this.own(id)) { this.equip(id, category); this.render(); return; }
+    if(!SamaraCoins.canAfford(price)) { App.toast(`Need ${price} coins! Keep learning to earn more! 🪙`); return; }
+    SamaraCoins.spend(price);
+    const owned = this.getOwned();
+    owned.push(id);
+    localStorage.setItem('samara_owned_items', JSON.stringify(owned));
+    this.equip(id, category);
+    App.toast(`Purchased! 🎉`);
+    this.render();
+  },
+  applyEquipped() {
+    const equipped = this.getEquipped();
+    // Apply theme
+    document.body.className = document.body.className.replace(/theme-\w+/g,'').trim();
+    if(equipped.themes) document.body.classList.add(equipped.themes);
+  },
+  showTab(tab) {
+    this.currentTab = tab;
+    ['themes','effects','avatars'].forEach(t=>{
+      const btn = document.getElementById(`tab-${t}`);
+      if(!btn) return;
+      btn.className = t===tab ? 'btn btn-primary' : 'btn btn-outline';
+      if(t!==tab) btn.style.color='#fff';
+    });
+    this.render();
+  },
+  render() {
+    const grid = document.getElementById('coinshop-grid');
+    if(!grid) return;
+    const shopCoins = document.getElementById('shop-coins-count');
+    if(shopCoins) shopCoins.textContent = SamaraCoins.get();
+    const items = this.ITEMS[this.currentTab] || [];
+    const owned = this.getOwned();
+    const equipped = this.getEquipped();
+    grid.innerHTML = items.map(item=>{
+      const isOwned = owned.includes(item.id) || item.price===0;
+      const isEquipped = equipped[this.currentTab]===item.id;
+      return `
+        <div class="shop-item ${isOwned?'owned':''} ${isEquipped?'equipped':''}" onclick="CoinShop.buy('${item.id}',${item.price},'${this.currentTab}')">
+          ${this.currentTab==='themes'?`<div style="width:100%;height:50px;border-radius:10px;background:${item.preview};margin-bottom:8px;"></div>`:''}
+          <div style="font-size:2.2rem;margin-bottom:6px;">${item.icon}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:0.95rem;color:#1A1A2E;">${item.name}</div>
+          <div style="font-size:0.72rem;color:#7A7A9D;margin:4px 0;">${item.desc}</div>
+          ${isEquipped?'<div style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.72rem;padding:3px 10px;border-radius:50px;margin-top:6px;display:inline-block;">Equipped ✓</div>':
+            isOwned?'<div style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.72rem;padding:3px 10px;border-radius:50px;margin-top:6px;display:inline-block;">Tap to equip</div>':
+            `<div style="background:linear-gradient(135deg,#302b63,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:4px 12px;border-radius:50px;margin-top:6px;display:inline-block;">🪙 ${item.price} coins</div>`}
+        </div>`;
+    }).join('');
+  },
+  init() { this.applyEquipped(); }
+};
+window.CoinShop = CoinShop;
+
+// ── HOMEWORK HELPER ───────────────────────────────────────────
+const HomeworkHelper = {
+  photoData: null,
+  freeUsed: false,
+
+  init() {
+    const isPro = Plan.isPro();
+    const gate = document.getElementById('homework-pro-gate');
+    const main = document.getElementById('homework-main');
+    this.freeUsed = !!localStorage.getItem('samara_hw_free_used');
+    if(isPro) {
+      gate?.classList.add('hidden');
+      if(main) main.style.display = 'block';
+    } else {
+      gate?.classList.remove('hidden');
+      if(main) main.style.display = 'none';
+    }
+  },
+
+  showUpload(isFreePreview) {
+    if(isFreePreview && this.freeUsed) {
+      App.toast('Free preview already used! Upgrade for unlimited 🚀');
+      App.showScreen('screen-pricing');
+      return;
+    }
+    const gate = document.getElementById('homework-pro-gate');
+    const main = document.getElementById('homework-main');
+    gate?.classList.add('hidden');
+    if(main) main.style.display='block';
+    if(isFreePreview) this._isFreePreview = true;
+  },
+
+  handlePhoto(input) {
+    const file = input.files[0];
+    if(!file) return;
+    if(file.size > 5 * 1024 * 1024) { App.toast('Photo too large! Max 5MB 📸'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.photoData = e.target.result;
+      const preview = document.getElementById('homework-preview');
+      const img = document.getElementById('homework-img');
+      if(img) img.src = this.photoData;
+      if(preview) preview.style.display = 'block';
+      document.getElementById('homework-result').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  },
+
+  async analyzePhoto() {
+    if(!this.photoData) return;
+    document.getElementById('homework-preview').style.display = 'none';
+    document.getElementById('homework-loading').style.display = 'block';
+    document.getElementById('homework-result').style.display = 'none';
+
+    const base64 = this.photoData.split(',')[1];
+    const mediaType = this.photoData.split(';')[0].split(':')[1];
+    const ageDesc = {'0-3':'very young child','4-6':'5-year-old','7-10':'9-year-old','11-14':'12-year-old','15-17':'16-year-old'}[S.ageGroup]||'student';
+
+    try {
+      const r = await fetch(AI_WORKER, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model:'claude-sonnet-4-6',
+          max_tokens:1000,
+          system:`You are Samara AI, a brilliant homework helper for a ${ageDesc}. Look at the homework question in the image and explain clearly how to solve or answer it. Give step-by-step guidance. Be encouraging and age-appropriate. Add 1-2 emojis.`,
+          messages:[{
+            role:'user',
+            content:[
+              {type:'image', source:{type:'base64', media_type:mediaType, data:base64}},
+              {type:'text', text:'Please explain this homework question and show me how to solve it step by step!'}
+            ]
+          }]
+        })
+      });
+      const d = await r.json();
+      const answer = d.content?.[0]?.text;
+      document.getElementById('homework-loading').style.display='none';
+      if(answer) {
+        this.showResult(answer);
+        if(this._isFreePreview) {
+          localStorage.setItem('samara_hw_free_used','1');
+          this._isFreePreview = false;
+        }
+      } else {
+        this.showError();
+      }
+    } catch(e) {
+      document.getElementById('homework-loading').style.display='none';
+      this.showError();
+    }
+  },
+
+  async askText() {
+    const input = document.getElementById('homework-text');
+    const question = input?.value.trim();
+    if(!question) return;
+    document.getElementById('homework-loading').style.display='block';
+    document.getElementById('homework-result').style.display='none';
+    const ageDesc = {'0-3':'very young child','4-6':'5-year-old','7-10':'9-year-old','11-14':'12-year-old','15-17':'16-year-old'}[S.ageGroup]||'student';
+    const answer = await callClaudeAI(
+      `Homework question: ${question}\n\nPlease explain how to solve this step by step!`,
+      S.ageGroup,
+      `You are Samara AI, a homework helper for a ${ageDesc}. Give clear step-by-step guidance. Be encouraging. Add 1-2 emojis.`,
+      800
+    );
+    document.getElementById('homework-loading').style.display='none';
+    if(answer) { this.showResult(answer); if(input) input.value=''; }
+    else this.showError();
+  },
+
+  showResult(answer) {
+    const result = document.getElementById('homework-result');
+    if(!result) return;
+    result.style.display='block';
+    result.innerHTML = `
+      <div style="background:rgba(255,255,255,0.08);border-radius:18px;padding:20px;border:1.5px solid rgba(255,255,255,0.14);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#7928CA,#FF0080);flex-shrink:0;"><img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/></div>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">Samara AI ✨</div>
+        </div>
+        <div style="color:rgba(255,255,255,0.92);font-size:0.92rem;line-height:1.8;">${answer.replace(/\n/g,'<br>')}</div>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="HomeworkHelper.askFollowUp('Can you explain that more simply?')" class="btn btn-outline" style="font-size:0.8rem;padding:6px 14px;color:#fff;">Simpler please 🍼</button>
+          <button onclick="HomeworkHelper.askFollowUp('Give me a similar practice question')" class="btn btn-outline" style="font-size:0.8rem;padding:6px 14px;color:#fff;">Practice question 📝</button>
+          <button onclick="document.getElementById('homework-result').style.display='none';document.getElementById('homework-preview').style.display='none';" class="btn btn-outline" style="font-size:0.8rem;padding:6px 14px;color:#fff;">New question ➕</button>
+        </div>
+        ${!Plan.isPro()?`<div style="margin-top:12px;background:rgba(255,217,61,0.1);border-radius:10px;padding:10px 14px;font-size:0.8rem;color:rgba(255,255,255,0.7);">💡 <span style="cursor:pointer;color:#FFD93D;text-decoration:underline;" onclick="App.showScreen('screen-pricing')">Upgrade to Pro</span> for unlimited homework help!</div>`:''}
+      </div>`;
+    SoundSystem.speak("Here is my explanation!");
+  },
+
+  async askFollowUp(prompt) {
+    document.getElementById('homework-loading').style.display='block';
+    document.getElementById('homework-result').style.display='none';
+    const answer = await callClaudeAI(prompt, S.ageGroup, 'You are Samara AI, a homework helper. Be clear, encouraging and step-by-step.', 600);
+    document.getElementById('homework-loading').style.display='none';
+    if(answer) this.showResult(answer);
+    else this.showError();
+  },
+
+  showError() {
+    const result = document.getElementById('homework-result');
+    if(result) {
+      result.style.display='block';
+      result.innerHTML=`<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.7);">Couldn't read the homework. Try a clearer photo or type your question! 💛</div>`;
+    }
+  }
+};
+window.HomeworkHelper = HomeworkHelper;
 const LearnDB = {
   currentFilter: 'all',
   currentLesson: null,
@@ -4755,6 +5350,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   try{
     App.init();
     PersonalAlgo.load();
+    SamaraCoins.init();
+    CoinShop.init();
+    FamilyMode.init();
   }catch(e){console.error('Boot error:',e);}
 });
 </script>
