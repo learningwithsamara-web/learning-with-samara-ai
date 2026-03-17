@@ -3294,7 +3294,7 @@ const App = {
       const msg = AITutor.tutorMsg('correct', '');
       const fb = el('quiz-feedback');
       if(fb){ fb.innerHTML = `<div>${msg}</div>`; fb.className = 'quiz-feedback correct-fb'; }
-      setTimeout(() => App.nextQ(), 1800);
+      setTimeout(() => App.nextQ(), 2500);
     } else {
       btn.classList.add('wrong');
       // Highlight the correct answer
@@ -3310,7 +3310,6 @@ const App = {
       PersonalAlgo.trackAnswer(S.subject, false);
       const msg = AITutor.tutorMsg('wrong', q.hint);
       const fb = el('quiz-feedback');
-      // Show correct answer + hint so student can learn
       if(fb){
         fb.innerHTML = `
           <div style="font-size:1rem;margin-bottom:6px;">${msg}</div>
@@ -3321,8 +3320,12 @@ const App = {
           </div>`;
         fb.className = 'quiz-feedback wrong-fb';
       }
-      // Give student 4 seconds to read the correct answer
-      setTimeout(() => App.nextQ(), 4000);
+      // Speak the correct answer after a short pause so the wrong tone finishes
+      setTimeout(() => {
+        SoundSystem.speak(`The correct answer is: ${correctLabel}. ${q.hint || ''}`, 0.82, 1.3);
+      }, 600);
+      // 7 seconds — plenty of time for voice to finish reading
+      setTimeout(() => App.nextQ(), 7000);
     }
   },
 
@@ -3461,18 +3464,26 @@ const App = {
   },
 
   async logout(){
-    try {
-      await DB.logout();
-    } catch(e) {}
+    try { await DB.client.auth.signOut(); } catch(e) { console.log('signOut error:', e); }
+    // Clear all local state
     S.user = null;
     S.score = 0;
     S.progress = [];
     S.subject = null;
+    S.worldIndex = null;
+    S.stageIndex = null;
+    S.questions = [];
     S.ageGroup = '7-10';
+    // Clear any stored session
+    try {
+      Object.keys(localStorage).forEach(k => {
+        if(k.startsWith('sb-') || k.includes('supabase')) localStorage.removeItem(k);
+      });
+    } catch(e) {}
     App.updateAuth();
     App.renderSubjects();
+    App.showScreen('screen-home');
     App.toast('Logged out! See you soon 👋');
-    setTimeout(() => App.showScreen('screen-home'), 400);
   },
 
   async renderDash(){
