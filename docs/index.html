@@ -3099,7 +3099,6 @@ const App = {
     if(id==='screen-family'){ AITutor.hideFloat(); FamilyMode.render(); }
     if(id==='screen-coinshop'){ AITutor.hideFloat(); CoinShop.render(); }
     if(id==='screen-homework'){ AITutor.hideFloat(); HomeworkHelper.init(); }
-    if(id==='screen-learn'){ AITutor.hideFloat(); setTimeout(()=>LearnLib.init(),100); }
   },
 
   showProGate(message) {
@@ -3160,10 +3159,18 @@ const App = {
   },
 
   openSubject(sid) {
-    S.subject=sid;const worlds=WORLDS[sid]||WORLDS['math'];
-    const def=(SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10']).find(s=>s.id===sid);
-    setText('worlds-title',`${def?.icon||'📚'} ${def?.name||sid} Worlds`);
-    App.updateScores();App.renderWorlds(worlds);App.showScreen('screen-worlds');
+    try {
+      S.subject=sid;
+      const worlds=WORLDS[sid]||WORLDS['math'];
+      const def=(SUBJECT_MAP[S.ageGroup]||SUBJECT_MAP['7-10']).find(s=>s.id===sid);
+      setText('worlds-title',`${def?.icon||'📚'} ${def?.name||sid} Worlds`);
+      App.updateScores();
+      App.renderWorlds(worlds);
+      App.showScreen('screen-worlds');
+    } catch(e) {
+      console.error('openSubject error:', e);
+      App.toast('Loading error — please try again! 🔄');
+    }
   },
 
   renderWorlds(worlds) {
