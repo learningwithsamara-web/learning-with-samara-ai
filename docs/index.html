@@ -5418,6 +5418,8 @@ const ReviewSystem = {
   async loadReviews() {
     const grid = document.getElementById('reviews-grid');
     if(!grid) return;
+    // Show static reviews immediately — never leave it blank
+    grid.innerHTML = this._staticReviews();
     try {
       const { data, error } = await DB.client
         .from('reviews')
@@ -5426,19 +5428,13 @@ const ReviewSystem = {
         .order('created_at', { ascending: false })
         .limit(20);
 
-      if(error) throw error;
+      if(error || !data || data.length === 0) return; // keep static
 
-      if(!data || data.length === 0) {
-        // No approved reviews yet — show static fallback cards
-        grid.innerHTML = this._staticReviews();
-        return;
-      }
-
-      // Update review count
+      // Update count
       const countEl = document.getElementById('review-count');
       if(countEl) countEl.textContent = data.length + '+';
 
-      // Render dynamic reviews
+      // Replace static with live approved reviews
       grid.innerHTML = data.map(r => {
         const stars = '⭐'.repeat(r.stars);
         const ago = this._timeAgo(r.created_at);
@@ -5450,21 +5446,19 @@ const ReviewSystem = {
               <div style="font-size:2rem;">${avatar}</div>
               <div style="flex:1;">
                 <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div>
-                <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location || 'Samara AI Family'}</div>
+                <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location||'Samara AI Family'}</div>
               </div>
               <div style="text-align:right;">
                 <div style="color:#FFD93D;font-size:0.85rem;">${stars}</div>
                 <div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${ago}</div>
               </div>
             </div>
-            ${r.feature ? `<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>` : ''}
+            ${r.feature?`<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>`:''}
             <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div>
           </div>`;
       }).join('');
-
     } catch(e) {
-      // Fallback to static on error
-      grid.innerHTML = this._staticReviews();
+      // Static reviews already showing — nothing to do
     }
   },
 
@@ -5635,36 +5629,36 @@ const ReviewSystem = {
     if(!stars) { if(err) err.textContent = 'Please tap a star to rate us!'; return; }
     if(!text || text.length < 10) { if(err) err.textContent = 'Please write at least 10 characters!'; return; }
     if(err) err.textContent = '';
-
     if(btn) { btn.textContent = 'Submitting... ⏳'; btn.disabled = true; }
 
     try {
-      // Add timeout so it never gets stuck forever
-      const insertPromise = DB.client.from('reviews').insert({
-        name: name,
-        location: location,
-        stars: stars,
-        feature: feature,
-        review_text: text,
-        approved: false
+      // Use direct REST API call — most reliable approach
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON,
+          'Authorization': `Bearer ${SUPABASE_ANON}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          name, location, stars,
+          feature, review_text: text,
+          approved: false
+        })
       });
 
-      const timeoutPromise = new Promise((_,reject) =>
-        setTimeout(() => reject(new Error('timeout')), 8000)
-      );
+      if(!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText || `HTTP ${res.status}`);
+      }
 
-      const { error } = await Promise.race([insertPromise, timeoutPromise]);
-      if(error) throw error;
-
-      // Success — show thank you
       this._showThankYou(stars, name);
 
     } catch(e) {
-      console.error('Review save error:', e);
+      console.error('Review error:', e);
       if(btn) { btn.textContent = '⭐ Submit Review'; btn.disabled = false; }
-      if(err) err.textContent = e.message === 'timeout'
-        ? 'Connection timed out — please check your internet and try again.'
-        : 'Something went wrong — please try again!';
+      if(err) err.textContent = 'Something went wrong — please try again!';
     }
   },
 
