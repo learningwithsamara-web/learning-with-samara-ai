@@ -2002,17 +2002,30 @@ const SoundSystem = {
 
     if(!clean) return;
 
-    // Split into short chunks — Chrome cuts off long speech
-    const chunks = clean.match(/[^.!?,;]+[.!?,;]*/g) || [clean];
+    // Smart chunking — split on sentence endings, merge short pieces
+    // This prevents unnatural pauses AND voice cutoff
+    const rawChunks = clean.match(/[^.!?]+[.!?]*/g) || [clean];
+    const chunks = [];
+    let current = '';
+    for(let i=0; i<rawChunks.length; i++) {
+      current += (current ? ' ' : '') + rawChunks[i].trim();
+      if(current.length > 80 || i === rawChunks.length-1) {
+        if(current.trim()) chunks.push(current.trim());
+        current = '';
+      }
+    }
+    if(current.trim()) chunks.push(current.trim());
+    // Chrome workaround: resume if auto-paused
+    const _ri = setInterval(()=>{ if(!this._speaking){clearInterval(_ri);return;} if(window.speechSynthesis.paused)window.speechSynthesis.resume(); }, 8000);
 
     let idx = 0;
     this._speaking = true;
 
     const speakChunk = () => {
-      if(!this._speaking || idx >= chunks.length) return;
+      if(!this._speaking || idx >= chunks.length) { clearInterval(_ri); return; }
       const chunk = chunks[idx].trim();
       idx++;
-      if(!chunk || chunk.length < 2) { speakChunk(); return; }
+      if(!chunk || chunk.length < 2) { setTimeout(speakChunk,50); return; }
 
       const utt = new SpeechSynthesisUtterance(chunk);
       utt.rate = rate;
@@ -2020,18 +2033,17 @@ const SoundSystem = {
       utt.volume = 1.0;
       utt.lang = 'en-US';
 
-      // Pick voice fresh each time in case it loaded late
       if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
 
-      utt.onend = speakChunk;
-      utt.onerror = () => { idx++; speakChunk(); };
+      utt.onend = () => setTimeout(speakChunk, 80);
+      utt.onerror = () => setTimeout(speakChunk, 100);
 
       window.speechSynthesis.speak(utt);
     };
 
-    // 200ms delay prevents Chrome "lik..." cutoff bug
-    setTimeout(speakChunk, 200);
+    // 350ms delay prevents Chrome opening-word cutoff bug
+    setTimeout(speakChunk, 350);
   },
 
   // Child-friendly voices — higher pitch, slower rate for babies
@@ -2039,6 +2051,12 @@ const SoundSystem = {
   speakPraise(text) { this.speak(text, 0.92, 1.4);  },
   speakHint(text)   { this.speak(text, 0.80, 1.3);  },
   speakLearn(text)  { this.speak(text, 0.82, 1.3);  },
+
+  speakQuestion(text) {
+    if(!this.enabled || !text) return;
+    const clean = String(text).replace(/[^\w\s.,!?'\-:()]/g,' ').replace(/\s+/g,' ').trim();
+    if(clean) this.speak(clean, 0.84, 1.3);
+  },
 
   stop() {
     this._speaking = false;
@@ -3300,11 +3318,22 @@ const App = {
   renderQ() {
     const q=S.questions[S.qIndex];if(!q)return;
     S.answered=false;
+    S._finishing=false;
     AITutor.hideHint();
     setText('quiz-q-num',`Q${S.qIndex+1}`);
     const pbar=el('quiz-progress-bar');
     if(pbar)pbar.style.width=`${(S.qIndex/S.questions.length)*100}%`;
-    el('quiz-question').textContent=q.text;
+
+    // Build question with repeat button
+    const qEl = el('quiz-question');
+    if(qEl) qEl.innerHTML = `
+      <div style="flex:1;">${q.text}</div>
+      <button onclick="SoundSystem.speakQuestion(${JSON.stringify(q.text).replace(/'/g,'&#39;')})"
+        title="Repeat question"
+        style="background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:38px;height:38px;flex-shrink:0;cursor:pointer;font-size:1.1rem;margin-left:10px;display:flex;align-items:center;justify-content:center;transition:background 0.15s;"
+        onmouseover="this.style.background='rgba(255,255,255,0.28)'"
+        onmouseout="this.style.background='rgba(255,255,255,0.15)'">🔊</button>`;
+
     const ae=el('quiz-answers');if(!ae)return;ae.innerHTML='';
     q.answers.forEach(a=>{
       const b=document.createElement('button');
@@ -3318,7 +3347,14 @@ const App = {
     });
     const fb=el('quiz-feedback');
     if(fb)fb.className='quiz-feedback hidden';
-    setTimeout(()=>{if(SoundSystem.enabled)SoundSystem.speak(q.text,0.85,1.05);},300);
+
+    // Auto-read question — always for 0-3 and 4-6, on demand for older
+    const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6';
+    if(autoRead && SoundSystem.enabled){
+      setTimeout(()=>SoundSystem.speakQuestion(q.text), 400);
+    } else if(SoundSystem.enabled){
+      setTimeout(()=>SoundSystem.speak(q.text,0.85,1.05),300);
+    }
   },
 
   answer(ans, q, btn) {
@@ -5547,22 +5583,170 @@ const Playhouse = {
 window.Playhouse = Playhouse;
 const BabyMode = {
   score:0, current:null, category:null, usedItems:new Set(),
-  questionCount:0, STAGE_LENGTH:10,
+  questionCount:0, STAGE_LENGTH:8,
+
+  // Real animal sounds using Web Audio API (synthesised tones that mimic animals)
+  playAnimalSound(animalName) {
+    try {
+      const ctx = new(window.AudioContext||window.webkitAudioContext)();
+      const sounds = {
+        'Dog':     ()=>this._bark(ctx),
+        'Cat':     ()=>this._meow(ctx),
+        'Cow':     ()=>this._moo(ctx),
+        'Duck':    ()=>this._quack(ctx),
+        'Lion':    ()=>this._roar(ctx),
+        'Elephant':()=>this._trumpet(ctx),
+        'Frog':    ()=>this._ribbit(ctx),
+        'Bird':    ()=>this._tweet(ctx),
+        'Rabbit':  ()=>this._squeak(ctx),
+        'Fish':    ()=>this._blub(ctx),
+      };
+      if(sounds[animalName]) sounds[animalName]();
+      else this._tweet(ctx); // default
+    } catch(e) {}
+  },
+
+  _bark(ctx) {
+    // Dog bark — short burst of noise with pitch drop
+    [0, 0.18].forEach(t => {
+      const buf = ctx.createBuffer(1, ctx.sampleRate*0.12, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(ctx.sampleRate*0.04));
+      const s = ctx.createBufferSource(); s.buffer=buf;
+      const f = ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=800; f.Q.value=1;
+      s.connect(f); f.connect(ctx.destination);
+      s.start(ctx.currentTime+t);
+    });
+  },
+
+  _meow(ctx) {
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='triangle';
+    o.frequency.setValueAtTime(600, ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(900, ctx.currentTime+0.15);
+    o.frequency.linearRampToValueAtTime(700, ctx.currentTime+0.5);
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.5);
+    o.start(); o.stop(ctx.currentTime+0.5);
+  },
+
+  _moo(ctx) {
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(180, ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(140, ctx.currentTime+0.6);
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.7);
+    o.start(); o.stop(ctx.currentTime+0.7);
+  },
+
+  _quack(ctx) {
+    [0, 0.22].forEach((t,i) => {
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='sawtooth';
+      o.frequency.setValueAtTime(500, ctx.currentTime+t);
+      o.frequency.linearRampToValueAtTime(350, ctx.currentTime+t+0.15);
+      g.gain.setValueAtTime(0.25, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.18);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.2);
+    });
+  },
+
+  _roar(ctx) {
+    const buf=ctx.createBuffer(1,ctx.sampleRate*0.8,ctx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.sin(i/ctx.sampleRate*200*Math.PI*2)*Math.exp(-i/(ctx.sampleRate*0.4));
+    const s=ctx.createBufferSource(); s.buffer=buf;
+    const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=400;
+    const g=ctx.createGain(); g.gain.value=0.8;
+    s.connect(f); f.connect(g); g.connect(ctx.destination);
+    s.start();
+  },
+
+  _trumpet(ctx) {
+    // Elephant trumpet — rising then falling
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(300, ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(800, ctx.currentTime+0.3);
+    o.frequency.linearRampToValueAtTime(400, ctx.currentTime+0.6);
+    g.gain.setValueAtTime(0.35, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.7);
+    o.start(); o.stop(ctx.currentTime+0.7);
+  },
+
+  _ribbit(ctx) {
+    [0, 0.2, 0.4].forEach(t => {
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='square';
+      o.frequency.setValueAtTime(200, ctx.currentTime+t);
+      o.frequency.linearRampToValueAtTime(100, ctx.currentTime+t+0.1);
+      g.gain.setValueAtTime(0.2, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.12);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.13);
+    });
+  },
+
+  _tweet(ctx) {
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='sine';
+    o.frequency.setValueAtTime(1200, ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(1800, ctx.currentTime+0.1);
+    o.frequency.linearRampToValueAtTime(1400, ctx.currentTime+0.2);
+    g.gain.setValueAtTime(0.2, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.25);
+    o.start(); o.stop(ctx.currentTime+0.25);
+  },
+
+  _squeak(ctx) {
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='sine';
+    o.frequency.setValueAtTime(800, ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(1200, ctx.currentTime+0.08);
+    o.frequency.linearRampToValueAtTime(900, ctx.currentTime+0.15);
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.18);
+    o.start(); o.stop(ctx.currentTime+0.2);
+  },
+
+  _blub(ctx) {
+    [0, 0.15, 0.3].forEach(t => {
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='sine';
+      o.frequency.setValueAtTime(400, ctx.currentTime+t);
+      o.frequency.exponentialRampToValueAtTime(100, ctx.currentTime+t+0.1);
+      g.gain.setValueAtTime(0.15, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.12);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.13);
+    });
+  },
+
   content:{
-    animals:[{name:'Dog',emoji:'🐕',sound:'Woof woof!'},{name:'Cat',emoji:'🐈',sound:'Meow meow!'},{name:'Cow',emoji:'🐄',sound:'Moo moo!'},{name:'Duck',emoji:'🦆',sound:'Quack quack!'},{name:'Lion',emoji:'🦁',sound:'Roar!'},{name:'Elephant',emoji:'🐘',sound:'Trumpet!'},{name:'Frog',emoji:'🐸',sound:'Ribbit!'},{name:'Bird',emoji:'🐦',sound:'Tweet tweet!'},{name:'Rabbit',emoji:'🐰',sound:'Hop hop!'},{name:'Fish',emoji:'🐠',sound:'Blub blub!'}],
+    animals:[{name:'Dog',emoji:'🐕',sound:'Woof woof!'},{name:'Cat',emoji:'🐈',sound:'Meow meow!'},{name:'Cow',emoji:'🐄',sound:'Moo moo!'},{name:'Duck',emoji:'🦆',sound:'Quack quack!'},{name:'Lion',emoji:'🦁',sound:'Roar!'},{name:'Elephant',emoji:'🐘',sound:'Trumpet!'},{name:'Frog',emoji:'🐸',sound:'Ribbit!'},{name:'Bird',emoji:'🐦',sound:'Tweet tweet!'},{name:'Rabbit',emoji:'🐰',sound:'Squeak!'},{name:'Fish',emoji:'🐠',sound:'Blub blub!'}],
     colors:[{name:'Red',emoji:'🔴',sound:'Red! Like apples!'},{name:'Blue',emoji:'🔵',sound:'Blue! Like the sky!'},{name:'Yellow',emoji:'🟡',sound:'Yellow! Like the sun!'},{name:'Green',emoji:'🟢',sound:'Green! Like grass!'},{name:'Orange',emoji:'🟠',sound:'Orange! Yummy!'},{name:'Purple',emoji:'🟣',sound:'Purple! So pretty!'},{name:'Pink',emoji:'🩷',sound:'Pink! How lovely!'},{name:'White',emoji:'⬜',sound:'White! Like clouds!'}],
     shapes:[{name:'Circle',emoji:'⭕',sound:'Circle! Round and round!'},{name:'Square',emoji:'🟥',sound:'Square! Four sides!'},{name:'Triangle',emoji:'🔺',sound:'Triangle! Three corners!'},{name:'Star',emoji:'⭐',sound:'Star! You are a star!'},{name:'Heart',emoji:'❤️',sound:'Heart! Full of love!'},{name:'Diamond',emoji:'💎',sound:'Diamond! So shiny!'}],
     numbers:[{name:'One',emoji:'1️⃣',sound:'One! Count: 1!'},{name:'Two',emoji:'2️⃣',sound:'Two! 1, 2!'},{name:'Three',emoji:'3️⃣',sound:'Three! 1, 2, 3!'},{name:'Four',emoji:'4️⃣',sound:'Four! Amazing!'},{name:'Five',emoji:'5️⃣',sound:'Five! You did it!'},{name:'Six',emoji:'6️⃣',sound:'Six! Wonderful!'},{name:'Seven',emoji:'7️⃣',sound:'Seven! Great!'},{name:'Eight',emoji:'8️⃣',sound:'Eight! Brilliant!'}]
   },
+
   start(cat){
-    this.category=cat;this.score=0;this.usedItems=new Set();this.questionCount=0;
+    this.category=cat; this.score=0; this.usedItems=new Set(); this.questionCount=0;
     setText('baby-score','0');
     el('baby-categories').classList.add('hidden');
     el('baby-activity').classList.remove('hidden');
     const labels={animals:'Animals 🐾',colors:'Colors 🎨',shapes:'Shapes 🔷',numbers:'Numbers 🔢'};
     setText('baby-screen-title',labels[cat]);
-    this.nextQuestion();
+    SoundSystem.speakBaby(`Let us learn ${cat}! Tap the right one!`);
+    setTimeout(()=>this.nextQuestion(), 1000);
   },
+
   nextQuestion(){
     if(this.questionCount >= this.STAGE_LENGTH){ this.stageComplete(); return; }
     const items=this.content[this.category];
@@ -5573,33 +5757,65 @@ const BabyMode = {
     this.current=correct;
     const others=items.filter(i=>i.name!==correct.name).sort(()=>Math.random()-0.5).slice(0,3);
     const all=[correct,...others].sort(()=>Math.random()-0.5);
-    const qText={animals:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,colors:`Tap ${correct.name.toUpperCase()}! ${correct.emoji}`,shapes:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,numbers:`Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`};
+    const qText={
+      animals:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
+      colors:`Tap ${correct.name.toUpperCase()}! ${correct.emoji}`,
+      shapes:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
+      numbers:`Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`
+    };
     setText('baby-question',`(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`);
-    SoundSystem.speakBaby(`Tap the ${correct.name}!`);
-    const grid=el('baby-items-grid');grid.innerHTML='';
-    all.forEach(item=>{const btn=document.createElement('button');btn.className='baby-item-btn';btn.innerHTML=`<div class="baby-item-emoji">${item.emoji}</div><div class="baby-item-word">${item.name}</div>`;btn.onclick=()=>this.answer(item,btn);grid.appendChild(btn);});
+
+    // Always read question aloud for babies
+    setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 300);
+
+    // Play animal sound for 0-3
+    if(S.ageGroup === '0-3' && this.category === 'animals') {
+      setTimeout(() => this.playAnimalSound(correct.name), 900);
+    }
+
+    const grid=el('baby-items-grid'); grid.innerHTML='';
+    all.forEach(item=>{
+      const btn=document.createElement('button');
+      btn.className='baby-item-btn';
+      btn.innerHTML=`<div class="baby-item-emoji">${item.emoji}</div><div class="baby-item-word">${item.name}</div>`;
+      btn.onclick=()=>this.answer(item,btn);
+      grid.appendChild(btn);
+    });
   },
+
   answer(item,btn){
     SoundSystem.playTone('tap');
     if(item.name===this.current.name){
-      btn.classList.add('correct-baby');this.score+=10;this.questionCount++;
-      setText('baby-score',this.score);SoundSystem.playTone('correct');
-      SoundSystem.speakBaby(`Yes! ${item.name}! ${item.sound} Amazing!`);
-      this.celebrate(item);setTimeout(()=>this.nextQuestion(),2200);
+      btn.classList.add('correct-baby');
+      this.score+=10;
+      this.questionCount++;
+      setText('baby-score',this.score);
+      SoundSystem.playTone('correct');
+      // Play animal sound on correct for 0-3
+      if(S.ageGroup==='0-3' && this.category==='animals') {
+        setTimeout(()=>this.playAnimalSound(item.name), 100);
+        setTimeout(()=>SoundSystem.speakBaby(`${item.name}! ${item.sound} Well done!`), 400);
+      } else {
+        SoundSystem.speakBaby(`Yes! ${item.name}! ${item.sound} Amazing!`);
+      }
+      this.celebrate(item);
+      setTimeout(()=>this.nextQuestion(), 2200);
     } else {
-      btn.classList.add('wrong-baby');SoundSystem.playTone('wrong');
+      btn.classList.add('wrong-baby');
+      SoundSystem.playTone('wrong');
       SoundSystem.speakBaby(`Try again! Find the ${this.current.name}!`);
       setTimeout(()=>btn.classList.remove('wrong-baby'),600);
     }
   },
+
   stageComplete(){
     SoundSystem.playTone('celebrate');
-    SoundSystem.speakBaby('Amazing! You finished! You are so smart!');
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 300);
     const cat=this.category;
-    const div=document.createElement('div');div.className='baby-celebrate';div.style.zIndex='99999';
+    const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
     div.innerHTML=`<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;">
       <span class="baby-celebrate-emoji">🏆</span>
-      <div class="baby-celebrate-text">Amazing! All Done! 🎉</div>
+      <div class="baby-celebrate-text">Stage Complete! 🎉</div>
       <div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: ${this.score} ⭐</div>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
         <button onclick="this.closest('.baby-celebrate').remove();BabyMode.start('${cat}')" style="background:rgba(255,255,255,0.25);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.4);cursor:pointer;">▶️ Play Again</button>
@@ -5607,10 +5823,32 @@ const BabyMode = {
       </div>
     </div>`;
     document.body.appendChild(div);
+    // Auto advance to next category after 5 seconds for 0-3
+    if(S.ageGroup === '0-3') {
+      const categories = ['animals','colors','shapes','numbers'];
+      const nextCat = categories[(categories.indexOf(cat)+1) % categories.length];
+      setTimeout(()=>{
+        div.remove();
+        SoundSystem.speakBaby(`Now let us try ${nextCat}!`);
+        setTimeout(()=>this.start(nextCat), 1200);
+      }, 5000);
+    }
   },
-  celebrate(item){const div=document.createElement('div');div.className='baby-celebrate';div.innerHTML=`<div class="baby-celebrate-inner"><span class="baby-celebrate-emoji">${item.emoji}</span><div class="baby-celebrate-text">⭐ ${item.name}! ⭐</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin-top:7px;">${item.sound}</div></div>`;document.body.appendChild(div);SoundSystem.playTone('celebrate');setTimeout(()=>div.remove(),1800);},
-  backToCategories(){el('baby-categories').classList.remove('hidden');el('baby-activity').classList.add('hidden');}
+
+  celebrate(item){
+    const div=document.createElement('div'); div.className='baby-celebrate';
+    div.innerHTML=`<div class="baby-celebrate-inner"><span class="baby-celebrate-emoji">${item.emoji}</span><div class="baby-celebrate-text">⭐ ${item.name}! ⭐</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin-top:7px;">${item.sound}</div></div>`;
+    document.body.appendChild(div);
+    SoundSystem.playTone('celebrate');
+    setTimeout(()=>div.remove(),1800);
+  },
+
+  backToCategories(){
+    el('baby-categories').classList.remove('hidden');
+    el('baby-activity').classList.add('hidden');
+  }
 };
+
 // ── PEP MODULE (AI-powered) ──────────────────────────────────
 const PEP = {
   async openSubject(subject) {
