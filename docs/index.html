@@ -2065,7 +2065,9 @@ const SoundSystem = {
   playTone(type) {
     if(!this.enabled)return;
     try{
-      const ctx=new(window.AudioContext||window.webkitAudioContext)();
+      if(!this._toneCtx||this._toneCtx.state==='closed') this._toneCtx=new(window.AudioContext||window.webkitAudioContext)();
+      if(this._toneCtx.state==='suspended') this._toneCtx.resume();
+      const ctx=this._toneCtx;
       const osc=ctx.createOscillator();const gain=ctx.createGain();
       osc.connect(gain);gain.connect(ctx.destination);
       if(type==='correct'){osc.frequency.setValueAtTime(523,ctx.currentTime);osc.frequency.setValueAtTime(659,ctx.currentTime+0.1);osc.frequency.setValueAtTime(784,ctx.currentTime+0.2);gain.gain.setValueAtTime(0.3,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.5);}
@@ -5635,7 +5637,12 @@ const BabyMode = {
   // Real animal sounds using Web Audio API (synthesised tones that mimic animals)
   playAnimalSound(animalName) {
     try {
-      const ctx = new(window.AudioContext||window.webkitAudioContext)();
+      // Reuse single AudioContext — creating new ones each time causes volume buildup
+      if(!this._audioCtx || this._audioCtx.state === 'closed') {
+        this._audioCtx = new(window.AudioContext||window.webkitAudioContext)();
+      }
+      if(this._audioCtx.state === 'suspended') this._audioCtx.resume();
+      const ctx = this._audioCtx;
       const sounds = {
         'Dog':     ()=>this._bark(ctx),
         'Cat':     ()=>this._meow(ctx),
@@ -5708,7 +5715,7 @@ const BabyMode = {
     for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.sin(i/ctx.sampleRate*200*Math.PI*2)*Math.exp(-i/(ctx.sampleRate*0.4));
     const s=ctx.createBufferSource(); s.buffer=buf;
     const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=400;
-    const g=ctx.createGain(); g.gain.value=0.8;
+    const g=ctx.createGain(); g.gain.value=0.25;
     s.connect(f); f.connect(g); g.connect(ctx.destination);
     s.start();
   },
@@ -5858,30 +5865,35 @@ const BabyMode = {
   },
 
   stageComplete(){
+    SoundSystem.stop();
     SoundSystem.playTone('celebrate');
-    setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 300);
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 400);
     const cat=this.category;
+    const categories = ['animals','colors','shapes','numbers'];
+    const nextCat = categories[(categories.indexOf(cat)+1) % categories.length];
     const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
     div.innerHTML=`<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;">
       <span class="baby-celebrate-emoji">🏆</span>
       <div class="baby-celebrate-text">Stage Complete! 🎉</div>
       <div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: ${this.score} ⭐</div>
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
-        <button onclick="this.closest('.baby-celebrate').remove();BabyMode.start('${cat}')" style="background:rgba(255,255,255,0.25);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.4);cursor:pointer;">▶️ Play Again</button>
-        <button onclick="this.closest('.baby-celebrate').remove();BabyMode.backToCategories()" style="background:rgba(255,255,255,0.25);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.4);cursor:pointer;">🏠 Categories</button>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-bottom:14px;">Great job learning ${cat}!</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="this.closest('.baby-celebrate').remove();BabyMode.start('${nextCat}')"
+          style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.2);">
+          ▶️ Next: ${nextCat.charAt(0).toUpperCase()+nextCat.slice(1)}
+        </button>
+        <button onclick="this.closest('.baby-celebrate').remove();BabyMode.start('${cat}')"
+          style="background:rgba(255,255,255,0.2);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">
+          🔄 Play Again
+        </button>
+        <button onclick="this.closest('.baby-celebrate').remove();BabyMode.backToCategories()"
+          style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);font-family:'Fredoka One',cursive;font-size:0.85rem;padding:10px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">
+          🏠 Menu
+        </button>
       </div>
     </div>`;
     document.body.appendChild(div);
-    // Auto advance to next category after 5 seconds for 0-3
-    if(S.ageGroup === '0-3') {
-      const categories = ['animals','colors','shapes','numbers'];
-      const nextCat = categories[(categories.indexOf(cat)+1) % categories.length];
-      setTimeout(()=>{
-        div.remove();
-        SoundSystem.speakBaby(`Now let us try ${nextCat}!`);
-        setTimeout(()=>this.start(nextCat), 1200);
-      }, 5000);
-    }
+    // NO auto-advance — parent/child presses button to continue
   },
 
   celebrate(item){
