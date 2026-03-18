@@ -500,7 +500,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   </div>
   <div class="header-btns">
     <button id="btn-login" class="btn btn-outline" onclick="App.showScreen('screen-auth')">Log In</button>
-    <button id="btn-signup" class="btn btn-outline" onclick="App.showScreen('screen-auth','signup')">Sign Up</button>
+    <button id="btn-signup" class="btn btn-outline" style="background:linear-gradient(135deg,#7928CA,#FF0080);color:#fff;border:none;" onclick="App.showScreen('screen-auth','signup')">Sign Up Free ✨</button>
     <button id="btn-dashboard" class="btn btn-glow hidden" onclick="App.showScreen('screen-dashboard')">🏆 My Progress</button>
     <button id="btn-parent" class="btn btn-green hidden" onclick="App.showScreen('screen-parent')">👨‍👩‍👧 Parent View</button>
     <button id="btn-family" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);" onclick="App.showScreen('screen-family')">👨‍👩‍👧 Family</button>
@@ -509,9 +509,9 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#7928CA,#FF0080);" onclick="App.showScreen('screen-shop')">🛍️📖✨ Samara Edu Store</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#4A90D9,#7928CA);" onclick="App.showScreen('screen-learn')">📚 Learn</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#302b63,#6BCB77);" onclick="App.showScreen('screen-getapp')">📲 Get the App</button>
-    <button class="btn btn-primary" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="App.showScreen('screen-research')">🔭 Research</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);" onclick="App.requireSignup('Research Anything','🔭','Create a free account to ask Samara about any topic — black holes, history, science and more!')?App.showScreen('screen-research'):null">🔭 Research</button>
     <button id="btn-homework" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);" onclick="App.showScreen('screen-homework')">📸 Homework Help</button>
-    <button class="btn btn-primary" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);" onclick="App.showScreen('screen-coinshop')">🪙 Coin Shop</button>
+    <button class="btn btn-primary" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);" onclick="App.requireSignup('Samara Coins & Shop','🪙','Create a free account to earn coins, unlock themes and save your rewards!')?App.showScreen('screen-coinshop'):null">🪙 Coin Shop</button>
     <button id="btn-studyplan" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="PersonalAlgo.openPlan()">🧠 My Plan</button>
     <button class="btn btn-gold" onclick="App.showScreen('screen-pricing')">⭐ Go Pro</button>
     <button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
@@ -1669,9 +1669,9 @@ const Plan = {
   useAIQuestion() { if (!this.isPro()) this._bump('aiQuestions'); },
 
   canUsePEPSubject(subjectIndex) {
-    if (this.isPro()) return { ok:true };
-    if (subjectIndex === 0) return { ok:true };
-    return { ok:false, msg:`Full PEP Jamaica prep is a Pro feature! 🇯🇲` };
+    // PEP is FREE for all users — it's our biggest differentiator
+    // AI features (Research, Chat, Homework) are what require Pro
+    return { ok:true };
   },
 
   getUsageSummary() {
@@ -2179,6 +2179,17 @@ const AITutor = {
   // ★ SMART AI — hook model: free users get 3/day, then warm upgrade
   async sendMessage() {
     const inp=document.getElementById('ai-chat-input');const txt=inp?.value.trim();if(!txt)return;
+
+    // ── SIGNUP GATE for AI chat ──
+    if(!S.user) {
+      if(inp) inp.value = '';
+      App.requireSignup(
+        'Sign Up to Chat with Samara!',
+        '💬',
+        'Create your free account to chat with Samara AI, ask any question and get personalised help across every subject.'
+      );
+      return;
+    }
 
     // Check daily AI chat limit
     const canChat = Plan.canUseAIChat();
@@ -3072,6 +3083,19 @@ const App = {
   },
 
   showScreen(id, param) {
+    // ── SIGNUP GATES — prompt login for protected features ──
+    const gates = {
+      'screen-research':  ['🔭 Research Anything', '🔭', 'Ask Samara to explain any topic — black holes, history, science and more. Save your progress and access your research history.'],
+      'screen-homework':  ['📸 Homework Helper',   '📸', 'Take a photo of any homework question and Samara will explain how to solve it step by step.'],
+      'screen-family':    ['👨‍👩‍👧 Family Mode',     '👨‍👩‍👧', 'Create up to 4 child profiles under one account. Each child gets their own progress, coins and age-appropriate content.'],
+      'screen-dashboard': ['🏆 My Progress',       '🏆', 'Track your learning progress across every subject. See your scores, streaks and personalised study plan.'],
+      'screen-coinshop':  ['🪙 Coin Shop',          '🪙', 'Earn coins by completing stages and spend them on themes, avatar outfits and special effects. Save your coins across sessions.'],
+    };
+    if(gates[id] && !S.user) {
+      const [name, icon, desc] = gates[id];
+      App.requireSignup(name, icon, desc);
+      return;
+    }
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     const sc=el(id);if(!sc)return;
     sc.classList.add('active');window.scrollTo(0,0);
@@ -3080,7 +3104,10 @@ const App = {
     if(id==='screen-dashboard')App.renderDash();
     if(id==='screen-parent')App.renderParent();  // open to all — upsell inside
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
-    if(id==='screen-research')setTimeout(()=>{try{Research.init();}catch(e){console.error('Research init error:',e);}},100);
+    if(id==='screen-research')setTimeout(()=>{
+      if(!S.user){ App.requireSignup('Research Anything!','🔭','Create your free account to explore any topic with Samara as your personal AI tutor!'); App.showScreen('screen-home'); return; }
+      try{Research.init();}catch(e){console.error('Research init error:',e);}
+    },100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos') Videos.init();
     if(id==='screen-learn') setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
@@ -3136,7 +3163,10 @@ const App = {
   searchTopic() {
     try {
       const v=el('topic-input')?.value.trim();if(!v){App.toast('Type a topic first! 🔍');return;}
-      // Route to research screen — works for all users now
+      // Gate Research for non-logged-in users
+      if(!S.user) {
+        if(!App.requireSignup('Research Anything with Samara!','🔭','Create your free account to explore any topic — science, history, maths and more — with Samara as your personal tutor!')) return;
+      }
       const inp=document.getElementById('research-input');if(inp)inp.value=v;
       App.showScreen('screen-research');setTimeout(()=>{ try{Research.search();}catch(e){console.error('Research error:',e);} },300);
     } catch(e) {
@@ -3201,7 +3231,23 @@ const App = {
   },
 
   async startStage(idx, world) {
-    // Check daily quiz limit
+    // ── SIGNUP GATE for non-logged-in users ──
+    // Allow 3 free quiz questions to taste, then prompt signup
+    if(!S.user) {
+      const freeUsed = parseInt(localStorage.getItem('samara_free_quiz_used')||'0');
+      if(freeUsed >= 5) {
+        App.requireSignup(
+          'You\'re loving Samara AI! 🌟',
+          '🎯',
+          'You\'ve completed your 5 free taster questions! Create your free account to unlock 10 quizzes per day, save your progress, earn Samara Coins and access the full platform — completely free!'
+        );
+        return;
+      }
+      // Show a subtle counter so they know how many free goes remain
+      if(freeUsed >= 3) App.toast(`${5 - freeUsed} free question${5-freeUsed===1?'':'s'} remaining — sign up for free to unlock more! 🎯`, 3500);
+      localStorage.setItem('samara_free_quiz_used', freeUsed + 1);
+    }
+    // Check daily quiz limit (for logged-in free users)
     const canQuiz = Plan.canStartQuiz();
     if(!canQuiz.ok){
       // Warm upgrade prompt — not a hard wall
@@ -3464,8 +3510,17 @@ const App = {
   },
 
   async logout(){
-    try { await DB.client.auth.signOut(); } catch(e) { console.log('signOut error:', e); }
-    // Clear all local state
+    // Clear Supabase session from localStorage first
+    try {
+      Object.keys(localStorage).forEach(k => {
+        if(k.startsWith('sb-') || k.toLowerCase().includes('supabase')) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch(e) {}
+    // Sign out from Supabase
+    try { await DB.client.auth.signOut(); } catch(e) {}
+    // Clear all app state
     S.user = null;
     S.score = 0;
     S.progress = [];
@@ -3474,16 +3529,9 @@ const App = {
     S.stageIndex = null;
     S.questions = [];
     S.ageGroup = '7-10';
-    // Clear any stored session
-    try {
-      Object.keys(localStorage).forEach(k => {
-        if(k.startsWith('sb-') || k.includes('supabase')) localStorage.removeItem(k);
-      });
-    } catch(e) {}
-    App.updateAuth();
-    App.renderSubjects();
-    App.showScreen('screen-home');
-    App.toast('Logged out! See you soon 👋');
+    // Force a clean page reload — guarantees everything is reset
+    App.toast('Logging out... 👋');
+    setTimeout(() => window.location.reload(), 800);
   },
 
   async renderDash(){
@@ -3566,7 +3614,41 @@ const App = {
   },
   stagesDone(sid,wid){let c=0;for(let s=1;s<=SPW;s++){if(S.progress.find(p=>p.subject===sid&&p.world===wid&&p.stage===s&&p.completed))c++;}return c;},
   updateScores(){['worlds-score','stages-score','quiz-score'].forEach(id=>{const e=el(id);if(e)e.textContent=S.score;});},
-  toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);}
+  toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);},
+
+  // ── SIGNUP GATE ──────────────────────────────────────────────
+  requireSignup(featureName, icon, description) {
+    if(S.user) return true;
+    // Remove any existing popup
+    document.getElementById('signup-gate-popup')?.remove();
+    const div = document.createElement('div');
+    div.id = 'signup-gate-popup';
+    div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    div.innerHTML = `
+      <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:32px 28px;max-width:400px;width:100%;text-align:center;border:2px solid rgba(199,125,255,0.4);position:relative;">
+        <button onclick="document.getElementById('signup-gate-popup').remove()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:1rem;">✕</button>
+        <div style="font-size:3.2rem;margin-bottom:10px;">${icon}</div>
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.5rem;margin-bottom:8px;">${featureName}</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.88rem;margin-bottom:18px;line-height:1.6;">${description}</div>
+        <!-- What you get free -->
+        <div style="background:rgba(107,203,119,0.12);border-radius:14px;padding:12px 16px;margin-bottom:16px;border:1px solid rgba(107,203,119,0.25);text-align:left;">
+          <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:0.85rem;margin-bottom:8px;">✅ FREE account includes:</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.8rem;line-height:1.8;">
+            🎯 10 quizzes per day · 🇯🇲 Full PEP access<br>
+            💬 3 AI chat messages · 🔭 1 Research topic<br>
+            🪙 Earn & save Samara Coins · 🏆 Progress tracking<br>
+            📚 Full Learn library · 🏠 Playhouse & Baby World
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button onclick="document.getElementById('signup-gate-popup').remove();App.showScreen('screen-auth','signup')" style="background:linear-gradient(135deg,#7928CA,#FF0080);color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;padding:14px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(121,40,202,0.4);">✨ Create Free Account — No Card Needed</button>
+          <button onclick="document.getElementById('signup-gate-popup').remove();App.showScreen('screen-auth','login')" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:11px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">Already have an account? Log In</button>
+        </div>
+        <div style="margin-top:12px;color:rgba(255,255,255,0.4);font-size:0.72rem;">Free forever · Upgrade to Pro anytime for unlimited access</div>
+      </div>`;
+    document.body.appendChild(div);
+    return false;
+  },
 };
 
 // ── TRACE & MATCH ────────────────────────────────────────────
