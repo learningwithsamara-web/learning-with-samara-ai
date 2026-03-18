@@ -5439,57 +5439,51 @@ const ReviewSystem = {
   // Load approved reviews from Supabase
   async loadReviews() {
     const grid = document.getElementById('reviews-grid');
-    if(!grid) { console.warn('[Reviews] grid element not found'); return; }
-    // Show static reviews immediately
+    if(!grid) return;
+    // Always show static reviews first
     grid.innerHTML = this._staticReviews();
     try {
-      console.log('[Reviews] fetching from Supabase...');
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=20`, {
-        headers: {
-          'apikey': SUPABASE_ANON,
-          'Authorization': `Bearer ${SUPABASE_ANON}`
-        }
+        headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
       });
       const data = await res.json();
-      console.log('[Reviews] response:', data, 'count:', data?.length);
+      if(!data || !Array.isArray(data) || data.length === 0) return;
 
-      if(!data || data.length === 0) {
-        console.log('[Reviews] no approved reviews yet — keeping static');
-        return;
-      }
-
-      // Update count
+      // Update count — live + static combined
       const countEl = document.getElementById('review-count');
-      if(countEl) countEl.textContent = data.length + '+';
+      if(countEl) countEl.textContent = (data.length + 6) + '+';
 
-      // Replace with live reviews
-      grid.innerHTML = data.map(r => {
-        const stars = '⭐'.repeat(Math.min(r.stars, 5));
+      // Build live cards
+      const liveCards = data.map(r => {
+        const stars = '\u2B50'.repeat(Math.min(r.stars, 5));
         const ago = this._timeAgo(r.created_at);
-        const avatars = ['👩🏾','👨🏾','👩🏽','👨🏿','👩🏻','👨🏽','👩🏿','👨🏻'];
-        const avatar = avatars[r.id % avatars.length] || '👩🏾';
-        return `
-          <div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:18px;border:1.5px solid rgba(255,255,255,0.1);">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-              <div style="font-size:2rem;">${avatar}</div>
-              <div style="flex:1;">
-                <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div>
-                <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location||'Samara AI Family'}</div>
-              </div>
-              <div style="text-align:right;">
-                <div style="color:#FFD93D;font-size:0.85rem;">${stars}</div>
-                <div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${ago}</div>
-              </div>
+        const avatars = ['\uD83D\uDC69\uD83C\uDFFE','\uD83D\uDC68\uD83C\uDFFE','\uD83D\uDC69\uD83C\uDFFD','\uD83D\uDC68\uD83C\uDFFF','\uD83D\uDC69\uD83C\uDFFB','\uD83D\uDC68\uD83C\uDFFD'];
+        const avatar = avatars[r.id % avatars.length] || avatars[0];
+        return `<div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:18px;border:1.5px solid rgba(255,255,255,0.1);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="font-size:2rem;">${avatar}</div>
+            <div style="flex:1;">
+              <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div>
+              <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location||'Samara AI Family'}</div>
             </div>
-            ${r.feature?`<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>`:''}
-            <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div>
-          </div>`;
+            <div style="text-align:right;">
+              <div style="color:#FFD93D;font-size:0.85rem;">${stars}</div>
+              <div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${ago}</div>
+            </div>
+          </div>
+          ${r.feature?`<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>`:''}
+          <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div>
+        </div>`;
       }).join('');
-      console.log('[Reviews] rendered', data.length, 'live reviews');
+
+      // COMBINE: new live reviews on top + original static reviews below
+      grid.innerHTML = liveCards + this._staticReviews();
     } catch(e) {
-      console.error('[Reviews] error:', e);
+      console.error('[Reviews]', e);
+      // Static reviews already showing — no action needed
     }
   },
+
 
   _timeAgo(dateStr) {
     const diff = Date.now() - new Date(dateStr).getTime();
