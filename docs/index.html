@@ -577,6 +577,11 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.4rem;margin-bottom:4px;">⭐ What Families Are Saying</div>
     <div style="color:rgba(255,255,255,0.65);font-size:0.85rem;">Real reviews from real families using Samara AI</div>
   </div>
+  <!-- Leave a review -->
+  <div style="text-align:center;">
+    <button onclick="ReviewSystem.openForm()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:11px 24px;border-radius:50px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(255,155,63,0.4);">⭐ Share Your Review</button>
+  </div>
+</div>
   <!-- Star rating summary -->
   <div style="background:rgba(255,255,255,0.07);border-radius:20px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;border:1.5px solid rgba(255,217,61,0.2);">
     <div style="text-align:center;">
@@ -3313,6 +3318,7 @@ const App = {
     },100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos') Videos.init();
+    if(id==='screen-home') setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },500);
     if(id==='screen-learn') setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
@@ -5486,6 +5492,91 @@ const LearnDB = {
 const ReviewSystem = {
   selectedStars: 0,
 
+  // Load approved reviews from Supabase
+  async loadReviews() {
+    const grid = document.getElementById('reviews-grid');
+    if(!grid) return;
+    try {
+      const { data, error } = await DB.client
+        .from('reviews')
+        .select('*')
+        .eq('approved', true)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if(error) throw error;
+
+      if(!data || data.length === 0) {
+        // No approved reviews yet — show static fallback cards
+        grid.innerHTML = this._staticReviews();
+        return;
+      }
+
+      // Update review count
+      const countEl = document.getElementById('review-count');
+      if(countEl) countEl.textContent = data.length + '+';
+
+      // Render dynamic reviews
+      grid.innerHTML = data.map(r => {
+        const stars = '⭐'.repeat(r.stars);
+        const ago = this._timeAgo(r.created_at);
+        const avatars = ['👩🏾','👨🏾','👩🏽','👨🏿','👩🏻','👨🏽','👩🏿','👨🏻'];
+        const avatar = avatars[r.id % avatars.length] || '👩🏾';
+        return `
+          <div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:18px;border:1.5px solid rgba(255,255,255,0.1);">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <div style="font-size:2rem;">${avatar}</div>
+              <div style="flex:1;">
+                <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div>
+                <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location || 'Samara AI Family'}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="color:#FFD93D;font-size:0.85rem;">${stars}</div>
+                <div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${ago}</div>
+              </div>
+            </div>
+            ${r.feature ? `<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>` : ''}
+            <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div>
+          </div>`;
+      }).join('');
+
+    } catch(e) {
+      // Fallback to static on error
+      grid.innerHTML = this._staticReviews();
+    }
+  },
+
+  _timeAgo(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const days = Math.floor(diff / 86400000);
+    if(days < 1) return 'Today';
+    if(days === 1) return '1 day ago';
+    if(days < 7) return `${days} days ago`;
+    if(days < 30) return `${Math.floor(days/7)} week${Math.floor(days/7)>1?'s':''} ago`;
+    if(days < 365) return `${Math.floor(days/30)} month${Math.floor(days/30)>1?'s':''} ago`;
+    return `${Math.floor(days/365)} year${Math.floor(days/365)>1?'s':''} ago`;
+  },
+
+  _staticReviews() {
+    return [
+      {name:'Kezia M.',location:'Kingston, Jamaica',stars:5,feature:'PEP Prep',text:'My daughter went from struggling with PEP maths to getting top marks! Samara explains everything so clearly and she actually enjoys studying now.',avatar:'👩🏾',ago:'2 weeks ago'},
+      {name:'Shanique R.',location:'London, UK',stars:5,feature:'Family Mode',text:'Three kids, three different ages — Samara works perfectly for all of them! The family mode is genius. Worth every penny.',avatar:'👩🏾',ago:'3 weeks ago'},
+      {name:'Marcus B.',location:'Toronto, Canada',stars:5,feature:'Algebra',text:'My teenager actually asked to do extra maths because of Samara AI. I never thought I would say that!',avatar:'👨🏿',ago:'1 week ago'},
+      {name:'Natalie C.',location:'Barbados',stars:5,feature:'Homework Helper',text:'The homework helper is a game changer! My daughter takes a photo and Samara walks her through it step by step.',avatar:'👩🏽',ago:'2 months ago'},
+      {name:'Simone W.',location:'Trinidad',stars:5,feature:'Baby World',text:'My 2-year-old points at the screen and says animal names! The visual learning really works for toddlers.',avatar:'👩🏾',ago:'2 weeks ago'},
+      {name:'Lisa-Ann K.',location:'Montego Bay, Jamaica',stars:5,feature:'Samara Coins',text:'My kids are obsessed with earning coins and unlocking new themes! They ask to do extra quizzes just to earn more coins.',avatar:'👩🏾',ago:'3 days ago'},
+    ].map(r => `
+      <div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:18px;border:1.5px solid rgba(255,255,255,0.1);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="font-size:2rem;">${r.avatar}</div>
+          <div style="flex:1;"><div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div><div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location}</div></div>
+          <div style="text-align:right;"><div style="color:#FFD93D;font-size:0.85rem;">${'⭐'.repeat(r.stars)}</div><div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${r.ago}</div></div>
+        </div>
+        <div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>
+        <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.text}"</div>
+      </div>`).join('');
+  },
+
   openForm() {
     this.selectedStars = 0;
     document.getElementById('review-popup')?.remove();
@@ -5610,48 +5701,57 @@ const ReviewSystem = {
     try { SoundSystem.playTone('tap'); } catch(e){}
   },
 
-  submit() {
+  async submit() {
     const stars = this.selectedStars;
     const name = document.getElementById('review-name')?.value.trim() || 'Anonymous';
     const location = document.getElementById('review-location')?.value.trim() || '';
     const feature = document.getElementById('review-feature')?.value || '';
     const text = document.getElementById('review-text')?.value.trim();
     const err = document.getElementById('review-err');
+    const btn = document.getElementById('review-submit-btn');
 
     if(!stars) { if(err) err.textContent = 'Please tap a star to rate us!'; return; }
     if(!text || text.length < 10) { if(err) err.textContent = 'Please write at least 10 characters!'; return; }
     if(err) err.textContent = '';
 
-    const starStr = '⭐'.repeat(stars);
-    const subjectLine = `${starStr} ${stars}-Star Review from ${name} — Samara AI`;
-    const body = [
-      `Name: ${name}`,
-      `Location: ${location || 'Not provided'}`,
-      `Stars: ${stars}/5 ${starStr}`,
-      feature ? `Favourite feature: ${feature}` : '',
-      ``,
-      `Review:`,
-      text,
-      ``,
-      `---`,
-      `Submitted via ai.learningwithsamara.com`
-    ].filter(l=>l!==null).join('\n');
+    // Disable button while saving
+    if(btn) { btn.textContent = 'Submitting...'; btn.disabled = true; }
 
-    const mailtoLink = `mailto:edu@learningwithsamara.com?subject=${encodeURIComponent(subjectLine)}&body=${encodeURIComponent(body)}`;
+    try {
+      // Save to Supabase reviews table
+      const { error } = await DB.client.from('reviews').insert({
+        name: name,
+        location: location,
+        stars: stars,
+        feature: feature,
+        review_text: text,
+        approved: false // you approve in Supabase dashboard
+      });
 
-    // Show thank you screen
-    const inner = document.querySelector('#review-popup > div');
-    if(inner) {
-      inner.innerHTML = `
-        <div style="text-align:center;padding:20px 10px;">
-          <div style="font-size:3.8rem;margin-bottom:12px;">${stars===5?'🏆':stars>=4?'🌟':'⭐'}</div>
-          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;margin-bottom:8px;">Thank You! 💛</div>
-          <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;line-height:1.7;margin-bottom:20px;">Your ${stars}-star review means everything to us!<br>Click the button below to send it to our team.</div>
-          <a href="${mailtoLink}" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:13px 28px;border-radius:50px;text-decoration:none;display:inline-block;box-shadow:0 6px 20px rgba(255,155,63,0.4);margin-bottom:12px;">📧 Send My Review</a>
-          <br>
-          <button onclick="document.getElementById('review-popup').remove()" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.85rem;padding:9px 22px;border-radius:50px;border:1px solid rgba(255,255,255,0.15);cursor:pointer;">Close</button>
-        </div>`;
-      try { SoundSystem.playTone('celebrate'); } catch(e){}
+      if(error) throw error;
+
+      // Show thank you screen
+      const inner = document.querySelector('#review-popup > div');
+      if(inner) {
+        inner.innerHTML = `
+          <div style="text-align:center;padding:28px 16px;">
+            <div style="font-size:3.8rem;margin-bottom:12px;">${stars===5?'🏆':stars>=4?'🌟':'⭐'}</div>
+            <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;margin-bottom:8px;">Thank You ${name}! 💛</div>
+            <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;line-height:1.7;margin-bottom:10px;">Your ${stars}-star review has been submitted successfully!</div>
+            <div style="background:rgba(107,203,119,0.15);border-radius:14px;padding:12px 16px;margin-bottom:18px;border:1px solid rgba(107,203,119,0.3);">
+              <div style="color:#6BCB77;font-size:0.82rem;line-height:1.6;">✅ Your review is now in our system.<br>Once approved by our team it will appear on the platform for other families to see!</div>
+            </div>
+            <div style="font-size:1.5rem;margin-bottom:14px;">${'⭐'.repeat(stars)}</div>
+            <button onclick="document.getElementById('review-popup').remove()" style="background:linear-gradient(135deg,#7928CA,#FF0080);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:11px 28px;border-radius:50px;border:none;cursor:pointer;">Done 🎉</button>
+          </div>`;
+        try { SoundSystem.playTone('celebrate'); } catch(e){}
+      }
+
+    } catch(e) {
+      // Fallback to email if Supabase fails
+      console.error('Review save error:', e);
+      if(btn) { btn.textContent = '⭐ Submit Review'; btn.disabled = false; }
+      if(err) err.textContent = 'Could not save — please try again or email us directly.';
     }
   }
 };
