@@ -7171,6 +7171,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     SamaraCoins.init();
     CoinShop.init();
     FamilyMode.init();
+    // Load reviews on boot so they always show
+    setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },800);
   }catch(e){console.error('Boot error:',e);}
 });
 </script>
