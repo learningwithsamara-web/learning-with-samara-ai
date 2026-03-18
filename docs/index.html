@@ -1879,7 +1879,9 @@ const Payments = {
   DESCRIPTIONS: {
     monthly: 'Unlimited quizzes · Full AI tutor · All subjects · PEP Jamaica · Parent dashboard',
     annual:  'Everything in Monthly · Save $29.88/yr · Best value for families',
-    family:  'Up to 4 children · All Pro features · One parent dashboard · $7.99/month total',
+    monthly: 'Unlimited quizzes · AI chat · Research · Homework Helper · 2 child profiles · $4.99/month',
+    annual:  'Everything in monthly · Save 50% · 2 child profiles · $29.99/year',
+    family:  'Up to 4 child profiles · All Pro features · One parent dashboard · $7.99/month total',
   },
 
   checkout(plan) {
@@ -3221,6 +3223,11 @@ const S = {user:null,score:0,progress:[],ageGroup:'7-10',subject:null,worldIndex
 const App = {
   async init() {
     DB.init();SoundSystem.init();
+    // Generate a unique device ID for this browser/device
+    if(!localStorage.getItem('samara_device_id')) {
+      localStorage.setItem('samara_device_id', 'dev_' + Date.now() + '_' + Math.random().toString(36).slice(2,9));
+    }
+    this._deviceId = localStorage.getItem('samara_device_id');
     DB.client.auth.onAuthStateChange(async(ev,sess)=>{S.user=sess?.user||null;App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);}});
     try{S.user=await DB.getUser();App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);}}catch(e){}
     App.renderSubjects();Avatars.loadSaved();
@@ -3769,7 +3776,15 @@ const App = {
       msg.textContent='Logging in...';
       const{data,error}=await DB.login(email,pw);
       if(error){msg.textContent=error.message;msg.classList.add('error');}
-      else{S.user=data.user;S.progress=await DB.loadProgress();App.updateAuth();App.toast('Welcome back! 🌟');App.showScreen('screen-home');}
+      else{
+        S.user=data.user;
+        S.progress=await DB.loadProgress();
+        App.updateAuth();
+        // Record this device session — helps detect sharing
+        App._recordDeviceSession(data.user.id);
+        App.toast('Welcome back! 🌟');
+        App.showScreen('screen-home');
+      }
     }
   },
 
@@ -3880,7 +3895,46 @@ const App = {
   updateScores(){['worlds-score','stages-score','quiz-score'].forEach(id=>{const e=el(id);if(e)e.textContent=S.score;});},
   toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);},
 
-  // ── SIGNUP GATE ──────────────────────────────────────────────
+  // ── DEVICE SESSION TRACKING (prevents account sharing) ────
+  _recordDeviceSession(userId) {
+    if(!userId) return;
+    const deviceId = this._deviceId || localStorage.getItem('samara_device_id');
+    const sessionKey = `samara_session_${userId}`;
+    const now = Date.now();
+    // Save this device + timestamp
+    try {
+      const sessions = JSON.parse(localStorage.getItem(sessionKey)||'{}');
+      sessions[deviceId] = now;
+      // Keep only sessions active in last 24 hours
+      Object.keys(sessions).forEach(k => { if(now - sessions[k] > 86400000) delete sessions[k]; });
+      localStorage.setItem(sessionKey, JSON.stringify(sessions));
+      // Save to Supabase for cross-device tracking
+      DB.client.from('device_sessions').upsert({
+        user_id: userId,
+        device_id: deviceId,
+        last_seen: new Date().toISOString(),
+        user_agent: navigator.userAgent.slice(0,100)
+      }, { onConflict: 'user_id,device_id' }).catch(()=>{});
+    } catch(e) {}
+  },
+
+  // Check if too many devices are using this account simultaneously
+  async _checkConcurrentSessions(userId) {
+    if(!userId || Plan.isRealPro()) return true; // Pro users get more leniency
+    try {
+      const { data } = await DB.client.from('device_sessions')
+        .select('device_id, last_seen')
+        .eq('user_id', userId)
+        .gte('last_seen', new Date(Date.now() - 3600000).toISOString()); // active in last hour
+      if(data && data.length > 3) {
+        // More than 3 different devices active in last hour — flag it
+        console.warn('[Security] Multiple devices detected:', data.length);
+        // Soft limit — show a warning but don't lock out
+        App.toast('⚠️ Your account is active on multiple devices.', 4000);
+      }
+    } catch(e) {}
+    return true;
+  },
   requireSignup(featureName, icon, description) {
     if(S.user) return true;
     // Remove any existing popup
@@ -4291,6 +4345,14 @@ window.SamaraCoins = SamaraCoins;
 // ── FAMILY MODE ───────────────────────────────────────────────
 const FamilyMode = {
   MAX_CHILDREN: 4,
+
+  // Get the child limit based on current plan
+  getChildLimit() {
+    const plan = localStorage.getItem('samara_plan') || 'monthly';
+    if(plan === 'family') return 4;        // $7.99 family plan
+    if(Plan.isPro()) return 2;             // $4.99 monthly/annual pro
+    return 0;                              // free — no family mode
+  },
   AVATARS: ['🦁','🐰','🦊','🐼','🐨','🦋','🐸','⭐','🦄','🐶'],
   COLORS: ['#FF6B6B','#FFD93D','#6BCB77','#7EC8E3','#C77DFF','#FF9B3F','#FF0080','#4A90D9'],
 
@@ -4317,8 +4379,33 @@ const FamilyMode = {
 
   addChild(name, age, avatar, color) {
     const profiles = this.getProfiles();
-    if(profiles.length >= this.MAX_CHILDREN) {
-      App.toast(`Maximum ${this.MAX_CHILDREN} children per family!`);
+    const limit = this.getChildLimit();
+    if(limit === 0) {
+      App.requireSignup('Family Mode requires Pro!', '👨‍👩‍👧', 'Upgrade to Samara Pro to add child profiles and track each child\'s progress separately.');
+      return false;
+    }
+    if(profiles.length >= limit) {
+      if(limit === 2) {
+        // Show upgrade to family plan
+        const div = document.createElement('div');
+        div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+        div.innerHTML = `
+          <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px;padding:28px;max-width:380px;width:100%;text-align:center;border:2px solid rgba(255,217,61,0.4);position:relative;">
+            <button onclick="this.closest('[style]').remove()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">✕</button>
+            <div style="font-size:2.5rem;margin-bottom:10px;">👨‍👩‍👧</div>
+            <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:8px;">Need More Child Profiles?</div>
+            <div style="color:rgba(255,255,255,0.75);font-size:0.85rem;margin-bottom:18px;line-height:1.6;">Your current Pro plan supports <strong style="color:#fff;">2 children</strong>. Upgrade to the <strong style="color:#FFD93D;">Family Plan</strong> to add up to <strong style="color:#fff;">4 children</strong> for just $7.99/month.</div>
+            <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:12px;margin-bottom:16px;">
+              <div style="color:#FFD93D;font-family:'Fredoka One',cursive;font-size:1rem;">Family Plan — $7.99/month</div>
+              <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:4px;">Up to 4 children · All Pro features · One parent dashboard</div>
+            </div>
+            <button onclick="Payments.checkout('family');this.closest('[style]').remove()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;width:100%;margin-bottom:8px;">⭐ Upgrade to Family Plan</button>
+            <button onclick="this.closest('[style]').remove()" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.85rem;padding:9px;border-radius:50px;border:1px solid rgba(255,255,255,0.15);cursor:pointer;width:100%;">Not now</button>
+          </div>`;
+        document.body.appendChild(div);
+      } else {
+        App.toast(`Maximum ${limit} children reached on your plan!`);
+      }
       return false;
     }
     const id = 'child_' + Date.now();
@@ -4355,14 +4442,17 @@ const FamilyMode = {
         </div>`).join('');
     }
 
-    // Show add button if under limit
-    if(profiles.length < this.MAX_CHILDREN) {
+    // Show add button based on plan limit
+    const limit = this.getChildLimit();
+    if(limit === 0) {
+      addSection.innerHTML = `<div style="text-align:center;padding:12px;background:rgba(255,255,255,0.06);border-radius:14px;"><div style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:8px;">Family Mode requires a Pro plan</div><button onclick="App.showScreen('screen-pricing')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:8px 20px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade to Pro</button></div>`;
+    } else if(profiles.length < limit) {
       addSection.innerHTML = `
         <button onclick="FamilyMode.showAddForm()" style="background:rgba(255,255,255,0.08);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:12px 24px;border-radius:50px;border:2px dashed rgba(255,255,255,0.3);cursor:pointer;width:100%;">
-          ➕ Add Child (${profiles.length}/${this.MAX_CHILDREN})
+          ➕ Add Child (${profiles.length}/${limit}) ${limit===2?'· <span style="color:#FFD93D;font-size:0.78rem;">Upgrade for 4 children</span>':''}
         </button>`;
     } else {
-      addSection.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.5);font-size:0.85rem;">Maximum ${this.MAX_CHILDREN} children reached</div>`;
+      addSection.innerHTML = `<div style="text-align:center;padding:10px;"><div style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Maximum ${limit} children reached on your plan</div>${limit===2?`<button onclick="Payments.checkout('family')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.78rem;padding:6px 16px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;">Upgrade to Family Plan for 4 children</button>`:''}  </div>`;
     }
 
     // Family stats
