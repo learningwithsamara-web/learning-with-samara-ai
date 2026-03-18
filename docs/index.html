@@ -5439,26 +5439,32 @@ const ReviewSystem = {
   // Load approved reviews from Supabase
   async loadReviews() {
     const grid = document.getElementById('reviews-grid');
-    if(!grid) return;
-    // Show static reviews immediately — never leave it blank
+    if(!grid) { console.warn('[Reviews] grid element not found'); return; }
+    // Show static reviews immediately
     grid.innerHTML = this._staticReviews();
     try {
-      const { data, error } = await DB.client
-        .from('reviews')
-        .select('*')
-        .eq('approved', true)
-        .order('created_at', { ascending: false })
-        .limit(20);
+      console.log('[Reviews] fetching from Supabase...');
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=20`, {
+        headers: {
+          'apikey': SUPABASE_ANON,
+          'Authorization': `Bearer ${SUPABASE_ANON}`
+        }
+      });
+      const data = await res.json();
+      console.log('[Reviews] response:', data, 'count:', data?.length);
 
-      if(error || !data || data.length === 0) return; // keep static
+      if(!data || data.length === 0) {
+        console.log('[Reviews] no approved reviews yet — keeping static');
+        return;
+      }
 
       // Update count
       const countEl = document.getElementById('review-count');
       if(countEl) countEl.textContent = data.length + '+';
 
-      // Replace static with live approved reviews
+      // Replace with live reviews
       grid.innerHTML = data.map(r => {
-        const stars = '⭐'.repeat(r.stars);
+        const stars = '⭐'.repeat(Math.min(r.stars, 5));
         const ago = this._timeAgo(r.created_at);
         const avatars = ['👩🏾','👨🏾','👩🏽','👨🏿','👩🏻','👨🏽','👩🏿','👨🏻'];
         const avatar = avatars[r.id % avatars.length] || '👩🏾';
@@ -5479,8 +5485,9 @@ const ReviewSystem = {
             <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div>
           </div>`;
       }).join('');
+      console.log('[Reviews] rendered', data.length, 'live reviews');
     } catch(e) {
-      // Static reviews already showing — nothing to do
+      console.error('[Reviews] error:', e);
     }
   },
 
