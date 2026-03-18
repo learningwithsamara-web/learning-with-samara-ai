@@ -5451,7 +5451,7 @@ const ReviewSystem = {
 
       // Update count — live + static combined
       const countEl = document.getElementById('review-count');
-      if(countEl) countEl.textContent = (data.length + 6) + '+';
+      // Keep 200+ — don't change the display count
 
       // Build live cards
       const liveCards = data.map(r => {
