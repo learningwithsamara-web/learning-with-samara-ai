@@ -3319,20 +3319,27 @@ const App = {
     const q=S.questions[S.qIndex];if(!q)return;
     S.answered=false;
     S._finishing=false;
+    S._currentQ=q;
     AITutor.hideHint();
     setText('quiz-q-num',`Q${S.qIndex+1}`);
     const pbar=el('quiz-progress-bar');
     if(pbar)pbar.style.width=`${(S.qIndex/S.questions.length)*100}%`;
 
-    // Build question with repeat button
+    // Build question — use data-q attribute to avoid JSON escaping issues in onclick
     const qEl = el('quiz-question');
-    if(qEl) qEl.innerHTML = `
-      <div style="flex:1;">${q.text}</div>
-      <button onclick="SoundSystem.speakQuestion(${JSON.stringify(q.text).replace(/'/g,'&#39;')})"
-        title="Repeat question"
-        style="background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:38px;height:38px;flex-shrink:0;cursor:pointer;font-size:1.1rem;margin-left:10px;display:flex;align-items:center;justify-content:center;transition:background 0.15s;"
-        onmouseover="this.style.background='rgba(255,255,255,0.28)'"
-        onmouseout="this.style.background='rgba(255,255,255,0.15)'">🔊</button>`;
+    if(qEl){
+      qEl.style.display='flex';
+      qEl.style.alignItems='center';
+      qEl.innerHTML = `
+        <div style="flex:1;line-height:1.4;">${q.text}</div>
+        <button id="repeat-btn" title="Hear question again"
+          style="background:rgba(255,255,255,0.18);border:2px solid rgba(255,255,255,0.3);border-radius:50%;width:42px;height:42px;min-width:42px;flex-shrink:0;cursor:pointer;font-size:1.3rem;margin-left:10px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;">🔊</button>`;
+      // Attach event directly — avoids all escaping problems
+      document.getElementById('repeat-btn').addEventListener('click', () => {
+        SoundSystem.stop();
+        setTimeout(() => SoundSystem.speakQuestion(q.text), 150);
+      });
+    }
 
     const ae=el('quiz-answers');if(!ae)return;ae.innerHTML='';
     q.answers.forEach(a=>{
@@ -3348,19 +3355,40 @@ const App = {
     const fb=el('quiz-feedback');
     if(fb)fb.className='quiz-feedback hidden';
 
-    // Auto-read question — always for 0-3 and 4-6, on demand for older
-    const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6';
+    // Auto-read for 4-6 and 7-10, older students read themselves
+    const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6' || S.ageGroup==='7-10';
     if(autoRead && SoundSystem.enabled){
-      setTimeout(()=>SoundSystem.speakQuestion(q.text), 400);
-    } else if(SoundSystem.enabled){
-      setTimeout(()=>SoundSystem.speak(q.text,0.85,1.05),300);
+      setTimeout(()=>SoundSystem.speakQuestion(q.text), 500);
     }
+  },
+
+  // Store last correct answer so student can recall it
+  _lastCorrectLabel: '',
+  _lastHint: '',
+
+  showCorrectAnswer() {
+    const fb = el('quiz-feedback');
+    if(!fb || !this._lastCorrectLabel) return;
+    fb.style.display = 'block';
+    fb.className = 'quiz-feedback wrong-fb';
+    fb.innerHTML = `
+      <div style="font-size:0.9rem;margin-bottom:6px;color:#FF6B6B;">✗ Not quite!</div>
+      <div style="background:rgba(107,203,119,0.25);border-radius:10px;padding:10px 14px;border:1.5px solid rgba(107,203,119,0.5);">
+        <div style="font-size:0.8rem;opacity:0.85;margin-bottom:4px;">✅ Correct answer:</div>
+        <div style="font-weight:800;font-size:1.1rem;">${this._lastCorrectLabel}</div>
+        ${this._lastHint ? `<div style="font-size:0.8rem;margin-top:6px;opacity:0.9;">💡 ${this._lastHint}</div>` : ''}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="SoundSystem.stop();setTimeout(()=>SoundSystem.speak('The correct answer is ${this._lastCorrectLabel.replace(/'/g,"'")}. ${(this._lastHint||'').replace(/'/g,"'")}',0.82,1.3),150)" style="background:rgba(255,255,255,0.15);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.25);cursor:pointer;">🔊 Hear again</button>
+        <button onclick="App.nextQ()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:6px 14px;border-radius:50px;border:none;cursor:pointer;">Next Question ▶</button>
+      </div>`;
+    SoundSystem.stop();
+    setTimeout(()=>SoundSystem.speak(`The correct answer is ${this._lastCorrectLabel}. ${this._lastHint||''}`,0.82,1.3),600);
   },
 
   answer(ans, q, btn) {
     if(S.answered) return;
     S.answered = true;
-    // Immediately remove ALL onclick handlers to prevent any double firing
     document.querySelectorAll('.answer-btn').forEach(b => {
       b.disabled = true;
       b.onclick = null;
@@ -3379,8 +3407,13 @@ const App = {
       setTimeout(() => App.nextQ(), 2500);
     } else {
       btn.classList.add('wrong');
-      // Highlight the correct answer
-      const correctLabel = String(q.answers.find(a=>a.isCorrect)?.label);
+      const correctLabel = String(q.answers.find(a=>a.isCorrect)?.label || '');
+      const hint = q.hint || '';
+      // Store for recall button
+      this._lastCorrectLabel = correctLabel;
+      this._lastHint = hint;
+
+      // Highlight correct answer button
       document.querySelectorAll('.answer-btn').forEach(b => {
         if(b.textContent.trim() === correctLabel) {
           b.classList.add('correct');
@@ -3390,29 +3423,43 @@ const App = {
       AITutor.trackWrong(q, S.ageGroup);
       SoundSystem.playTone('wrong');
       PersonalAlgo.trackAnswer(S.subject, false);
-      const msg = AITutor.tutorMsg('wrong', q.hint);
+      const msg = AITutor.tutorMsg('wrong', hint);
       const fb = el('quiz-feedback');
       if(fb){
         fb.innerHTML = `
           <div style="font-size:1rem;margin-bottom:6px;">${msg}</div>
-          <div style="background:rgba(107,203,119,0.25);border-radius:10px;padding:8px 12px;margin-top:6px;border:1.5px solid rgba(107,203,119,0.5);">
-            <div style="font-size:0.8rem;opacity:0.85;margin-bottom:2px;">✅ Correct answer:</div>
-            <div style="font-weight:800;font-size:1rem;">${correctLabel}</div>
-            ${q.hint ? `<div style="font-size:0.8rem;margin-top:4px;opacity:0.85;">💡 ${q.hint}</div>` : ''}
+          <div style="background:rgba(107,203,119,0.25);border-radius:10px;padding:10px 14px;margin-top:6px;border:1.5px solid rgba(107,203,119,0.5);">
+            <div style="font-size:0.8rem;opacity:0.85;margin-bottom:4px;">✅ Correct answer:</div>
+            <div style="font-weight:800;font-size:1.1rem;">${correctLabel}</div>
+            ${hint ? `<div style="font-size:0.8rem;margin-top:6px;opacity:0.9;">💡 ${hint}</div>` : ''}
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap;">
+            <button id="hear-answer-btn" style="background:rgba(255,255,255,0.15);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.25);cursor:pointer;">🔊 Hear explanation</button>
+            <button onclick="App.nextQ()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:6px 14px;border-radius:50px;border:none;cursor:pointer;">Next ▶</button>
           </div>`;
         fb.className = 'quiz-feedback wrong-fb';
+        // Attach hear button with direct event listener
+        setTimeout(() => {
+          const hearBtn = document.getElementById('hear-answer-btn');
+          if(hearBtn) hearBtn.addEventListener('click', () => {
+            SoundSystem.stop();
+            setTimeout(()=>SoundSystem.speak(`The correct answer is ${correctLabel}. ${hint}`,0.82,1.3),200);
+          });
+        }, 100);
       }
-      // Speak the correct answer after a short pause so the wrong tone finishes
+      // Read the correct answer fully — wait for wrong tone to finish first
       setTimeout(() => {
-        SoundSystem.speak(`The correct answer is: ${correctLabel}. ${q.hint || ''}`, 0.82, 1.3);
-      }, 600);
-      // 7 seconds — plenty of time for voice to finish reading
-      setTimeout(() => App.nextQ(), 7000);
+        SoundSystem.speak(`The correct answer is ${correctLabel}. ${hint}`, 0.82, 1.3);
+      }, 800);
+      // 30 seconds so student can read, listen and absorb before moving on
+      App._wrongTimer = setTimeout(() => App.nextQ(), 30000);
     }
   },
 
   nextQ() {
     if(S._finishing) return;
+    // Cancel any pending auto-advance timer
+    if(App._wrongTimer) { clearTimeout(App._wrongTimer); App._wrongTimer = null; }
     S.qIndex++;
     if(S.qIndex >= S.questions.length) {
       S._finishing = true;
@@ -5765,12 +5812,14 @@ const BabyMode = {
     };
     setText('baby-question',`(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`);
 
-    // Always read question aloud for babies
-    setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 300);
-
-    // Play animal sound for 0-3
+    // For 0-3 animals: play animal sound FIRST, then voice speaks after sound finishes
     if(S.ageGroup === '0-3' && this.category === 'animals') {
-      setTimeout(() => this.playAnimalSound(correct.name), 900);
+      setTimeout(() => this.playAnimalSound(correct.name), 300);
+      // Voice speaks AFTER the animal sound (~800ms duration)
+      setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 1200);
+    } else {
+      // For all other categories: just speak
+      setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 400);
     }
 
     const grid=el('baby-items-grid'); grid.innerHTML='';
@@ -5791,12 +5840,12 @@ const BabyMode = {
       this.questionCount++;
       setText('baby-score',this.score);
       SoundSystem.playTone('correct');
-      // Play animal sound on correct for 0-3
+      // Play animal sound on correct for 0-3 — sound first, voice after
       if(S.ageGroup==='0-3' && this.category==='animals') {
-        setTimeout(()=>this.playAnimalSound(item.name), 100);
-        setTimeout(()=>SoundSystem.speakBaby(`${item.name}! ${item.sound} Well done!`), 400);
+        setTimeout(()=>this.playAnimalSound(item.name), 200);
+        setTimeout(()=>SoundSystem.speakBaby(`${item.name}! Well done!`), 1100);
       } else {
-        SoundSystem.speakBaby(`Yes! ${item.name}! ${item.sound} Amazing!`);
+        setTimeout(()=>SoundSystem.speakBaby(`Yes! ${item.name}! Amazing!`), 200);
       }
       this.celebrate(item);
       setTimeout(()=>this.nextQuestion(), 2200);
