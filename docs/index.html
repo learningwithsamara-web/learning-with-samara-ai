@@ -7167,6 +7167,122 @@ const BabyTV = {
   }
 };
 window.BabyTV = BabyTV;
+// ── ESL FOR KIDS ─────────────────────────────────────────
+const ESL={
+SUBJECTS:['vocabulary','phonics','grammar','reading','conversation','esl-practice'],
+FREE_SUBJECT:'vocabulary',
+openSubject(subjectKey){
+const isPro=Plan.isPro();
+const isFree=subjectKey===this.FREE_SUBJECT;
+if(!isPro&&!isFree){
+const div=document.createElement('div');
+div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+div.innerHTML=`<div style="background:linear-gradient(135deg,#11998e,#1a1a3e);border-radius:28px;padding:32px 28px;max-width:400px;width:100%;text-align:center;border:2px solid rgba(56,239,125,0.4);">
+<div style="font-size:3rem;margin-bottom:12px;">🌍</div>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.5rem;margin-bottom:8px;">ESL Pro Feature!</div>
+<div style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:20px;line-height:1.6;">Vocabulary is free to try!<br>Upgrade to Pro to unlock all 5 ESL subjects — Phonics, Grammar, Reading, Conversation and Practice Test.</div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+<button onclick="Payments.checkout('monthly');this.closest('[style]').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 22px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade Now</button>
+<button onclick="this.closest('[style]').remove();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);cursor:pointer;">Try Vocabulary Free</button>
+</div>
+</div>`;
+document.body.appendChild(div);
+return;
+}
+const names={vocabulary:'Basic Vocabulary',phonics:'Phonics & Pronunciation',grammar:'Simple Sentences & Grammar',reading:'Reading & Comprehension',conversation:'Conversational English','esl-practice':'ESL Practice Test'};
+const icons={vocabulary:'🔤',phonics:'🔊',grammar:'📝',reading:'📖',conversation:'💬','esl-practice':'🏆'};
+const canQ=Plan.canStartQuiz();
+if(!canQ.ok){App.toast(canQ.msg);setTimeout(()=>App.showScreen('screen-pricing'),1200);return;}
+S.subject='esl-'+subjectKey;
+S.currentWorld={id:1,name:names[subjectKey]};
+S.stageIndex=0;S.worldIndex=0;S.qIndex=0;S.correct=0;S.answered=false;S._finishing=false;
+AITutor.wrongStreak=0;
+App.showScreen('screen-quiz');
+document.getElementById('quiz-subject-badge').textContent=icons[subjectKey]+' '+names[subjectKey];
+document.getElementById('quiz-loading')?.classList.remove('hidden');
+document.getElementById('quiz-question').textContent='';
+document.getElementById('quiz-answers').innerHTML='';
+const canAI=Plan.canUseAIQuestion();
+let questions=null;
+if(canAI.ok){Plan.useAIQuestion();questions=await this._generateAIQuestions(subjectKey);}
+if(!questions||questions.length<3){questions=this._fallbackQuestions(subjectKey);}
+S.questions=questions;
+Plan.useQuiz();
+document.getElementById('quiz-loading')?.classList.add('hidden');
+document.getElementById('quiz-q-total').textContent=S.questions.length;
+App.updateScores();
+App.renderQ();
+},
+async _generateAIQuestions(subjectKey){
+const prompts={
+vocabulary:'Create 5 ESL vocabulary questions for young children learning English. Cover colors, numbers, animals and food. Use simple clear English.',
+phonics:'Create 5 ESL phonics questions for young children. Cover letter sounds, simple blends and basic pronunciation.',
+grammar:'Create 5 ESL grammar questions for children learning English. Cover nouns, verbs, simple sentences and basic tenses.',
+reading:'Create 5 ESL reading comprehension questions for children. Use very simple short sentences and basic vocabulary.',
+conversation:'Create 5 ESL conversational English questions for children. Cover greetings, introductions and everyday phrases.',
+'esl-practice':'Create 5 mixed ESL questions covering vocabulary, grammar and conversation for children learning English.',
+};
+const prompt=(prompts[subjectKey]||prompts['vocabulary'])+`
+Return ONLY valid JSON — no markdown:
+[{"text":"Question?","correct":"Answer","wrong":["W1","W2","W3"],"hint":"Hint"}]`;
+const result=await callClaudeAI(prompt,S.ageGroup,'You are an ESL teacher for children. Return ONLY valid JSON arrays. No markdown.',1000);
+if(!result)return null;
+try{
+const cleaned=result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+const parsed=JSON.parse(cleaned);
+if(!Array.isArray(parsed)||parsed.length===0)return null;
+return parsed.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q.correct,hint:q.hint||''}));
+}catch(e){return null;}
+},
+_fallbackQuestions(subjectKey){
+const banks={
+vocabulary:[
+{text:'What color is the sky?',correct:'Blue',wrong:['Red','Green','Yellow'],hint:'Look up on a sunny day!'},
+{text:'What sound does a dog make?',correct:'Woof',wrong:['Meow','Moo','Oink'],hint:'Dogs are loyal pets'},
+{text:'How many fingers do you have?',correct:'10',wrong:['5','8','12'],hint:'Count both hands together'},
+{text:'What do you eat for breakfast?',correct:'Eggs',wrong:['Pizza','Cake','Chips'],hint:'A healthy morning meal'},
+{text:'What animal says moo?',correct:'Cow',wrong:['Cat','Dog','Bird'],hint:'Lives on a farm and gives milk'},
+],
+phonics:[
+{text:'What sound does the letter A make?',correct:'Ah as in apple',wrong:['Ee as in eat','Oh as in open','Oo as in moon'],hint:'Think of the word apple'},
+{text:'Which word starts with the B sound?',correct:'Ball',wrong:['Cat','Dog','Fish'],hint:'You kick or throw this'},
+{text:'Which word rhymes with CAT?',correct:'Hat',wrong:['Dog','Sun','Tree'],hint:'You wear it on your head'},
+{text:'What sound does SH make?',correct:'Shh as in ship',wrong:['S as in sun','Ch as in chip','Th as in the'],hint:'Like telling someone to be quiet'},
+{text:'Which word ends with the N sound?',correct:'Sun',wrong:['Cat','Dog','Lip'],hint:'It shines in the sky'},
+],
+grammar:[
+{text:'Which is a noun?',correct:'Apple',wrong:['Run','Happy','Quickly'],hint:'A noun is a person place or thing'},
+{text:'Which is a verb?',correct:'Jump',wrong:['Blue','Table','Slowly'],hint:'A verb is an action word'},
+{text:'Complete the sentence: She ___ to school.',correct:'Goes',wrong:['Go','Going','Gone'],hint:'She is one person so use goes'},
+{text:'Which sentence is correct?',correct:'The dog is big.',wrong:['The dog are big.','Big the dog is.','Is the dog big.'],hint:'Subject then verb then description'},
+{text:'What is the plural of cat?',correct:'Cats',wrong:['Cates','Cat','Catt'],hint:'Add S to make most words plural'},
+],
+reading:[
+{text:'Sam has a red ball. What color is the ball?',correct:'Red',wrong:['Blue','Green','Yellow'],hint:'Read the sentence again carefully'},
+{text:'The dog is big and brown. What does the dog look like?',correct:'Big and brown',wrong:['Small and black','Big and white','Tiny and brown'],hint:'The answer is right in the sentence'},
+{text:'I eat breakfast in the morning. When do I eat breakfast?',correct:'In the morning',wrong:['At night','In the afternoon','At lunch'],hint:'Read the last part of the sentence'},
+{text:'The cat sat on the mat. Where is the cat?',correct:'On the mat',wrong:['On the chair','Under the table','In the garden'],hint:'Where did the cat sit?'},
+{text:'Tom likes to play football. What does Tom like?',correct:'Playing football',wrong:['Reading books','Swimming','Drawing'],hint:'What does the sentence say Tom likes?'},
+],
+conversation:[
+{text:'How do you greet someone in the morning?',correct:'Good morning!',wrong:['Good night!','Goodbye!','See you later!'],hint:'We say this when we wake up'},
+{text:'What do you say when you meet someone new?',correct:'Nice to meet you!',wrong:['Goodbye!','Thank you!','I am sorry!'],hint:'A friendly greeting for new people'},
+{text:'How do you ask someone their name?',correct:'What is your name?',wrong:['Where are you?','How old are you?','What do you like?'],hint:'You want to know who they are'},
+{text:'What do you say when someone helps you?',correct:'Thank you!',wrong:['Sorry!','Hello!','Goodbye!'],hint:'A polite way to show gratitude'},
+{text:'How do you say goodbye in English?',correct:'Goodbye!',wrong:['Hello!','Please!','Thank you!'],hint:'You say this when you are leaving'},
+],
+'esl-practice':[
+{text:'What color is grass?',correct:'Green',wrong:['Blue','Red','Yellow'],hint:'Look outside at a lawn'},
+{text:'Which word is a verb?',correct:'Run',wrong:['House','Happy','Ball'],hint:'Verbs are action words'},
+{text:'How do you greet someone?',correct:'Hello!',wrong:['Goodbye!','Sorry!','Maybe!'],hint:'A friendly way to say hi'},
+{text:'The cat is ___. (Choose the adjective)',correct:'Fluffy',wrong:['Runs','Meow','Quickly'],hint:'Adjectives describe how something looks'},
+{text:'What do you say when you need help?',correct:'Can you help me please?',wrong:['Go away!','I am fine!','No thank you!'],hint:'Always be polite when asking for help'},
+],
+};
+const bank=banks[subjectKey]||banks['vocabulary'];
+return bank.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q.correct,hint:q.hint}));
+}};
+window.ESL=ESL;
 // ── US TEST PREP ─────────────────────────────────────────
 const USTESTPREP={
 _fallbackQuestions(s){
