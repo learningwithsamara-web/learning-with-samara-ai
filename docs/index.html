@@ -3538,7 +3538,7 @@ const App = {
 
     // Auto-read for 4-6 and 7-14, older students read themselves
     const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6' || S.ageGroup==='7-14';
-   if(autoRead && SoundSystem.enabled){
+ if(SoundSystem.enabled){
 const isESL = S.subject && S.subject.startsWith('esl');
 const speechRate = isESL ? 0.72 : 0.84;
 const speechPitch = isESL ? 1.4 : 1.3;
