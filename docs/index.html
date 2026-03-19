@@ -7172,6 +7172,32 @@ const ESL={
 FREE_SUBJECT:'vocabulary',
 _names:{vocabulary:'Basic Vocabulary',phonics:'Phonics & Pronunciation',grammar:'Simple Sentences & Grammar',reading:'Reading & Comprehension',conversation:'Conversational English','esl-practice':'ESL Practice Test'},
 _icons:{vocabulary:'🔤',phonics:'🔊',grammar:'📝',reading:'📖',conversation:'💬','esl-practice':'🏆'},
+openSubject(subjectKey){
+const isPro=Plan.isPro();
+const isFree=subjectKey===this.FREE_SUBJECT;
+if(!isPro&&!isFree){App.showScreen('screen-pricing');App.toast('⭐ Upgrade to Pro to unlock all ESL subjects!');return;}
+const canQ=Plan.canStartQuiz();
+if(!canQ.ok){App.toast(canQ.msg);setTimeout(()=>App.showScreen('screen-pricing'),1200);return;}
+S.subject='esl-'+subjectKey;
+S.currentWorld={id:1,name:this._names[subjectKey]};
+S.stageIndex=0;S.worldIndex=0;S.qIndex=0;S.correct=0;S.answered=false;S._finishing=false;
+AITutor.wrongStreak=0;
+App.showScreen('screen-quiz');
+document.getElementById('quiz-subject-badge').textContent=this._icons[subjectKey]+' '+this._names[subjectKey];
+document.getElementById('quiz-loading')?.classList.remove('hidden');
+document.getElementById('quiz-question').textContent='';
+document.getElementById('quiz-answers').innerHTML='';
+const canAI=Plan.canUseAIQuestion();
+let questions=null;
+if(canAI.ok){Plan.useAIQuestion();questions=this._fallbackQuestions(subjectKey);}
+if(!questions||questions.length<3){questions=this._fallbackQuestions(subjectKey);}
+S.questions=questions;
+Plan.useQuiz();
+document.getElementById('quiz-loading')?.classList.add('hidden');
+document.getElementById('quiz-q-total').textContent=S.questions.length;
+App.updateScores();
+App.renderQ();
+},
 // ── US TEST PREP ─────────────────────────────────────────
 const USTESTPREP={
 _fallbackQuestions(s){
