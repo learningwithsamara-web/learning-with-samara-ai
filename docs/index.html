@@ -7246,6 +7246,8 @@ conversation:[
 const bank=banks[subjectKey]||banks['vocabulary'];
 return bank.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q.correct,hint:q.hint}));
 },
+};
+window.ESL=ESL;
 // ── US TEST PREP ─────────────────────────────────────────
 const USTESTPREP={
 _fallbackQuestions(s){
