@@ -3537,13 +3537,15 @@ const App = {
     if(fb)fb.className='quiz-feedback hidden';
 
 // Auto-read for 4-6 and 7-10, older students read themselves
-const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6' || S.ageGroup==='7-10';
-if(autoRead && SoundSystem.enabled){
-setTimeout(()=>SoundSystem.speakQuestion(q.text), 500);
-}
-// Store last correct answer so student can recall it
-_lastCorrectLabel: '',
-_lastHint: '',
+    const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6' || S.ageGroup==='7-10';
+    if(autoRead && SoundSystem.enabled){
+      setTimeout(()=>SoundSystem.speakQuestion(q.text), 500);
+    }
+  },
+
+  // Store last correct answer so student can recall it
+  _lastCorrectLabel: '',
+  _lastHint: '',
 
   showCorrectAnswer() {
     const fb = el('quiz-feedback');
