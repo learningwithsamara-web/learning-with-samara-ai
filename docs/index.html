@@ -3285,7 +3285,7 @@ const App = {
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos') Videos.init();
     if(id==='screen-home') setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },500);
-    if(id==='screen-learn') setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
+    if(id==='screen-learn'){if(!Plan.isPro()){App.requireSignup('📚 Learn Library','📚','The full Learn Library with lessons, memory tricks and mini quizzes is a Pro feature — upgrade to unlock!');App.showScreen('screen-home');return;}setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);} setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
     if(id==='screen-getapp') AITutor.hideFloat();
