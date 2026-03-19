@@ -7170,6 +7170,13 @@ const ESL={
 FREE_SUBJECT:'vocabulary',
 _names:{vocabulary:'Basic Vocabulary',phonics:'Phonics & Pronunciation',grammar:'Simple Sentences & Grammar',reading:'Reading & Comprehension',conversation:'Conversational English','esl-practice':'ESL Practice Test'},
 _icons:{vocabulary:'🔤',phonics:'🔊',grammar:'📝',reading:'📖',conversation:'💬','esl-practice':'🏆'},
+_readAnswers(answers){
+if(!SoundSystem.enabled) return;
+setTimeout(()=>{
+const labels = answers.map(a=>a.label.replace(/[^\w\s]/gi,' ')).join(' ... ');
+SoundSystem.speak('Your choices are ... ' + labels, 0.82, 1.3);
+},2000);
+},
 openSubject(subjectKey){
 const isPro=Plan.isPro();
 const isFree=subjectKey===this.FREE_SUBJECT;
