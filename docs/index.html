@@ -3538,9 +3538,13 @@ const App = {
 
     // Auto-read for 4-6 and 7-10, older students read themselves
     const autoRead = S.ageGroup==='0-3' || S.ageGroup==='4-6' || S.ageGroup==='7-10';
-    if(autoRead && SoundSystem.enabled){
-      setTimeout(()=>SoundSystem.speakQuestion(q.text), 500);
-    }
+if(SoundSystem.enabled){
+setTimeout(()=>{
+SoundSystem.speakQuestion(q.text);
+const answerLabels = q.answers.map(a=>a.label.replace(/[^\w\s]/gi,' ')).join(' ... ');
+setTimeout(()=>SoundSystem.speak('Your choices are ... ' + answerLabels, 0.82, 1.3), 2500);
+},500);
+}
   },
 
   // Store last correct answer so student can recall it
