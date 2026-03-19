@@ -7196,6 +7196,7 @@ return bank.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q
 async openSubject(subjectKey){
 const names={'sat-math':'SAT Math','sat-reading':'SAT Reading and Writing','common-core-math':'Common Core Math','us-history':'US History','us-civics':'US Civics','us-practice':'Full Practice Test'};
 const icons={'sat-math':'🔢','sat-reading':'📖','common-core-math':'➕','us-history':'🗽','us-civics':'🏛️','us-practice':'📝'};
+if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('⭐ US Test Prep is a Pro feature — upgrade to unlock!');return;}
 const canQ=Plan.canStartQuiz();
 if(!canQ.ok){App.toast(canQ.msg);setTimeout(()=>App.showScreen('screen-pricing'),1200);return;}
 S.subject='ustestprep-'+subjectKey;
