@@ -7423,16 +7423,11 @@ const avName=Avatars.names[av]||'Samara';
 const msg=this.MESSAGES[Math.floor(Math.random()*this.MESSAGES.length)];
 this.launchConfetti();
 SoundSystem.playTone('celebrate');
-```
-
-Then find this line inside the birthday box HTML:
-```
-<div style="font-size:4rem;margin-bottom:8px;animation:bounce 1s ease-in-out infinite;">🎂</div>
 const div=document.createElement('div');
 div.className='birthday-overlay';
 div.id='birthday-overlay';
 div.innerHTML=`<div class="birthday-box">
-<div style="font-size:4rem;margin-bottom:8px;animation:bounce 1s ease-in-out infinite;">🎂</div>
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:14px;"><iframe src="https://www.youtube.com/embed/n9ttCgc32KU?autoplay=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 <img src="${avFile}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:4px solid #FFD93D;margin-bottom:10px;" onerror="this.style.display='none'" />
 <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:6px;">${avName} AI ✨</div>
 <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.6rem;margin-bottom:8px;">🎉 Happy Birthday ${name}! 🎉</div>
