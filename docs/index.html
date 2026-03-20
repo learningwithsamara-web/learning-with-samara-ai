@@ -7386,6 +7386,152 @@ return bank.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q
 }
 };
 window.ESL=ESL;
+
+// ── SPEAKING COACH ───────────────────────────────────────
+const SpeakingCoach={
+PROMPTS:[
+'What is your favorite animal and why do you like it?',
+'Tell me about your best day ever!',
+'If you could fly anywhere in the world, where would you go?',
+'What is your favorite food and how does it taste?',
+'Describe your bedroom using three words.',
+'If you had a superpower, what would it be?',
+'Tell me about someone you love very much.',
+'What makes you laugh the most?',
+'If you could be any animal for a day, which one would you pick?',
+'What is your favorite thing to do after school?',
+'Tell me about your best friend.',
+'If you found a magic door, where would it lead?',
+'What would you do if you were invisible for a day?',
+'Describe your perfect birthday party!',
+'What is something you are really good at?',
+],
+BADGES:[
+{id:'first-speaker',icon:'🎤',name:'First Speaker',desc:'Completed your first session!'},
+{id:'brave-voice',icon:'🦁',name:'Brave Voice',desc:'Completed 3 speaking sessions!'},
+{id:'storyteller',icon:'📖',name:'Storyteller',desc:'Completed 5 speaking sessions!'},
+{id:'confident-kid',icon:'⭐',name:'Confident Kid',desc:'Completed 10 speaking sessions!'},
+],
+currentPrompt:'',
+sessionsToday:0,
+totalSessions:0,
+init(){
+this.totalSessions=parseInt(localStorage.getItem('speaking_total')||'0');
+this.sessionsToday=parseInt(localStorage.getItem('speaking_today_'+new Date().toISOString().slice(0,10))||'0');
+this.newPrompt();
+this.renderBadges();
+const notice=document.getElementById('speaking-free-notice');
+if(Plan.isPro()&&notice)notice.style.display='none';
+},
+newPrompt(){
+const p=this.PROMPTS[Math.floor(Math.random()*this.PROMPTS.length)];
+this.currentPrompt=p;
+const el=document.getElementById('speaking-prompt');
+if(el)el.textContent=p;
+document.getElementById('speaking-response-area').style.display='block';
+document.getElementById('speaking-feedback-area').style.display='none';
+SoundSystem.speak(p,0.80,1.3);
+},
+readPrompt(){
+if(this.currentPrompt)SoundSystem.speak(this.currentPrompt,0.80,1.3);
+},
+startRecording(){
+if(!Plan.isPro()&&this.sessionsToday>=1){
+App.showScreen('screen-pricing');
+App.toast('⭐ Upgrade to Pro for unlimited Speaking Coach sessions!');
+return;
+}
+const area=document.getElementById('speaking-response-area');
+if(area)area.style.display='block';
+const input=document.getElementById('speaking-input');
+if(input)input.focus();
+if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const r=new SR();r.lang='en-US';r.interimResults=false;
+const btn=document.getElementById('record-btn');
+if(btn){btn.textContent='🔴 Listening...';btn.style.background='linear-gradient(135deg,#FF0000,#FF6B6B)';}
+r.onresult=(e)=>{
+const txt=e.results[0][0].transcript;
+const inp=document.getElementById('speaking-input');
+if(inp)inp.value=txt;
+if(btn){btn.textContent='🎤 Start Speaking';btn.style.background='linear-gradient(135deg,#FF6B6B,#C77DFF)';}
+setTimeout(()=>this.submitResponse(),500);
+};
+r.onerror=r.onend=()=>{
+if(btn){btn.textContent='🎤 Start Speaking';btn.style.background='linear-gradient(135deg,#FF6B6B,#C77DFF)';}
+};
+r.start();
+} else {
+App.toast('Voice not supported — type your answer instead!');
+}
+},
+tryAgain(){
+document.getElementById('speaking-feedback-area').style.display='none';
+document.getElementById('speaking-response-area').style.display='block';
+const inp=document.getElementById('speaking-input');
+if(inp)inp.value='';
+},
+async submitResponse(){
+if(!Plan.isPro()&&this.sessionsToday>=1){
+App.showScreen('screen-pricing');
+App.toast('⭐ Upgrade to Pro for unlimited Speaking Coach sessions!');
+return;
+}
+const inp=document.getElementById('speaking-input');
+const response=inp?.value.trim();
+if(!response||response.length<2){
+App.toast('Please say or type something first! 😊');
+return;
+}
+const feedbackArea=document.getElementById('speaking-feedback-area');
+const responseArea=document.getElementById('speaking-response-area');
+if(responseArea)responseArea.style.display='none';
+if(feedbackArea)feedbackArea.style.display='block';
+document.getElementById('speaking-praise').textContent='Samara is thinking... 🤔';
+document.getElementById('speaking-tip').textContent='';
+document.getElementById('speaking-followup').textContent='';
+const ageDesc={'0-3':'a 2-year-old','4-6':'a 5-year-old','7-10':'a 9-year-old','11-14':'a 12-year-old','15-17':'a 16-year-old'}[S.ageGroup]||'a child';
+const prompt=`You are Samara, a warm encouraging speaking coach for children. A ${ageDesc} was given this prompt: "${this.currentPrompt}" and responded: "${response}". Give feedback in this exact JSON format with no markdown: {"praise":"...","improvement_tip":"...","follow_up_question":"...","confidence_level":"low|medium|high"}`;
+const result=await callClaudeAI(prompt,S.ageGroup,'You are Samara, a kind encouraging speaking coach for children. Always be positive. Return ONLY valid JSON. No markdown.',300);
+let praise='Great job speaking today! You are so brave! 🌟';
+let tip='Next time try adding more details to your answer!';
+let followup='Can you tell me one more thing about that?';
+if(result){
+try{
+const cleaned=result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+const parsed=JSON.parse(cleaned);
+if(parsed.praise)praise=parsed.praise;
+if(parsed.improvement_tip)tip=parsed.improvement_tip;
+if(parsed.follow_up_question)followup=parsed.follow_up_question;
+}catch(e){console.error('Speaking coach parse error:',e);}
+}
+document.getElementById('speaking-praise').textContent='⭐ '+praise;
+document.getElementById('speaking-tip').textContent='💡 '+tip;
+document.getElementById('speaking-followup').textContent='🤔 '+followup;
+SoundSystem.speak(praise+' '+tip,0.82,1.3);
+this.sessionsToday++;
+this.totalSessions++;
+localStorage.setItem('speaking_total',this.totalSessions);
+localStorage.setItem('speaking_today_'+new Date().toISOString().slice(0,10),this.sessionsToday);
+this.renderBadges();
+SamaraCoins.add(15,'Speaking Coach session! 🎤');
+},
+renderBadges(){
+const display=document.getElementById('badges-display');
+if(!display)return;
+const earned=[];
+if(this.totalSessions>=1)earned.push(this.BADGES[0]);
+if(this.totalSessions>=3)earned.push(this.BADGES[1]);
+if(this.totalSessions>=5)earned.push(this.BADGES[2]);
+if(this.totalSessions>=10)earned.push(this.BADGES[3]);
+if(earned.length===0){
+display.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.85rem;">Complete sessions to earn badges! 🏆</div>';
+return;
+}
+display.innerHTML=earned.map(b=>`<div style="background:rgba(255,217,61,0.15);border-radius:12px;padding:8px 12px;border:1px solid rgba(255,217,61,0.25);text-align:center;"><div style="font-size:1.8rem;">${b.icon}</div><div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.75rem;margin-top:3px;">${b.name}</div></div>`).join('');
+}
+};
+window.SpeakingCoach=SpeakingCoach;
   
 // ── PROMO CODE ───────────────────────────────────────────────
 const PromoCode = {
