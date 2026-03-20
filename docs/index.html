@@ -7885,9 +7885,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     App.init();
     PersonalAlgo.load();
     SamaraCoins.init();
+    FamilyMode.init();
     BirthdayShoutout.init();
     CoinShop.init();
-    FamilyMode.init();
     // Load reviews on boot so they always show
     setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },800);
   }catch(e){console.error('Boot error:',e);}
