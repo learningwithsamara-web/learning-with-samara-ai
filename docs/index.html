@@ -1011,7 +1011,56 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div class="pep-subject-card" data-pep="general" onclick="PEP.openSubject('general')"><div class="pep-subject-icon">🧠</div><div class="pep-subject-name">General Knowledge</div><div class="pep-subject-count">Current Affairs & Culture</div></div>
     <div class="pep-subject-card" data-pep="practice" onclick="PEP.openSubject('practice')"><div class="pep-subject-icon">📝</div><div class="pep-subject-name">Practice Test</div><div class="pep-subject-count">Full Mock PEP Exam</div></div>
   </div>
-</div>
+</div><!-- ══ SPEAKING COACH ══ -->
+<div id="screen-speaking" class="screen">
+  <div class="pep-header" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);">
+    <button class="back-btn" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);" onclick="App.showScreen('screen-home')">← Back</button>
+    <div class="pep-badge" style="background:rgba(255,255,255,0.25);color:#fff;">🎤 AI Speaking Coach</div>
+    <h2 class="pep-title">Speaking Coach</h2>
+    <p class="pep-subtitle">Build confidence · Express yourself · Have fun!</p>
+  </div>
+  <div style="max-width:660px;margin:0 auto;padding:22px;">
+    <!-- Info box -->
+    <div class="pep-info-box" style="margin-bottom:18px;">
+      <div class="pep-info-icon">💡</div>
+      <div class="pep-info-text">Samara listens and helps you become a confident speaker! Answer fun prompts and get encouraging feedback. 🌟</div>
+    </div>
+    <!-- Free session notice -->
+    <div id="speaking-free-notice" style="background:rgba(255,217,61,0.12);border-radius:14px;padding:12px 16px;margin-bottom:18px;border:1px solid rgba(255,217,61,0.25);text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;">🎁 1 Free Session Today!</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:4px;">Try Speaking Coach free — upgrade to Pro for unlimited sessions!</div>
+    </div>
+    <!-- Daily prompt card -->
+    <div style="background:rgba(255,255,255,0.07);border-radius:20px;padding:22px;margin-bottom:18px;border:1.5px solid rgba(255,255,255,0.12);">
+      <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1rem;margin-bottom:12px;">🌟 Today's Speaking Prompt</div>
+      <div id="speaking-prompt" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;line-height:1.5;margin-bottom:16px;">Loading your prompt...</div>
+      <button onclick="SpeakingCoach.readPrompt()" style="background:rgba(199,125,255,0.2);color:#C77DFF;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:7px 16px;border-radius:50px;border:1px solid rgba(199,125,255,0.3);cursor:pointer;margin-bottom:14px;">🔊 Hear the prompt</button>
+      <div style="display:flex;gap:9px;flex-wrap:wrap;">
+        <button onclick="SpeakingCoach.newPrompt()" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:8px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">🔄 New Prompt</button>
+        <button onclick="SpeakingCoach.startRecording()" id="record-btn" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">🎤 Start Speaking</button>
+      </div>
+    </div>
+    <!-- Response area -->
+    <div id="speaking-response-area" style="display:none;">
+      <div style="background:rgba(255,255,255,0.07);border-radius:20px;padding:20px;margin-bottom:16px;border:1.5px solid rgba(255,255,255,0.12);">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;margin-bottom:10px;">📝 Or type your answer here:</div>
+        <textarea id="speaking-input" placeholder="Tell Samara what you think..." style="width:100%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:0.95rem;outline:none;resize:none;min-height:100px;box-sizing:border-box;"></textarea>
+        <button onclick="SpeakingCoach.submitResponse()" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:11px 28px;border-radius:50px;border:none;cursor:pointer;margin-top:10px;width:100%;">✨ Get Samara's Feedback!</button>
+      </div>
+    </div>
+    <!-- Feedback area -->
+    <div id="speaking-feedback-area" style="display:none;">
+      <div style="background:linear-gradient(135deg,rgba(199,125,255,0.15),rgba(255,107,107,0.15));border-radius:20px;padding:22px;border:1.5px solid rgba(199,125,255,0.3);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#FF6B6B,#C77DFF);flex-shrink:0;"><img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='🎤'"/></div>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">Samara's Feedback ✨</div>
+        </div>
+        <div id="speaking-praise" style="background:rgba(107,203,119,0.15);border-radius:12px;padding:12px 14px;margin-bottom:10px;border:1px solid rgba(107,203,119,0.25);color:#6BCB77;font-family:'Fredoka One',cursive;font-size:1rem;"></div>
+        <div id="speaking-tip" style="background:rgba(255,217,61,0.12);border-radius:12px;padding:12px 14px;margin-bottom:10px;border:1px solid rgba(255,217,61,0.25);color:#FFD93D;font-size:0.9rem;font-weight:700;"></div>
+        <div id="speaking-followup" style="background:rgba(199,125,255,0.12);border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid rgba(199,125,255,0.25);color:#C77DFF;font-family:'Fredoka One',cursive;font-size:1rem;"></div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;">
+          <button onclick="SpeakingCoach.tryAgain()" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:9px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Try Again</button>
+
 <!-- ══ ESL FOR KIDS ══ -->
 <div id="screen-esl" class="screen">
   <div class="pep-header" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
