@@ -7544,6 +7544,182 @@ if(today===bdayDate)setTimeout(()=>BirthdayShoutout.showShoutoutForChild(profile
 };
 window.FamilyProfiles=FamilyProfiles;
 
+// ── BIRTHDAY SHOUTOUT ────────────────────────────────────
+const BirthdayShoutout={
+MESSAGES:[
+'Happy Birthday superstar! You make the world a brighter place!',
+'Wishing you the most magical birthday ever! You deserve all the happiness!',
+'Happy Birthday to the most amazing learner! Keep shining bright!',
+'Today is YOUR special day! Happy Birthday from all of us at Samara AI!',
+'Happy Birthday! You are so smart, so kind and so loved!',
+],
+init(){
+const profiles=FamilyProfiles.getProfiles();
+const today=new Date().toISOString().slice(5,10);
+if(profiles.length>0){
+profiles.forEach(child=>{
+if(!child.birthday)return;
+const bdayDate=child.birthday.slice(5,10);
+if(today===bdayDate){
+const key='samara_bday_shown_'+child.name+today;
+if(localStorage.getItem(key))return;
+localStorage.setItem(key,today);
+setTimeout(()=>BirthdayShoutout.showShoutoutForChild(child),2000);
+}
+});
+return;
+}
+const bday=localStorage.getItem('samara_birthday');
+if(!bday)return;
+const bdayDate=bday.slice(5,10);
+if(today===bdayDate){
+const lastShown=localStorage.getItem('samara_bday_shown');
+if(lastShown===today)return;
+localStorage.setItem('samara_bday_shown',today);
+setTimeout(()=>this.showShoutout(),2000);
+}
+},
+showShoutoutForChild(child){
+const name=child.name||'Superstar';
+const avFile=child.tutor==='littlejr'?'littlejr.png.jpeg':child.tutor==='mommytutor'?'tutormommy.png.jpeg':'samara.png.jpeg';
+const avName=child.tutor==='littlejr'?'Little Jr':child.tutor==='mommytutor'?'Mommy Tutor':'Samara';
+const msg=this.MESSAGES[Math.floor(Math.random()*this.MESSAGES.length)];
+this.launchConfetti();
+SoundSystem.playTone('celebrate');
+const div=document.createElement('div');
+div.className='birthday-overlay';
+div.id='birthday-overlay';
+div.innerHTML=`<div class="birthday-box">
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:14px;"><iframe src="https://www.youtube.com/embed/n9ttCgc32KU?autoplay=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<img src="${avFile}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:4px solid #FFD93D;margin-bottom:10px;" onerror="this.style.display='none'" />
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:6px;">${avName} AI ✨</div>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.6rem;margin-bottom:8px;">🎉 Happy Birthday ${name}! 🎉</div>
+<div style="color:rgba(255,255,255,0.85);font-size:0.92rem;line-height:1.6;margin-bottom:16px;">${msg}</div>
+<div style="background:rgba(255,217,61,0.15);border-radius:12px;padding:10px;margin-bottom:16px;border:1px solid rgba(255,217,61,0.3);">
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">🎁 Birthday Gift!</div>
+<div style="color:rgba(255,255,255,0.8);font-size:0.82rem;margin-top:4px;">50 bonus Samara Coins just for you!</div>
+</div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+<button onclick="BirthdayShoutout.share('${name}')" style="background:linear-gradient(135deg,#FF6B6B,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;">📤 Share Birthday!</button>
+<button onclick="document.getElementById('birthday-overlay').remove();SoundSystem.stop();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 18px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">Thank you! 💛</button>
+</div>
+</div>`;
+document.body.appendChild(div);
+SamaraCoins.add(50,'🎂 Birthday bonus!');
+this.earnBadge();
+},
+showShoutout(){
+const name=localStorage.getItem('samara_user_name')||'Superstar';
+const av=Avatars?.current||'samara';
+const avFile=av==='littlejr'?'littlejr.png.jpeg':av==='mommytutor'?'tutormommy.png.jpeg':'samara.png.jpeg';
+const avName=av==='littlejr'?'Little Jr':av==='mommytutor'?'Mommy Tutor':'Samara';
+const msg=this.MESSAGES[Math.floor(Math.random()*this.MESSAGES.length)];
+this.launchConfetti();
+SoundSystem.playTone('celebrate');
+const div=document.createElement('div');
+div.className='birthday-overlay';
+div.id='birthday-overlay';
+div.innerHTML=`<div class="birthday-box">
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:14px;"><iframe src="https://www.youtube.com/embed/n9ttCgc32KU?autoplay=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<img src="${avFile}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:4px solid #FFD93D;margin-bottom:10px;" onerror="this.style.display='none'" />
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:6px;">${avName} AI ✨</div>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.6rem;margin-bottom:8px;">🎉 Happy Birthday ${name}! 🎉</div>
+<div style="color:rgba(255,255,255,0.85);font-size:0.92rem;line-height:1.6;margin-bottom:16px;">${msg}</div>
+<div style="background:rgba(255,217,61,0.15);border-radius:12px;padding:10px;margin-bottom:16px;border:1px solid rgba(255,217,61,0.3);">
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">🎁 Birthday Gift!</div>
+<div style="color:rgba(255,255,255,0.8);font-size:0.82rem;margin-top:4px;">50 bonus Samara Coins just for you!</div>
+</div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+<button onclick="BirthdayShoutout.share('${name}')" style="background:linear-gradient(135deg,#FF6B6B,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;">📤 Share Birthday!</button>
+<button onclick="document.getElementById('birthday-overlay').remove();SoundSystem.stop();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 18px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">Thank you! 💛</button>
+</div>
+</div>`;
+document.body.appendChild(div);
+SamaraCoins.add(50,'🎂 Birthday bonus!');
+this.earnBadge();
+},
+launchConfetti(){
+const colors=['#FFD93D','#FF6B6B','#6BCB77','#7EC8E3','#C77DFF','#FF9B3F'];
+for(let i=0;i<80;i++){
+setTimeout(()=>{
+const c=document.createElement('div');
+c.className='confetti-piece';
+c.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*10}px;height:${6+Math.random()*10}px;animation-duration:${2+Math.random()*3}s;animation-delay:0s;border-radius:${Math.random()>0.5?'50%':'2px'};`;
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),5000);
+},i*50);
+}
+},
+share(name){
+const text=`🎂 ${name} is celebrating their birthday with Samara AI! Join the fun at ai.learningwithsamara.com 🌟`;
+if(navigator.share){
+navigator.share({title:'Happy Birthday from Samara AI!',text,url:'https://ai.learningwithsamara.com'});
+}else{
+navigator.clipboard?.writeText(text);
+App.toast('Birthday message copied! Share it! 🎂');
+}
+},
+earnBadge(){
+const badges=JSON.parse(localStorage.getItem('samara_owned_items')||'[]');
+if(!badges.includes('birthday-star')){
+badges.push('birthday-star');
+localStorage.setItem('samara_owned_items',JSON.stringify(badges));
+App.toast('🎂 Birthday Star badge earned! 🌟');
+}
+},
+openSettings(){
+const existing=localStorage.getItem('samara_birthday');
+const div=document.createElement('div');
+div.id='birthday-settings';
+div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:32px 28px;max-width:380px;width:100%;text-align:center;border:2px solid rgba(255,217,61,0.4);position:relative;">
+<button onclick="document.getElementById('birthday-settings').remove()" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:1rem;">✕</button>
+<div style="font-size:3rem;margin-bottom:10px;">🎂</div>
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.4rem;margin-bottom:6px;">Birthday Shoutout!</div>
+<div style="color:rgba(255,255,255,0.75);font-size:0.88rem;margin-bottom:18px;line-height:1.6;">Set your birthday and Samara will surprise you with a special shoutout, confetti and bonus coins on your big day!</div>
+<div style="margin-bottom:14px;">
+<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.9rem;margin-bottom:8px;">Enter your birthday:</div>
+<input type="date" id="bday-input" value="${existing||''}" style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 14px;color:#fff;font-size:0.95rem;outline:none;box-sizing:border-box;" />
+</div>
+<div style="margin-bottom:16px;">
+<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.9rem;margin-bottom:8px;">Pick your tutor:</div>
+<div style="display:flex;gap:10px;justify-content:center;">
+<div onclick="BirthdayShoutout._pickTutor('samara',this)" data-tutor="samara" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid rgba(255,217,61,0.5);">
+<img src="samara.png.jpeg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.72rem;margin-top:4px;">Samara</div>
+</div>
+<div onclick="BirthdayShoutout._pickTutor('littlejr',this)" data-tutor="littlejr" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid transparent;">
+<img src="littlejr.png.jpeg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='🧒'"/>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.72rem;margin-top:4px;">Little Jr</div>
+</div>
+<div onclick="BirthdayShoutout._pickTutor('mommytutor',this)" data-tutor="mommytutor" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid transparent;">
+<img src="tutormommy.png.jpeg" style="width:50px;height:50px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='👩'"/>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.72rem;margin-top:4px;">Mommy Tutor</div>
+</div>
+</div>
+</div>
+<button onclick="BirthdayShoutout.saveBirthday()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;width:100%;margin-bottom:8px;">🎂 Save My Birthday!</button>
+<button onclick="BirthdayShoutout.showShoutout()" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-family:'Fredoka One',cursive;font-size:0.85rem;padding:10px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;width:100%;">👀 Preview Shoutout</button>
+</div>`;
+document.body.appendChild(div);
+},
+_pickTutor(id,el){
+Avatars.select(id);
+document.querySelectorAll('[data-tutor]').forEach(d=>d.style.borderColor='transparent');
+el.style.borderColor='rgba(255,217,61,0.5)';
+},
+saveBirthday(){
+const input=document.getElementById('bday-input');
+const val=input?.value;
+if(!val){App.toast('Please enter your birthday! 🎂');return;}
+localStorage.setItem('samara_birthday',val);
+document.getElementById('birthday-settings')?.remove();
+App.toast('🎂 Birthday saved! Samara will surprise you on your special day!',3000);
+}
+};
+window.BirthdayShoutout=BirthdayShoutout;
+
+
 // ── SPEAKING COACH ───────────────────────────────────────
 const SpeakingCoach={
 PROMPTS:[
