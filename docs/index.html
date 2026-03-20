@@ -7375,6 +7375,36 @@ return bank.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q
 }
 };
 window.ESL=ESL;
+// ── SPEAKING COACH ───────────────────────────────────────
+const SpeakingCoach={
+PROMPTS:[
+'What is your favorite animal and why do you like it?',
+'Tell me about your best day ever!',
+'If you could fly anywhere, where would you go?',
+'What is your favorite food and how does it taste?',
+'Describe your bedroom using three words.',
+'If you had a superpower, what would it be?',
+'Tell me about someone you love very much.',
+'What makes you laugh the most?',
+'If you could be any animal for a day, which one?',
+'What is your favorite thing to do after school?',
+'Tell me about your best friend.',
+'If you found a magic door, where would it lead?',
+'What would you do if you were invisible for a day?',
+'Describe your perfect birthday party!',
+'What is something you are really good at?',
+],
+BADGES:[
+{id:'first-speaker',icon:'🎤',name:'First Speaker',desc:'Completed your first session!'},
+{id:'brave-voice',icon:'🦁',name:'Brave Voice',desc:'Completed 3 speaking sessions!'},
+{id:'storyteller',icon:'📖',name:'Storyteller',desc:'Completed 5 speaking sessions!'},
+{id:'confident-kid',icon:'⭐',name:'Confident Kid',desc:'Completed 10 speaking sessions!'},
+],
+currentPrompt:'',
+sessionsToday:0,
+totalSessions:0, 
+};
+window.ESL=ESL;
   
 // ── PROMO CODE ───────────────────────────────────────────────
 const PromoCode = {
