@@ -2260,11 +2260,11 @@ const SoundSystem = {
       if(!chunk || chunk.length < 2) { setTimeout(speakChunk, 50); return; }
 
       const utt = new SpeechSynthesisUtterance(chunk);
-      utt.rate = rate;
-      utt.pitch = isMobile ? Math.max(1.0, pitch - 0.1) : pitch;
+      utt.rate = isMobile ? Math.min(rate, 0.85) : rate;
+      utt.pitch = isMobile ? Math.min(pitch, 1.2) : pitch;
       utt.volume = 1.0;
       utt.lang = 'en-US';
-
+  
       if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
 
