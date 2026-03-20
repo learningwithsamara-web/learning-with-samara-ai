@@ -7386,11 +7386,11 @@ MAX_FAMILY:4,
 getMax(){
 return this.MAX_PRO;
 },
+getProfiles(){
+return JSON.parse(localStorage.getItem('samara_family_profiles')||'[]');
+},
 saveProfiles(profiles){
 localStorage.setItem('samara_family_profiles',JSON.stringify(profiles));
-},
-init(){
-this.render();
 },
 render(){
 const list=document.getElementById('family-profiles-list');
