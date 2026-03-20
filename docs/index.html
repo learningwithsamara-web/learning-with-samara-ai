@@ -7423,7 +7423,11 @@ const avName=Avatars.names[av]||'Samara';
 const msg=this.MESSAGES[Math.floor(Math.random()*this.MESSAGES.length)];
 this.launchConfetti();
 SoundSystem.playTone('celebrate');
-setTimeout(()=>SoundSystem.speak('Happy Birthday '+name+'! '+msg,0.82,1.35),500);
+```
+
+Then find this line inside the birthday box HTML:
+```
+<div style="font-size:4rem;margin-bottom:8px;animation:bounce 1s ease-in-out infinite;">🎂</div>
 const div=document.createElement('div');
 div.className='birthday-overlay';
 div.id='birthday-overlay';
