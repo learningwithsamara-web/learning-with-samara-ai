@@ -7408,8 +7408,9 @@ MAX_FREE:0,
 MAX_PRO:2,
 MAX_FAMILY:4,
 getMax(){
-if(Plan.isPlan('family'))return this.MAX_FAMILY;
-if(Plan.isPro())return this.MAX_PRO;
+const plan=localStorage.getItem('samara_plan')||'free';
+if(plan==='family')return this.MAX_FAMILY;
+if(plan==='pro'||plan==='monthly'||plan==='yearly')return this.MAX_PRO;
 return this.MAX_FREE;
 },
 getProfiles(){
