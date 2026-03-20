@@ -3375,7 +3375,7 @@ const App = {
     SoundSystem.stop(); // stop any speaking when changing screens
     if(id==='screen-auth'&&param)App.switchTab(param);
     if(id==='screen-dashboard')App.renderDash();
-    if(id==='screen-parent'){App.renderParent();FamilyProfiles.render();}  // open to all — upsell inside
+    if(id==='screen-parent'){App.renderParent();FamilyProfiles.render().catch(e=>console.error('Family profiles error:',e));}
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
     if(id==='screen-research')setTimeout(()=>{
       if(!S.user){ App.requireSignup('Research Anything!','🔭','Create your free account to explore any topic with Samara as your personal AI tutor!'); App.showScreen('screen-home'); return; }
