@@ -1,6 +1,6 @@
 // ── Samara AI Service Worker ─────────────────────────────────
 // Version — bump this to force cache refresh on update
-const CACHE_VERSION = 'samara-v1.0.51';
+const CACHE_VERSION = 'samara-v1.0.52';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 
