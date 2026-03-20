@@ -7380,46 +7380,98 @@ window.ESL=ESL;
 
 // ── FAMILY PROFILES ──────────────────────────────────────
 const FamilyProfiles={
-MAX_FREE:0,
-MAX_PRO:2,
-MAX_FAMILY:4,
-getMax(){
-return this.MAX_PRO;
+async getMax(){
+const user=await DB.getUser();
+if(!user)return 0;
+const plan=user.user_metadata?.plan||localStorage.getItem('samara_plan')||'free';
+if(plan.includes('family'))return 4;
+if(plan.includes('pro')||plan.includes('monthly')||plan.includes('yearly'))return 2;
+return 0;
 },
-getProfiles(){
-return JSON.parse(localStorage.getItem('samara_family_profiles')||'[]');
+async getProfiles(){
+const user=await DB.getUser();
+if(!user)return [];
+try{
+const res=await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?parent_id=eq.${user.id}&order=created_at.asc`,{
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`}
+});
+const data=await res.json();
+return Array.isArray(data)?data:[];
+}catch(e){
+console.error('Failed to load profiles:',e);
+return [];
+}
 },
-saveProfiles(profiles){
-localStorage.setItem('samara_family_profiles',JSON.stringify(profiles));
+async saveProfile(profile){
+const user=await DB.getUser();
+if(!user)return null;
+try{
+const res=await fetch(`${SUPABASE_URL}/rest/v1/child_profiles`,{
+method:'POST',
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`,'Content-Type':'application/json','Prefer':'return=representation'},
+body:JSON.stringify({parent_id:user.id,name:profile.name,birthday:profile.birthday||null,age_group:profile.ageGroup||'7-10',tutor:profile.tutor||'samara',avatar:profile.avatar||'📚'})
+});
+const data=await res.json();
+return Array.isArray(data)?data[0]:null;
+}catch(e){
+console.error('Failed to save profile:',e);
+return null;
+}
 },
-render(){
+async updateProfile(id,profile){
+const user=await DB.getUser();
+if(!user)return;
+try{
+await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?id=eq.${id}`,{
+method:'PATCH',
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`,'Content-Type':'application/json'},
+body:JSON.stringify({name:profile.name,birthday:profile.birthday||null,age_group:profile.ageGroup||'7-10',tutor:profile.tutor||'samara',avatar:profile.avatar||'📚'})
+});
+}catch(e){
+console.error('Failed to update profile:',e);
+}
+},
+async deleteProfile(id){
+const user=await DB.getUser();
+if(!user)return;
+try{
+await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?id=eq.${id}`,{
+method:'DELETE',
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`}
+});
+}catch(e){
+console.error('Failed to delete profile:',e);
+}
+},
+async render(){
 const list=document.getElementById('family-profiles-list');
 const notice=document.getElementById('family-plan-notice');
 const addBtn=document.getElementById('add-child-btn');
 if(!list)return;
-const profiles=this.getProfiles();
-const max=this.getMax();
+list.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;padding:16px;">Loading profiles... ⏳</div>';
+const profiles=await this.getProfiles();
+const max=await this.getMax();
 if(profiles.length===0){
 list.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;padding:16px;">No child profiles yet — add your first child! 👶</div>';
 }else{
 list.innerHTML=profiles.map((p,i)=>`
 <div style="background:rgba(255,255,255,0.07);border-radius:16px;padding:14px 16px;border:1.5px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:12px;">
-<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#C77DFF,#7928CA);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${p.avatar||'👤'}</div>
+<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#C77DFF,#7928CA);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${p.avatar||'📚'}</div>
 <div style="flex:1;">
 <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${p.name}</div>
-<div style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Age group: ${p.ageGroup||'Not set'} · Tutor: ${p.tutor||'Samara'}</div>
+<div style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Age: ${p.age_group||'Not set'} · Tutor: ${p.tutor||'Samara'}</div>
 ${p.birthday?`<div style="color:#FFD93D;font-size:0.78rem;">🎂 Birthday: ${new Date(p.birthday+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div>`:''}
 </div>
 <div style="display:flex;gap:6px;">
-<button onclick="FamilyProfiles.editChild(${i})" style="background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">✏️</button>
-<button onclick="FamilyProfiles.deleteChild(${i})" style="background:rgba(255,107,107,0.2);color:#FF6B6B;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">🗑️</button>
+<button onclick="FamilyProfiles.editChild('${p.id}')" style="background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">✏️</button>
+<button onclick="FamilyProfiles.deleteChild('${p.id}')" style="background:rgba(255,107,107,0.2);color:#FF6B6B;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">🗑️</button>
 </div>
 </div>`).join('');
 }
-if(profiles.length>=max&&max>0){
+if(max===0){
 if(notice)notice.style.display='block';
 if(addBtn)addBtn.style.display='none';
-}else if(max===0){
+}else if(profiles.length>=max){
 if(notice)notice.style.display='block';
 if(addBtn)addBtn.style.display='none';
 }else{
@@ -7427,31 +7479,30 @@ if(notice)notice.style.display='none';
 if(addBtn)addBtn.style.display='block';
 }
 },
-addChild(){
-const max=this.getMax();
-const profiles=this.getProfiles();
+async addChild(){
+const max=await this.getMax();
+const profiles=await this.getProfiles();
 if(max===0){App.showScreen('screen-pricing');App.toast('⭐ Upgrade to Pro to add child profiles!');return;}
 if(profiles.length>=max){App.showScreen('screen-pricing');App.toast('⭐ Upgrade to add more children!');return;}
-this.showForm(-1,{});
+this.showForm(null,{});
 },
-editChild(index){
-const profiles=this.getProfiles();
-this.showForm(index,profiles[index]);
+async editChild(id){
+const profiles=await this.getProfiles();
+const profile=profiles.find(p=>p.id===id);
+if(profile)this.showForm(id,profile);
 },
-deleteChild(index){
-const profiles=this.getProfiles();
-profiles.splice(index,1);
-this.saveProfiles(profiles);
-this.render();
+async deleteChild(id){
+await this.deleteProfile(id);
+await this.render();
 App.toast('Child profile removed!');
 },
-showForm(index,data){
+showForm(id,data){
 const div=document.createElement('div');
 div.id='child-form-overlay';
 div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
 div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:400px;width:100%;border:2px solid rgba(199,125,255,0.4);position:relative;">
 <button onclick="document.getElementById('child-form-overlay').remove()" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:50%;width:30px;height:30px;cursor:pointer;">✕</button>
-<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:18px;text-align:center;">${index===-1?'👶 Add Child':'✏️ Edit Child'}</div>
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:18px;text-align:center;">${!id?'👶 Add Child':'✏️ Edit Child'}</div>
 <div style="margin-bottom:12px;">
 <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:6px;">Child Name:</div>
 <input id="cf-name" type="text" placeholder="Enter name..." value="${data.name||''}" style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;"/>
@@ -7463,35 +7514,35 @@ div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);bo
 <div style="margin-bottom:12px;">
 <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:6px;">Age Group:</div>
 <select id="cf-age" style="width:100%;background:#2d1b69;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;">
-<option value="0-3" ${data.ageGroup==='0-3'?'selected':''}>0-3 Baby World</option>
-<option value="4-6" ${data.ageGroup==='4-6'?'selected':''}>4-6 Junior</option>
-<option value="7-10" ${data.ageGroup==='7-10'?'selected':''}>7-10 Explorer</option>
-<option value="11-14" ${data.ageGroup==='11-14'?'selected':''}>11-14 Pro</option>
-<option value="15-17" ${data.ageGroup==='15-17'?'selected':''}>15-17 Advanced</option>
+<option value="0-3" ${(data.age_group||data.ageGroup)==='0-3'?'selected':''}>0-3 Baby World</option>
+<option value="4-6" ${(data.age_group||data.ageGroup)==='4-6'?'selected':''}>4-6 Junior</option>
+<option value="7-10" ${(data.age_group||data.ageGroup)==='7-10'?'selected':''}>7-10 Explorer</option>
+<option value="11-14" ${(data.age_group||data.ageGroup)==='11-14'?'selected':''}>11-14 Pro</option>
+<option value="15-17" ${(data.age_group||data.ageGroup)==='15-17'?'selected':''}>15-17 Advanced</option>
 </select>
 </div>
 <div style="margin-bottom:18px;">
 <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:8px;">Preferred Tutor:</div>
 <div style="display:flex;gap:8px;justify-content:center;">
-<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="samara" id="cf-tutor-samara" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${(!data.tutor||data.tutor==='samara')?'rgba(255,217,61,0.6)':'transparent'};">
+<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="samara" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${(!data.tutor||data.tutor==='samara')?'rgba(255,217,61,0.6)':'transparent'};">
 <img src="samara.png.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
 <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.7rem;margin-top:3px;">Samara</div>
 </div>
-<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="littlejr" id="cf-tutor-littlejr" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${data.tutor==='littlejr'?'rgba(255,217,61,0.6)':'transparent'};">
+<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="littlejr" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${data.tutor==='littlejr'?'rgba(255,217,61,0.6)':'transparent'};">
 <img src="littlejr.png.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='🧒'"/>
 <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.7rem;margin-top:3px;">Little Jr</div>
 </div>
-<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="mommytutor" id="cf-tutor-mommytutor" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${data.tutor==='mommytutor'?'rgba(255,217,61,0.6)':'transparent'};">
+<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="mommytutor" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${data.tutor==='mommytutor'?'rgba(255,217,61,0.6)':'transparent'};">
 <img src="tutormommy.png.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='👩'"/>
 <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.7rem;margin-top:3px;">Mommy Tutor</div>
 </div>
 </div>
 </div>
-<button onclick="FamilyProfiles.saveChild(${index})" style="background:linear-gradient(135deg,#6BCB77,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px;border-radius:50px;border:none;cursor:pointer;width:100%;">💾 Save Profile</button>
+<button onclick="FamilyProfiles.saveChild('${id||''}')" style="background:linear-gradient(135deg,#6BCB77,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px;border-radius:50px;border:none;cursor:pointer;width:100%;">💾 Save Profile</button>
 </div>`;
 document.body.appendChild(div);
 },
-saveChild(index){
+async saveChild(id){
 const name=document.getElementById('cf-name')?.value.trim();
 if(!name){App.toast('Please enter a name!');return;}
 const birthday=document.getElementById('cf-birthday')?.value||'';
@@ -7499,13 +7550,16 @@ const ageGroup=document.getElementById('cf-age')?.value||'7-10';
 const selectedTutor=document.querySelector('[data-t][style*="rgba(255,217,61"]');
 const tutor=selectedTutor?.getAttribute('data-t')||'samara';
 const avatars={'0-3':'🍼','4-6':'🧒','7-10':'📚','11-14':'🎓','15-17':'🏆'};
-const profile={name,birthday,ageGroup,tutor,avatar:avatars[ageGroup]||'👤'};
-const profiles=this.getProfiles();
-if(index===-1){profiles.push(profile);}else{profiles[index]=profile;}
-this.saveProfiles(profiles);
+const profile={name,birthday,ageGroup,tutor,avatar:avatars[ageGroup]||'📚'};
+if(id){
+await this.updateProfile(id,profile);
+App.toast('✅ Profile updated!');
+}else{
+await this.saveProfile(profile);
+App.toast('👶 Child profile added!');
+}
 document.getElementById('child-form-overlay')?.remove();
-this.render();
-App.toast(index===-1?'👶 Child profile added!':'✅ Profile updated!');
+await this.render();
 if(birthday){
 const today=new Date().toISOString().slice(5,10);
 const bdayDate=birthday.slice(5,10);
@@ -7514,7 +7568,6 @@ if(today===bdayDate)setTimeout(()=>BirthdayShoutout.showShoutoutForChild(profile
 }
 };
 window.FamilyProfiles=FamilyProfiles;
-
 // ── BIRTHDAY SHOUTOUT ────────────────────────────────────
 const BirthdayShoutout={
 MESSAGES:[
