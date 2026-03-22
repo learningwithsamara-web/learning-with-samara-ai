@@ -861,7 +861,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   <div style="margin-top:28px;">
     <h3 class="dash-section-title">👨‍👩‍👧 Family Profiles</h3>
     <div id="family-profiles-list" style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;"></div>
-    <button onclick="FamilyProfiles.addChild()" id="add-child-btn" style="background:linear-gradient(135deg,#6BCB77,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;width:100%;">👶 Add Child Profile</button>
+    onclick="FamilyProfiles.addChild().catch(e=>{console.error('AddChild error:',e);App.toast('Error: '+e.message);})"
     <div id="family-plan-notice" style="display:none;background:rgba(255,217,61,0.1);border-radius:12px;padding:12px;margin-top:10px;text-align:center;border:1px solid rgba(255,217,61,0.25);">
       <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">⭐ Upgrade to add more children!</div>
       <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:4px;">Pro: 2 children · Family Pro: 4 children</div>
