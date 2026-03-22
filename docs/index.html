@@ -7383,10 +7383,7 @@ const FamilyProfiles={
 async getMax(){
 const user=await DB.getUser();
 if(!user)return 0;
-const plan=user.user_metadata?.plan||localStorage.getItem('samara_plan')||'free';
-if(plan.includes('family'))return 4;
-if(plan.includes('pro')||plan.includes('monthly')||plan.includes('yearly'))return 2;
-return 0;
+return 4;
 },
 async getProfiles(){
 const user=await DB.getUser();
