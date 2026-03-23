@@ -2225,6 +2225,7 @@ const SoundSystem = {
   async speakGoogle(text, rate=0.9, pitch=2.0) {
     if(!this.enabled || !text) return;
     try {
+      console.log('[Google TTS] Requesting:', text.slice(0,50));
       const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
