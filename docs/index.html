@@ -2222,13 +2222,32 @@ const SoundSystem = {
   },
 
   // Main speak function — tuned for natural girl child voice
-  speak(text, rate=0.88, pitch=1.35) {
+  async speakGoogle(text, rate=0.9, pitch=2.0) {
+    if(!this.enabled || !text) return;
+    try {
+      const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({text:String(text).slice(0,500), rate, pitch})
+      });
+      const data = await res.json();
+      if(data.audioContent) {
+        this.stop();
+        const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+        audio.play();
+        this._currentAudio = audio;
+        return;
+      }
+    } catch(e) {
+      console.warn('Google TTS failed, using browser voice:', e);
+    }
+    this.speak(text, rate, pitch);
+  },
+speak(text, rate=0.88, pitch=1.35) {
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
-
     this._speaking = false;
     if(this._resumeInterval) clearInterval(this._resumeInterval);
     window.speechSynthesis.cancel();
-
     const clean = text
       .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
       .replace(/[\u2600-\u27BF]/g, '')
