@@ -2262,7 +2262,7 @@ speak(text, rate=0.88, pitch=1.35) {
     if(!clean) return;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const maxLen = isMobile ? 100 : 180;
+    const maxLen = isMobile ? 170 : 350;
 
     const rawChunks = clean.match(/[^.!?]+[.!?]*/g) || [clean];
     const chunks = [];
@@ -2305,7 +2305,7 @@ speak(text, rate=0.88, pitch=1.35) {
       if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
 
-      utt.onend = () => setTimeout(speakChunk, isMobile ? 180 : 80);
+      utt.onend = () => setTimeout(speakChunk, isMobile ? 300 : 170);
       utt.onerror = () => setTimeout(speakChunk, 200);
 
       window.speechSynthesis.speak(utt);
