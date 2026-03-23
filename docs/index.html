@@ -7389,8 +7389,10 @@ async getProfiles(){
 const user=await DB.getUser();
 if(!user)return [];
 try{
+const session=await DB.getSession?.();
+const token=session?.access_token||SUPABASE_ANON;
 const res=await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?parent_id=eq.${user.id}&order=created_at.asc`,{
-headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`}
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${token}`}
 });
 const data=await res.json();
 return Array.isArray(data)?data:[];
