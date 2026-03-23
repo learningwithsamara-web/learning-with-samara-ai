@@ -2297,8 +2297,8 @@ speak(text, rate=0.88, pitch=1.35) {
       if(!chunk || chunk.length < 2) { setTimeout(speakChunk, 50); return; }
 
       const utt = new SpeechSynthesisUtterance(chunk);
-      utt.rate = isMobile ? Math.min(rate, 0.85) : rate;
-      utt.pitch = isMobile ? Math.min(pitch, 1.2) : pitch;
+      utt.rate = isMobile ? Math.min(rate, 0.82) : rate;
+      utt.pitch = isMobile ? Math.min(pitch, 1.15) : pitch;
       utt.volume = 1.0;
       utt.lang = 'en-US';
   
