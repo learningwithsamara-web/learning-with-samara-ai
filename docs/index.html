@@ -2248,6 +2248,7 @@ console.log('[Google TTS] Requesting:', text.slice(0,50));
   },
 speak(text, rate=0.88, pitch=1.35) {
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
+    if(this._googleTTSActive) return;
     this._speaking = false;
     if(this._resumeInterval) clearInterval(this._resumeInterval);
     window.speechSynthesis.cancel();
