@@ -8185,12 +8185,12 @@ this.setMsg('Letters shuffled! Look for new words!');
 },
 skipTurn(){
 this.placedTiles.forEach(t=>{this.boardState[t.idx]=null;this.players[this.currentPlayer].rack.push(t.letter);});
-this.placedTiles=[];
-this.buildBoard();
-const newLetters=this.drawLetters(2);
-this.players[this.currentPlayer].rack.push(...newLetters);
-this.renderRack();
-this.setMsg('Turn skipped! Got '+newLetters.length+' new letters.');
+this.placedTiles=[];this.buildBoard();
+const nl=this.drawLetters(2);
+this.players[this.currentPlayer].rack.push(...nl);
+this.players[this.currentPlayer].lastWord='Skipped';
+this.renderRack();this.updateScoreCards();
+this.setMsg('Turn skipped! Got '+nl.length+' new letters.');
 this.nextTurn();
 },
 nextTurn(){
