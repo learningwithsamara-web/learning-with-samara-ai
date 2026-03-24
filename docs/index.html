@@ -8199,8 +8199,8 @@ b.textContent=a;
 b.onclick=()=>this.check(a,q.a,b);
 g.appendChild(b);
 });
-document.getElementById('sl-q-overlay').style.display='flex';
-setTimeout(()=>SoundSystem.speakQuestion(q.q),500);
+SoundSystem.speakQuestion(q.q);
+setTimeout(()=>{document.getElementById('sl-q-overlay').style.display='flex';},300);
 },
 check(sel,correct,btn){
 document.querySelectorAll('#sl-qg button').forEach(b=>b.onclick=null);
