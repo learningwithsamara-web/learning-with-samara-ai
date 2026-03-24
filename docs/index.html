@@ -7847,6 +7847,288 @@ App.toast('🎂 Birthday saved! Samara will surprise you on your special day!',3
 window.BirthdayShoutout=BirthdayShoutout;
 
 
+// ── SNAKE & LADDER GAME ───────────────────────────────────
+const SLGame={
+SN:{16:6,47:26,49:11,56:53,62:19,64:60,87:24,93:73,95:75,99:78},
+LA:{4:14,9:31,20:38,28:84,40:59,51:67,63:81,71:91},
+DF:['⚀','⚁','⚂','⚃','⚄','⚅'],
+QS:{
+'4-6':[
+{q:'What color is the sky?',a:'Blue',w:['Green','Red','Purple']},
+{q:'How many legs does a dog have?',a:'4',w:['2','6','8']},
+{q:'What sound does a cow make?',a:'Moo',w:['Woof','Meow','Oink']},
+{q:'Which is a fruit?',a:'Apple',w:['Carrot','Potato','Onion']},
+{q:'How many fingers on TWO hands?',a:'10',w:['8','12','5']},
+{q:'What shape is a ball?',a:'Circle',w:['Square','Triangle','Star']},
+{q:'What do fish live in?',a:'Water',w:['Trees','Sand','Clouds']},
+{q:'Which animal has a trunk?',a:'Elephant',w:['Giraffe','Lion','Monkey']},
+{q:'What color is a banana?',a:'Yellow',w:['Blue','Red','Green']},
+{q:'Which season has snow?',a:'Winter',w:['Summer','Spring','Autumn']},
+],
+'7-10':[
+{q:'What is 7 times 8?',a:'56',w:['54','58','48']},
+{q:'Capital of Jamaica?',a:'Kingston',w:['Montego Bay','Ocho Rios','Spanish Town']},
+{q:'Sides of a hexagon?',a:'6',w:['5','7','8']},
+{q:'Planet closest to the Sun?',a:'Mercury',w:['Venus','Earth','Mars']},
+{q:'What is 144 divided by 12?',a:'12',w:['11','13','14']},
+{q:'Fastest land animal?',a:'Cheetah',w:['Lion','Horse','Leopard']},
+{q:'Past tense of run?',a:'Ran',w:['Runned','Running','Runs']},
+{q:'What is 25% of 80?',a:'20',w:['15','25','30']},
+{q:'How many continents?',a:'7',w:['5','6','8']},
+{q:'Gas we breathe in?',a:'Oxygen',w:['Carbon dioxide','Nitrogen','Helium']},
+],
+'11-14':[
+{q:'Square root of 144?',a:'12',w:['11','13','14']},
+{q:'Gas plants absorb?',a:'Carbon dioxide',w:['Oxygen','Nitrogen','Hydrogen']},
+{q:'Who wrote Romeo and Juliet?',a:'Shakespeare',w:['Dickens','Austen','Twain']},
+{q:'Powerhouse of the cell?',a:'Mitochondria',w:['Nucleus','Ribosome','Vacuole']},
+{q:'15% of 200?',a:'30',w:['25','35','20']},
+{q:'Which continent is Egypt in?',a:'Africa',w:['Asia','Europe','South America']},
+{q:'Formula for water?',a:'H2O',w:['CO2','NaCl','O2']},
+{q:'WW2 ended in?',a:'1945',w:['1944','1946','1940']},
+{q:'Speed of light?',a:'300000 km/s',w:['150000 km/s','450000 km/s','100000 km/s']},
+{q:'Largest ocean?',a:'Pacific',w:['Atlantic','Indian','Arctic']},
+],
+'15-17':[
+{q:'Solve: 2x + 6 = 18',a:'x = 6',w:['x = 5','x = 7','x = 9']},
+{q:'Who developed theory of relativity?',a:'Einstein',w:['Newton','Hawking','Darwin']},
+{q:'Derivative of x squared?',a:'2x',w:['x2','2','x']},
+{q:'Berlin Wall fell in?',a:'1989',w:['1991','1987','1990']},
+{q:'Chemical symbol for gold?',a:'Au',w:['Go','Gd','Ag']},
+{q:'Who painted Mona Lisa?',a:'Leonardo da Vinci',w:['Michelangelo','Raphael','Botticelli']},
+{q:'What is photosynthesis?',a:'Plants converting sunlight to energy',w:['Animals breathing','Water cycle','Soil absorption']},
+{q:'GDP means?',a:'Gross Domestic Product',w:['General Daily Payment','Government Debt Plan','Gross Daily Profit']},
+{q:'Newton first law?',a:'Object in motion stays in motion',w:['Force equals mass times acceleration','Every action has equal reaction','Energy cannot be created']},
+{q:'DNA stands for?',a:'Deoxyribonucleic acid',w:['Dynamic nucleic acid','Double neutron atom','Dense nitrogen acid']},
+]
+},
+age:'4-6',pos:[1,1],pts:[0,0],turn:0,waiting:false,pending:0,
+init(){
+this.reset();
+},
+cellPos(n){
+const row=Math.floor((n-1)/10);
+const col=(n-1)%10;
+const r=9-row;
+const c=row%2===0?col:9-col;
+return{x:c*50,y:r*50};
+},
+drawBoard(){
+const cv=document.getElementById('sl-canvas');
+if(!cv)return;
+const ctx=cv.getContext('2d');
+ctx.clearRect(0,0,500,500);
+const colors=[['#1a472a','#2d6a4f'],['#14213d','#1b3a6b'],['#3d1f00','#6b3a2a'],['#2c0e37','#4a1a6b'],['#0d3b4a','#1a6b7a'],['#1f3a00','#3d6b1a'],['#3a0d00','#6b2a14'],['#00213a','#0a4a6b'],['#1a0a2e','#302060'],['#003a1a','#0a6b3d']];
+for(let row=0;row<10;row++){
+for(let col=0;col<10;col++){
+const actualRow=9-row;
+const actualCol=actualRow%2===0?col:9-col;
+const n=actualRow*10+actualCol+1;
+const x=col*50,y=row*50;
+const pair=Math.floor((n-1)/10);
+ctx.fillStyle=n%2===0?colors[pair%10][0]:colors[pair%10][1];
+ctx.fillRect(x,y,50,50);
+ctx.strokeStyle='rgba(255,255,255,0.1)';
+ctx.strokeRect(x,y,50,50);
+ctx.fillStyle='rgba(255,255,255,0.5)';
+ctx.font='bold 9px Nunito,sans-serif';
+ctx.textAlign='left';
+ctx.fillText(n,x+3,y+11);
+}
+}
+const p1=this.cellPos(1);
+ctx.fillStyle='rgba(107,203,119,0.3)';
+ctx.fillRect(p1.x,p1.y,50,50);
+ctx.font='22px serif';ctx.textAlign='center';
+ctx.fillText('🚀',p1.x+25,p1.y+33);
+const p100=this.cellPos(100);
+ctx.fillStyle='rgba(255,217,61,0.4)';
+ctx.fillRect(p100.x,p100.y,50,50);
+ctx.font='22px serif';ctx.textAlign='center';
+ctx.fillText('🏆',p100.x+25,p100.y+33);
+const sc=['#FF4757','#FF6348','#FF4500','#E84393','#FF1744','#FF6B6B','#FF3D00','#FF1744','#D50000','#FF4081'];
+let ci=0;
+for(const[head,tail] of Object.entries(this.SN)){
+const hp=this.cellPos(parseInt(head));
+const tp=this.cellPos(parseInt(tail));
+const hx=hp.x+25,hy=hp.y+25,tx=tp.x+25,ty=tp.y+25;
+const col=sc[ci%sc.length];ci++;
+const mx=(hx+tx)/2+(Math.sin(ci*1.5)*60);
+const my=(hy+ty)/2+(Math.cos(ci*1.5)*40);
+ctx.beginPath();ctx.moveTo(hx,hy);
+ctx.quadraticCurveTo(mx,my,tx,ty);
+ctx.strokeStyle=col;ctx.lineWidth=6;ctx.lineCap='round';ctx.setLineDash([]);ctx.stroke();
+ctx.beginPath();ctx.moveTo(hx,hy);
+ctx.quadraticCurveTo(mx,my,tx,ty);
+ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.lineWidth=2;ctx.stroke();
+ctx.font='18px serif';ctx.textAlign='center';
+ctx.fillText('🐍',hx,hy+6);
+ctx.font='11px serif';ctx.fillText('💀',tx,ty+5);
+}
+for(const[bottom,top] of Object.entries(this.LA)){
+const bp=this.cellPos(parseInt(bottom));
+const tp=this.cellPos(parseInt(top));
+const bx=bp.x+25,by=bp.y+25,tx=tp.x+25,ty=tp.y+25;
+const angle=Math.atan2(ty-by,tx-bx);
+const perp=angle+Math.PI/2;
+const offset=5;
+const lx1=bx+Math.cos(perp)*offset,ly1=by+Math.sin(perp)*offset;
+const lx2=bx-Math.cos(perp)*offset,ly2=by-Math.sin(perp)*offset;
+const rx1=tx+Math.cos(perp)*offset,ry1=ty+Math.sin(perp)*offset;
+const rx2=tx-Math.cos(perp)*offset,ry2=ty-Math.sin(perp)*offset;
+ctx.strokeStyle='#FFD93D';ctx.lineWidth=4;ctx.setLineDash([]);
+ctx.beginPath();ctx.moveTo(lx1,ly1);ctx.lineTo(rx1,ry1);ctx.stroke();
+ctx.beginPath();ctx.moveTo(lx2,ly2);ctx.lineTo(rx2,ry2);ctx.stroke();
+const steps=Math.max(3,Math.floor(Math.sqrt((tx-bx)**2+(ty-by)**2)/18));
+for(let i=1;i<steps;i++){
+const t=i/steps;
+const sx=lx1+(rx1-lx1)*t,sy=ly1+(ry1-ly1)*t;
+const ex=lx2+(rx2-lx2)*t,ey=ly2+(ry2-ly2)*t;
+ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(ex,ey);
+ctx.strokeStyle='rgba(255,217,61,0.6)';ctx.lineWidth=2;ctx.stroke();
+}
+ctx.font='16px serif';ctx.textAlign='center';
+ctx.fillText('🪜',bx,by+6);
+ctx.fillText('⭐',tx,ty+5);
+}
+ctx.lineWidth=1;ctx.setLineDash([]);
+const tokens=[{pos:this.pos[0],color:'#a855f7',ring:'#d8b4fe',label:'P1'},{pos:this.pos[1],color:'#f59e0b',ring:'#fde68a',label:'P2'}];
+tokens.forEach((t,i)=>{
+const p=this.cellPos(t.pos);
+const ox=i===0?14:36;
+const x=p.x+ox,y=p.y+25;
+ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fillStyle=t.ring;ctx.fill();
+ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fillStyle=t.color;ctx.fill();
+ctx.fillStyle='#fff';ctx.font='bold 7px Nunito,sans-serif';ctx.textAlign='center';
+ctx.fillText(t.label,x,y+3);
+});
+},
+setAge(a,btn){
+this.age=a;
+document.querySelectorAll('.sl-age-btn').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+this.reset();
+},
+roll(){
+if(this.waiting)return;
+this.waiting=true;
+document.getElementById('sl-rbtn').disabled=true;
+const d=document.getElementById('sl-dice');
+let t=0;
+const iv=setInterval(()=>{
+d.textContent=this.DF[Math.floor(Math.random()*6)];
+if(++t>10){
+clearInterval(iv);
+const r=Math.floor(Math.random()*6)+1;
+d.textContent=this.DF[r-1];
+this.pending=r;
+this.setSt('Player '+(this.turn+1)+' rolled '+r+'! Answer to move!');
+setTimeout(()=>this.showQ(),500);
+}
+},60);
+},
+showQ(){
+const qs=this.QS[this.age];
+const q=qs[Math.floor(Math.random()*qs.length)];
+const all=[q.a,...q.w].sort(()=>Math.random()-0.5);
+const qp=document.getElementById('sl-qp');
+qp.textContent='Player '+(this.turn+1)+' — Roll: '+this.pending;
+qp.style.background=this.turn===0?'linear-gradient(135deg,#a855f7,#7c3aed)':'linear-gradient(135deg,#f59e0b,#d97706)';
+document.getElementById('sl-qq').textContent=q.q;
+const g=document.getElementById('sl-qg');
+g.innerHTML='';
+all.forEach(a=>{
+const b=document.createElement('button');
+b.style.cssText='background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:11px 8px;font-size:0.8rem;cursor:pointer;text-align:center;font-weight:700;transition:all 0.2s;';
+b.textContent=a;
+b.onclick=()=>this.check(a,q.a,b);
+g.appendChild(b);
+});
+document.getElementById('sl-q-overlay').style.display='flex';
+},
+check(sel,correct,btn){
+document.querySelectorAll('#sl-qg button').forEach(b=>b.onclick=null);
+if(sel===correct){
+btn.style.background='rgba(107,203,119,0.3)';
+btn.style.borderColor='#6BCB77';
+btn.style.color='#6BCB77';
+document.getElementById('sl-q-overlay').style.display='none';
+this.pts[this.turn]+=10;
+this.move(this.pending);
+}else{
+btn.style.background='rgba(255,71,87,0.3)';
+btn.style.borderColor='#FF4757';
+btn.style.color='#FF4757';
+document.querySelectorAll('#sl-qg button').forEach(b=>{
+if(b.textContent===correct){b.style.background='rgba(107,203,119,0.3)';b.style.borderColor='#6BCB77';b.style.color='#6BCB77';}
+});
+setTimeout(()=>{
+document.getElementById('sl-q-overlay').style.display='none';
+this.setSt('Wrong! Correct: '+correct+'. Player '+(this.turn+1)+' stays at '+this.pos[this.turn]+'.');
+this.nextTurn();
+},1800);
+}
+},
+move(steps){
+let np=this.pos[this.turn]+steps;
+if(np>100)np=this.pos[this.turn];
+this.pos[this.turn]=np;
+this.drawBoard();this.updateUI();
+if(np===100){this.win();return;}
+if(this.SN[np]){
+const end=this.SN[np];
+setTimeout(()=>{
+this.setSt('🐍 SNAKE at '+np+'! Slides down to '+end+'! Oops!');
+this.pos[this.turn]=end;
+this.drawBoard();this.updateUI();
+setTimeout(()=>this.nextTurn(),1800);
+},600);
+}else if(this.LA[np]){
+const top=this.LA[np];
+setTimeout(()=>{
+this.setSt('🪜 LADDER at '+np+'! Climbs up to '+top+'! Amazing!');
+this.pos[this.turn]=top;
+this.drawBoard();this.updateUI();
+setTimeout(()=>this.nextTurn(),1800);
+},600);
+}else{
+this.setSt('Player '+(this.turn+1)+' moves to '+np+'! +10pts');
+setTimeout(()=>this.nextTurn(),900);
+}
+},
+nextTurn(){
+this.turn=this.turn===0?1:0;
+this.waiting=false;
+document.getElementById('sl-rbtn').disabled=false;
+this.setSt('Player '+(this.turn+1)+'\'s turn! Roll the dice!');
+this.updateUI();
+},
+updateUI(){
+for(let i=0;i<2;i++){
+document.getElementById('sl-pp'+i).textContent='Square '+this.pos[i]+' · '+this.pts[i]+' pts';
+document.getElementById('sl-p'+i+'card').style.border=this.turn===i?'2px solid #FFD93D':'2px solid rgba(255,255,255,0.1)';
+document.getElementById('sl-p'+i+'card').style.background=this.turn===i?'rgba(255,217,61,0.12)':'rgba(255,255,255,0.06)';
+}
+},
+win(){
+document.getElementById('sl-wt').textContent='Player '+(this.turn+1)+' Wins!';
+document.getElementById('sl-wm').textContent='Amazing! Reached square 100 with '+this.pts[this.turn]+' points!';
+document.getElementById('sl-win-overlay').style.display='flex';
+SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
+},
+setSt(m){const el=document.getElementById('sl-status');if(el)el.textContent=m;},
+reset(){
+this.pos=[1,1];this.pts=[0,0];this.turn=0;this.waiting=false;this.pending=0;
+const d=document.getElementById('sl-dice');if(d)d.textContent='🎲';
+const r=document.getElementById('sl-rbtn');if(r)r.disabled=false;
+this.setSt("Player 1's turn! Roll the dice!");
+const wo=document.getElementById('sl-win-overlay');if(wo)wo.style.display='none';
+const qo=document.getElementById('sl-q-overlay');if(qo)qo.style.display='none';
+this.drawBoard();this.updateUI();
+}
+};
+window.SLGame=SLGame;
+
 // ── SPEAKING COACH ───────────────────────────────────────
 const SpeakingCoach={
 PROMPTS:[
