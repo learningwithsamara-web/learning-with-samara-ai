@@ -8280,7 +8280,7 @@ SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
 },
 setSt(m){const el=document.getElementById('sl-status');if(el)el.textContent=m;},
 reset(){
-this.pos=[1,1];this.pts=[0,0];this.turn=0;this.waiting=false;this.pending=0;
+this.pos=[1,1];this.pts=[0,0];this.turn=0;this.waiting=false;this.pending=0;this.usedQ=[];
 const d=document.getElementById('sl-dice');if(d)d.textContent='🎲';
 const r=document.getElementById('sl-rbtn');if(r)r.disabled=false;
 this.setSt("Player 1's turn! Roll the dice!");
