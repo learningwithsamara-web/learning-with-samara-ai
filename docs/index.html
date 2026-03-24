@@ -1046,6 +1046,57 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div class="pep-subject-card" style="position:relative;overflow:hidden;opacity:0.5;"><div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#6BCB77,#4A90D9);border-radius:18px 18px 0 0;"></div><div class="pep-subject-icon">🧠</div><div class="pep-subject-name">Memory Match</div><div class="pep-subject-count">Coming Soon!</div></div>
   </div>
 </div>
+<!-- ══ SNAKE & LADDER ══ -->
+<div id="screen-snake-ladder" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+  <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
+    <button class="back-btn" style="position:relative;transform:none;top:auto;left:auto;" onclick="App.showScreen('screen-games')">← Back</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🐍 Samara's Snake & Ladder Game 🪜</div>
+  </div>
+  <div style="padding:8px 16px 4px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.78rem;">Roll · Answer · Win! First to square 100 wins the crown!</div>
+  <div style="display:flex;gap:6px;justify-content:center;padding:6px 16px;flex-wrap:wrap;" id="sl-age-bar">
+    <button class="sl-age-btn active" onclick="SLGame.setAge('4-6',this)">🧒 Ages 4-6</button>
+    <button class="sl-age-btn" onclick="SLGame.setAge('7-10',this)">📚 Ages 7-10</button>
+    <button class="sl-age-btn" onclick="SLGame.setAge('11-14',this)">🎓 Ages 11-14</button>
+    <button class="sl-age-btn" onclick="SLGame.setAge('15-17',this)">🏆 Ages 15-17</button>
+  </div>
+  <div style="display:flex;gap:12px;padding:8px 16px 16px;align-items:flex-start;">
+    <div style="flex:1;position:relative;">
+      <canvas id="sl-canvas" width="500" height="500" style="display:block;width:100%;border-radius:16px;border:3px solid rgba(255,255,255,0.2);box-shadow:0 0 40px rgba(199,125,255,0.3);"></canvas>
+    </div>
+    <div style="width:170px;display:flex;flex-direction:column;gap:8px;">
+      <div id="sl-p0card" style="border-radius:14px;padding:11px;border:2px solid #FFD93D;background:rgba(255,217,61,0.12);">
+        <div style="font-size:1.8rem;">🟣</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#fff;">Player 1</div>
+        <div id="sl-pp0" style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:2px;">Square 1 · 0 pts</div>
+      </div>
+      <div id="sl-p1card" style="border-radius:14px;padding:11px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);">
+        <div style="font-size:1.8rem;">🟡</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#fff;">Player 2</div>
+        <div id="sl-pp1" style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:2px;">Square 1 · 0 pts</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:12px;text-align:center;border:2px solid rgba(255,255,255,0.1);">
+        <div id="sl-dice" style="width:60px;height:60px;background:linear-gradient(135deg,#fff,#f0f0f0);border-radius:12px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 6px 20px rgba(0,0,0,0.4);border:3px solid rgba(255,255,255,0.8);">🎲</div>
+        <button id="sl-rbtn" onclick="SLGame.roll()" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:9px;border-radius:50px;border:none;cursor:pointer;width:100%;box-shadow:0 4px 15px rgba(199,125,255,0.4);">🎲 Roll!</button>
+      </div>
+      <div id="sl-status" style="background:rgba(255,255,255,0.06);border-radius:12px;padding:9px;font-size:0.72rem;color:rgba(255,255,255,0.85);text-align:center;min-height:38px;border:1px solid rgba(255,255,255,0.1);line-height:1.4;">Player 1's turn! 🎲</div>
+    </div>
+  </div>
+  <div id="sl-q-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:400px;width:100%;border:2px solid rgba(199,125,255,0.5);">
+      <div id="sl-qp" style="font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:10px;padding:6px 14px;border-radius:50px;display:inline-block;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;">Player 1</div>
+      <div id="sl-qq" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-bottom:18px;line-height:1.45;"></div>
+      <div id="sl-qg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+    </div>
+  </div>
+  <div id="sl-win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;text-align:center;border:3px solid #FFD93D;max-width:360px;width:90%;box-shadow:0 0 60px rgba(255,217,61,0.4);">
+      <div style="font-size:4rem;margin-bottom:10px;">🏆</div>
+      <div id="sl-wt" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:8px;">Player 1 Wins!</div>
+      <div id="sl-wm" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:22px;line-height:1.6;">Amazing champion!</div>
+      <button onclick="SLGame.reset()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">🎮 Play Again!</button>
+    </div>
+  </div>
+</div>
 <!-- ══ SPEAKING COACH ══ -->
 <div id="screen-speaking" class="screen">
   <div class="pep-header" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);">
