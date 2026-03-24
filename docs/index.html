@@ -3493,7 +3493,7 @@ const App = {
     if(id==='screen-homework'){ AITutor.hideFloat(); HomeworkHelper.init(); }
     if(id==='screen-speaking'){AITutor.hideFloat();SpeakingCoach.init();}
     if(id==='screen-games') AITutor.hideFloat();
-    if(id==='screen-snake-ladder'){AITutor.hideFloat();SLGame.init();}
+    if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>SLGame.init(),100);}
   },
 
   showProGate(message) {
