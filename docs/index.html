@@ -1151,10 +1151,10 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   <div id="sc-rules-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
     <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px;padding:24px;max-width:500px;width:100%;border:2px solid rgba(199,125,255,0.4);margin:auto;">
       <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.5rem;text-align:center;margin-bottom:4px;">How to Play Scrabble!</div>
-      <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;text-align:center;margin-bottom:16px;">Learn the rules and become a champion!</div>
+      <div style="color:rgba(255,255,255,0.9);font-size:0.78rem;text-align:center;margin-bottom:16px;">Learn the rules and become a champion!</div>
       <div style="margin-bottom:14px;">
         <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;margin-bottom:8px;">The Goal:</div>
-        <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px;color:rgba(255,255,255,0.85);font-size:0.8rem;">Score the most points by spelling words on the board! The player with the highest score wins!</div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.8rem;">Score the most points by spelling words on the board! The player with the highest score wins!</div>
       </div>
       <div style="margin-bottom:14px;">
         <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;margin-bottom:8px;">Step by Step:</div>
@@ -8095,8 +8095,21 @@ this.setMsg('Now tap any empty square on the board to place it!');
 this.setStep(2);
 },
 placeOnBoard(ci){
-if(this.selectedTile===null){this.setMsg('Pick a letter from your rack first!');this.setStep(1);return;}
-if(this.boardState[ci]){this.setMsg('That square is taken! Choose an empty one.');return;}
+if(this.selectedTile===null){
+if(this.boardState[ci]){
+const placed=this.placedTiles.find(t=>t.idx===ci);
+if(placed){
+this.players[this.currentPlayer].rack.push(placed.letter);
+this.boardState[ci]=null;
+this.placedTiles=this.placedTiles.filter(t=>t.idx!==ci);
+this.buildBoard();this.renderRack();
+this.setMsg('Letter returned to your rack!');
+return;
+}
+}
+this.setMsg('Pick a letter from your rack first!');this.setStep(1);return;
+}
+if(this.boardState[ci]){this.setMsg('That square is taken! Choose another.');return;}
 const p=this.players[this.currentPlayer];
 const letter=p.rack[this.selectedTile];
 this.boardState[ci]=letter;
