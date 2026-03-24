@@ -8124,11 +8124,18 @@ this.buildBoard();this.renderRack();
 this.setMsg('Letter placed! Place more or click Play Word!');
 this.setStep(3);
 },
-playWord(){
+async playWord(){
 if(this.placedTiles.length===0){this.setMsg('Place some letters first!');this.setStep(1);return;}
 const word=this.placedTiles.map(t=>t.letter).join('');
-const wb=this.WB[this.age];
-const isValid=wb.some(w=>w===word||w===word.split('').reverse().join(''));
+this.setMsg('Checking word... please wait!');
+const ageDesc={'4-6':'ages 4 to 6','7-10':'ages 7 to 10','11-14':'ages 11 to 14','15-17':'ages 15 to 17'}[this.age]||'children';
+const result=await callClaudeAI(
+'Is '+word+' a valid real English word suitable for '+ageDesc+'? Reply with only YES or NO.',
+this.age,
+'You are a Scrabble dictionary. Answer only YES or NO. No explanation.',
+10
+);
+const isValid=result&&result.trim().toUpperCase().startsWith('YES');
 const bm=this.getBonusMap();
 let score=0;let wm=1;
 this.placedTiles.forEach(t=>{
