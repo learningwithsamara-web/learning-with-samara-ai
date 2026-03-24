@@ -8168,6 +8168,7 @@ roll(){
 if(this.waiting)return;
 this.waiting=true;
 document.getElementById('sl-rbtn').disabled=true;
+if(SoundSystem.enabled)SoundSystem.stop();
 const d=document.getElementById('sl-dice');
 let t=0;
 const iv=setInterval(()=>{
