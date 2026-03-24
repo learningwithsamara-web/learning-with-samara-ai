@@ -8062,12 +8062,6 @@ QS:{
 {q:'What is the difference between microeconomics and macroeconomics?',a:'Micro studies individuals macro studies whole economies',w:['Micro is larger than macro','Macro studies businesses micro studies countries','There is no difference']},
 ],
 },
-showQ(){
-const qs=this.QS[this.age];
-const q=qs[Math.floor(Math.random()*qs.length)];
-init(){
-this.reset();
-},
 cellPos(n){
 const row=Math.floor((n-1)/10);
 const col=(n-1)%10;
