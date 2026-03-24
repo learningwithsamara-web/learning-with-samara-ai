@@ -8200,8 +8200,7 @@ b.onclick=()=>this.check(a,q.a,b);
 g.appendChild(b);
 });
 document.getElementById('sl-q-overlay').style.display='flex';
-const isMob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-setTimeout(()=>SoundSystem.speak(q.q,0.84,1.3),isMob?800:300);
+setTimeout(()=>SoundSystem.speakQuestion(q.q),500);
 },
 check(sel,correct,btn){
 document.querySelectorAll('#sl-qg button').forEach(b=>b.onclick=null);
