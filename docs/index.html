@@ -8195,6 +8195,7 @@ this.nextTurn();
 },
 nextTurn(){
 clearInterval(this.timerInterval);
+if(this.checkGameOver()) return;
 this.currentPlayer=(this.currentPlayer+1)%this.players.length;
 this.selectedTile=null;this.placedTiles=[];
 this.buildBoard();this.renderRack();this.updateTurnBadge();this.updateScoreCards();
@@ -8206,6 +8207,32 @@ setTimeout(()=>this.aiTurn(),1500);
 }else{
 this.setMsg('Your turn! Click a letter tile to start!');
 }
+},
+checkGameOver(){
+const bagEmpty=this.bag.length===0;
+const anyoneEmpty=this.players.some(p=>p.rack.length===0);
+if(bagEmpty&&anyoneEmpty){
+this.showWinner();
+return true;
+}
+const allSkipped=this.players.every(p=>p.lastWord==='Skipped');
+if(allSkipped){
+this.showWinner();
+return true;
+}
+return false;
+},
+showWinner(){
+clearInterval(this.timerInterval);
+const winner=this.players.reduce((a,b)=>a.score>b.score?a:b);
+const isTie=this.players.filter(p=>p.score===winner.score).length>1;
+const scores=this.players.map(p=>(p.isAI?'Samara AI':p.name)+': '+p.score+' pts').join(' · ');
+document.getElementById('scrabble-game').style.display='none';
+document.getElementById('scrabble-setup').style.display='block';
+const msg=isTie?'Its a tie! Final scores: '+scores:(winner.isAI?'Samara AI wins':''+winner.name+' wins!')+'! Final scores: '+scores;
+App.toast(msg,5000);
+SoundSystem.speak(isTie?'Its a tie! Well played everyone!':((winner.isAI?'Samara AI':'Player '+( this.players.indexOf(winner)+1))+' wins the Scrabble game! Congratulations!'),0.84,1.3);
+SamaraCoins.add(50,'Scrabble game completed!');
 },
 aiTurn(){
 const p=this.players[this.currentPlayer];
