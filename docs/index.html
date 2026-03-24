@@ -8270,8 +8270,8 @@ if(!sc)return;
 sc.innerHTML='';
 this.players.forEach((p,i)=>{
 const card=document.createElement('div');
-card.style.cssText='border-radius:10px;padding:9px;border:2px solid '+(i===this.currentPlayer?'#FFD93D':'rgba(255,255,255,0.08)')+';background:'+(i===this.currentPlayer?'rgba(255,217,61,0.08)':'rgba(255,255,255,0.05)')+';transition:all 0.3s;';
-card.innerHTML='<div style="font-family:Fredoka One,cursive;font-size:0.82rem;color:#fff;">'+(p.isAI?'Samara AI':p.name)+'</div><div style="font-family:Fredoka One,cursive;font-size:1.3rem;color:#FFD93D;">'+p.score+'</div><div style="font-size:0.6rem;color:rgba(255,255,255,0.45);">'+(p.lastWord||'No words yet')+'</div>';
+card.style.cssText='border-radius:12px;padding:11px;border:2px solid '+(i===this.currentPlayer?'#FFD93D':'rgba(255,255,255,0.15)')+';background:'+(i===this.currentPlayer?'rgba(255,217,61,0.12)':'rgba(255,255,255,0.08)')+';transition:all 0.3s;box-shadow:'+(i===this.currentPlayer?'0 0 15px rgba(255,217,61,0.2)':'none')+';';
+card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:Fredoka One,cursive;font-size:0.85rem;color:#fff;">'+(p.isAI?'Samara AI':p.name)+'</div><div style="font-family:Fredoka One,cursive;font-size:1.6rem;color:#FFD93D;text-shadow:0 0 10px rgba(255,217,61,0.5);">'+p.score+'</div></div><div style="font-size:0.65rem;color:rgba(255,255,255,0.6);margin-top:3px;background:rgba(255,255,255,0.05);border-radius:6px;padding:3px 6px;">'+(p.lastWord||'No words yet')+'</div>';
 sc.appendChild(card);
 });
 },
