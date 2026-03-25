@@ -7996,78 +7996,54 @@ window.BirthdayShoutout=BirthdayShoutout;
 const ScrabbleGame={
 LV:{A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10},
 LD:{A:9,B:2,C:2,D:4,E:12,F:2,G:3,H:2,I:9,J:1,K:1,L:4,M:2,N:6,O:8,P:2,Q:1,R:6,S:4,T:6,U:4,V:2,W:2,X:1,Y:2,Z:1},
-WB:{
-'4-6':['CAT','DOG','SUN','BIG','RED','HAT','BED','FUN','HOP','MAP','JAM','CUP','PIG','HEN','FOX','ANT','BEE','COW','OWL','EGG','BUS','CAR','BOX','MOP','RUN','SIT','CAN','BAT','RAT','MAT','SAT','FAT','PAT','TAP','NAP','LAP','CAP','HIT','PIT','BIT','WIT','FIT','POT','NOT','HOT','DOT','GOT','LOT','TIN','WIN','PIN'],
-'7-10':['JUMP','SWIM','PLAY','BOOK','TREE','FISH','BIRD','FROG','STAR','MOON','RAIN','WIND','FIRE','SNOW','LAKE','HILL','FARM','TOWN','ROAD','BOAT','CAKE','MILK','RICE','CORN','BEAN','PEAR','BEAR','DEER','WOLF','LION','SEAL','CROW','HAWK','DUCK','CRAB','TOAD','WORM','SAND','ROCK','CAVE','POND','MIST','GLOW','DRUM','HARP','SONG','BELL','RING','KING','WING'],
-'11-14':['BRAVE','CLOUD','DANCE','EARTH','FLAME','GRACE','HEART','IMAGE','JOKER','KARMA','LIGHT','MAGIC','NOBLE','OCEAN','PEACE','QUEEN','RIVER','SHADE','TIGER','UNITY','VALOR','WATER','YOUTH','ZEBRA','AMAZE','BLEND','CRISP','DRIVE','EMBER','FROST','GLARE','HASTE','IRONY','JEWEL','KNACK','LUNAR','MINOR','NEXUS','OPTIC','PRISM','REALM','SWIFT','THORN','ULTRA','VIVID','WHIRL','YOUNG','ZONAL','QUOTA','NAVAL'],
-'15-17':['QUARTZ','BEYOND','CIPHER','DIVINE','ENIGMA','FATHOM','HERALD','IGNITE','JUNGLE','KNIGHT','LAMENT','MORTAL','NARROW','PATENT','QUIVER','SERENE','THRONE','UNIQUE','VIBRANT','WITHER','ZENITH','ABLAZE','BUCKLE','CRAFTY','DAGGER','FACTOR','GAMBIT','HAMLET','IMPEDE','KERNEL','LACKEY','MYSTIC','NETHER','PARDON','RAFTER','SAVANT','UMBRAL','VORTEX','WALRUS','YEOMAN','ZEPHYR','OUSTER','EFFACE','JOUNCE','XYSTER','TACIT','QUENCH','CRAFTY','BLAZON','FURTIVE']
-},
-TBA:{'4-6':180,'7-10':120,'11-14':90,'15-17':60},
-PCOLORS:['linear-gradient(135deg,#C77DFF,#7928CA)','linear-gradient(135deg,#FFD93D,#FF9B3F)','linear-gradient(135deg,#6BCB77,#4A90D9)','linear-gradient(135deg,#FF6B6B,#FF4757)'],
 TWS:[0,7,14,105,119,210,217,224],
 DWS:[16,28,32,42,48,56,64,70,154,160,168,176,182,192,196,208],
 TLS:[20,24,76,80,84,88,96,108,116,128,136,140,144,148,164],
 DLS:[3,11,36,38,45,52,59,92,102,108,116,122,132,165,172,179,186,213,221],
-age:'4-6',numPlayers:2,players:[],currentPlayer:0,selectedTile:null,placedTiles:[],bag:[],timerInterval:null,timeLeft:180,maxTime:180,boardState:Array(225).fill(null),
-getBonusMap(){
+TBA:{'4-6':180,'7-10':120,'11-14':90,'15-17':60},
+PCOLORS:['linear-gradient(135deg,#C77DFF,#7928CA)','linear-gradient(135deg,#FFD93D,#FF9B3F)','linear-gradient(135deg,#6BCB77,#4A90D9)','linear-gradient(135deg,#FF6B6B,#FF4757)'],
+age:'4-6',numPlayers:2,players:[],cur:0,sel:null,placed:[],bag:[],timerInterval:null,tLeft:180,tMax:180,board:Array(225).fill(null),firstWord:true,
+getBM(){
 const m={};
-this.TWS.forEach(i=>m[i]='tws');
-this.DWS.forEach(i=>m[i]='dws');
-this.TLS.forEach(i=>m[i]='tls');
-this.DLS.forEach(i=>m[i]='dls');
-m[112]='ctr';
-return m;
+this.TWS.forEach(i=>m[i]='tws');this.DWS.forEach(i=>m[i]='dws');
+this.TLS.forEach(i=>m[i]='tls');this.DLS.forEach(i=>m[i]='dls');
+m[112]='ctr';return m;
 },
 buildBag(){
 this.bag=[];
 for(const[l,c] of Object.entries(this.LD)){for(let i=0;i<c;i++)this.bag.push(l);}
 this.bag.sort(()=>Math.random()-0.5);
 },
-drawLetters(n){
-const d=[];for(let i=0;i<n&&this.bag.length>0;i++)d.push(this.bag.pop());return d;
-},
-setAge(a,btn){
-this.age=a;
-document.querySelectorAll('.sc-age-btn').forEach(b=>b.classList.remove('active'));
-if(btn)btn.classList.add('active');
-},
-setPlayers(n,btn){
-this.numPlayers=n;
-document.querySelectorAll('.sc-player-btn').forEach(b=>b.classList.remove('active'));
-if(btn)btn.classList.add('active');
-},
+draw(n){const d=[];for(let i=0;i<n&&this.bag.length>0;i++)d.push(this.bag.pop());return d;},
+setAge(a,btn){this.age=a;document.querySelectorAll('.sc-age-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');},
+setPlayers(n,btn){this.numPlayers=n;document.querySelectorAll('.sc-player-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');},
 start(){
-if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('⭐ Scrabble is a Pro feature — upgrade to unlock!');return;}
+if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('Scrabble is a Pro feature!');return;}
 this.buildBag();
-this.boardState=Array(225).fill(null);
-this.placedTiles=[];this.selectedTile=null;this.players=[];
+this.board=Array(225).fill(null);this.placed=[];this.sel=null;this.firstWord=true;this.players=[];
 const pc=this.numPlayers===1?2:this.numPlayers;
-for(let i=0;i<pc;i++) this.players.push({name:this.numPlayers===1&&i===1?'Samara AI':'Player '+(i+1),score:0,rack:this.drawLetters(7),isAI:this.numPlayers===1&&i===1,lastWord:''});
-this.currentPlayer=0;
+for(let i=0;i<pc;i++) this.players.push({name:this.numPlayers===1&&i===1?'Samara AI':'Player '+(i+1),score:0,rack:this.draw(7),isAI:this.numPlayers===1&&i===1,lastWord:'',skips:0});
+this.cur=0;
 document.getElementById('scrabble-setup').style.display='none';
 document.getElementById('scrabble-game').style.display='block';
 this.buildBoard();this.updateScoreCards();this.renderRack();this.updateTurnBadge();
-this.maxTime=this.TBA[this.age];
-this.startTimer();
-this.setMsg('Step 1: Click a letter tile from your rack!');
-this.setStep(1);
+this.tMax=this.TBA[this.age];this.startTimer();
+this.setMsg('First word must cover the centre star!');this.setStep(1);
 },
 buildBoard(){
-const bm=this.getBonusMap();
-const b=document.getElementById('sc-board');
-if(!b)return;
-b.innerHTML='';
+const bm=this.getBM();
+const b=document.getElementById('sc-board');if(!b)return;b.innerHTML='';
 for(let i=0;i<225;i++){
 const cell=document.createElement('div');
 const bt=bm[i]||'empty';
-cell.className='sc-cell '+bt;
-cell.id='sc-cell-'+i;
-cell.onclick=()=>this.placeOnBoard(i);
-if(this.boardState[i]){
-cell.classList.add('placed');
-const t=document.createElement('div');t.className='sc-tile-board';
-const l=document.createElement('div');l.className='sc-tile-letter';l.textContent=this.boardState[i];
-const v=document.createElement('div');v.className='sc-tile-score';v.textContent=this.LV[this.boardState[i]]||0;
+cell.className='sc-cell '+bt;cell.id='sc-cell-'+i;
+cell.onclick=()=>this.place(i);
+if(this.board[i]){
+const isNew=this.placed.find(p=>p.idx===i);
+if(isNew)cell.classList.add('new-placed'); else cell.classList.add('placed');
+const t=document.createElement('div');t.className='sc-tile-board '+(isNew?'new':'old');
+const l=document.createElement('div');l.className='sc-tile-letter';l.textContent=this.board[i];
+const v=document.createElement('div');v.className='sc-tile-score';v.textContent=this.LV[this.board[i]]||0;
 t.appendChild(l);t.appendChild(v);cell.appendChild(t);
 }else{
 let lbl='';
@@ -8077,228 +8053,240 @@ cell.textContent=lbl;
 b.appendChild(cell);
 }
 },
-
 renderRack(){
-const rack=document.getElementById('sc-rack');
-if(!rack)return;
-rack.innerHTML='';
-const p=this.players[this.currentPlayer];
-if(!p||p.isAI)return;
+const rack=document.getElementById('sc-rack');if(!rack)return;rack.innerHTML='';
+const p=this.players[this.cur];if(!p||p.isAI)return;
 p.rack.forEach((letter,i)=>{
-const t=document.createElement('div');t.className='sc-rack-tile';t.id='sc-rt-'+i;
-t.onclick=()=>this.selectRackTile(i);
+const t=document.createElement('div');t.className='sc-rack-tile';t.onclick=()=>this.selTile(i);
 const l=document.createElement('div');l.className='sc-rack-letter';l.textContent=letter;
 const v=document.createElement('div');v.className='sc-rack-value';v.textContent=this.LV[letter]||0;
 t.appendChild(l);t.appendChild(v);rack.appendChild(t);
 });
 },
-selectRackTile(idx){
-this.selectedTile=idx;
+selTile(idx){
+this.sel=idx;
 document.querySelectorAll('.sc-rack-tile').forEach((t,i)=>t.classList.toggle('selected',i===idx));
-this.setMsg('Now tap any empty square on the board to place it!');
-this.setStep(2);
+this.setMsg('Now tap an empty square on the board!');this.setStep(2);
 },
-placeOnBoard(ci){
-if(this.selectedTile===null){
-if(this.boardState[ci]){
-const placed=this.placedTiles.find(t=>t.idx===ci);
-if(placed){
-this.players[this.currentPlayer].rack.push(placed.letter);
-this.boardState[ci]=null;
-this.placedTiles=this.placedTiles.filter(t=>t.idx!==ci);
+place(ci){
+if(this.sel===null){
+if(this.board[ci]){
+const pi=this.placed.findIndex(p=>p.idx===ci);
+if(pi>=0){
+this.players[this.cur].rack.push(this.placed[pi].letter);
+this.board[ci]=null;this.placed.splice(pi,1);
 this.buildBoard();this.renderRack();
-this.setMsg('Letter returned to your rack!');
+this.setMsg('Letter returned to rack!');
+if(this.placed.length===0)this.setStep(1);
 return;
 }
 }
 this.setMsg('Pick a letter from your rack first!');this.setStep(1);return;
 }
-if(this.boardState[ci]){this.setMsg('That square is taken! Choose another.');return;}
-const p=this.players[this.currentPlayer];
-const letter=p.rack[this.selectedTile];
-this.boardState[ci]=letter;
-this.placedTiles.push({idx:ci,letter,ri:this.selectedTile});
-p.rack.splice(this.selectedTile,1);
-this.selectedTile=null;
+if(this.board[ci]){this.setMsg('That square is taken!');return;}
+const p=this.players[this.cur];
+const letter=p.rack[this.sel];
+this.board[ci]=letter;this.placed.push({idx:ci,letter});
+p.rack.splice(this.sel,1);this.sel=null;
 this.buildBoard();this.renderRack();
-this.setMsg('Letter placed! Place more or click Play Word!');
-this.setStep(3);
+this.setMsg('Placed! Add more or click Play Word!');this.setStep(3);
 },
-async playWord(){
-if(this.placedTiles.length===0){this.setMsg('Place some letters first!');this.setStep(1);return;}
-const word=this.placedTiles.map(t=>t.letter).join('');
-this.setMsg('Checking word... please wait!');
-const ageDesc={'4-6':'ages 4 to 6','7-10':'ages 7 to 10','11-14':'ages 11 to 14','15-17':'ages 15 to 17'}[this.age]||'children';
-const result=await callClaudeAI(
-'Is '+word+' a valid real English word suitable for '+ageDesc+'? Reply with only YES or NO.',
-this.age,
-'You are a Scrabble dictionary. Answer only YES or NO. No explanation.',
-10
-);
-const isValid=result&&result.trim().toUpperCase().startsWith('YES');
-const bm=this.getBonusMap();
-let score=0;let wm=1;
-this.placedTiles.forEach(t=>{
-let lv=this.LV[t.letter]||1;
-const b=bm[t.idx];
-if(b==='tls')lv*=3;else if(b==='dls')lv*=2;
-else if(b==='tws'||b==='ctr')wm*=3;else if(b==='dws')wm*=2;
+getRow(i){return Math.floor(i/15);},
+getCol(i){return i%15;},
+getWordAt(idx,horiz){
+let start=idx;const step=horiz?1:15;
+const inBounds=(i)=>horiz?(this.getRow(i)===this.getRow(idx)):(i>=0&&i<225);
+while(start-step>=0&&inBounds(start-step)&&this.board[start-step])start-=step;
+let word='';let pos=[];let i=start;
+while(i<225&&inBounds(i)&&this.board[i]){word+=this.board[i];pos.push(i);i+=step;}
+return word.length>1?{word,pos}:null;
+},
+getNewWords(){
+if(this.placed.length===0)return[];
+const rows=this.placed.map(p=>this.getRow(p.idx));
+const cols=this.placed.map(p=>this.getCol(p.idx));
+const allRow=rows.every(r=>r===rows[0]);
+const allCol=cols.every(c=>c===cols[0]);
+const words=[];const seen=new Set();
+const add=(w)=>{if(w&&w.word.length>1){const k=w.pos.join(',');if(!seen.has(k)){seen.add(k);words.push(w);}}};
+if(allRow||this.placed.length===1){
+add(this.getWordAt(this.placed[0].idx,true));
+this.placed.forEach(p=>add(this.getWordAt(p.idx,false)));
+}
+if(allCol||this.placed.length===1){
+add(this.getWordAt(this.placed[0].idx,false));
+this.placed.forEach(p=>add(this.getWordAt(p.idx,true)));
+}
+return words;
+},
+isConnected(){
+if(this.firstWord)return this.placed.some(p=>p.idx===112);
+return this.placed.some(p=>{
+const n=[p.idx-1,p.idx+1,p.idx-15,p.idx+15];
+return n.some(ni=>{
+if(ni<0||ni>=225)return false;
+if(Math.abs(this.getRow(ni)-this.getRow(p.idx))>1)return false;
+return this.board[ni]&&!this.placed.find(pl=>pl.idx===ni);
+});
+});
+},
+isLinear(){
+if(this.placed.length<=1)return true;
+const rows=this.placed.map(p=>this.getRow(p.idx));
+const cols=this.placed.map(p=>this.getCol(p.idx));
+return rows.every(r=>r===rows[0])||cols.every(c=>c===cols[0]);
+},
+scoreWord(pos){
+let score=0;let wm=1;const bm=this.getBM();
+pos.forEach(idx=>{
+let lv=this.LV[this.board[idx]]||1;
+if(this.placed.find(p=>p.idx===idx)){
+const bt=bm[idx];
+if(bt==='tls')lv*=3;else if(bt==='dls')lv*=2;
+else if(bt==='tws'||bt==='ctr')wm*=3;else if(bt==='dws')wm*=2;
+}
 score+=lv;
 });
-score*=wm;
-if(this.placedTiles.length>=7)score+=50;
-const p=this.players[this.currentPlayer];
-if(isValid){
-p.score+=score;p.lastWord=word+' +'+score+'pts';
-p.rack.push(...this.drawLetters(this.placedTiles.length));
-this.placedTiles=[];
-this.setMsg(word+' is a great word! +'+score+' points!');
-this.buildBoard();this.updateScoreCards();this.renderRack();
-SamaraCoins.add(score,'Scrabble word: '+word);
-setTimeout(()=>this.nextTurn(),1000);
-}else{
-this.placedTiles.forEach(t=>{this.boardState[t.idx]=null;p.rack.push(t.letter);});
-this.placedTiles=[];
-this.setMsg(word+' is not valid. Try another word!');
-this.buildBoard();this.renderRack();this.setStep(1);
+return score*wm;
+},
+async checkWord(word){
+try{
+const r=await fetch('https://samara-proxy.learningwithsamara.workers.dev',{
+method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({system:'You are a Scrabble dictionary. Answer only YES or NO.',messages:[{role:'user',content:'Is '+word+' a valid English word? YES or NO only.'}],max_tokens:5})
+});
+const d=await r.json();
+return(d.content?.[0]?.text||'').trim().toUpperCase().startsWith('YES');
+}catch(e){return true;}
+},
+async playWord(){
+if(this.placed.length===0){this.setMsg('Place some letters first!');return;}
+if(!this.isLinear()){this.setMsg('Letters must be in a straight line!');return;}
+if(!this.isConnected()){
+this.setMsg(this.firstWord?'First word must cover the centre star!':'New tiles must connect to existing words!');return;
 }
+const words=this.getNewWords();
+if(words.length===0){this.setMsg('No valid words formed!');return;}
+this.setMsg('Checking words...');
+let total=0;let valid=true;let wlist=[];
+for(const w of words){
+const ok=await this.checkWord(w.word);
+if(!ok){valid=false;this.setMsg(w.word+' is not a valid word!');break;}
+const s=this.scoreWord(w.pos);total+=s;wlist.push(w.word+' +'+s);
+}
+if(!valid){
+this.placed.forEach(p=>{this.players[this.cur].rack.push(p.letter);this.board[p.idx]=null;});
+this.placed=[];this.buildBoard();this.renderRack();return;
+}
+if(this.placed.length>=7)total+=50;
+const p=this.players[this.cur];
+p.score+=total;p.lastWord=wlist.join(' · ')+' = '+total+'pts';p.skips=0;
+p.rack.push(...this.draw(this.placed.length));
+this.placed=[];this.firstWord=false;
+this.buildBoard();this.updateScoreCards();this.renderRack();
+this.setMsg('Valid! +'+total+' points!');
+SamaraCoins.add(total,'Scrabble: '+wlist[0]);
+setTimeout(()=>this.nextTurn(),1200);
 },
 getHint(){
-const p=this.players[this.currentPlayer];
-const rack=[...p.rack,...this.placedTiles.map(t=>t.letter)];
-const words=this.WB[this.age];
-const possible=words.filter(w=>{
-const r=[...rack];
-return w.split('').every(l=>{const i=r.indexOf(l);if(i>=0){r.splice(i,1);return true;}return false;});
-}).sort((a,b)=>b.length-a.length);
-if(possible.length>0){
-this.setMsg('Hint: Try spelling '+possible[0]+'! ('+possible.length+' words possible)');
-}else{
-this.setMsg('No words found! Try skipping to get new letters.');
-}
+const p=this.players[this.cur];
+const rack=[...p.rack,...this.placed.map(t=>t.letter)];
+const common=['CAT','DOG','SUN','HAT','RUN','MAP','CAN','PAN','MAN','TAN','BAT','MAT','RAT','TIN','WIN','PIN','SIT','BIT','HIT','PIG','BIG','HOT','POT','NOT','HOP','MOP','TOP','CUP','BUD','MUD','JUMP','SWIM','PLAY','BOOK','TREE','FISH','BIRD','STAR','MOON','RAIN','WIND','FIRE','SNOW','LAKE','HILL','FARM','TOWN','ROAD','BOAT','CAKE'];
+const possible=common.filter(w=>{const r=[...rack];return w.split('').every(l=>{const i=r.indexOf(l);if(i>=0){r.splice(i,1);return true;}return false;});}).sort((a,b)=>b.length-a.length);
+this.setMsg(possible.length>0?'Hint: Try spelling '+possible[0]+'!':'No hints found. Try shuffling!');
 },
-shuffleRack(){
-const p=this.players[this.currentPlayer];
-p.rack.sort(()=>Math.random()-0.5);
-this.renderRack();
-this.setMsg('Letters shuffled! Look for new words!');
-},
+shuffleRack(){this.players[this.cur].rack.sort(()=>Math.random()-0.5);this.renderRack();this.setMsg('Letters shuffled!');},
 skipTurn(){
-this.placedTiles.forEach(t=>{this.boardState[t.idx]=null;this.players[this.currentPlayer].rack.push(t.letter);});
-this.placedTiles=[];this.buildBoard();
-const nl=this.drawLetters(2);
-this.players[this.currentPlayer].rack.push(...nl);
-this.players[this.currentPlayer].lastWord='Skipped';
+this.placed.forEach(p=>{this.players[this.cur].rack.push(p.letter);this.board[p.idx]=null;});
+this.placed=[];this.buildBoard();
+const nl=this.draw(2);this.players[this.cur].rack.push(...nl);
+this.players[this.cur].skips++;this.players[this.cur].lastWord='Skipped';
 this.renderRack();this.updateScoreCards();
-this.setMsg('Turn skipped! Got '+nl.length+' new letters.');
+this.setMsg('Skipped! Got '+nl.length+' new letters.');
 this.nextTurn();
 },
 nextTurn(){
 clearInterval(this.timerInterval);
-if(this.checkGameOver()) return;
-this.currentPlayer=(this.currentPlayer+1)%this.players.length;
-this.selectedTile=null;this.placedTiles=[];
+if(this.bag.length===0&&this.players.some(p=>p.rack.length===0)){this.showWinner();return;}
+if(this.players.every(p=>p.skips>=2)){this.showWinner();return;}
+this.cur=(this.cur+1)%this.players.length;
+this.sel=null;this.placed=[];
 this.buildBoard();this.renderRack();this.updateTurnBadge();this.updateScoreCards();
-this.maxTime=this.TBA[this.age];
-this.startTimer();this.setStep(1);
-if(this.players[this.currentPlayer].isAI){
+this.tMax=this.TBA[this.age];this.startTimer();this.setStep(1);
+if(this.players[this.cur].isAI){
 this.setMsg('Samara AI is thinking...');
 setTimeout(()=>this.aiTurn(),1500);
 }else{
-this.setMsg('Your turn! Click a letter tile to start!');
+this.setMsg('Your turn! Pick a letter from your rack!');
 }
 },
-checkGameOver(){
-const bagEmpty=this.bag.length===0;
-const anyoneEmpty=this.players.some(p=>p.rack.length===0);
-if(bagEmpty&&anyoneEmpty){
-this.showWinner();
-return true;
+aiTurn(){
+const p=this.players[this.cur];
+const common=['CAT','DOG','SUN','HAT','RUN','MAP','CAN','BAT','MAT','TIN','WIN','SIT','BIT','HIT','HOT','POT','HOP','JUMP','PLAY','BOOK','TREE','FISH','BIRD','STAR','MOON','RAIN'];
+const rack=p.rack.join('');
+const possible=common.filter(w=>{const r=rack.split('');return w.split('').every(l=>{const i=r.indexOf(l);if(i>=0){r.splice(i,1);return true;}return false;});}).sort((a,b)=>b.length-a.length);
+if(possible.length>0){
+const word=possible[0];
+let sr=this.firstWord?7:Math.floor(Math.random()*10)+2;
+let sc=this.firstWord?Math.floor((15-word.length)/2):Math.floor(Math.random()*5)+2;
+if(this.firstWord){this.placed=[{idx:112,letter:word[Math.floor(word.length/2)]}];}
+let valid=true;
+for(let i=0;i<word.length;i++){if(this.board[sr*15+sc+i]){valid=false;break;}}
+if(valid&&sc+word.length<=15){
+let score=0;
+word.split('').forEach((l,i)=>{
+const idx=sr*15+sc+i;this.board[idx]=l;
+p.rack.splice(p.rack.indexOf(l),1);
+score+=this.LV[l]||1;
+});
+p.rack.push(...this.draw(word.length));
+p.score+=score;p.lastWord=word+' +'+score+'pts';p.skips=0;
+this.firstWord=false;this.placed=[];
+this.buildBoard();this.updateScoreCards();
+this.setMsg('Samara AI played '+word+' for '+score+' points!');
+setTimeout(()=>this.nextTurn(),1200);
+return;
 }
-const allSkipped=this.players.every(p=>p.lastWord==='Skipped');
-if(allSkipped){
-this.showWinner();
-return true;
 }
-return false;
+this.setMsg('Samara AI skipped!');
+this.players[this.cur].skips++;
+setTimeout(()=>this.nextTurn(),1000);
 },
 showWinner(){
 clearInterval(this.timerInterval);
 const winner=this.players.reduce((a,b)=>a.score>b.score?a:b);
+const scores=this.players.map(p=>(p.isAI?'Samara AI':p.name)+': '+p.score+'pts').join(' | ');
 const isTie=this.players.filter(p=>p.score===winner.score).length>1;
-const scores=this.players.map(p=>(p.isAI?'Samara AI':p.name)+': '+p.score+' pts').join(' · ');
 document.getElementById('scrabble-game').style.display='none';
 document.getElementById('scrabble-setup').style.display='block';
-const msg=isTie?'Its a tie! Final scores: '+scores:(winner.isAI?'Samara AI wins':''+winner.name+' wins!')+'! Final scores: '+scores;
-App.toast(msg,5000);
-SoundSystem.speak(isTie?'Its a tie! Well played everyone!':((winner.isAI?'Samara AI':'Player '+( this.players.indexOf(winner)+1))+' wins the Scrabble game! Congratulations!'),0.84,1.3);
+App.toast((isTie?'Its a tie! ':''+( winner.isAI?'Samara AI':winner.name)+' wins! ')+scores,5000);
 SamaraCoins.add(50,'Scrabble game completed!');
 },
-aiTurn(){
-const p=this.players[this.currentPlayer];
-const words=this.WB[this.age];
-const rack=p.rack.join('');
-const possible=words.filter(w=>{
-const r=rack.split('');
-return w.split('').every(l=>{const i=r.indexOf(l);if(i>=0){r.splice(i,1);return true;}return false;});
-}).sort((a,b)=>b.length-a.length);
-if(possible.length>0){
-const word=possible[0];
-let sr=Math.floor(Math.random()*10)+2;
-let sc=Math.floor(Math.random()*10)+2;
-let valid=sc+word.length<=15;
-if(valid){
-for(let i=0;i<word.length;i++){if(this.boardState[sr*15+sc+i]){valid=false;break;}}
-}
-if(valid){
-let score=0;
-word.split('').forEach((l,i)=>{
-const idx=sr*15+sc+i;
-this.boardState[idx]=l;
-p.rack.splice(p.rack.indexOf(l),1);
-score+=this.LV[l]||1;
-});
-p.rack.push(...this.drawLetters(word.length));
-p.score+=score;p.lastWord=word+' +'+score+'pts';
-this.buildBoard();this.updateScoreCards();
-this.setMsg('Samara AI played '+word+' for '+score+' points!');
-}else{
-this.setMsg('Samara AI skipped this turn!');
-}
-}else{
-this.setMsg('Samara AI could not find a word!');
-}
-setTimeout(()=>this.nextTurn(),1200);
-},
 startTimer(){
-this.timeLeft=this.maxTime;this.updateTimerDisplay();
+this.tLeft=this.tMax;this.updateTimerDisplay();
 this.timerInterval=setInterval(()=>{
-this.timeLeft--;this.updateTimerDisplay();
-if(this.timeLeft<=0){clearInterval(this.timerInterval);this.setMsg('Time is up! Skipping...');setTimeout(()=>this.skipTurn(),800);}
+this.tLeft--;this.updateTimerDisplay();
+if(this.tLeft<=0){clearInterval(this.timerInterval);this.setMsg('Time up! Skipping...');setTimeout(()=>this.skipTurn(),800);}
 },1000);
 },
 updateTimerDisplay(){
-const mins=Math.floor(this.timeLeft/60);
-const secs=this.timeLeft%60;
-const el=document.getElementById('sc-timer-txt');
-if(el)el.textContent=mins+':'+(secs<10?'0':'')+secs;
-const pct=(this.timeLeft/this.maxTime)*100;
+const m=Math.floor(this.tLeft/60);const s=this.tLeft%60;
+const el=document.getElementById('sc-timer-txt');if(el)el.textContent=m+':'+(s<10?'0':'')+s;
+const pct=(this.tLeft/this.tMax)*100;
 const bar=document.getElementById('sc-timer-bar');
 if(bar){bar.style.width=pct+'%';bar.style.background=pct>50?'#6BCB77':pct>25?'#FFD93D':'#FF4757';}
 },
 updateTurnBadge(){
-const p=this.players[this.currentPlayer];
+const p=this.players[this.cur];
 const b=document.getElementById('sc-turn-badge');
-if(b){b.textContent=(p.isAI?'Samara AI':'Player '+(this.currentPlayer+1))+"'s Turn";b.style.background=this.PCOLORS[this.currentPlayer];}
+if(b){b.textContent=(p.isAI?'Samara AI':'Player '+(this.cur+1))+"'s Turn";b.style.background=this.PCOLORS[this.cur];}
 },
 updateScoreCards(){
-const sc=document.getElementById('sc-score-cards');
-if(!sc)return;
-sc.innerHTML='';
+const sc=document.getElementById('sc-score-cards');if(!sc)return;sc.innerHTML='';
 this.players.forEach((p,i)=>{
 const card=document.createElement('div');
-card.style.cssText='border-radius:12px;padding:11px;border:2px solid '+(i===this.currentPlayer?'#FFD93D':'rgba(255,255,255,0.15)')+';background:'+(i===this.currentPlayer?'rgba(255,217,61,0.12)':'rgba(255,255,255,0.08)')+';transition:all 0.3s;box-shadow:'+(i===this.currentPlayer?'0 0 15px rgba(255,217,61,0.2)':'none')+';';
-card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:Fredoka One,cursive;font-size:0.85rem;color:#fff;">'+(p.isAI?'Samara AI':p.name)+'</div><div style="font-family:Fredoka One,cursive;font-size:1.6rem;color:#FFD93D;text-shadow:0 0 10px rgba(255,217,61,0.5);">'+p.score+'</div></div><div style="font-size:0.65rem;color:rgba(255,255,255,0.6);margin-top:3px;background:rgba(255,255,255,0.05);border-radius:6px;padding:3px 6px;">'+(p.lastWord||'No words yet')+'</div>';
+card.style.cssText='border-radius:12px;padding:11px;border:2px solid '+(i===this.cur?'#FFD93D':'rgba(255,255,255,0.1)')+';background:'+(i===this.cur?'rgba(255,217,61,0.1)':'rgba(255,255,255,0.06)')+';margin-bottom:5px;transition:all 0.3s;';
+card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:Fredoka One,cursive;font-size:0.85rem;color:#fff;">'+(p.isAI?'Samara AI':p.name)+'</div><div style="font-family:Fredoka One,cursive;font-size:1.5rem;color:#FFD93D;">'+p.score+'</div></div><div style="font-size:0.62rem;color:rgba(255,255,255,0.55);margin-top:3px;background:rgba(255,255,255,0.05);border-radius:5px;padding:2px 6px;">'+(p.lastWord||'No words yet')+'</div>';
 sc.appendChild(card);
 });
 },
@@ -8306,18 +8294,17 @@ setStep(n){for(let i=1;i<=3;i++){const s=document.getElementById('sc-step'+i);if
 setMsg(m){const el=document.getElementById('sc-msg');if(el)el.textContent=m;},
 showRules(){const o=document.getElementById('sc-rules-overlay');if(o)o.style.display='flex';setTimeout(()=>this.readRules(),500);},
 readRules(){
-const rules='Welcome to Samara Scrabble! Here is how to play. The goal is to score the most points by spelling words on the board. Step 1: You get 7 letter tiles in your rack. Step 2: Click a tile to select it. Step 3: Click a board square to place your letter. Step 4: Spell a complete word then click Play Word! Step 5: Draw new tiles and the next player goes! Bonus squares give you extra points. Triple Word multiplies your whole word by 3! Double Word multiplies by 2! Triple Letter multiplies one letter by 3! Double Letter multiplies by 2! Pro tip: Use the Get a Hint button if you are stuck! Good luck and have fun!';
+const rules='Welcome to Samara Scrabble! Here is how to play. The goal is to score the most points by spelling words on the board. Step 1: You get 7 letter tiles in your rack. Step 2: Click a tile to select it. Step 3: Click a board square to place your letter. Step 4: Spell a complete word then click Play Word! Step 5: Draw new tiles and the next player goes! The first word must cover the centre star square. All new words must connect to existing words on the board. Bonus squares give you extra points. Good luck and have fun!';
 SoundSystem.speak(rules,0.82,1.3);
 },
 backToSetup(){
 clearInterval(this.timerInterval);
 document.getElementById('scrabble-game').style.display='none';
 document.getElementById('scrabble-setup').style.display='block';
-this.boardState=Array(225).fill(null);this.placedTiles=[];
+this.board=Array(225).fill(null);this.placed=[];
 }
 };
 window.ScrabbleGame=ScrabbleGame;
-
   
 // ── SNAKE & LADDER GAME ───────────────────────────────────
 const SLGame={
