@@ -8370,7 +8370,248 @@ this.board=Array(225).fill(null);this.placed=[];
 }
 };
 window.ScrabbleGame=ScrabbleGame;
-  
+
+// ── WORD PUZZLE GAME ─────────────────────────────────────
+const WordPuzzle={
+PUZZLES:{
+'4-6':[
+{topic:'Animals',words:['CAT','DOG','PIG','HEN','COW','BEE','ANT','OWL']},
+{topic:'Colors',words:['RED','BLUE','PINK','GOLD','GREY','LIME','TEAL','ROSE']},
+{topic:'Food',words:['EGG','CAKE','MILK','RICE','CORN','PEAR','PLUM','BEAN']},
+{topic:'Family',words:['MOM','DAD','SIS','SON','NAN','POP','BOY','TOY']},
+{topic:'Fruits',words:['PLUM','PEAR','LIME','KIWI','FIG','DATE','YAM','NUT']},
+{topic:'Weather',words:['SUN','RAIN','WIND','SNOW','HAIL','MIST','COLD','WARM']},
+],
+'7-10':[
+{topic:'Science',words:['ATOM','CELL','HEAT','WAVE','MOON','STAR','RAIN','WIND']},
+{topic:'Animals',words:['LION','BEAR','WOLF','DEER','FROG','CRAB','HAWK','SEAL']},
+{topic:'Sports',words:['KICK','SWIM','JUMP','RACE','GOLF','DIVE','BOWL','SAIL']},
+{topic:'Nature',words:['LAKE','CAVE','HILL','SAND','MIST','REEF','DUNE','GLOW']},
+{topic:'Countries',words:['PERU','CUBA','IRAN','IRAQ','MALI','FIJI','TOGO','CHAD']},
+{topic:'Space',words:['MARS','MOON','STAR','COMET','ORBIT','SOLAR','NOVA','RING']},
+],
+'11-14':[
+{topic:'Science',words:['ORBIT','OZONE','NERVE','VENOM','LUNAR','SOLAR','PRISM','FLORA']},
+{topic:'History',words:['TRADE','REIGN','RULER','NOBLE','SIEGE','EXILE','GUILD','MANOR']},
+{topic:'Math',words:['ANGLE','RATIO','PRIME','GRAPH','SLOPE','CHORD','TALLY','DIGIT']},
+{topic:'Literature',words:['PROSE','RHYME','METER','IRONY','FABLE','TROPE','NOVEL','LYRIC']},
+{topic:'Geography',words:['DELTA','FJORD','PLAIN','RIDGE','BASIN','ATOLL','GORGE','BAYOU']},
+{topic:'Biology',words:['ALGAE','FUNGI','SPORE','TOXIN','LARVA','VENOM','FLORA','FAUNA']},
+],
+'15-17':[
+{topic:'Science',words:['QUASAR','PLASMA','GENOME','ENZYME','PHOTON','NEURON','OSMOSIS','QUANTUM']},
+{topic:'History',words:['EMPIRE','TREATY','COLONY','FEUDAL','REVOLT','REFORM','SOVIET','ALLIED']},
+{topic:'Economics',words:['EQUITY','TARIFF','BARTER','FISCAL','SUPPLY','DEMAND','MARGIN','EXPORT']},
+{topic:'Literature',words:['SATIRE','SONNET','PATHOS','MYTHOS','SIMILE','HUBRIS','TRAGIC','BALLAD']},
+{topic:'Philosophy',words:['ETHICS','REASON','VIRTUE','STOIC','LOGOS','THESIS','DOGMA','AXIOM']},
+{topic:'Chemistry',words:['ALKALI','ENZYME','ISOMER','VALENCE','HALIDE','ESTER','PHENOL','KETONE']},
+]},
+DIRS:[[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]],
+age:'4-6',size:8,grid:[],words:[],placed:[],found:[],
+selecting:false,selCells:[],score:0,timerInt:null,elapsed:0,
+topic:'',colorMap:{},usedSets:[],aiGenerated:false,
+setAge(a,btn){
+this.age=a;this.usedSets=[];
+document.querySelectorAll('#wp-age-bar .sl-age-btn').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+this.newGame();
+},
+async newGame(){
+if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('Word Puzzle is a Pro feature!');return;}
+clearInterval(this.timerInt);
+this.size=this.age==='4-6'?8:this.age==='7-10'?10:12;
+this.found=[];this.selecting=false;this.selCells=[];
+this.elapsed=0;this.colorMap={};this.aiGenerated=false;
+this.grid=Array.from({length:this.size},()=>Array(this.size).fill(''));
+this.placed=[];
+const allSets=this.PUZZLES[this.age];
+const available=allSets.filter((_,i)=>!this.usedSets.includes(i));
+if(available.length===0){
+await this.generateAI();
+}else{
+const idx=Math.floor(Math.random()*available.length);
+const orig=allSets.indexOf(available[idx]);
+this.usedSets.push(orig);
+this.topic=available[idx].topic;
+this.words=[...available[idx].words];
+}
+this.words.forEach(w=>this.placeWord(w));
+this.fillRandom();
+this.render();
+this.renderClues();
+this.updateScore();
+document.getElementById('wp-topic-badge').textContent=this.topic;
+const aib=document.getElementById('wp-ai-badge');
+if(aib)aib.style.display=this.aiGenerated?'block':'none';
+document.getElementById('wp-status').textContent='Tap a letter then drag to select a word!';
+this.timerInt=setInterval(()=>{this.elapsed++;const el=document.getElementById('wp-timer');if(el)el.textContent=this.elapsed+'s';},1000);
+},
+async generateAI(){
+const ld=document.getElementById('wp-loading');if(ld)ld.style.display='flex';
+try{
+const ageDesc={'4-6':'ages 4-6 simple 3-4 letter words','7-10':'ages 7-10 simple 4-5 letter words','11-14':'ages 11-14 medium 5-6 letter words','15-17':'ages 15-17 advanced 6-8 letter words'}[this.age];
+const result=await callClaudeAI(
+'Create a word search puzzle for '+ageDesc+'. Pick a fun educational topic and give exactly 8 words. Return ONLY this JSON with no markdown: {"topic":"Topic Name","words":["WORD1","WORD2","WORD3","WORD4","WORD5","WORD6","WORD7","WORD8"]}. All words must be uppercase single words no spaces no hyphens.',
+this.age,
+'You are an educational word puzzle creator for children. Return ONLY valid JSON. No markdown backticks.',
+200
+);
+if(result){
+const cleaned=result.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+const parsed=JSON.parse(cleaned);
+if(parsed.topic&&parsed.words&&parsed.words.length>=6){
+this.topic=parsed.topic;
+this.words=parsed.words.slice(0,8).map(w=>w.toUpperCase().replace(/[^A-Z]/g,''));
+this.aiGenerated=true;
+}else{this.useFallback();}
+}else{this.useFallback();}
+}catch(e){this.useFallback();}
+if(ld)ld.style.display='none';
+},
+useFallback(){
+const sets=this.PUZZLES[this.age];
+const p=sets[Math.floor(Math.random()*sets.length)];
+this.topic=p.topic;this.words=[...p.words];
+},
+placeWord(word){
+let placed=false;let tries=0;
+while(!placed&&tries<300){
+tries++;
+const dir=this.DIRS[Math.floor(Math.random()*this.DIRS.length)];
+const row=Math.floor(Math.random()*this.size);
+const col=Math.floor(Math.random()*this.size);
+const endRow=row+dir[0]*(word.length-1);
+const endCol=col+dir[1]*(word.length-1);
+if(endRow<0||endRow>=this.size||endCol<0||endCol>=this.size)continue;
+let ok=true;
+for(let i=0;i<word.length;i++){
+const r=row+dir[0]*i,c=col+dir[1]*i;
+if(this.grid[r][c]!==''&&this.grid[r][c]!==word[i]){ok=false;break;}
+}
+if(ok){
+const cells=[];
+for(let i=0;i<word.length;i++){
+const r=row+dir[0]*i,c=col+dir[1]*i;
+this.grid[r][c]=word[i];cells.push([r,c]);
+}
+this.placed.push({word,cells});placed=true;
+}
+}
+},
+fillRandom(){
+const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+for(let r=0;r<this.size;r++)
+for(let c=0;c<this.size;c++)
+if(this.grid[r][c]==='')
+this.grid[r][c]=letters[Math.floor(Math.random()*26)];
+},
+render(){
+const g=document.getElementById('wp-grid');if(!g)return;
+g.style.gridTemplateColumns='repeat('+this.size+',1fr)';
+g.innerHTML='';
+for(let r=0;r<this.size;r++){
+for(let c=0;c<this.size;c++){
+const cell=document.createElement('div');
+cell.className='wp-cell';cell.id='wc'+r+'-'+c;
+cell.textContent=this.grid[r][c];
+cell.addEventListener('pointerdown',()=>this.startSel(r,c));
+cell.addEventListener('pointerenter',()=>this.extendSel(r,c));
+cell.addEventListener('pointerup',()=>this.endSel());
+g.appendChild(cell);
+}
+}
+g.addEventListener('pointerup',()=>this.endSel());
+this.refreshCells();
+},
+startSel(r,c){this.selecting=true;this.selCells=[[r,c]];this.refreshCells();},
+extendSel(r,c){
+if(!this.selecting)return;
+const first=this.selCells[0];if(!first)return;
+const dr=r-first[0],dc=c-first[1];
+const len=Math.max(Math.abs(dr),Math.abs(dc));
+if(len===0){this.selCells=[[r,c]];this.refreshCells();return;}
+let stepR=0,stepC=0;
+if(dr!==0)stepR=dr/Math.abs(dr);
+if(dc!==0)stepC=dc/Math.abs(dc);
+if(dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc))return;
+const cells=[];
+for(let i=0;i<=len;i++)cells.push([first[0]+stepR*i,first[1]+stepC*i]);
+this.selCells=cells;this.refreshCells();
+},
+endSel(){
+if(!this.selecting)return;
+this.selecting=false;
+const self=this;
+const selected=this.selCells.map(function(rc){return self.grid[rc[0]][rc[1]];}).join('');
+const rev=selected.split('').reverse().join('');
+const match=this.placed.find(function(p){return !self.found.includes(p.word)&&(p.word===selected||p.word===rev);});
+if(match){
+this.found.push(match.word);
+this.colorMap[match.word]='wcolor'+(this.found.length-1);
+this.score+=match.word.length*10;
+const st=document.getElementById('wp-status');if(st)st.textContent='Found: '+match.word+'! +'+(match.word.length*10)+' points!';
+SamaraCoins.add(match.word.length,'Found '+match.word+'!');
+this.updateScore();this.renderClues();
+if(this.found.length===this.words.length){
+clearInterval(this.timerInt);
+SamaraCoins.add(25,'Word Puzzle completed!');
+const self2=this;
+setTimeout(function(){
+const wm=document.getElementById('wp-win-msg');
+if(wm)wm.textContent='You found all '+self2.words.length+' words in '+self2.elapsed+' seconds! Score: '+self2.score;
+const wo=document.getElementById('wp-win-overlay');
+if(wo)wo.style.display='flex';
+},500);
+}
+}else{
+if(selected.length>1){const st=document.getElementById('wp-status');if(st)st.textContent='Not a word — try again!';}
+}
+this.selCells=[];this.refreshCells();
+},
+refreshCells(){
+const self=this;
+for(let r=0;r<this.size;r++){
+for(let c=0;c<this.size;c++){
+const el=document.getElementById('wc'+r+'-'+c);if(!el)continue;
+el.className='wp-cell';
+const isSel=this.selCells.some(function(rc){return rc[0]===r&&rc[1]===c;});
+if(isSel){el.classList.add('selecting');continue;}
+const fw=this.placed.find(function(p){return self.found.includes(p.word)&&p.cells.some(function(rc){return rc[0]===r&&rc[1]===c;});});
+if(fw)el.classList.add(self.colorMap[fw.word]||'wcolor0');
+}
+}
+},
+updateScore(){
+const fc=document.getElementById('wp-found-count');if(fc)fc.textContent=this.found.length;
+const tc=document.getElementById('wp-total-count');if(tc)tc.textContent=this.words.length;
+const sc=document.getElementById('wp-score');if(sc)sc.textContent=this.score;
+},
+renderClues(){
+const list=document.getElementById('wp-clue-list');if(!list)return;
+const self=this;
+list.innerHTML=this.words.map(function(w,i){
+return '<div class="wp-clue-item '+(self.found.includes(w)?'found':'')+'"><span style="font-family:Fredoka One,cursive;color:#C77DFF;font-size:0.72rem;min-width:18px;">'+(i+1)+'.</span><span style="color:rgba(255,255,255,0.85);font-size:0.72rem;font-weight:700;">'+w+'</span></div>';
+}).join('');
+},
+hint(){
+const self=this;
+const rem=this.words.filter(function(w){return !self.found.includes(w);});
+if(!rem.length)return;
+const word=rem[0];
+const pl=this.placed.find(function(p){return p.word===word;});
+if(!pl)return;
+const fc=pl.cells[0];
+const el=document.getElementById('wc'+fc[0]+'-'+fc[1]);
+if(el){
+el.style.background='rgba(255,217,61,0.6)';el.style.borderColor='#FFD93D';
+setTimeout(function(){el.style.background='';el.style.borderColor='';self.refreshCells();},2000);
+}
+const st=document.getElementById('wp-status');if(st)st.textContent='Hint: '+word+' starts at the highlighted cell!';
+},
+init(){this.newGame();}
+};
+window.WordPuzzle=WordPuzzle;
+
 // ── SNAKE & LADDER GAME ───────────────────────────────────
 const SLGame={
 SN:{16:6,47:26,49:11,56:53,62:19,64:60,87:24,93:73,95:75,99:78},
