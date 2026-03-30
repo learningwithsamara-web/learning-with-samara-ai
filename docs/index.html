@@ -8627,7 +8627,13 @@ roll(){
 if(this.waiting)return;
 this.waiting=true;
 document.getElementById('sl-rbtn').disabled=true;
-if(SoundSystem.enabled)SoundSystem.stop();
+if(SoundSystem.enabled){
+SoundSystem.stop();
+const utt=new SpeechSynthesisUtterance(' ');
+utt.volume=0;
+window.speechSynthesis.speak(utt);
+}
+const d=document.getElementById('sl-dice');
 const d=document.getElementById('sl-dice');
 let t=0;
 const iv=setInterval(()=>{
