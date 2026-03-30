@@ -1193,6 +1193,55 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
 </div>
   </div>
 </div>
+<!-- ══ WORD PUZZLE ══ -->
+<div id="screen-word-puzzle" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+  <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
+    <button class="back-btn" style="position:relative;transform:none;top:auto;left:auto;" onclick="App.showScreen('screen-games')">← Back</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Samara's Word Puzzle</div>
+  </div>
+  <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;text-align:center;padding:4px 16px 8px;">Find all the hidden words! Tap and drag to select!</div>
+  <div style="display:flex;gap:6px;justify-content:center;padding:0 16px 8px;flex-wrap:wrap;" id="wp-age-bar">
+    <button class="sl-age-btn active" onclick="WordPuzzle.setAge('4-6',this)">🧒 Ages 4-6</button>
+    <button class="sl-age-btn" onclick="WordPuzzle.setAge('7-10',this)">📚 Ages 7-10</button>
+    <button class="sl-age-btn" onclick="WordPuzzle.setAge('11-14',this)">🎓 Ages 11-14</button>
+    <button class="sl-age-btn" onclick="WordPuzzle.setAge('15-17',this)">🏆 Ages 15-17</button>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px;flex-wrap:wrap;padding:0 16px;">
+    <div style="background:rgba(255,255,255,0.08);border-radius:50px;padding:5px 14px;font-family:'Fredoka One',cursive;font-size:0.82rem;color:#fff;border:1px solid rgba(255,255,255,0.1);">Found: <span id="wp-found-count" style="color:#FFD93D;">0</span>/<span id="wp-total-count" style="color:#FFD93D;">0</span></div>
+    <div style="background:rgba(255,255,255,0.08);border-radius:50px;padding:5px 14px;font-family:'Fredoka One',cursive;font-size:0.82rem;color:#fff;border:1px solid rgba(255,255,255,0.1);">Score: <span id="wp-score" style="color:#FFD93D;">0</span></div>
+    <div style="background:rgba(255,255,255,0.08);border-radius:50px;padding:5px 14px;font-family:'Fredoka One',cursive;font-size:0.82rem;color:#fff;border:1px solid rgba(255,255,255,0.1);">Time: <span id="wp-timer" style="color:#FFD93D;">0s</span></div>
+  </div>
+  <div style="display:flex;gap:10px;padding:0 16px 16px;align-items:flex-start;">
+    <div style="flex:1;min-width:0;">
+      <div style="background:rgba(255,255,255,0.04);border-radius:16px;padding:8px;border:2px solid rgba(255,255,255,0.1);margin-bottom:8px;position:relative;">
+        <div id="wp-grid" style="display:grid;gap:2px;width:100%;"></div>
+        <div id="wp-loading" style="display:none;position:absolute;inset:0;background:rgba(15,12,40,0.92);border-radius:16px;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;">Samara AI is making a new puzzle...</div>
+          <div style="display:flex;gap:6px;"><div class="wp-dot"></div><div class="wp-dot"></div><div class="wp-dot"></div></div>
+        </div>
+      </div>
+      <div id="wp-status" style="background:rgba(255,255,255,0.06);border-radius:10px;padding:8px 12px;font-size:0.72rem;color:rgba(255,255,255,0.8);text-align:center;border:1px solid rgba(255,255,255,0.08);min-height:32px;">Tap a letter then drag to select a word!</div>
+    </div>
+    <div style="width:165px;display:flex;flex-direction:column;gap:7px;flex-shrink:0;">
+      <div id="wp-topic-badge" style="background:linear-gradient(135deg,rgba(199,125,255,0.2),rgba(121,40,202,0.2));border-radius:50px;padding:5px 12px;font-family:'Fredoka One',cursive;font-size:0.78rem;color:#C77DFF;text-align:center;border:1px solid rgba(199,125,255,0.3);">Topic</div>
+      <div id="wp-ai-badge" style="display:none;background:linear-gradient(135deg,#FFD93D,#FF9B3F);border-radius:50px;padding:3px 10px;font-family:'Fredoka One',cursive;font-size:0.65rem;color:#fff;text-align:center;">AI Generated!</div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:14px;padding:10px;border:1px solid rgba(255,255,255,0.1);">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.82rem;margin-bottom:6px;">Find These Words:</div>
+        <div id="wp-clue-list"></div>
+      </div>
+      <button onclick="WordPuzzle.hint()" style="background:rgba(255,217,61,0.15);color:#FFD93D;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:8px;border-radius:50px;border:1px solid rgba(255,217,61,0.3);cursor:pointer;width:100%;">💡 Hint!</button>
+      <button onclick="WordPuzzle.newGame()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:8px;border-radius:50px;border:none;cursor:pointer;width:100%;">🔄 New Puzzle</button>
+    </div>
+  </div>
+  <div id="wp-win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:32px;text-align:center;border:3px solid #FFD93D;max-width:320px;width:90%;">
+      <div style="font-size:4rem;margin-bottom:8px;">🎉</div>
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:8px;">Amazing!</div>
+      <div id="wp-win-msg" style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-bottom:20px;line-height:1.6;"></div>
+      <button onclick="WordPuzzle.newGame();document.getElementById('wp-win-overlay').style.display='none';" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;">Play Again!</button>
+    </div>
+  </div>
+</div>
 <!-- ══ SNAKE & LADDER ══ -->
 <div id="screen-snake-ladder" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
   <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
