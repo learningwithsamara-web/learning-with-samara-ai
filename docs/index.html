@@ -3703,7 +3703,7 @@ const App = {
     if(id==='screen-games') AITutor.hideFloat();
     if(id==='screen-scrabble') AITutor.hideFloat();
     if(id==='screen-word-puzzle'){AITutor.hideFloat();setTimeout(()=>WordPuzzle.newGame(),150);}
-    if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>{SLGame.reset();setTimeout(()=>SLGame.drawBoard(),200);},100);}
+    if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>SLGame.init(),400);}
   },
 
   showProGate(message) {
@@ -8927,6 +8927,9 @@ setAge(a,btn){
 this.age=a;
 document.querySelectorAll('.sl-age-btn').forEach(b=>b.classList.remove('active'));
 if(btn)btn.classList.add('active');
+this.reset();
+},
+init(){
 this.reset();
 },
 roll(){
