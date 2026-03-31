@@ -3702,7 +3702,7 @@ const App = {
     if(id==='screen-speaking'){AITutor.hideFloat();SpeakingCoach.init();}
     if(id==='screen-games') AITutor.hideFloat();
     if(id==='screen-scrabble') AITutor.hideFloat();
-    if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>{SLGame.reset();SLGame.drawBoard();},300);}
+    if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>{SLGame.reset();},500);}
     if(id==='screen-word-puzzle'){AITutor.hideFloat();setTimeout(()=>WordPuzzle.newGame(),150);}
   },
 
