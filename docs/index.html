@@ -1229,7 +1229,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   <div style="display:flex;gap:10px;padding:0 16px 16px;align-items:flex-start;">
     <div style="flex:1;min-width:0;">
       <div style="background:rgba(255,255,255,0.04);border-radius:16px;padding:8px;border:2px solid rgba(255,255,255,0.1);margin-bottom:8px;position:relative;">
-        <div id="wp-grid" style="display:grid;gap:2px;width:100%;"></div>
+        <div id="wp-grid" style="display:grid;gap:2px;width:100%;max-width:280px;margin:0 auto;">
         <div id="wp-loading" style="display:none;position:absolute;inset:0;background:rgba(15,12,40,0.92);border-radius:16px;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
           <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.95rem;">Samara AI is making a new puzzle...</div>
           <div style="display:flex;gap:6px;"><div class="wp-dot"></div><div class="wp-dot"></div><div class="wp-dot"></div></div>
@@ -3703,7 +3703,7 @@ const App = {
     if(id==='screen-games') AITutor.hideFloat();
     if(id==='screen-scrabble') AITutor.hideFloat();
     if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>SLGame.init(),100);}
-    if(id==='screen-word-puzzle'){AITutor.hideFloat();setTimeout(()=>WordPuzzle.init(),100);}
+    if(id==='screen-word-puzzle'){AITutor.hideFloat();setTimeout(()=>WordPuzzle.newGame(),150);}
   },
 
   showProGate(message) {
