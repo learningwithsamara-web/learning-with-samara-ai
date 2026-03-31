@@ -8973,6 +8973,7 @@ g.appendChild(cell);
 }
 }
 g.addEventListener('pointerup',()=>this.endSel());
+g.style.touchAction='none';
 this.refreshCells();
 },
 startSel(r,c){this.selecting=true;this.selCells=[[r,c]];this.refreshCells();},
