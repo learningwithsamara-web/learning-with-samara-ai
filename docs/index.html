@@ -8974,6 +8974,28 @@ g.appendChild(cell);
 }
 g.addEventListener('pointerup',()=>this.endSel());
 g.style.touchAction='none';
+g.addEventListener('touchstart',(e)=>{
+e.preventDefault();
+const t=e.touches[0];
+const el=document.elementFromPoint(t.clientX,t.clientY);
+if(el&&el.id&&el.id.startsWith('wc')){
+const parts=el.id.replace('wc','').split('-');
+if(parts.length===2)this.startSel(parseInt(parts[0]),parseInt(parts[1]));
+}
+},{passive:false});
+g.addEventListener('touchmove',(e)=>{
+e.preventDefault();
+const t=e.touches[0];
+const el=document.elementFromPoint(t.clientX,t.clientY);
+if(el&&el.id&&el.id.startsWith('wc')){
+const parts=el.id.replace('wc','').split('-');
+if(parts.length===2)this.extendSel(parseInt(parts[0]),parseInt(parts[1]));
+}
+},{passive:false});
+g.addEventListener('touchend',(e)=>{
+e.preventDefault();
+this.endSel();
+},{passive:false});
 this.refreshCells();
 },
 startSel(r,c){this.selecting=true;this.selCells=[[r,c]];this.refreshCells();},
