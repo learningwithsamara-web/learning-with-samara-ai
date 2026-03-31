@@ -481,6 +481,33 @@ body.theme-forest{background:linear-gradient(135deg,#0d2b0d,#1a4a1a,#2d6b2d)!imp
 body.theme-sunset{background:linear-gradient(135deg,#4a0a0a,#8b2500,#c94f00)!important;}
 body.theme-space{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e)!important;}
 body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!important;}
+/* ── GAMES ── */
+.sl-age-btn{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1.5px solid rgba(255,255,255,0.15);border-radius:50px;padding:5px 14px;font-size:0.78rem;cursor:pointer;font-family:'Fredoka One',cursive;transition:all 0.2s;}
+.sl-age-btn.active{background:linear-gradient(135deg,#FFD93D,#FF9B3F);border-color:#FFD93D;color:#fff;}
+.sc-age-btn{background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:all 0.2s;color:#fff;font-weight:700;font-size:0.82rem;}
+.sc-age-btn.active{background:linear-gradient(135deg,rgba(199,125,255,0.3),rgba(121,40,202,0.3));border-color:#C77DFF;color:#C77DFF;}
+.sc-player-btn{flex:1;min-width:70px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:all 0.2s;color:#fff;font-weight:700;font-size:0.85rem;}
+.sc-player-btn.active{background:linear-gradient(135deg,rgba(255,217,61,0.3),rgba(255,155,63,0.3));border-color:#FFD93D;color:#FFD93D;}
+.sc-step{background:rgba(255,255,255,0.08);border-radius:50px;padding:4px 10px;font-size:0.68rem;color:rgba(255,255,255,0.4);font-weight:700;border:1px solid rgba(255,255,255,0.1);}
+.sc-step.active{background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;border-color:#C77DFF;}
+.sc-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:0.48rem;font-weight:900;border-radius:2px;cursor:pointer;transition:all 0.15s;position:relative;text-align:center;line-height:1;border:1px solid rgba(0,0,0,0.2);}
+.sc-cell:hover{transform:scale(1.12);z-index:10;}
+.sc-cell.tws{background:linear-gradient(135deg,#8b0000,#c0392b);color:rgba(255,200,200,0.9);}
+.sc-cell.dws{background:linear-gradient(135deg,#880e4f,#c2185b);color:rgba(255,200,220,0.9);}
+.sc-cell.tls{background:linear-gradient(135deg,#0d47a1,#1565c0);color:rgba(200,220,255,0.9);}
+.sc-cell.dls{background:linear-gradient(135deg,#006064,#00838f);color:rgba(200,255,255,0.9);}
+.sc-cell.ctr{background:linear-gradient(135deg,#e65100,#ff6d00);color:#fff;}
+.sc-cell.empty{background:rgba(101,84,55,0.35);}
+.sc-cell.placed{cursor:default;}
+.sc-cell.placed:hover{transform:none;}
+.sc-tile-board{width:92%;height:92%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,#faebd7,#deb887);border-radius:3px;box-shadow:2px 2px 0 #5a3a1a;border:1px solid #f5deb3;position:relative;}
+.sc-tile-letter{font-size:0.85rem;font-weight:900;color:#1a0a00;font-family:'Fredoka One',cursive;line-height:1;}
+.sc-tile-score{font-size:0.38rem;font-weight:900;color:#5a3010;position:absolute;bottom:1px;right:2px;}
+.sc-rack-tile{width:34px;height:34px;background:linear-gradient(145deg,#faebd7,#deb887);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;box-shadow:3px 3px 0 #5a3a1a;border:1px solid #f5deb3;position:relative;}
+.sc-rack-tile:hover{transform:translateY(-3px);}
+.sc-rack-tile.selected{transform:translateY(-8px) scale(1.05);background:linear-gradient(145deg,#fff8e1,#ffd54f);border-color:#FFD93D;box-shadow:3px 10px 0 #5a3a1a;}
+.sc-rack-letter{font-size:0.92rem;font-weight:900;color:#1a0a00;font-family:'Fredoka One',cursive;line-height:1;}
+.sc-rack-value{font-size:0.42rem;font-weight:900;color:#5a3010;position:absolute;bottom:2px;right:2px;}
 /* ── BIRTHDAY ── */
 .birthday-overlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);animation:fade-in 0.3s ease;}
 .birthday-box{background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:32px 28px;max-width:400px;width:90%;text-align:center;border:2px solid rgba(255,217,61,0.5);animation:pop-in 0.4s cubic-bezier(0.34,1.56,0.64,1);}
@@ -517,6 +544,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <button id="btn-esl" class="btn btn-primary" style="background:linear-gradient(135deg,#11998e,#38ef7d);" onclick="App.showScreen('screen-esl')">🌍 ESL for Kids</button>
     <button id="btn-speaking" class="btn btn-primary" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);" onclick="App.showScreen('screen-speaking')">🎤 Speaking Coach</button>
     <button id="btn-birthday" class="btn btn-primary" style="background:linear-gradient(135deg,#FF6B6B,#FFD93D);" onclick="BirthdayShoutout.openSettings()">🎂 Birthday</button>
+    <button id="btn-games" class="btn btn-primary" style="background:linear-gradient(135deg,#FF4757,#FF6B6B);" onclick="App.showScreen('screen-games')">🎮 Games</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#7928CA,#FF0080);" onclick="App.showScreen('screen-shop')">🛍️📖✨ Samara Edu Store</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#4A90D9,#7928CA);" onclick="App.showScreen('screen-learn')">📚 Learn</button>
     <button class="btn btn-primary" style="background:linear-gradient(135deg,#302b63,#6BCB77);" onclick="App.showScreen('screen-getapp')">📲 Get the App</button>
@@ -856,9 +884,17 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   </div>
   <h3 class="dash-section-title">📊 Subject Performance</h3>
   <div id="parent-subject-list"></div>
-  <div class="suggestions-box">
-    <div class="suggestions-title">💡 Study Suggestions</div>
-    <div id="parent-suggestions"></div>
+  <div id="parent-suggestions"></div>
+  </div>
+  <div style="margin-top:28px;">
+    <h3 class="dash-section-title">👨‍👩‍👧 Family Profiles</h3>
+    <div id="family-profiles-list" style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;"></div>
+ <button onclick="FamilyProfiles.addChild()" id="add-child-btn" style="background:linear-gradient(135deg,#6BCB77,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;width:100%;">👶 Add Child Profile</button>
+ <div id="family-plan-notice" style="display:none;background:rgba(255,217,61,0.1);border-radius:12px;padding:12px;margin-top:10px;text-align:center;border:1px solid rgba(255,217,61,0.25);">
+ <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">⭐ Upgrade to add more children!</div>
+ <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:4px;">Pro: 2 children · Family Pro: 4 children</div>
+ <button onclick="App.showScreen('screen-pricing')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:8px 20px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;">See Plans</button>
+ </div>
   </div>
 </div>
 </div>
@@ -1016,6 +1052,195 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div class="pep-subject-card" data-pep="social" onclick="PEP.openSubject('social')"><div class="pep-subject-icon">🌍</div><div class="pep-subject-name">Social Studies</div><div class="pep-subject-count">Caribbean History & Geography</div></div>
     <div class="pep-subject-card" data-pep="general" onclick="PEP.openSubject('general')"><div class="pep-subject-icon">🧠</div><div class="pep-subject-name">General Knowledge</div><div class="pep-subject-count">Current Affairs & Culture</div></div>
     <div class="pep-subject-card" data-pep="practice" onclick="PEP.openSubject('practice')"><div class="pep-subject-icon">📝</div><div class="pep-subject-name">Practice Test</div><div class="pep-subject-count">Full Mock PEP Exam</div></div>
+  </div>
+</div>
+<!-- ══ GAMES ══ -->
+<div id="screen-games" class="screen">
+  <div class="pep-header" style="background:linear-gradient(135deg,#FF4757,#C77DFF);">
+    <button class="back-btn" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);" onclick="App.showScreen('screen-home')">← Back</button>
+    <div class="pep-badge" style="background:rgba(255,255,255,0.25);color:#fff;">🎮 Learning Games</div>
+    <h2 class="pep-title">Samara's Game Zone!</h2>
+    <p class="pep-subtitle">Learn while you play! Fun games for every age!</p>
+  </div>
+  <div class="pep-info-box" style="margin-top:18px;">
+    <div class="pep-info-icon">💡</div>
+    <div class="pep-info-text">Answer questions correctly to win! More games coming soon! 🌟</div>
+  </div>
+  <div class="pep-subjects-grid">
+    <div class="pep-subject-card" onclick="App.showScreen('screen-snake-ladder')" style="position:relative;overflow:hidden;"><div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#FF4757,#FFD93D);border-radius:18px 18px 0 0;"></div><div class="pep-subject-icon">🐍</div><div class="pep-subject-name">Snake & Ladder</div><div class="pep-subject-count">Roll · Answer · Win!</div></div>
+    <div class="pep-subject-card" onclick="App.showScreen('screen-scrabble')" style="position:relative;overflow:hidden;"><div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#C77DFF,#7928CA);border-radius:18px 18px 0 0;"></div><div class="pep-subject-icon">🔤</div><div class="pep-subject-name">Samara Scrabble</div><div class="pep-subject-count">Build words · Score points!</div></div>
+    <div class="pep-subject-card" style="position:relative;overflow:hidden;opacity:0.5;"><div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#C77DFF,#7928CA);border-radius:18px 18px 0 0;"></div><div class="pep-subject-icon">🧩</div><div class="pep-subject-name">Word Puzzle</div><div class="pep-subject-count">Coming Soon!</div></div>
+    <div class="pep-subject-card" style="position:relative;overflow:hidden;opacity:0.5;"><div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#FFD93D,#FF9B3F);border-radius:18px 18px 0 0;"></div><div class="pep-subject-icon">🔢</div><div class="pep-subject-name">Number Blast</div><div class="pep-subject-count">Coming Soon!</div></div>
+    <div class="pep-subject-card" style="position:relative;overflow:hidden;opacity:0.5;"><div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#6BCB77,#4A90D9);border-radius:18px 18px 0 0;"></div><div class="pep-subject-icon">🧠</div><div class="pep-subject-name">Memory Match</div><div class="pep-subject-count">Coming Soon!</div></div>
+  </div>
+</div>
+<!-- ══ SCRABBLE ══ -->
+<div id="screen-scrabble" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+  <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
+    <button class="back-btn" style="position:relative;transform:none;top:auto;left:auto;" onclick="App.showScreen('screen-games')">← Back</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Samara's Scrabble Game</div>
+    <button id="scrabble-rules-btn" onclick="ScrabbleGame.showRules()" style="margin-left:auto;background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:0.75rem;padding:6px 14px;border-radius:50px;border:none;cursor:pointer;">How to Play?</button>
+  </div>
+  <div id="scrabble-setup" style="padding:16px;">
+    <div style="background:rgba(255,255,255,0.06);border-radius:20px;padding:20px;border:2px solid rgba(255,255,255,0.1);max-width:500px;margin:0 auto;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.2rem;text-align:center;margin-bottom:14px;">Set Up Your Game!</div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.08);">
+        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:0.85rem;margin-bottom:8px;">How to Play:</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin-bottom:5px;">1. Click a letter tile from your rack</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin-bottom:5px;">2. Tap a square on the board to place it</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin-bottom:5px;">3. Spell a word then click Play Word!</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.78rem;">4. Land on bonus squares for extra points!</div>
+      </div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-bottom:8px;font-weight:700;">Choose Age Group:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="sc-age-grid">
+        <div class="sc-age-btn active" onclick="ScrabbleGame.setAge('4-6',this)">Ages 4-6<br><small style="font-size:0.68rem;opacity:0.7">3 min · Simple words</small></div>
+        <div class="sc-age-btn" onclick="ScrabbleGame.setAge('7-10',this)">Ages 7-10<br><small style="font-size:0.68rem;opacity:0.7">2 min · Common words</small></div>
+        <div class="sc-age-btn" onclick="ScrabbleGame.setAge('11-14',this)">Ages 11-14<br><small style="font-size:0.68rem;opacity:0.7">90 sec · Advanced</small></div>
+        <div class="sc-age-btn" onclick="ScrabbleGame.setAge('15-17',this)">Ages 15-17<br><small style="font-size:0.68rem;opacity:0.7">60 sec · Expert</small></div>
+      </div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-bottom:8px;font-weight:700;">Number of Players:</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;" id="sc-player-grid">
+        <div class="sc-player-btn" onclick="ScrabbleGame.setPlayers(1,this)">vs AI</div>
+        <div class="sc-player-btn active" onclick="ScrabbleGame.setPlayers(2,this)">2 Players</div>
+        <div class="sc-player-btn" onclick="ScrabbleGame.setPlayers(3,this)">3 Players</div>
+        <div class="sc-player-btn" onclick="ScrabbleGame.setPlayers(4,this)">4 Players</div>
+      </div>
+      <button onclick="ScrabbleGame.start()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:50px;border:none;cursor:pointer;width:100%;">Let's Play Scrabble!</button>
+    </div>
+  </div>
+  <div id="scrabble-game" style="display:none;padding:8px 12px 16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+      <button onclick="ScrabbleGame.backToSetup()" style="background:rgba(255,255,255,0.1);color:#fff;border:1.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 14px;font-size:0.8rem;cursor:pointer;font-family:'Fredoka One',cursive;">New Game</button>
+      <div id="sc-turn-badge" style="font-family:'Fredoka One',cursive;font-size:0.85rem;padding:6px 14px;border-radius:50px;color:#fff;background:linear-gradient(135deg,#C77DFF,#7928CA);">Player 1's Turn</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+        <div style="width:70px;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;"><div id="sc-timer-bar" style="height:100%;border-radius:4px;background:#6BCB77;transition:width 1s linear,background 1s;width:100%;"></div></div>
+        <div id="sc-timer-txt" style="font-family:'Fredoka One',cursive;font-size:0.85rem;color:#FFD93D;min-width:36px;">3:00</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;" id="sc-steps">
+      <div class="sc-step active" id="sc-step1">1 Pick tile</div>
+      <div class="sc-step" id="sc-step2">2 Place it</div>
+      <div class="sc-step" id="sc-step3">3 Play word</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;">
+      <div style="flex:1;min-width:0;">
+        <div id="sc-board" style="display:grid;grid-template-columns:repeat(15,1fr);gap:1px;background:rgba(30,20,60,0.8);border:2px solid rgba(255,255,255,0.15);border-radius:10px;padding:2px;box-shadow:0 8px 32px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.08);width:100%;"></div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;justify-content:center;">
+          <div style="display:flex;align-items:center;gap:3px;font-size:0.58rem;color:rgba(255,255,255,0.5);"><div style="width:9px;height:9px;border-radius:2px;background:linear-gradient(135deg,#8b0000,#c0392b)"></div>TW x3</div>
+          <div style="display:flex;align-items:center;gap:3px;font-size:0.58rem;color:rgba(255,255,255,0.5);"><div style="width:9px;height:9px;border-radius:2px;background:linear-gradient(135deg,#880e4f,#c2185b)"></div>DW x2</div>
+          <div style="display:flex;align-items:center;gap:3px;font-size:0.58rem;color:rgba(255,255,255,0.5);"><div style="width:9px;height:9px;border-radius:2px;background:linear-gradient(135deg,#0d47a1,#1565c0)"></div>TL x3</div>
+          <div style="display:flex;align-items:center;gap:3px;font-size:0.58rem;color:rgba(255,255,255,0.5);"><div style="width:9px;height:9px;border-radius:2px;background:linear-gradient(135deg,#006064,#00838f)"></div>DL x2</div>
+        </div>
+      </div>
+      <div style="width:175px;display:flex;flex-direction:column;gap:7px;flex-shrink:0;">
+        <div id="sc-score-cards" style="display:flex;flex-direction:column;gap:5px;"></div>
+        <div style="background:linear-gradient(135deg,rgba(101,84,55,0.3),rgba(80,60,30,0.3));border-radius:12px;padding:10px;border:2px solid rgba(139,119,85,0.3);">
+          <div style="font-family:'Fredoka One',cursive;color:rgba(255,217,61,0.8);font-size:0.7rem;margin-bottom:6px;text-align:center;">Your Letters - Click one!</div>
+          <div id="sc-rack" style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap;"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <button onclick="ScrabbleGame.playWord()" style="padding:8px;border-radius:10px;border:none;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.78rem;background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;width:100%;">Play Word!</button>
+          <button onclick="ScrabbleGame.getHint()" style="padding:8px;border-radius:10px;border:none;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.78rem;background:linear-gradient(135deg,#6a1b9a,#8e24aa);color:#fff;width:100%;">Get a Hint!</button>
+          <button onclick="ScrabbleGame.shuffleRack()" style="padding:8px;border-radius:10px;border:none;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.78rem;background:rgba(255,217,61,0.15);color:#FFD93D;border:1px solid rgba(255,217,61,0.3);width:100%;">Shuffle Letters</button>
+          <button onclick="ScrabbleGame.skipTurn()" style="padding:8px;border-radius:10px;border:none;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.78rem;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.15);width:100%;">Skip Turn</button>
+        </div>
+        <div id="sc-msg" style="background:rgba(255,255,255,0.05);border-radius:10px;padding:8px;font-size:0.68rem;color:rgba(255,255,255,0.85);text-align:center;border:1px solid rgba(255,255,255,0.08);min-height:36px;line-height:1.5;">Click a letter tile to start!</div>
+      </div>
+    </div>
+  </div>
+  <div id="sc-rules-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;color:#fff;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px;padding:24px;max-width:500px;width:100%;border:2px solid rgba(199,125,255,0.4);margin:auto;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.5rem;text-align:center;margin-bottom:4px;">How to Play Scrabble!</div>
+      <div style="color:rgba(255,255,255,0.9);font-size:0.78rem;text-align:center;margin-bottom:16px;">Learn the rules and become a champion!</div>
+      <div style="margin-bottom:14px;">
+        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;margin-bottom:8px;">The Goal:</div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.8rem;">Score the most points by spelling words on the board! The player with the highest score wins!</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;margin-bottom:8px;">Step by Step:</div>
+        <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px;font-size:0.78rem;color:rgba(255,255,255,0.85);line-height:1.8;">
+          1. You get 7 letter tiles in your rack<br>
+          2. Click a tile to select it (it lifts up!)<br>
+          3. Click a board square to place it<br>
+          4. Spell a word then click Play Word!<br>
+          5. Draw new tiles and next player goes!
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.95rem;margin-bottom:8px;">Bonus Squares:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="background:rgba(139,0,0,0.2);border-radius:10px;padding:8px;display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:5px;background:linear-gradient(135deg,#8b0000,#c0392b);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:#fff;flex-shrink:0;">TW</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.8);"><strong style="color:#fff;display:block;">Triple Word</strong>Whole word x3!</div></div>
+          <div style="background:rgba(136,14,79,0.2);border-radius:10px;padding:8px;display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:5px;background:linear-gradient(135deg,#880e4f,#c2185b);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:#fff;flex-shrink:0;">DW</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.8);"><strong style="color:#fff;display:block;">Double Word</strong>Whole word x2!</div></div>
+          <div style="background:rgba(13,71,161,0.2);border-radius:10px;padding:8px;display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:5px;background:linear-gradient(135deg,#0d47a1,#1565c0);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:#fff;flex-shrink:0;">TL</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.8);"><strong style="color:#fff;display:block;">Triple Letter</strong>One letter x3!</div></div>
+          <div style="background:rgba(0,96,100,0.2);border-radius:10px;padding:8px;display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:5px;background:linear-gradient(135deg,#006064,#00838f);display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:#fff;flex-shrink:0;">DL</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.8);"><strong style="color:#fff;display:block;">Double Letter</strong>One letter x2!</div></div>
+        </div>
+      </div>
+      <div style="background:rgba(107,203,119,0.1);border:1px solid rgba(107,203,119,0.25);border-radius:12px;padding:12px;margin-bottom:14px;">
+        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:0.85rem;margin-bottom:6px;">Pro Tips!</div>
+        <div style="color:rgba(255,255,255,0.75);font-size:0.75rem;line-height:1.8;">
+          • Use Get a Hint if you are stuck!<br>
+          • Land on Triple Word for big points!<br>
+          • Use all 7 letters for a 50 point bonus!<br>
+          • Shuffle Letters to see new possibilities!<br>
+          • Skip Turn to get 2 fresh new letters!
+        </div>
+      </div>
+      <button onclick="document.getElementById('sc-rules-overlay').style.display='none'" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px;border-radius:50px;border:none;cursor:pointer;width:100%;"><div style="display:flex;gap:8px;margin-top:4px;">
+<button onclick="ScrabbleGame.readRules()" style="background:linear-gradient(135deg,#6BCB77,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:12px;border-radius:50px;border:none;cursor:pointer;flex:1;">🔊 Read Rules!</button>
+<button onclick="SoundSystem.stop()" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:12px 16px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">⏹️</button>
+<button onclick="document.getElementById('sc-rules-overlay').style.display='none';SoundSystem.stop();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:12px;border-radius:50px;border:none;cursor:pointer;flex:1;">Got it!</button>
+</div>
+</div>
+  </div>
+</div>
+<!-- ══ SNAKE & LADDER ══ -->
+<div id="screen-snake-ladder" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+  <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
+    <button class="back-btn" style="position:relative;transform:none;top:auto;left:auto;" onclick="App.showScreen('screen-games')">← Back</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🐍 Samara's Snake & Ladder Game 🪜</div>
+  </div>
+  <div style="padding:8px 16px 4px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.78rem;">Roll · Answer · Win! First to square 100 wins the crown!</div>
+  <div style="display:flex;gap:6px;justify-content:center;padding:6px 16px;flex-wrap:wrap;" id="sl-age-bar">
+    <button class="sl-age-btn active" onclick="SLGame.setAge('4-6',this)">🧒 Ages 4-6</button>
+    <button class="sl-age-btn" onclick="SLGame.setAge('7-10',this)">📚 Ages 7-10</button>
+    <button class="sl-age-btn" onclick="SLGame.setAge('11-14',this)">🎓 Ages 11-14</button>
+    <button class="sl-age-btn" onclick="SLGame.setAge('15-17',this)">🏆 Ages 15-17</button>
+  </div>
+  <div style="display:flex;gap:12px;padding:8px 16px 16px;align-items:flex-start;">
+    <div style="flex:1;min-width:280px;position:relative;">
+<canvas id="sl-canvas" width="500" height="500" style="display:block;width:100%;max-width:500px;border-radius:16px;border:3px solid rgba(255,255,255,0.2);box-shadow:0 0 40px rgba(199,125,255,0.3);"></canvas>    
+    </div>
+      <div id="sl-p0card" style="border-radius:14px;padding:11px;border:2px solid #FFD93D;background:rgba(255,217,61,0.12);">
+        <div style="font-size:1.8rem;">🟣</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#fff;">Player 1</div>
+        <div id="sl-pp0" style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:2px;">Square 1 · 0 pts</div>
+      </div>
+      <div id="sl-p1card" style="border-radius:14px;padding:11px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);">
+        <div style="font-size:1.8rem;">🟡</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#fff;">Player 2</div>
+        <div id="sl-pp1" style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-top:2px;">Square 1 · 0 pts</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:12px;text-align:center;border:2px solid rgba(255,255,255,0.1);">
+        <div id="sl-dice" style="width:60px;height:60px;background:linear-gradient(135deg,#fff,#f0f0f0);border-radius:12px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 6px 20px rgba(0,0,0,0.4);border:3px solid rgba(255,255,255,0.8);">🎲</div>
+        <button id="sl-rbtn" onclick="SLGame.roll()" style="background:linear-gradient(135deg,#FF6B6B,#C77DFF);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:9px;border-radius:50px;border:none;cursor:pointer;width:100%;box-shadow:0 4px 15px rgba(199,125,255,0.4);">🎲 Roll!</button>
+      </div>
+      <div id="sl-status" style="background:rgba(255,255,255,0.06);border-radius:12px;padding:9px;font-size:0.72rem;color:rgba(255,255,255,0.85);text-align:center;min-height:38px;border:1px solid rgba(255,255,255,0.1);line-height:1.4;">Player 1's turn! 🎲</div>
+    </div>
+  </div>
+  <div id="sl-q-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:400px;width:100%;border:2px solid rgba(199,125,255,0.5);">
+      <div id="sl-qp" style="font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:10px;padding:6px 14px;border-radius:50px;display:inline-block;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;">Player 1</div>
+      <div id="sl-qq" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-bottom:18px;line-height:1.45;"></div>
+      <div id="sl-qg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+    </div>
+  </div>
+  <div id="sl-win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;text-align:center;border:3px solid #FFD93D;max-width:360px;width:90%;box-shadow:0 0 60px rgba(255,217,61,0.4);">
+      <div style="font-size:4rem;margin-bottom:10px;">🏆</div>
+      <div id="sl-wt" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:8px;">Player 1 Wins!</div>
+      <div id="sl-wm" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:22px;line-height:1.6;">Amazing champion!</div>
+      <button onclick="SLGame.reset()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">🎮 Play Again!</button>
+    </div>
   </div>
 </div>
 <!-- ══ SPEAKING COACH ══ -->
@@ -2214,13 +2439,36 @@ const SoundSystem = {
   },
 
   // Main speak function — tuned for natural girl child voice
-  speak(text, rate=0.88, pitch=1.35) {
+  async speakGoogle(text, rate=0.9, pitch=2.0) {
+    if(!this.enabled || !text) return;
+    try {
+      window.speechSynthesis.cancel();
+console.log('[Google TTS] Requesting:', text.slice(0,50));
+      const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({text:String(text).slice(0,500), rate, pitch})
+      });
+      const data = await res.json();
+      if(data.audioContent) {
+        window.speechSynthesis.cancel();
+        if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
+        const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+        audio.play();
+        this._currentAudio = audio;
+        return;
+      }
+    } catch(e) {
+      console.warn('Google TTS failed, using browser voice:', e);
+    }
+    this.speak(text, rate, pitch);
+  },
+speak(text, rate=0.88, pitch=1.35) {
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
-
+    if(this._googleTTSActive) return;
     this._speaking = false;
     if(this._resumeInterval) clearInterval(this._resumeInterval);
     window.speechSynthesis.cancel();
-
     const clean = text
       .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
       .replace(/[\u2600-\u27BF]/g, '')
@@ -2231,7 +2479,7 @@ const SoundSystem = {
     if(!clean) return;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const maxLen = isMobile ? 100 : 180;
+    const maxLen = isMobile ? 170 : 350;
 
     const rawChunks = clean.match(/[^.!?]+[.!?]*/g) || [clean];
     const chunks = [];
@@ -2266,15 +2514,15 @@ const SoundSystem = {
       if(!chunk || chunk.length < 2) { setTimeout(speakChunk, 50); return; }
 
       const utt = new SpeechSynthesisUtterance(chunk);
-      utt.rate = isMobile ? Math.min(rate, 0.85) : rate;
-      utt.pitch = isMobile ? Math.min(pitch, 1.2) : pitch;
+      utt.rate = isMobile ? Math.min(rate, 0.82) : rate;
+      utt.pitch = isMobile ? Math.min(pitch, 1.15) : pitch;
       utt.volume = 1.0;
       utt.lang = 'en-US';
   
       if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
 
-      utt.onend = () => setTimeout(speakChunk, isMobile ? 180 : 80);
+      utt.onend = () => setTimeout(speakChunk, isMobile ? 300 : 170);
       utt.onerror = () => setTimeout(speakChunk, 200);
 
       window.speechSynthesis.speak(utt);
@@ -2286,10 +2534,10 @@ const SoundSystem = {
   },
 
   // Child-friendly voices — higher pitch, slower rate for babies
-  speakBaby(text)   { this.speak(text, 0.72, 1.45); },
-  speakPraise(text) { this.speak(text, 0.92, 1.4);  },
-  speakHint(text)   { this.speak(text, 0.80, 1.3);  },
-  speakLearn(text)  { this.speak(text, 0.82, 1.3);  },
+speakBaby(text)   { this.speak(text, 0.72, 1.45); },
+speakPraise(text) { this.speak(text, 0.92, 1.4);  },
+speakHint(text)   { this.speak(text, 0.80, 1.3);  },
+speakLearn(text)  { this.speak(text, 0.82, 1.3);  },
 
   speakQuestion(text) {
     if(!this.enabled || !text) return;
@@ -2297,10 +2545,11 @@ const SoundSystem = {
     if(clean) this.speak(clean, 0.84, 1.3);
   },
 
-  stop() {
-    this._speaking = false;
-    if(this._resumeInterval) { clearInterval(this._resumeInterval); this._resumeInterval = null; }
-    window.speechSynthesis.cancel();
+ stop() {
+  this._speaking = false;
+  if(this._resumeInterval) { clearInterval(this._resumeInterval); this._resumeInterval = null; }
+  window.speechSynthesis.cancel();
+  if(this._currentAudio){ this._currentAudio.pause(); this._currentAudio=null; }
   },
   playTone(type) {
     if(!this.enabled)return;
@@ -3367,7 +3616,7 @@ const App = {
     SoundSystem.stop(); // stop any speaking when changing screens
     if(id==='screen-auth'&&param)App.switchTab(param);
     if(id==='screen-dashboard')App.renderDash();
-    if(id==='screen-parent')App.renderParent();  // open to all — upsell inside
+    if(id==='screen-parent'){App.renderParent();FamilyProfiles.render().catch(e=>console.error('Family profiles error:',e));}
     if(id==='screen-quiz')AITutor.showFloat();else AITutor.hideFloat();
     if(id==='screen-research')setTimeout(()=>{
       if(!S.user){ App.requireSignup('Research Anything!','🔭','Create your free account to explore any topic with Samara as your personal AI tutor!'); App.showScreen('screen-home'); return; }
@@ -3386,6 +3635,9 @@ const App = {
     if(id==='screen-coinshop'){ AITutor.hideFloat(); CoinShop.render(); }
     if(id==='screen-homework'){ AITutor.hideFloat(); HomeworkHelper.init(); }
     if(id==='screen-speaking'){AITutor.hideFloat();SpeakingCoach.init();}
+    if(id==='screen-games') AITutor.hideFloat();
+    if(id==='screen-scrabble') AITutor.hideFloat();
+    if(id==='screen-snake-ladder'){AITutor.hideFloat();setTimeout(()=>SLGame.init(),100);}
   },
 
   showProGate(message) {
@@ -3606,11 +3858,15 @@ const App = {
 
 if(SoundSystem.enabled){
 const isESL = S.subject && S.subject.startsWith('esl');
-const rate = isESL ? 0.70 : 0.84;
+const rate = isESL ? 0.68 : 0.80;
 const pitch = isESL ? 1.4 : 1.3;
 SoundSystem.stop();
-setTimeout(()=>SoundSystem.speak(q.text, rate, pitch), 600);
-setTimeout(()=>SoundSystem.speak('Option 1 ... ' + q.answers[0].label + ' ... Option 2 ... ' + q.answers[1].label + ' ... Option 3 ... ' + q.answers[2].label + ' ... Option 4 ... ' + q.answers[3].label, rate, pitch), 8000);
+setTimeout(()=>{
+SoundSystem.speak(q.text, rate, pitch);
+const qLen = q.text.length;
+const optDelay = qLen < 60 ? 6000 : qLen < 120 ? 9000 : 13000;
+setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 ' + q.answers[1].label + ' Option 3 ' + q.answers[2].label + ' Option 4 ' + q.answers[3].label, rate, pitch), optDelay);
+}, 600);
 }
   },
 
@@ -5557,7 +5813,6 @@ const ReviewSystem = {
   async loadReviews() {
     const grid = document.getElementById('reviews-grid');
     if(!grid) return;
-    // Always show static reviews first
     grid.innerHTML = this._staticReviews();
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?approved=eq.true&order=created_at.desc&limit=20`, {
@@ -5565,39 +5820,16 @@ const ReviewSystem = {
       });
       const data = await res.json();
       if(!data || !Array.isArray(data) || data.length === 0) return;
-
-      // Update count — live + static combined
-      const countEl = document.getElementById('review-count');
-      // Keep 200+ — don't change the display count
-
-      // Build live cards
       const liveCards = data.map(r => {
-        const stars = '\u2B50'.repeat(Math.min(r.stars, 5));
+        const stars = '⭐'.repeat(Math.min(r.stars, 5));
         const ago = this._timeAgo(r.created_at);
-        const avatars = ['\uD83D\uDC69\uD83C\uDFFE','\uD83D\uDC68\uD83C\uDFFE','\uD83D\uDC69\uD83C\uDFFD','\uD83D\uDC68\uD83C\uDFFF','\uD83D\uDC69\uD83C\uDFFB','\uD83D\uDC68\uD83C\uDFFD'];
+        const avatars = ['👩🏾','👨🏾','👩🏽','👨🏿','👩🏻','👨🏽'];
         const avatar = avatars[r.id % avatars.length] || avatars[0];
-        return `<div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:18px;border:1.5px solid rgba(255,255,255,0.1);">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <div style="font-size:2rem;">${avatar}</div>
-            <div style="flex:1;">
-              <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div>
-              <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location||'Samara AI Family'}</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="color:#FFD93D;font-size:0.85rem;">${stars}</div>
-              <div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${ago}</div>
-            </div>
-          </div>
-          ${r.feature?`<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>`:''}
-          <div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div>
-        </div>`;
+        return `<div style="background:rgba(255,255,255,0.06);border-radius:18px;padding:18px;border:1.5px solid rgba(255,255,255,0.1);"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="font-size:2rem;">${avatar}</div><div style="flex:1;"><div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.95rem;">${r.name}</div><div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">${r.location||'Samara AI Family'}</div></div><div style="text-align:right;"><div style="color:#FFD93D;font-size:0.85rem;">${stars}</div><div style="color:rgba(255,255,255,0.4);font-size:0.68rem;">${ago}</div></div></div>${r.feature?`<div style="background:rgba(255,217,61,0.12);border-radius:10px;padding:4px 10px;margin-bottom:8px;display:inline-block;"><span style="color:#FFD93D;font-size:0.72rem;font-weight:800;">${r.feature}</span></div>`:''}<div style="color:rgba(255,255,255,0.82);font-size:0.83rem;line-height:1.6;">"${r.review_text}"</div></div>`;
       }).join('');
-
-      // COMBINE: new live reviews on top + original static reviews below
       grid.innerHTML = liveCards + this._staticReviews();
     } catch(e) {
       console.error('[Reviews]', e);
-      // Static reviews already showing — no action needed
     }
   },
 
@@ -6422,7 +6654,9 @@ const BabyMode = {
       shapes:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
       numbers:`Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`
     };
-    setText('baby-question',`(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`);
+    const bq = `(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`;
+  setText('baby-question', bq);
+  setTimeout(()=>SoundSystem.speakBaby(qText[this.category]), 400);
 
     // For 0-3 animals: play animal sound FIRST, then voice speaks after sound finishes
     if(S.ageGroup === '0-3' && this.category === 'animals') {
@@ -7394,6 +7628,195 @@ return bank.map(q=>({text:q.text,answers:makeA(q.correct,q.wrong),correctValue:q
 };
 window.ESL=ESL;
 
+// ── FAMILY PROFILES ──────────────────────────────────────
+const FamilyProfiles={
+async getMax(){
+const user=await DB.getUser();
+if(!user)return 0;
+return 4;
+},
+async getProfiles(){
+const user=await DB.getUser();
+if(!user)return [];
+try{
+const session=await DB.getSession?.();
+const token=session?.access_token||SUPABASE_ANON;
+const res=await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?parent_id=eq.${user.id}&order=created_at.asc`,{
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${token}`}
+});
+const data=await res.json();
+return Array.isArray(data)?data:[];
+}catch(e){
+console.error('Failed to load profiles:',e);
+return [];
+}
+},
+async saveProfile(profile){
+const user=await DB.getUser();
+if(!user)return null;
+try{
+const res=await fetch(`${SUPABASE_URL}/rest/v1/child_profiles`,{
+method:'POST',
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`,'Content-Type':'application/json','Prefer':'return=representation'},
+body:JSON.stringify({parent_id:user.id,name:profile.name,birthday:profile.birthday||null,age_group:profile.ageGroup||'7-10',tutor:profile.tutor||'samara',avatar:profile.avatar||'📚'})
+});
+const data=await res.json();
+return Array.isArray(data)?data[0]:null;
+}catch(e){
+console.error('Failed to save profile:',e);
+return null;
+}
+},
+async updateProfile(id,profile){
+const user=await DB.getUser();
+if(!user)return;
+try{
+await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?id=eq.${id}`,{
+method:'PATCH',
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`,'Content-Type':'application/json'},
+body:JSON.stringify({name:profile.name,birthday:profile.birthday||null,age_group:profile.ageGroup||'7-10',tutor:profile.tutor||'samara',avatar:profile.avatar||'📚'})
+});
+}catch(e){
+console.error('Failed to update profile:',e);
+}
+},
+async deleteProfile(id){
+const user=await DB.getUser();
+if(!user)return;
+try{
+await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?id=eq.${id}`,{
+method:'DELETE',
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`}
+});
+}catch(e){
+console.error('Failed to delete profile:',e);
+}
+},
+async render(){
+const list=document.getElementById('family-profiles-list');
+const notice=document.getElementById('family-plan-notice');
+const addBtn=document.getElementById('add-child-btn');
+if(!list)return;
+list.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;padding:16px;">Loading profiles... ⏳</div>';
+const profiles=await this.getProfiles();
+const max=await this.getMax();
+if(profiles.length===0){
+list.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;padding:16px;">No child profiles yet — add your first child! 👶</div>';
+}else{
+list.innerHTML=profiles.map((p,i)=>`
+<div style="background:rgba(255,255,255,0.07);border-radius:16px;padding:14px 16px;border:1.5px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:12px;">
+<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#C77DFF,#7928CA);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${p.avatar||'📚'}</div>
+<div style="flex:1;">
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${p.name}</div>
+<div style="color:rgba(255,255,255,0.6);font-size:0.8rem;">Age: ${p.age_group||'Not set'} · Tutor: ${p.tutor||'Samara'}</div>
+${p.birthday?`<div style="color:#FFD93D;font-size:0.78rem;">🎂 Birthday: ${new Date(p.birthday+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div>`:''}
+</div>
+<div style="display:flex;gap:6px;">
+<button onclick="FamilyProfiles.editChild('${p.id}')" style="background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">✏️</button>
+<button onclick="FamilyProfiles.deleteChild('${p.id}')" style="background:rgba(255,107,107,0.2);color:#FF6B6B;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">🗑️</button>
+</div>
+</div>`).join('');
+}
+if(max===0){
+if(notice)notice.style.display='block';
+if(addBtn)addBtn.style.display='none';
+}else if(profiles.length>=max){
+if(notice)notice.style.display='block';
+if(addBtn)addBtn.style.display='none';
+}else{
+if(notice)notice.style.display='none';
+if(addBtn)addBtn.style.display='block';
+}
+},
+async addChild(){
+const max=await this.getMax();
+const profiles=await this.getProfiles();
+if(max===0){App.showScreen('screen-pricing');App.toast('⭐ Upgrade to Pro to add child profiles!');return;}
+if(profiles.length>=max){App.showScreen('screen-pricing');App.toast('⭐ Upgrade to add more children!');return;}
+this.showForm(null,{});
+},
+async editChild(id){
+const profiles=await this.getProfiles();
+const profile=profiles.find(p=>p.id===id);
+if(profile)this.showForm(id,profile);
+},
+async deleteChild(id){
+await this.deleteProfile(id);
+await this.render();
+App.toast('Child profile removed!');
+},
+showForm(id,data){
+const div=document.createElement('div');
+div.id='child-form-overlay';
+div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
+div.innerHTML=`<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:400px;width:100%;border:2px solid rgba(199,125,255,0.4);position:relative;">
+<button onclick="document.getElementById('child-form-overlay').remove()" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:50%;width:30px;height:30px;cursor:pointer;">✕</button>
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:18px;text-align:center;">${!id?'👶 Add Child':'✏️ Edit Child'}</div>
+<div style="margin-bottom:12px;">
+<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:6px;">Child Name:</div>
+<input id="cf-name" type="text" placeholder="Enter name..." value="${data.name||''}" style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;"/>
+</div>
+<div style="margin-bottom:12px;">
+<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:6px;">Birthday:</div>
+<input id="cf-birthday" type="date" value="${data.birthday||''}" style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;"/>
+</div>
+<div style="margin-bottom:12px;">
+<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:6px;">Age Group:</div>
+<select id="cf-age" style="width:100%;background:#2d1b69;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 12px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;">
+<option value="0-3" ${(data.age_group||data.ageGroup)==='0-3'?'selected':''}>0-3 Baby World</option>
+<option value="4-6" ${(data.age_group||data.ageGroup)==='4-6'?'selected':''}>4-6 Junior</option>
+<option value="7-10" ${(data.age_group||data.ageGroup)==='7-10'?'selected':''}>7-10 Explorer</option>
+<option value="11-14" ${(data.age_group||data.ageGroup)==='11-14'?'selected':''}>11-14 Pro</option>
+<option value="15-17" ${(data.age_group||data.ageGroup)==='15-17'?'selected':''}>15-17 Advanced</option>
+</select>
+</div>
+<div style="margin-bottom:18px;">
+<div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.85);font-size:0.88rem;margin-bottom:8px;">Preferred Tutor:</div>
+<div style="display:flex;gap:8px;justify-content:center;">
+<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="samara" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${(!data.tutor||data.tutor==='samara')?'rgba(255,217,61,0.6)':'transparent'};">
+<img src="samara.png.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.7rem;margin-top:3px;">Samara</div>
+</div>
+<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="littlejr" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${data.tutor==='littlejr'?'rgba(255,217,61,0.6)':'transparent'};">
+<img src="littlejr.png.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='🧒'"/>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.7rem;margin-top:3px;">Little Jr</div>
+</div>
+<div onclick="this.parentElement.querySelectorAll('[data-t]').forEach(x=>x.style.borderColor='transparent');this.style.borderColor='rgba(255,217,61,0.6)';" data-t="mommytutor" style="cursor:pointer;text-align:center;padding:8px;border-radius:12px;border:2px solid ${data.tutor==='mommytutor'?'rgba(255,217,61,0.6)':'transparent'};">
+<img src="tutormommy.png.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML='👩'"/>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.7rem;margin-top:3px;">Mommy Tutor</div>
+</div>
+</div>
+</div>
+<button onclick="FamilyProfiles.saveChild('${id||''}')" style="background:linear-gradient(135deg,#6BCB77,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px;border-radius:50px;border:none;cursor:pointer;width:100%;">💾 Save Profile</button>
+</div>`;
+document.body.appendChild(div);
+},
+async saveChild(id){
+const name=document.getElementById('cf-name')?.value.trim();
+if(!name){App.toast('Please enter a name!');return;}
+const birthday=document.getElementById('cf-birthday')?.value||'';
+const ageGroup=document.getElementById('cf-age')?.value||'7-10';
+const selectedTutor=document.querySelector('[data-t][style*="rgba(255,217,61"]');
+const tutor=selectedTutor?.getAttribute('data-t')||'samara';
+const avatars={'0-3':'🍼','4-6':'🧒','7-10':'📚','11-14':'🎓','15-17':'🏆'};
+const profile={name,birthday,ageGroup,tutor,avatar:avatars[ageGroup]||'📚'};
+if(id){
+await this.updateProfile(id,profile);
+App.toast('✅ Profile updated!');
+}else{
+await this.saveProfile(profile);
+App.toast('👶 Child profile added!');
+}
+document.getElementById('child-form-overlay')?.remove();
+await this.render();
+if(birthday){
+const today=new Date().toISOString().slice(5,10);
+const bdayDate=birthday.slice(5,10);
+if(today===bdayDate)setTimeout(()=>BirthdayShoutout.showShoutoutForChild(profile),1000);
+}
+}
+};
+window.FamilyProfiles=FamilyProfiles;
 // ── BIRTHDAY SHOUTOUT ────────────────────────────────────
 const BirthdayShoutout={
 MESSAGES:[
@@ -7404,9 +7827,23 @@ MESSAGES:[
 'Happy Birthday! You are so smart, so kind and so loved!',
 ],
 init(){
+const profiles=FamilyProfiles.getProfiles();
+const today=new Date().toISOString().slice(5,10);
+if(profiles.length>0){
+profiles.forEach(child=>{
+if(!child.birthday)return;
+const bdayDate=child.birthday.slice(5,10);
+if(today===bdayDate){
+const key='samara_bday_shown_'+child.name+today;
+if(localStorage.getItem(key))return;
+localStorage.setItem(key,today);
+setTimeout(()=>BirthdayShoutout.showShoutoutForChild(child),2000);
+}
+});
+return;
+}
 const bday=localStorage.getItem('samara_birthday');
 if(!bday)return;
-const today=new Date().toISOString().slice(5,10);
 const bdayDate=bday.slice(5,10);
 if(today===bdayDate){
 const lastShown=localStorage.getItem('samara_bday_shown');
@@ -7415,11 +7852,40 @@ localStorage.setItem('samara_bday_shown',today);
 setTimeout(()=>this.showShoutout(),2000);
 }
 },
+showShoutoutForChild(child){
+const name=child.name||'Superstar';
+const avFile=child.tutor==='littlejr'?'littlejr.png.jpeg':child.tutor==='mommytutor'?'tutormommy.png.jpeg':'samara.png.jpeg';
+const avName=child.tutor==='littlejr'?'Little Jr':child.tutor==='mommytutor'?'Mommy Tutor':'Samara';
+const msg=this.MESSAGES[Math.floor(Math.random()*this.MESSAGES.length)];
+this.launchConfetti();
+SoundSystem.playTone('celebrate');
+const div=document.createElement('div');
+div.className='birthday-overlay';
+div.id='birthday-overlay';
+div.innerHTML=`<div class="birthday-box">
+<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:14px;"><iframe src="https://www.youtube.com/embed/n9ttCgc32KU?autoplay=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<img src="${avFile}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:4px solid #FFD93D;margin-bottom:10px;" onerror="this.style.display='none'" />
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:6px;">${avName} AI ✨</div>
+<div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.6rem;margin-bottom:8px;">🎉 Happy Birthday ${name}! 🎉</div>
+<div style="color:rgba(255,255,255,0.85);font-size:0.92rem;line-height:1.6;margin-bottom:16px;">${msg}</div>
+<div style="background:rgba(255,217,61,0.15);border-radius:12px;padding:10px;margin-bottom:16px;border:1px solid rgba(255,217,61,0.3);">
+<div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">🎁 Birthday Gift!</div>
+<div style="color:rgba(255,255,255,0.8);font-size:0.82rem;margin-top:4px;">50 bonus Samara Coins just for you!</div>
+</div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+<button onclick="BirthdayShoutout.share('${name}')" style="background:linear-gradient(135deg,#FF6B6B,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;">📤 Share Birthday!</button>
+<button onclick="document.getElementById('birthday-overlay').remove();SoundSystem.stop();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 18px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);cursor:pointer;">Thank you! 💛</button>
+</div>
+</div>`;
+document.body.appendChild(div);
+SamaraCoins.add(50,'🎂 Birthday bonus!');
+this.earnBadge();
+},
 showShoutout(){
-const name=document.getElementById('dash-name')?.textContent||'Superstar';
-const av=Avatars.current||'samara';
-const avFile=Avatars.files[av]||'samara.png.jpeg';
-const avName=Avatars.names[av]||'Samara';
+const name=localStorage.getItem('samara_user_name')||'Superstar';
+const av=Avatars?.current||'samara';
+const avFile=av==='littlejr'?'littlejr.png.jpeg':av==='mommytutor'?'tutormommy.png.jpeg':'samara.png.jpeg';
+const avName=av==='littlejr'?'Little Jr':av==='mommytutor'?'Mommy Tutor':'Samara';
 const msg=this.MESSAGES[Math.floor(Math.random()*this.MESSAGES.length)];
 this.launchConfetti();
 SoundSystem.playTone('celebrate');
@@ -7525,6 +7991,771 @@ App.toast('🎂 Birthday saved! Samara will surprise you on your special day!',3
 }
 };
 window.BirthdayShoutout=BirthdayShoutout;
+
+// ── SCRABBLE GAME ────────────────────────────────────────
+const ScrabbleGame={
+LV:{A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10},
+LD:{A:9,B:2,C:2,D:4,E:12,F:2,G:3,H:2,I:9,J:1,K:1,L:4,M:2,N:6,O:8,P:2,Q:1,R:6,S:4,T:6,U:4,V:2,W:2,X:1,Y:2,Z:1},
+WB:{
+'4-6':['CAT','DOG','SUN','BIG','RED','HAT','BED','FUN','HOP','MAP','JAM','CUP','PIG','HEN','FOX','ANT','BEE','COW','OWL','EGG','BUS','CAR','BOX','MOP','RUN','SIT','CAN','BAT','RAT','MAT','SAT','FAT','PAT','TAP','NAP','LAP','CAP','HIT','PIT','BIT','WIT','FIT','POT','NOT','HOT','DOT','GOT','LOT','TIN','WIN','PIN'],
+'7-10':['JUMP','SWIM','PLAY','BOOK','TREE','FISH','BIRD','FROG','STAR','MOON','RAIN','WIND','FIRE','SNOW','LAKE','HILL','FARM','TOWN','ROAD','BOAT','CAKE','MILK','RICE','CORN','BEAN','PEAR','BEAR','DEER','WOLF','LION','SEAL','CROW','HAWK','DUCK','CRAB','TOAD','WORM','SAND','ROCK','CAVE','POND','MIST','GLOW','DRUM','HARP','SONG','BELL','RING','KING','WING'],
+'11-14':['BRAVE','CLOUD','DANCE','EARTH','FLAME','GRACE','HEART','IMAGE','JOKER','KARMA','LIGHT','MAGIC','NOBLE','OCEAN','PEACE','QUEEN','RIVER','SHADE','TIGER','UNITY','VALOR','WATER','YOUTH','ZEBRA','AMAZE','BLEND','CRISP','DRIVE','EMBER','FROST','GLARE','HASTE','IRONY','JEWEL','KNACK','LUNAR','MINOR','NEXUS','OPTIC','PRISM','REALM','SWIFT','THORN','ULTRA','VIVID','WHIRL','YOUNG','ZONAL','QUOTA','NAVAL'],
+'15-17':['QUARTZ','BEYOND','CIPHER','DIVINE','ENIGMA','FATHOM','HERALD','IGNITE','JUNGLE','KNIGHT','LAMENT','MORTAL','NARROW','PATENT','QUIVER','SERENE','THRONE','UNIQUE','VIBRANT','WITHER','ZENITH','ABLAZE','BUCKLE','CRAFTY','DAGGER','FACTOR','GAMBIT','HAMLET','IMPEDE','KERNEL','LACKEY','MYSTIC','NETHER','PARDON','RAFTER','SAVANT','UMBRAL','VORTEX','WALRUS','YEOMAN','ZEPHYR','OUSTER','EFFACE','JOUNCE','XYSTER','TACIT','QUENCH','CRAFTY','BLAZON','FURTIVE']
+},
+TBA:{'4-6':180,'7-10':120,'11-14':90,'15-17':60},
+PCOLORS:['linear-gradient(135deg,#C77DFF,#7928CA)','linear-gradient(135deg,#FFD93D,#FF9B3F)','linear-gradient(135deg,#6BCB77,#4A90D9)','linear-gradient(135deg,#FF6B6B,#FF4757)'],
+TWS:[0,7,14,105,119,210,217,224],
+DWS:[16,28,32,42,48,56,64,70,154,160,168,176,182,192,196,208],
+TLS:[20,24,76,80,84,88,96,108,116,128,136,140,144,148,164],
+DLS:[3,11,36,38,45,52,59,92,102,108,116,122,132,165,172,179,186,213,221],
+age:'4-6',numPlayers:2,players:[],currentPlayer:0,selectedTile:null,placedTiles:[],bag:[],timerInterval:null,timeLeft:180,maxTime:180,boardState:Array(225).fill(null),
+getBonusMap(){
+const m={};
+this.TWS.forEach(i=>m[i]='tws');
+this.DWS.forEach(i=>m[i]='dws');
+this.TLS.forEach(i=>m[i]='tls');
+this.DLS.forEach(i=>m[i]='dls');
+m[112]='ctr';
+return m;
+},
+buildBag(){
+this.bag=[];
+for(const[l,c] of Object.entries(this.LD)){for(let i=0;i<c;i++)this.bag.push(l);}
+this.bag.sort(()=>Math.random()-0.5);
+},
+drawLetters(n){
+const d=[];for(let i=0;i<n&&this.bag.length>0;i++)d.push(this.bag.pop());return d;
+},
+setAge(a,btn){
+this.age=a;
+document.querySelectorAll('.sc-age-btn').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+},
+setPlayers(n,btn){
+this.numPlayers=n;
+document.querySelectorAll('.sc-player-btn').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+},
+start(){
+if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('⭐ Scrabble is a Pro feature — upgrade to unlock!');return;}
+this.buildBag();
+this.boardState=Array(225).fill(null);
+this.placedTiles=[];this.selectedTile=null;this.players=[];
+const pc=this.numPlayers===1?2:this.numPlayers;
+for(let i=0;i<pc;i++) this.players.push({name:this.numPlayers===1&&i===1?'Samara AI':'Player '+(i+1),score:0,rack:this.drawLetters(7),isAI:this.numPlayers===1&&i===1,lastWord:''});
+this.currentPlayer=0;
+document.getElementById('scrabble-setup').style.display='none';
+document.getElementById('scrabble-game').style.display='block';
+this.buildBoard();this.updateScoreCards();this.renderRack();this.updateTurnBadge();
+this.maxTime=this.TBA[this.age];
+this.startTimer();
+this.setMsg('Step 1: Click a letter tile from your rack!');
+this.setStep(1);
+},
+buildBoard(){
+const bm=this.getBonusMap();
+const b=document.getElementById('sc-board');
+if(!b)return;
+b.innerHTML='';
+for(let i=0;i<225;i++){
+const cell=document.createElement('div');
+const bt=bm[i]||'empty';
+cell.className='sc-cell '+bt;
+cell.id='sc-cell-'+i;
+cell.onclick=()=>this.placeOnBoard(i);
+if(this.boardState[i]){
+cell.classList.add('placed');
+const t=document.createElement('div');t.className='sc-tile-board';
+const l=document.createElement('div');l.className='sc-tile-letter';l.textContent=this.boardState[i];
+const v=document.createElement('div');v.className='sc-tile-score';v.textContent=this.LV[this.boardState[i]]||0;
+t.appendChild(l);t.appendChild(v);cell.appendChild(t);
+}else{
+let lbl='';
+if(bt==='tws')lbl='TW';else if(bt==='dws')lbl='DW';else if(bt==='tls')lbl='TL';else if(bt==='dls')lbl='DL';else if(bt==='ctr')lbl='★';
+cell.textContent=lbl;
+}
+b.appendChild(cell);
+}
+},
+
+renderRack(){
+const rack=document.getElementById('sc-rack');
+if(!rack)return;
+rack.innerHTML='';
+const p=this.players[this.currentPlayer];
+if(!p||p.isAI)return;
+p.rack.forEach((letter,i)=>{
+const t=document.createElement('div');t.className='sc-rack-tile';t.id='sc-rt-'+i;
+t.onclick=()=>this.selectRackTile(i);
+const l=document.createElement('div');l.className='sc-rack-letter';l.textContent=letter;
+const v=document.createElement('div');v.className='sc-rack-value';v.textContent=this.LV[letter]||0;
+t.appendChild(l);t.appendChild(v);rack.appendChild(t);
+});
+},
+selectRackTile(idx){
+this.selectedTile=idx;
+document.querySelectorAll('.sc-rack-tile').forEach((t,i)=>t.classList.toggle('selected',i===idx));
+this.setMsg('Now tap any empty square on the board to place it!');
+this.setStep(2);
+},
+placeOnBoard(ci){
+if(this.selectedTile===null){
+if(this.boardState[ci]){
+const placed=this.placedTiles.find(t=>t.idx===ci);
+if(placed){
+this.players[this.currentPlayer].rack.push(placed.letter);
+this.boardState[ci]=null;
+this.placedTiles=this.placedTiles.filter(t=>t.idx!==ci);
+this.buildBoard();this.renderRack();
+this.setMsg('Letter returned to your rack!');
+return;
+}
+}
+this.setMsg('Pick a letter from your rack first!');this.setStep(1);return;
+}
+if(this.boardState[ci]){this.setMsg('That square is taken! Choose another.');return;}
+const p=this.players[this.currentPlayer];
+const letter=p.rack[this.selectedTile];
+this.boardState[ci]=letter;
+this.placedTiles.push({idx:ci,letter,ri:this.selectedTile});
+p.rack.splice(this.selectedTile,1);
+this.selectedTile=null;
+this.buildBoard();this.renderRack();
+this.setMsg('Letter placed! Place more or click Play Word!');
+this.setStep(3);
+},
+async playWord(){
+if(this.placedTiles.length===0){this.setMsg('Place some letters first!');this.setStep(1);return;}
+const word=this.placedTiles.map(t=>t.letter).join('');
+this.setMsg('Checking word... please wait!');
+const ageDesc={'4-6':'ages 4 to 6','7-10':'ages 7 to 10','11-14':'ages 11 to 14','15-17':'ages 15 to 17'}[this.age]||'children';
+const result=await callClaudeAI(
+'Is '+word+' a valid real English word suitable for '+ageDesc+'? Reply with only YES or NO.',
+this.age,
+'You are a Scrabble dictionary. Answer only YES or NO. No explanation.',
+10
+);
+const isValid=result&&result.trim().toUpperCase().startsWith('YES');
+const bm=this.getBonusMap();
+let score=0;let wm=1;
+this.placedTiles.forEach(t=>{
+let lv=this.LV[t.letter]||1;
+const b=bm[t.idx];
+if(b==='tls')lv*=3;else if(b==='dls')lv*=2;
+else if(b==='tws'||b==='ctr')wm*=3;else if(b==='dws')wm*=2;
+score+=lv;
+});
+score*=wm;
+if(this.placedTiles.length>=7)score+=50;
+const p=this.players[this.currentPlayer];
+if(isValid){
+p.score+=score;p.lastWord=word+' +'+score+'pts';
+p.rack.push(...this.drawLetters(this.placedTiles.length));
+this.placedTiles=[];
+this.setMsg(word+' is a great word! +'+score+' points!');
+this.buildBoard();this.updateScoreCards();this.renderRack();
+SamaraCoins.add(score,'Scrabble word: '+word);
+setTimeout(()=>this.nextTurn(),1000);
+}else{
+this.placedTiles.forEach(t=>{this.boardState[t.idx]=null;p.rack.push(t.letter);});
+this.placedTiles=[];
+this.setMsg(word+' is not valid. Try another word!');
+this.buildBoard();this.renderRack();this.setStep(1);
+}
+},
+getHint(){
+const p=this.players[this.currentPlayer];
+const rack=[...p.rack,...this.placedTiles.map(t=>t.letter)];
+const words=this.WB[this.age];
+const possible=words.filter(w=>{
+const r=[...rack];
+return w.split('').every(l=>{const i=r.indexOf(l);if(i>=0){r.splice(i,1);return true;}return false;});
+}).sort((a,b)=>b.length-a.length);
+if(possible.length>0){
+this.setMsg('Hint: Try spelling '+possible[0]+'! ('+possible.length+' words possible)');
+}else{
+this.setMsg('No words found! Try skipping to get new letters.');
+}
+},
+shuffleRack(){
+const p=this.players[this.currentPlayer];
+p.rack.sort(()=>Math.random()-0.5);
+this.renderRack();
+this.setMsg('Letters shuffled! Look for new words!');
+},
+skipTurn(){
+this.placedTiles.forEach(t=>{this.boardState[t.idx]=null;this.players[this.currentPlayer].rack.push(t.letter);});
+this.placedTiles=[];this.buildBoard();
+const nl=this.drawLetters(2);
+this.players[this.currentPlayer].rack.push(...nl);
+this.players[this.currentPlayer].lastWord='Skipped';
+this.renderRack();this.updateScoreCards();
+this.setMsg('Turn skipped! Got '+nl.length+' new letters.');
+this.nextTurn();
+},
+nextTurn(){
+clearInterval(this.timerInterval);
+if(this.checkGameOver()) return;
+this.currentPlayer=(this.currentPlayer+1)%this.players.length;
+this.selectedTile=null;this.placedTiles=[];
+this.buildBoard();this.renderRack();this.updateTurnBadge();this.updateScoreCards();
+this.maxTime=this.TBA[this.age];
+this.startTimer();this.setStep(1);
+if(this.players[this.currentPlayer].isAI){
+this.setMsg('Samara AI is thinking...');
+setTimeout(()=>this.aiTurn(),1500);
+}else{
+this.setMsg('Your turn! Click a letter tile to start!');
+}
+},
+checkGameOver(){
+const bagEmpty=this.bag.length===0;
+const anyoneEmpty=this.players.some(p=>p.rack.length===0);
+if(bagEmpty&&anyoneEmpty){
+this.showWinner();
+return true;
+}
+const allSkipped=this.players.every(p=>p.lastWord==='Skipped');
+if(allSkipped){
+this.showWinner();
+return true;
+}
+return false;
+},
+showWinner(){
+clearInterval(this.timerInterval);
+const winner=this.players.reduce((a,b)=>a.score>b.score?a:b);
+const isTie=this.players.filter(p=>p.score===winner.score).length>1;
+const scores=this.players.map(p=>(p.isAI?'Samara AI':p.name)+': '+p.score+' pts').join(' · ');
+document.getElementById('scrabble-game').style.display='none';
+document.getElementById('scrabble-setup').style.display='block';
+const msg=isTie?'Its a tie! Final scores: '+scores:(winner.isAI?'Samara AI wins':''+winner.name+' wins!')+'! Final scores: '+scores;
+App.toast(msg,5000);
+SoundSystem.speak(isTie?'Its a tie! Well played everyone!':((winner.isAI?'Samara AI':'Player '+( this.players.indexOf(winner)+1))+' wins the Scrabble game! Congratulations!'),0.84,1.3);
+SamaraCoins.add(50,'Scrabble game completed!');
+},
+aiTurn(){
+const p=this.players[this.currentPlayer];
+const words=this.WB[this.age];
+const rack=p.rack.join('');
+const possible=words.filter(w=>{
+const r=rack.split('');
+return w.split('').every(l=>{const i=r.indexOf(l);if(i>=0){r.splice(i,1);return true;}return false;});
+}).sort((a,b)=>b.length-a.length);
+if(possible.length>0){
+const word=possible[0];
+let sr=Math.floor(Math.random()*10)+2;
+let sc=Math.floor(Math.random()*10)+2;
+let valid=sc+word.length<=15;
+if(valid){
+for(let i=0;i<word.length;i++){if(this.boardState[sr*15+sc+i]){valid=false;break;}}
+}
+if(valid){
+let score=0;
+word.split('').forEach((l,i)=>{
+const idx=sr*15+sc+i;
+this.boardState[idx]=l;
+p.rack.splice(p.rack.indexOf(l),1);
+score+=this.LV[l]||1;
+});
+p.rack.push(...this.drawLetters(word.length));
+p.score+=score;p.lastWord=word+' +'+score+'pts';
+this.buildBoard();this.updateScoreCards();
+this.setMsg('Samara AI played '+word+' for '+score+' points!');
+}else{
+this.setMsg('Samara AI skipped this turn!');
+}
+}else{
+this.setMsg('Samara AI could not find a word!');
+}
+setTimeout(()=>this.nextTurn(),1200);
+},
+startTimer(){
+this.timeLeft=this.maxTime;this.updateTimerDisplay();
+this.timerInterval=setInterval(()=>{
+this.timeLeft--;this.updateTimerDisplay();
+if(this.timeLeft<=0){clearInterval(this.timerInterval);this.setMsg('Time is up! Skipping...');setTimeout(()=>this.skipTurn(),800);}
+},1000);
+},
+updateTimerDisplay(){
+const mins=Math.floor(this.timeLeft/60);
+const secs=this.timeLeft%60;
+const el=document.getElementById('sc-timer-txt');
+if(el)el.textContent=mins+':'+(secs<10?'0':'')+secs;
+const pct=(this.timeLeft/this.maxTime)*100;
+const bar=document.getElementById('sc-timer-bar');
+if(bar){bar.style.width=pct+'%';bar.style.background=pct>50?'#6BCB77':pct>25?'#FFD93D':'#FF4757';}
+},
+updateTurnBadge(){
+const p=this.players[this.currentPlayer];
+const b=document.getElementById('sc-turn-badge');
+if(b){b.textContent=(p.isAI?'Samara AI':'Player '+(this.currentPlayer+1))+"'s Turn";b.style.background=this.PCOLORS[this.currentPlayer];}
+},
+updateScoreCards(){
+const sc=document.getElementById('sc-score-cards');
+if(!sc)return;
+sc.innerHTML='';
+this.players.forEach((p,i)=>{
+const card=document.createElement('div');
+card.style.cssText='border-radius:12px;padding:11px;border:2px solid '+(i===this.currentPlayer?'#FFD93D':'rgba(255,255,255,0.15)')+';background:'+(i===this.currentPlayer?'rgba(255,217,61,0.12)':'rgba(255,255,255,0.08)')+';transition:all 0.3s;box-shadow:'+(i===this.currentPlayer?'0 0 15px rgba(255,217,61,0.2)':'none')+';';
+card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;"><div style="font-family:Fredoka One,cursive;font-size:0.85rem;color:#fff;">'+(p.isAI?'Samara AI':p.name)+'</div><div style="font-family:Fredoka One,cursive;font-size:1.6rem;color:#FFD93D;text-shadow:0 0 10px rgba(255,217,61,0.5);">'+p.score+'</div></div><div style="font-size:0.65rem;color:rgba(255,255,255,0.6);margin-top:3px;background:rgba(255,255,255,0.05);border-radius:6px;padding:3px 6px;">'+(p.lastWord||'No words yet')+'</div>';
+sc.appendChild(card);
+});
+},
+setStep(n){for(let i=1;i<=3;i++){const s=document.getElementById('sc-step'+i);if(s)s.className='sc-step'+(i===n?' active':'');}},
+setMsg(m){const el=document.getElementById('sc-msg');if(el)el.textContent=m;},
+showRules(){const o=document.getElementById('sc-rules-overlay');if(o)o.style.display='flex';setTimeout(()=>this.readRules(),500);},
+readRules(){
+const rules='Welcome to Samara Scrabble! Here is how to play. The goal is to score the most points by spelling words on the board. Step 1: You get 7 letter tiles in your rack. Step 2: Click a tile to select it. Step 3: Click a board square to place your letter. Step 4: Spell a complete word then click Play Word! Step 5: Draw new tiles and the next player goes! Bonus squares give you extra points. Triple Word multiplies your whole word by 3! Double Word multiplies by 2! Triple Letter multiplies one letter by 3! Double Letter multiplies by 2! Pro tip: Use the Get a Hint button if you are stuck! Good luck and have fun!';
+SoundSystem.speak(rules,0.82,1.3);
+},
+backToSetup(){
+clearInterval(this.timerInterval);
+document.getElementById('scrabble-game').style.display='none';
+document.getElementById('scrabble-setup').style.display='block';
+this.boardState=Array(225).fill(null);this.placedTiles=[];
+}
+};
+window.ScrabbleGame=ScrabbleGame;
+
+  
+// ── SNAKE & LADDER GAME ───────────────────────────────────
+const SLGame={
+SN:{16:6,47:26,49:11,56:53,62:19,64:60,87:24,93:73,95:75,99:78},
+LA:{4:14,9:31,20:38,28:84,40:59,51:67,63:81,71:91},
+DF:['⚀','⚁','⚂','⚃','⚄','⚅'],
+QS:{
+'4-6':[
+{q:'What color is the sky?',a:'Blue',w:['Green','Red','Purple']},
+{q:'How many legs does a dog have?',a:'4',w:['2','6','8']},
+{q:'What sound does a cow make?',a:'Moo',w:['Woof','Meow','Oink']},
+{q:'Which is a fruit?',a:'Apple',w:['Carrot','Potato','Onion']},
+{q:'How many fingers on TWO hands?',a:'10',w:['8','12','5']},
+{q:'What shape is a ball?',a:'Circle',w:['Square','Triangle','Star']},
+{q:'What do fish live in?',a:'Water',w:['Trees','Sand','Clouds']},
+{q:'Which animal has a trunk?',a:'Elephant',w:['Giraffe','Lion','Monkey']},
+{q:'What color is a banana?',a:'Yellow',w:['Blue','Red','Green']},
+{q:'Which season has snow?',a:'Winter',w:['Summer','Spring','Autumn']},
+{q:'What do we call baby dogs?',a:'Puppies',w:['Kittens','Cubs','Chicks']},
+{q:'How many wheels does a car have?',a:'4',w:['2','3','6']},
+{q:'What color is the sun?',a:'Yellow',w:['Blue','Red','Green']},
+{q:'Which animal says quack?',a:'Duck',w:['Cat','Dog','Cow']},
+{q:'What do we use to brush our teeth?',a:'Toothbrush',w:['Comb','Fork','Pencil']},
+{q:'How many eyes do you have?',a:'2',w:['1','3','4']},
+{q:'What grows on trees?',a:'Leaves',w:['Fish','Clouds','Rocks']},
+{q:'Which animal is known as mans best friend?',a:'Dog',w:['Cat','Bird','Fish']},
+{q:'What color is a carrot?',a:'Orange',w:['Blue','Purple','Green']},
+{q:'How many sides does a triangle have?',a:'3',w:['4','2','5']},
+{q:'What do butterflies come from?',a:'Caterpillars',w:['Eggs only','Birds','Flowers']},
+{q:'What color is the ocean?',a:'Blue',w:['Green','Red','Yellow']},
+{q:'Which animal lives in water and on land?',a:'Frog',w:['Dog','Cat','Bird']},
+{q:'What do we wear on our feet?',a:'Shoes',w:['Hats','Gloves','Scarves']},
+{q:'How many months are in a year?',a:'12',w:['10','8','6']},
+{q:'What is the opposite of hot?',a:'Cold',w:['Warm','Soft','Loud']},
+{q:'Which animal hops and has a pouch?',a:'Kangaroo',w:['Lion','Elephant','Bear']},
+{q:'What do plants need to grow?',a:'Sunlight and water',w:['Rocks and sand','Ice and snow','Darkness and salt']},
+{q:'What color is a strawberry?',a:'Red',w:['Blue','Yellow','Purple']},
+{q:'How many days in a week?',a:'7',w:['5','6','8']},
+{q:'Which animal purrs?',a:'Cat',w:['Dog','Fish','Bird']},
+{q:'What do we use to cut paper?',a:'Scissors',w:['Spoon','Brush','Fork']},
+{q:'What color is a frog?',a:'Green',w:['Red','Blue','Purple']},
+{q:'Which is the biggest animal?',a:'Elephant',w:['Cat','Dog','Mouse']},
+{q:'What falls from clouds?',a:'Rain',w:['Juice','Milk','Sand']},
+{q:'How many ears do you have?',a:'2',w:['1','3','4']},
+{q:'What do birds use to fly?',a:'Wings',w:['Fins','Legs','Tail']},
+{q:'What color is a tomato?',a:'Red',w:['Blue','Green','Yellow']},
+{q:'Which number comes after 9?',a:'10',w:['8','11','7']},
+{q:'What do we drink when we are thirsty?',a:'Water',w:['Sand','Air','Stone']},
+{q:'Which animal gives us milk?',a:'Cow',w:['Dog','Cat','Fish']},
+{q:'What color is a pumpkin?',a:'Orange',w:['Blue','Purple','Pink']},
+{q:'How many legs does a spider have?',a:'8',w:['6','4','10']},
+{q:'What do we use to see?',a:'Eyes',w:['Ears','Nose','Mouth']},
+{q:'Which animal is the king of the jungle?',a:'Lion',w:['Elephant','Tiger','Bear']},
+{q:'What color is snow?',a:'White',w:['Blue','Yellow','Red']},
+{q:'How many horns does a rhino have?',a:'1 or 2',w:['3','4','None']},
+{q:'What do bees make?',a:'Honey',w:['Milk','Juice','Water']},
+{q:'Which is bigger: a mouse or a cat?',a:'Cat',w:['Mouse','They are the same','Neither']},
+{q:'What do we use to hear?',a:'Ears',w:['Eyes','Nose','Hands']},
+],
+'7-10':[
+{q:'What is 7 times 8?',a:'56',w:['54','58','48']},
+{q:'Capital of Jamaica?',a:'Kingston',w:['Montego Bay','Ocho Rios','Spanish Town']},
+{q:'Sides of a hexagon?',a:'6',w:['5','7','8']},
+{q:'Planet closest to the Sun?',a:'Mercury',w:['Venus','Earth','Mars']},
+{q:'What is 144 divided by 12?',a:'12',w:['11','13','14']},
+{q:'Fastest land animal?',a:'Cheetah',w:['Lion','Horse','Leopard']},
+{q:'Past tense of run?',a:'Ran',w:['Runned','Running','Runs']},
+{q:'What is 25% of 80?',a:'20',w:['15','25','30']},
+{q:'How many continents?',a:'7',w:['5','6','8']},
+{q:'Gas we breathe in?',a:'Oxygen',w:['Carbon dioxide','Nitrogen','Helium']},
+{q:'What is 9 times 9?',a:'81',w:['72','90','79']},
+{q:'How many sides does an octagon have?',a:'8',w:['6','7','9']},
+{q:'What is the largest planet?',a:'Jupiter',w:['Saturn','Mars','Neptune']},
+{q:'What is half of 96?',a:'48',w:['42','50','46']},
+{q:'Which country has the maple leaf on its flag?',a:'Canada',w:['USA','Australia','Brazil']},
+{q:'What is the capital of the USA?',a:'Washington DC',w:['New York','Los Angeles','Chicago']},
+{q:'How many zeros in one million?',a:'6',w:['5','7','8']},
+{q:'What is 15 times 4?',a:'60',w:['55','65','50']},
+{q:'Which ocean is the largest?',a:'Pacific',w:['Atlantic','Indian','Arctic']},
+{q:'What is the hardest natural substance?',a:'Diamond',w:['Gold','Iron','Silver']},
+{q:'How many bones are in the human body?',a:'206',w:['156','256','186']},
+{q:'What is the chemical symbol for water?',a:'H2O',w:['CO2','NaCl','O2']},
+{q:'What planet has rings around it?',a:'Saturn',w:['Jupiter','Mars','Venus']},
+{q:'How many players on a football team?',a:'11',w:['9','10','12']},
+{q:'What is 200 divided by 4?',a:'50',w:['40','60','45']},
+{q:'Which is the longest river in the world?',a:'Nile',w:['Amazon','Mississippi','Congo']},
+{q:'What is the plural of mouse?',a:'Mice',w:['Mouses','Mousies','Mices']},
+{q:'What is 30% of 100?',a:'30',w:['20','40','25']},
+{q:'How many degrees in a right angle?',a:'90',w:['45','180','60']},
+{q:'What is the capital of England?',a:'London',w:['Manchester','Birmingham','Leeds']},
+{q:'What is 8 times 7?',a:'56',w:['48','63','54']},
+{q:'Which gas makes up most of the air we breathe?',a:'Nitrogen',w:['Oxygen','Carbon dioxide','Helium']},
+{q:'What is the perimeter of a square with sides of 5?',a:'20',w:['10','15','25']},
+{q:'Which animal is the tallest?',a:'Giraffe',w:['Elephant','Camel','Horse']},
+{q:'What is 1000 minus 375?',a:'625',w:['525','725','635']},
+{q:'How many days in a leap year?',a:'366',w:['365','367','364']},
+{q:'What is the capital of France?',a:'Paris',w:['Lyon','Marseille','Nice']},
+{q:'What is 6 squared?',a:'36',w:['12','18','30']},
+{q:'Which planet is known as the red planet?',a:'Mars',w:['Venus','Jupiter','Saturn']},
+{q:'What is the area of a rectangle 6 by 4?',a:'24',w:['20','28','10']},
+{q:'How many hours in 2 days?',a:'48',w:['36','24','72']},
+{q:'What is the capital of Australia?',a:'Canberra',w:['Sydney','Melbourne','Brisbane']},
+{q:'Which sense do we use our nose for?',a:'Smell',w:['Taste','Touch','Sight']},
+{q:'What is 100 divided by 5?',a:'20',w:['15','25','10']},
+{q:'How many sides does a pentagon have?',a:'5',w:['4','6','7']},
+{q:'What is the boiling point of water in Celsius?',a:'100',w:['50','75','120']},
+{q:'Which country is the largest in the world?',a:'Russia',w:['China','USA','Canada']},
+{q:'What is 7 plus 8 times 2?',a:'23',w:['30','22','29']},
+{q:'How many strings does a guitar have?',a:'6',w:['4','5','8']},
+{q:'What is the square root of 81?',a:'9',w:['7','8','10']},
+],
+'11-14':[
+{q:'Square root of 144?',a:'12',w:['11','13','14']},
+{q:'Gas plants absorb?',a:'Carbon dioxide',w:['Oxygen','Nitrogen','Hydrogen']},
+{q:'Who wrote Romeo and Juliet?',a:'Shakespeare',w:['Dickens','Austen','Twain']},
+{q:'Powerhouse of the cell?',a:'Mitochondria',w:['Nucleus','Ribosome','Vacuole']},
+{q:'15% of 200?',a:'30',w:['25','35','20']},
+{q:'Which continent is Egypt in?',a:'Africa',w:['Asia','Europe','South America']},
+{q:'Formula for water?',a:'H2O',w:['CO2','NaCl','O2']},
+{q:'WW2 ended in?',a:'1945',w:['1944','1946','1940']},
+{q:'Speed of light?',a:'300000 km/s',w:['150000 km/s','450000 km/s','100000 km/s']},
+{q:'Largest ocean?',a:'Pacific',w:['Atlantic','Indian','Arctic']},
+{q:'What is the value of pi to 2 decimal places?',a:'3.14',w:['3.12','3.16','3.18']},
+{q:'What is the chemical symbol for gold?',a:'Au',w:['Go','Gd','Ag']},
+{q:'Who painted the Mona Lisa?',a:'Leonardo da Vinci',w:['Michelangelo','Raphael','Botticelli']},
+{q:'What is the largest organ in the human body?',a:'Skin',w:['Heart','Liver','Lungs']},
+{q:'What is 2 to the power of 8?',a:'256',w:['128','512','64']},
+{q:'Which planet is closest to Earth?',a:'Venus',w:['Mars','Mercury','Jupiter']},
+{q:'What is the capital of Brazil?',a:'Brasilia',w:['Rio de Janeiro','Sao Paulo','Salvador']},
+{q:'Who invented the telephone?',a:'Alexander Graham Bell',w:['Thomas Edison','Nikola Tesla','Albert Einstein']},
+{q:'What is the area of a circle with radius 7?',a:'153.86',w:['98.0','43.96','22.0']},
+{q:'Which war was known as the Great War?',a:'World War I',w:['World War II','Vietnam War','Korean War']},
+{q:'What is the chemical symbol for iron?',a:'Fe',w:['Ir','In','Fr']},
+{q:'How many chromosomes do humans have?',a:'46',w:['23','48','44']},
+{q:'What is the Pythagorean theorem?',a:'a2 + b2 = c2',w:['a + b = c','a3 + b3 = c3','2a + 2b = c']},
+{q:'Who was the first US President?',a:'George Washington',w:['Abraham Lincoln','Thomas Jefferson','John Adams']},
+{q:'What is the freezing point of water in Fahrenheit?',a:'32',w:['0','100','212']},
+{q:'What gas do humans exhale?',a:'Carbon dioxide',w:['Oxygen','Nitrogen','Helium']},
+{q:'What is 3 cubed?',a:'27',w:['9','18','24']},
+{q:'Who discovered gravity?',a:'Isaac Newton',w:['Albert Einstein','Galileo','Stephen Hawking']},
+{q:'What is the longest bone in the human body?',a:'Femur',w:['Tibia','Humerus','Spine']},
+{q:'What does DNA stand for?',a:'Deoxyribonucleic acid',w:['Dynamic nucleic acid','Double neutron atom','Dense nitrogen acid']},
+{q:'What is the capital of Japan?',a:'Tokyo',w:['Osaka','Kyoto','Hiroshima']},
+{q:'Which blood type is the universal donor?',a:'O negative',w:['A positive','B negative','AB positive']},
+{q:'What is 5 factorial?',a:'120',w:['60','24','720']},
+{q:'Who wrote Harry Potter?',a:'JK Rowling',w:['Roald Dahl','CS Lewis','Tolkien']},
+{q:'What is the capital of Canada?',a:'Ottawa',w:['Toronto','Vancouver','Montreal']},
+{q:'What is the speed of sound in air?',a:'343 m/s',w:['150 m/s','500 m/s','1000 m/s']},
+{q:'Which element has atomic number 1?',a:'Hydrogen',w:['Helium','Oxygen','Carbon']},
+{q:'What is the quadratic formula used for?',a:'Solving quadratic equations',w:['Finding area','Calculating speed','Measuring angles']},
+{q:'Who wrote Animal Farm?',a:'George Orwell',w:['Charles Dickens','Mark Twain','Ernest Hemingway']},
+{q:'What is the capital of China?',a:'Beijing',w:['Shanghai','Hong Kong','Guangzhou']},
+{q:'What is the angle sum of a triangle?',a:'180 degrees',w:['90 degrees','360 degrees','270 degrees']},
+{q:'Which organ produces insulin?',a:'Pancreas',w:['Liver','Kidney','Stomach']},
+{q:'What is the chemical symbol for sodium?',a:'Na',w:['So','Sd','Sn']},
+{q:'Who invented the light bulb?',a:'Thomas Edison',w:['Nikola Tesla','Alexander Bell','Albert Einstein']},
+{q:'What is the largest country in Africa?',a:'Algeria',w:['Nigeria','South Africa','Egypt']},
+{q:'What is momentum equal to?',a:'Mass times velocity',w:['Mass times acceleration','Force times time','Weight times speed']},
+{q:'Who was Shakespeare?',a:'An English playwright and poet',w:['A French painter','A German composer','An Italian sculptor']},
+{q:'What is 12 squared?',a:'144',w:['124','164','114']},
+{q:'Which vitamin does sunlight provide?',a:'Vitamin D',w:['Vitamin C','Vitamin A','Vitamin B']},
+{q:'What is the capital of Germany?',a:'Berlin',w:['Munich','Hamburg','Frankfurt']},
+],
+'15-17':[
+{q:'Solve: 2x + 6 = 18',a:'x = 6',w:['x = 5','x = 7','x = 9']},
+{q:'Who developed theory of relativity?',a:'Einstein',w:['Newton','Hawking','Darwin']},
+{q:'Derivative of x squared?',a:'2x',w:['x2','2','x']},
+{q:'Berlin Wall fell in?',a:'1989',w:['1991','1987','1990']},
+{q:'Chemical symbol for gold?',a:'Au',w:['Go','Gd','Ag']},
+{q:'Who painted Mona Lisa?',a:'Leonardo da Vinci',w:['Michelangelo','Raphael','Botticelli']},
+{q:'What is photosynthesis?',a:'Plants converting sunlight to energy',w:['Animals breathing','Water cycle','Soil absorption']},
+{q:'GDP means?',a:'Gross Domestic Product',w:['General Daily Payment','Government Debt Plan','Gross Daily Profit']},
+{q:'Newton first law?',a:'Object in motion stays in motion',w:['Force equals mass times acceleration','Every action has equal reaction','Energy cannot be created']},
+{q:'DNA stands for?',a:'Deoxyribonucleic acid',w:['Dynamic nucleic acid','Double neutron atom','Dense nitrogen acid']},
+{q:'What is the integral of 2x?',a:'x squared plus C',w:['2x squared','x plus C','2 plus C']},
+{q:'What is Ohms law?',a:'V equals IR',w:['F equals MA','E equals MC squared','P equals IV']},
+{q:'Who wrote 1984?',a:'George Orwell',w:['Aldous Huxley','Ray Bradbury','JD Salinger']},
+{q:'What is the powerhouse of the cell?',a:'Mitochondria',w:['Nucleus','Ribosome','Lysosome']},
+{q:'What is the binomial theorem used for?',a:'Expanding powers of binomials',w:['Solving linear equations','Finding derivatives','Calculating probability']},
+{q:'Which war started in 1914?',a:'World War I',w:['World War II','Vietnam War','Korean War']},
+{q:'What is entropy?',a:'Measure of disorder in a system',w:['Measure of energy','Measure of pressure','Measure of temperature']},
+{q:'Who was Nelson Mandela?',a:'First Black president of South Africa',w:['President of Nigeria','Leader of Zimbabwe','Prime Minister of Kenya']},
+{q:'What is the quadratic formula?',a:'Negative b plus minus root b squared minus 4ac over 2a',w:['b squared minus 4ac','2a plus b minus c','negative b over 2a']},
+{q:'What is the speed of light?',a:'299792458 m/s',w:['150000000 m/s','450000000 m/s','100000000 m/s']},
+{q:'What is a catalyst?',a:'Substance that speeds up a reaction without being consumed',w:['A type of acid','A form of energy','A measure of pressure']},
+{q:'What caused the Great Depression?',a:'Stock market crash of 1929',w:['World War I','Industrial revolution','Banking reform']},
+{q:'What is Pythagoras theorem?',a:'a squared plus b squared equals c squared',w:['a plus b equals c','2a plus 2b equals c','a times b equals c']},
+{q:'Who is considered the father of computers?',a:'Charles Babbage',w:['Alan Turing','Bill Gates','Steve Jobs']},
+{q:'What is the difference between mitosis and meiosis?',a:'Mitosis produces 2 identical cells meiosis produces 4 sex cells',w:['Mitosis is in plants meiosis is in animals','Mitosis is faster than meiosis','There is no difference']},
+{q:'What is inflation?',a:'General rise in prices over time',w:['Fall in prices over time','Rise in employment','Decrease in GDP']},
+{q:'Who wrote Hamlet?',a:'Shakespeare',w:['Dickens','Tolstoy','Chaucer']},
+{q:'What is the derivative of sin x?',a:'cos x',w:['sin x','tan x','negative cos x']},
+{q:'What is supply and demand?',a:'Economic model of price determination in markets',w:['A type of government policy','A measure of inflation','A banking system']},
+{q:'What is the French Revolution known for?',a:'Overthrowing the monarchy and establishing democracy',w:['Defeating Napoleon','Starting World War I','Colonizing Africa']},
+{q:'What is a genome?',a:'Complete set of genetic material in an organism',w:['A type of cell','A protein structure','A chromosome type']},
+{q:'What is the Doppler effect?',a:'Change in frequency due to relative motion',w:['Change in light speed','Change in gravity','Change in temperature']},
+{q:'Who wrote Pride and Prejudice?',a:'Jane Austen',w:['Charlotte Bronte','George Eliot','Virginia Woolf']},
+{q:'What is the law of conservation of energy?',a:'Energy cannot be created or destroyed',w:['Energy always increases','Energy always decreases','Energy equals mass times speed']},
+{q:'What is opportunity cost in economics?',a:'Value of the next best alternative forgone',w:['Cost of production','Market price of a good','Total revenue minus costs']},
+{q:'What is the Krebs cycle?',a:'Series of chemical reactions to generate energy',w:['Process of cell division','Type of DNA replication','Method of protein synthesis']},
+{q:'What is Karl Marx known for?',a:'Communist Manifesto and critique of capitalism',w:['Theory of relativity','Discovery of DNA','Industrial revolution']},
+{q:'What is the derivative of e to the x?',a:'e to the x',w:['x times e','e squared','1 over x']},
+{q:'What is the Magna Carta?',a:'1215 document limiting power of English monarchy',w:['1776 declaration of independence','1789 French constitution','1215 religious text']},
+{q:'What is the difference between speed and velocity?',a:'Velocity has direction speed does not',w:['Speed is faster than velocity','Velocity is always larger','There is no difference']},
+{q:'What is DNA replication?',a:'Process of copying DNA before cell division',w:['Process of making proteins','Process of cell respiration','Process of photosynthesis']},
+{q:'Who developed the periodic table?',a:'Mendeleev',w:['Einstein','Bohr','Curie']},
+{q:'What is the Enlightenment?',a:'18th century intellectual movement emphasizing reason',w:['Ancient Greek philosophy','Medieval religious movement','Industrial age philosophy']},
+{q:'What is compound interest?',a:'Interest calculated on principal and accumulated interest',w:['Interest on principal only','Fixed monthly payment','Government tax on savings']},
+{q:'What is the central dogma of molecular biology?',a:'DNA to RNA to protein',w:['Protein to RNA to DNA','RNA to DNA to protein','DNA to protein to RNA']},
+{q:'What is Keynesian economics?',a:'Government spending can stimulate economic growth',w:['Free markets solve all problems','Money supply controls inflation','Trade deficits cause recessions']},
+{q:'What is a black hole?',a:'Region of spacetime where gravity prevents escape',w:['A dark star','An empty region of space','A collapsed galaxy']},
+{q:'What is the difference between microeconomics and macroeconomics?',a:'Micro studies individuals macro studies whole economies',w:['Micro is larger than macro','Macro studies businesses micro studies countries','There is no difference']},
+],
+},
+cellPos(n){
+const row=Math.floor((n-1)/10);
+const col=(n-1)%10;
+const r=9-row;
+const c=row%2===0?col:9-col;
+return{x:c*50,y:r*50};
+},
+drawBoard(){
+const cv=document.getElementById('sl-canvas');
+if(!cv)return;
+const ctx=cv.getContext('2d');
+ctx.clearRect(0,0,500,500);
+const colors=[['#1a472a','#2d6a4f'],['#14213d','#1b3a6b'],['#3d1f00','#6b3a2a'],['#2c0e37','#4a1a6b'],['#0d3b4a','#1a6b7a'],['#1f3a00','#3d6b1a'],['#3a0d00','#6b2a14'],['#00213a','#0a4a6b'],['#1a0a2e','#302060'],['#003a1a','#0a6b3d']];
+for(let row=0;row<10;row++){
+for(let col=0;col<10;col++){
+const actualRow=9-row;
+const actualCol=actualRow%2===0?col:9-col;
+const n=actualRow*10+actualCol+1;
+const x=col*50,y=row*50;
+const pair=Math.floor((n-1)/10);
+ctx.fillStyle=n%2===0?colors[pair%10][0]:colors[pair%10][1];
+ctx.fillRect(x,y,50,50);
+ctx.strokeStyle='rgba(255,255,255,0.1)';
+ctx.strokeRect(x,y,50,50);
+ctx.fillStyle='rgba(255,255,255,0.5)';
+ctx.font='bold 9px Nunito,sans-serif';
+ctx.textAlign='left';
+ctx.fillText(n,x+3,y+11);
+}
+}
+const p1=this.cellPos(1);
+ctx.fillStyle='rgba(107,203,119,0.3)';
+ctx.fillRect(p1.x,p1.y,50,50);
+ctx.font='22px serif';ctx.textAlign='center';
+ctx.fillText('🚀',p1.x+25,p1.y+33);
+const p100=this.cellPos(100);
+ctx.fillStyle='rgba(255,217,61,0.4)';
+ctx.fillRect(p100.x,p100.y,50,50);
+ctx.font='22px serif';ctx.textAlign='center';
+ctx.fillText('🏆',p100.x+25,p100.y+33);
+const sc=['#FF4757','#FF6348','#FF4500','#E84393','#FF1744','#FF6B6B','#FF3D00','#FF1744','#D50000','#FF4081'];
+let ci=0;
+for(const[head,tail] of Object.entries(this.SN)){
+const hp=this.cellPos(parseInt(head));
+const tp=this.cellPos(parseInt(tail));
+const hx=hp.x+25,hy=hp.y+25,tx=tp.x+25,ty=tp.y+25;
+const col=sc[ci%sc.length];ci++;
+const mx=(hx+tx)/2+(Math.sin(ci*1.5)*60);
+const my=(hy+ty)/2+(Math.cos(ci*1.5)*40);
+ctx.beginPath();ctx.moveTo(hx,hy);
+ctx.quadraticCurveTo(mx,my,tx,ty);
+ctx.strokeStyle=col;ctx.lineWidth=6;ctx.lineCap='round';ctx.setLineDash([]);ctx.stroke();
+ctx.beginPath();ctx.moveTo(hx,hy);
+ctx.quadraticCurveTo(mx,my,tx,ty);
+ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.lineWidth=2;ctx.stroke();
+ctx.font='18px serif';ctx.textAlign='center';
+ctx.fillText('🐍',hx,hy+6);
+ctx.font='11px serif';ctx.fillText('💀',tx,ty+5);
+}
+for(const[bottom,top] of Object.entries(this.LA)){
+const bp=this.cellPos(parseInt(bottom));
+const tp=this.cellPos(parseInt(top));
+const bx=bp.x+25,by=bp.y+25,tx=tp.x+25,ty=tp.y+25;
+const angle=Math.atan2(ty-by,tx-bx);
+const perp=angle+Math.PI/2;
+const offset=5;
+const lx1=bx+Math.cos(perp)*offset,ly1=by+Math.sin(perp)*offset;
+const lx2=bx-Math.cos(perp)*offset,ly2=by-Math.sin(perp)*offset;
+const rx1=tx+Math.cos(perp)*offset,ry1=ty+Math.sin(perp)*offset;
+const rx2=tx-Math.cos(perp)*offset,ry2=ty-Math.sin(perp)*offset;
+ctx.strokeStyle='#FFD93D';ctx.lineWidth=4;ctx.setLineDash([]);
+ctx.beginPath();ctx.moveTo(lx1,ly1);ctx.lineTo(rx1,ry1);ctx.stroke();
+ctx.beginPath();ctx.moveTo(lx2,ly2);ctx.lineTo(rx2,ry2);ctx.stroke();
+const steps=Math.max(3,Math.floor(Math.sqrt((tx-bx)**2+(ty-by)**2)/18));
+for(let i=1;i<steps;i++){
+const t=i/steps;
+const sx=lx1+(rx1-lx1)*t,sy=ly1+(ry1-ly1)*t;
+const ex=lx2+(rx2-lx2)*t,ey=ly2+(ry2-ly2)*t;
+ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(ex,ey);
+ctx.strokeStyle='rgba(255,217,61,0.6)';ctx.lineWidth=2;ctx.stroke();
+}
+ctx.font='16px serif';ctx.textAlign='center';
+ctx.fillText('🪜',bx,by+6);
+ctx.fillText('⭐',tx,ty+5);
+}
+ctx.lineWidth=1;ctx.setLineDash([]);
+const tokens=[{pos:this.pos[0],color:'#a855f7',ring:'#d8b4fe',label:'P1'},{pos:this.pos[1],color:'#f59e0b',ring:'#fde68a',label:'P2'}];
+tokens.forEach((t,i)=>{
+const p=this.cellPos(t.pos);
+const ox=i===0?14:36;
+const x=p.x+ox,y=p.y+25;
+ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fillStyle=t.ring;ctx.fill();
+ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fillStyle=t.color;ctx.fill();
+ctx.fillStyle='#fff';ctx.font='bold 7px Nunito,sans-serif';ctx.textAlign='center';
+ctx.fillText(t.label,x,y+3);
+});
+},
+setAge(a,btn){
+this.age=a;
+document.querySelectorAll('.sl-age-btn').forEach(b=>b.classList.remove('active'));
+if(btn)btn.classList.add('active');
+this.reset();
+},
+roll(){
+if(this.waiting)return;
+this.waiting=true;
+document.getElementById('sl-rbtn').disabled=true;
+if(SoundSystem.enabled)SoundSystem.stop();
+const d=document.getElementById('sl-dice');
+let t=0;
+const iv=setInterval(()=>{
+d.textContent=this.DF[Math.floor(Math.random()*6)];
+if(++t>10){
+clearInterval(iv);
+const r=Math.floor(Math.random()*6)+1;
+d.textContent=this.DF[r-1];
+this.pending=r;
+this.setSt('Player '+(this.turn+1)+' rolled '+r+'! Answer to move!');
+setTimeout(()=>this.showQ(),500);
+}
+},60);
+},
+showQ(){
+const qs=this.QS[this.age];
+const q=qs[Math.floor(Math.random()*qs.length)];
+const all=[q.a,...q.w].sort(()=>Math.random()-0.5);
+const qp=document.getElementById('sl-qp');
+qp.textContent='Player '+(this.turn+1)+' — Roll: '+this.pending;
+qp.style.background=this.turn===0?'linear-gradient(135deg,#a855f7,#7c3aed)':'linear-gradient(135deg,#f59e0b,#d97706)';
+document.getElementById('sl-qq').textContent=q.q;
+const g=document.getElementById('sl-qg');
+g.innerHTML='';
+all.forEach(a=>{
+const b=document.createElement('button');
+b.style.cssText='background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:11px 8px;font-size:0.8rem;cursor:pointer;text-align:center;font-weight:700;transition:all 0.2s;';
+b.textContent=a;
+b.onclick=()=>this.check(a,q.a,b);
+g.appendChild(b);
+});
+SoundSystem.speakQuestion(q.q);
+setTimeout(()=>{document.getElementById('sl-q-overlay').style.display='flex';},300);
+},
+check(sel,correct,btn){
+document.querySelectorAll('#sl-qg button').forEach(b=>b.onclick=null);
+if(sel===correct){
+btn.style.background='rgba(107,203,119,0.3)';
+btn.style.borderColor='#6BCB77';
+btn.style.color='#6BCB77';
+document.getElementById('sl-q-overlay').style.display='none';
+this.pts[this.turn]+=10;
+this.move(this.pending);
+}else{
+btn.style.background='rgba(255,71,87,0.3)';
+btn.style.borderColor='#FF4757';
+btn.style.color='#FF4757';
+document.querySelectorAll('#sl-qg button').forEach(b=>{
+if(b.textContent===correct){b.style.background='rgba(107,203,119,0.3)';b.style.borderColor='#6BCB77';b.style.color='#6BCB77';}
+});
+setTimeout(()=>{
+document.getElementById('sl-q-overlay').style.display='none';
+this.setSt('Wrong! Correct: '+correct+'. Player '+(this.turn+1)+' stays at '+this.pos[this.turn]+'.');
+this.nextTurn();
+},1800);
+}
+},
+move(steps){
+let np=this.pos[this.turn]+steps;
+if(np>100)np=this.pos[this.turn];
+this.pos[this.turn]=np;
+this.drawBoard();this.updateUI();
+if(np===100){this.win();return;}
+if(this.SN[np]){
+const end=this.SN[np];
+setTimeout(()=>{
+this.setSt('🐍 SNAKE at '+np+'! Slides down to '+end+'! Oops!');
+this.pos[this.turn]=end;
+this.drawBoard();this.updateUI();
+setTimeout(()=>this.nextTurn(),1800);
+},600);
+}else if(this.LA[np]){
+const top=this.LA[np];
+setTimeout(()=>{
+this.setSt('🪜 LADDER at '+np+'! Climbs up to '+top+'! Amazing!');
+this.pos[this.turn]=top;
+this.drawBoard();this.updateUI();
+setTimeout(()=>this.nextTurn(),1800);
+},600);
+}else{
+this.setSt('Player '+(this.turn+1)+' moves to '+np+'! +10pts');
+setTimeout(()=>this.nextTurn(),900);
+}
+},
+nextTurn(){
+this.turn=this.turn===0?1:0;
+this.waiting=false;
+document.getElementById('sl-rbtn').disabled=false;
+this.setSt('Player '+(this.turn+1)+'\'s turn! Roll the dice!');
+this.updateUI();
+},
+updateUI(){
+for(let i=0;i<2;i++){
+document.getElementById('sl-pp'+i).textContent='Square '+this.pos[i]+' · '+this.pts[i]+' pts';
+document.getElementById('sl-p'+i+'card').style.border=this.turn===i?'2px solid #FFD93D':'2px solid rgba(255,255,255,0.1)';
+document.getElementById('sl-p'+i+'card').style.background=this.turn===i?'rgba(255,217,61,0.12)':'rgba(255,255,255,0.06)';
+}
+},
+win(){
+document.getElementById('sl-wt').textContent='Player '+(this.turn+1)+' Wins!';
+document.getElementById('sl-wm').textContent='Amazing! Reached square 100 with '+this.pts[this.turn]+' points!';
+document.getElementById('sl-win-overlay').style.display='flex';
+SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
+},
+setSt(m){const el=document.getElementById('sl-status');if(el)el.textContent=m;},
+reset(){
+this.pos=[1,1];this.pts=[0,0];this.turn=0;this.waiting=false;this.pending=0;this.usedQ=[];
+const d=document.getElementById('sl-dice');if(d)d.textContent='🎲';
+const r=document.getElementById('sl-rbtn');if(r)r.disabled=false;
+this.setSt("Player 1's turn! Roll the dice!");
+const wo=document.getElementById('sl-win-overlay');if(wo)wo.style.display='none';
+const qo=document.getElementById('sl-q-overlay');if(qo)qo.style.display='none';
+this.drawBoard();this.updateUI();
+}
+};
+window.SLGame=SLGame;
 
 // ── SPEAKING COACH ───────────────────────────────────────
 const SpeakingCoach={
