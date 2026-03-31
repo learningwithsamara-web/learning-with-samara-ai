@@ -8959,9 +8959,16 @@ for(let c=0;c<this.size;c++){
 const cell=document.createElement('div');
 cell.className='wp-cell';cell.id='wc'+r+'-'+c;
 cell.textContent=this.grid[r][c];
-cell.addEventListener('pointerdown',()=>this.startSel(r,c));
-cell.addEventListener('pointerenter',()=>this.extendSel(r,c));
-cell.addEventListener('pointerup',()=>this.endSel());
+cell.addEventListener('pointerdown',(e)=>{e.preventDefault();this.startSel(r,c);});
+cell.addEventListener('pointermove',(e)=>{
+e.preventDefault();
+const el=document.elementFromPoint(e.clientX,e.clientY);
+if(el&&el.id&&el.id.startsWith('wc')){
+const parts=el.id.replace('wc','').split('-');
+if(parts.length===2)this.extendSel(parseInt(parts[0]),parseInt(parts[1]));
+}
+});
+cell.addEventListener('pointerup',(e)=>{e.preventDefault();this.endSel();});
 g.appendChild(cell);
 }
 }
