@@ -8886,7 +8886,8 @@ document.getElementById('wp-topic-badge').textContent=this.topic;
 const aib=document.getElementById('wp-ai-badge');
 if(aib)aib.style.display=this.aiGenerated?'block':'none';
 document.getElementById('wp-status').textContent='Tap a letter then drag to select a word!';
-this.timerInt=setInterval(()=>{this.elapsed++;const el=document.getElementById('wp-timer');if(el)el.textContent=this.elapsed+'s';},1000);
+const self=this;
+this.timerInt=setInterval(function(){self.elapsed++;const el=document.getElementById('wp-timer');if(el)el.textContent=self.elapsed+'s';},1000);
 },
 async generateAI(){
 this.useFallback();return;
