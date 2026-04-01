@@ -2406,7 +2406,7 @@ const DB = {
   async loadProgress(){ const user=await this.getUser();if(!user)return[];try{const{data}=await this.client.from('progress').select('*').eq('user_id',user.id);return data||[];}catch(e){return[];} },
   async loadScores(n=20){ const user=await this.getUser();if(!user)return[];try{const{data}=await this.client.from('scores').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(n);return data||[];}catch(e){return[];} }
 };
-
+DB.getSession = async function(){ try{const r=await DB.client.auth.getSession();return r.data.session;}catch(e){return null;} };
 const Adaptive = {
   diff:{},
   get(s){return this.diff[s]||1;},
