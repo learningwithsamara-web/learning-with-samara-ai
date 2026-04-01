@@ -4913,7 +4913,7 @@ const FamilyMode = {
     const profiles = this.getProfiles();
     const limit = this.getChildLimit();
     if(limit === 0) { App.requireSignup('Family Mode requires Pro!', 'Family', 'Upgrade to Samara Pro!'); return; }
-    if(profiles.length >= limit) { App.showScreen('screen-pricing'); App.toast('Upgrade to add more children!'); return; }
+    if(profiles.length >= limit) { App.toast('You have reached your limit of ' + limit + ' children!'); return; }
     const id = 'child_' + Date.now();
     const newChild = { id, name, age: age||'7-10', avatar: avatar||'star', color: color||'#6BCB77', created: new Date().toISOString() };
     profiles.push(newChild);
