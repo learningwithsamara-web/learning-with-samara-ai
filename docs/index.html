@@ -7769,7 +7769,9 @@ const notice=document.getElementById('family-plan-notice');
 const addBtn=document.getElementById('add-child-btn');
 if(!list)return;
 list.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;padding:16px;">Loading profiles... ⏳</div>';
-const profiles=await this.getProfiles();
+const supaProfiles=await this.getProfiles();
+const localProfiles=FamilyMode.getProfiles();
+const profiles=supaProfiles.length>0?supaProfiles:localProfiles;
 const max=await this.getMax();
 if(profiles.length===0){
 list.innerHTML='<div style="color:rgba(255,255,255,0.5);font-size:0.88rem;text-align:center;padding:16px;">No child profiles yet — add your first child! 👶</div>';
