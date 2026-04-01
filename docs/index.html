@@ -4251,7 +4251,7 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
   async renderParent(){
     const user=await DB.getUser();if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
     const name=user.user_metadata?.full_name||user.email.split('@')[0];
-    setText('parent-sub',`Tracking progress for ${name}`);
+    setText('parent-sub', 'Family Learning Report');
     const recent=await DB.loadScores(50);
     setText('parent-total-quizzes',recent.length);setText('parent-total-pts',recent.reduce((s,r)=>s+r.score,0));
     setText('parent-avg-accuracy',`${recent.length>0?Math.round(recent.reduce((s,r)=>s+(r.accuracy||0),0)/recent.length*100):0}%`);
