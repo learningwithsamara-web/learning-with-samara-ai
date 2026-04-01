@@ -7737,7 +7737,7 @@ if(!user)return null;
 try{
 const res=await fetch(`${SUPABASE_URL}/rest/v1/child_profiles`,{
 method:'POST',
-headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${(await DB.getSession?.())?.access_token||SUPABASE_ANON}`,'Content-Type':'application/json','Prefer':'return=representation'},
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`,'Content-Type':'application/json','Prefer':'return=representation'},
 body:JSON.stringify({parent_id:user.id,name:profile.name,birthday:profile.birthday||null,age_group:profile.ageGroup||'7-10',tutor:profile.tutor||'samara',avatar:profile.avatar||'📚'})
 });
 const data=await res.json();
@@ -7753,7 +7753,7 @@ if(!user)return;
 try{
 await fetch(`${SUPABASE_URL}/rest/v1/child_profiles?id=eq.${id}`,{
 method:'PATCH',
-headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${(await DB.getSession?.())?.access_token||SUPABASE_ANON}`,'Content-Type':'application/json'},
+headers:{'apikey':SUPABASE_ANON,'Authorization':`Bearer ${SUPABASE_ANON}`,'Content-Type':'application/json'},
 body:JSON.stringify({name:profile.name,birthday:profile.birthday||null,age_group:profile.ageGroup||'7-10',tutor:profile.tutor||'samara',avatar:profile.avatar||'📚'})
 });
 }catch(e){
