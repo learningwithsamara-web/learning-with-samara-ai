@@ -4904,19 +4904,33 @@ const FamilyMode = {
     document.getElementById('new-child-color').value = color;
   },
 
-  _confirmAdd() {
-    const name = document.getElementById('new-child-name')?.value.trim();
-    const age = document.getElementById('new-child-age')?.value;
-    const avatar = document.getElementById('new-child-avatar')?.value;
-    const color = document.getElementById('new-child-color')?.value;
-    if(!name) { App.toast('Please enter a name!'); return; }
-    const id = this.addChild(name, age, avatar, color);
-    if(id) {
-      document.getElementById('family-add-popup')?.remove();
-      this.render();
-      App.toast(`${avatar} ${name} added to your family! 🎉`);
-    }
-  },
+ _confirmAdd() {
+  const name = document.getElementById('new-child-name')?.value.trim();
+  const age = document.getElementById('new-child-age')?.value;
+  const avatar = document.getElementById('new-child-avatar')?.value;
+  const color = document.getElementById('new-child-color')?.value;
+  if(!name) { App.toast('Please enter a name!'); return; }
+  const profiles = this.getProfiles();
+  const limit = this.getChildLimit();
+  if(limit === 0) {
+    App.requireSignup('Family Mode requires Pro!', 'Family', 'Upgrade to Samara Pro to add child profiles!');
+    return;
+  }
+  if(profiles.length >= limit) {
+    App.showScreen('screen-pricing');
+    App.toast('Upgrade to add more children!');
+    return;
+  }
+  const id = 'child_' + Date.now();
+  const newChild = { id, name, age: age||'explorer', avatar: avatar||'⭐', color: color||'#6BCB77', created: new Date().toISOString() };
+  profiles.push(newChild);
+  this.saveProfiles(profiles);
+  document.getElementById('family-add-popup')?.remove();
+  this.render();
+  App.toast(name + ' added to your family! 🎉');
+   }
+  }
+},
 
   init() {
     const profiles = this.getProfiles();
