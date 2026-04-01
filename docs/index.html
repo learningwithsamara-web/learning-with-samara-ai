@@ -4201,6 +4201,7 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
   },
 
   async renderDash(){
+    await DB.client.auth.refreshSession().catch(()=>{});
     const user=await DB.getUser();if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
     const name=user.user_metadata?.full_name||user.email.split('@')[0];setText('dash-name',name);
     const ageLbl={'4-6':'Junior','7-10':'Explorer','11-14':'Pro','15-17':'Senior'};
