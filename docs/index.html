@@ -2404,11 +2404,9 @@ const DB = {
   async saveScore(r){ const user=await this.getUser();if(!user)return;try{await this.client.from('scores').insert({user_id:user.id,...r,created_at:new Date().toISOString()});}catch(e){} },
   async saveProgress(subject,world,stage,accuracy){ const user=await this.getUser();if(!user)return;const stars=accuracy>=0.9?3:accuracy>=0.7?2:1;try{await this.client.from('progress').upsert({user_id:user.id,subject,world,stage,completed:true,stars,accuracy,created_at:new Date().toISOString()},{onConflict:'user_id,subject,world,stage'});}catch(e){} },
   async loadProgress(){ const user=await this.getUser();if(!user)return[];try{const{data}=await this.client.from('progress').select('*').eq('user_id',user.id);return data||[];}catch(e){return[];} },
- async loadScores(n=20){ const user=await this.getUser();if(!user)return[];try{const{data}=await this.client.from('scores').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(n);return data||[];}catch(e){return[];} },
-async getSession(){ try{const{data:{session}}=await this.client.auth.getSession();return session;}catch(e){return null;} } 
-  
+  async loadScores(n=20){ const user=await this.getUser();if(!user)return[];try{const{data}=await this.client.from('scores').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(n);return data||[];}catch(e){return[];} },
+  async getSession(){ try{const{data:{session}}=await this.client.auth.getSession();return session;}catch(e){return null;} }
 };
-
 const Adaptive = {
   diff:{},
   get(s){return this.diff[s]||1;},
