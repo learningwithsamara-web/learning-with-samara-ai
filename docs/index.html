@@ -4068,7 +4068,8 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
     // Save to DB in background (non-blocking)
     if(S.user){
       const name=S.user.user_metadata?.full_name||S.user.email;
-      DB.saveScore({student:name,subject:S.subject,world:world.id,stage:S.stageIndex+1,score:pts,total:total*10,accuracy:acc}).catch(()=>{});
+      const activeChild = FamilyMode.getActive();
+      DB.saveScore({student:activeChild?activeChild.name:name,subject:S.subject,world:world.id,stage:S.stageIndex+1,score:pts,total:total*10,accuracy:acc,child_id:activeChild?activeChild.id:null,child_name:activeChild?activeChild.name:null}).catch(()=>{});
       DB.saveProgress(S.subject,world.id,S.stageIndex+1,acc).then(()=>{
         DB.loadProgress().then(p=>{ if(p) S.progress=p; }).catch(()=>{});
       }).catch(()=>{});
