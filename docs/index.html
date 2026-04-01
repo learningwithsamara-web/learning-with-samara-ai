@@ -4874,8 +4874,6 @@ const FamilyMode = {
         <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.4rem;margin-bottom:16px;text-align:center;">👶 Add a Child</div>
         <input id="new-child-name" type="text" placeholder="Child's name" maxlength="20"
           style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;outline:none;margin-bottom:12px;box-sizing:border-box;" />
-        <input id="new-child-birthday" type="date" placeholder="Birthday (optional)"
-  style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;outline:none;margin-bottom:12px;box-sizing:border-box;" />
         <select id="new-child-age" style="width:100%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;outline:none;margin-bottom:14px;box-sizing:border-box;">
           <option value="0-3" style="color:#000;">Ages 0–3 (Baby)</option>
           <option value="4-6" style="color:#000;">Ages 4–6 (Junior)</option>
@@ -4906,33 +4904,18 @@ const FamilyMode = {
     document.getElementById('new-child-color').value = color;
   },
 
- _confirmAdd() {
+  _confirmAdd() {
     const name = document.getElementById('new-child-name')?.value.trim();
     const age = document.getElementById('new-child-age')?.value;
     const avatar = document.getElementById('new-child-avatar')?.value;
     const color = document.getElementById('new-child-color')?.value;
     if(!name) { App.toast('Please enter a name!'); return; }
-    const profiles = this.getProfiles();
-    const limit = this.getChildLimit();
-    if(limit === 0) {
-      App.requireSignup('Family Mode requires Pro!', 'Family', 'Upgrade to Samara Pro to add child profiles!');
-      return;
+    const id = this.addChild(name, age, avatar, color);
+    if(id) {
+      document.getElementById('family-add-popup')?.remove();
+      this.render();
+      App.toast(`${avatar} ${name} added to your family! 🎉`);
     }
-    if(profiles.length >= limit) {
-      App.showScreen('screen-pricing');
-      App.toast('Upgrade to add more children!');
-      return;
-    }
-    const id = 'child_' + Date.now();
-    const newChild = { id, name, age: age||'explorer', avatar: avatar||'star', color: color||'#6BCB77', created: new Date().toISOString() };
-    profiles.push(newChild);
-    this.saveProfiles(profiles);
-   const birthday = document.getElementById('new-child-birthday')?.value||'';
-if(birthday) { localStorage.setItem('samara_birthday_' + id, birthday); }
-    document.getElementById('family-add-popup')?.remove();
-    this.render();
-    App.toast(name + ' added to your family!');
-   }
   },
 
   init() {
