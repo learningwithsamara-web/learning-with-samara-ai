@@ -3653,7 +3653,7 @@ const App = {
     App.renderSubjects();Avatars.loadSaved();
     setTimeout(()=>App.updateSearchSuggestions(),500);
     App.updatePlanUI();
-    document.addEventListener('touchstart', ()=>{ if(!SoundSystem._iosAudio){ SoundSystem._iosAudio = new Audio(); SoundSystem._iosAudio.play().catch(()=>{}); } }, {once:true});
+    document.addEventListener('touchstart', ()=>{ try{ if(!SoundSystem._unlocked){ const a=new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD/84AEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAABIADAwMDA//OEAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAABIADAwMDAwMDA');a.volume=0.01;a.play().then(()=>{SoundSystem._unlocked=true;}).catch(()=>{});} }catch(e){} }, {once:true});
   },
 
   updatePlanUI() {
