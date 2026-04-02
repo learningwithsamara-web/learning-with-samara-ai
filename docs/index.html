@@ -4856,6 +4856,7 @@ const FamilyMode = {
           <div style="font-size:0.75rem;color:#7A7A9D;margin-top:2px;">${p.age} yrs</div>
           ${p.id===activeId?'<div style="margin-top:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.72rem;padding:2px 10px;border-radius:50px;display:inline-block;">Active ✓</div>':''}
           <button onclick="event.stopPropagation();FamilyMode.removeChild('${p.id}');FamilyMode.render();" style="position:absolute;top:8px;right:8px;background:rgba(255,107,107,0.15);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.7rem;color:#FF6B6B;">✕</button>
+<button onclick="event.stopPropagation();FamilyMode.editChild('${p.id}');" style="position:absolute;top:8px;right:34px;background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.7rem;color:#fff;">✏️</button>
         </div>`).join('');
     }
 
