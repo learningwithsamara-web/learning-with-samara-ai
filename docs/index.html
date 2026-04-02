@@ -6158,7 +6158,8 @@ const ReviewSystem = {
   pickStar(n) {
     this.selectedStars = n;
     this.resetStars();
-    try { SoundSystem.playTone('tap'); } catch(e){}
+    try { SoundSystem.stop();
+   SoundSystem.playTone('tap'); } catch(e){}
   },
 
   async submit() {
