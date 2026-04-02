@@ -6828,8 +6828,7 @@ const BabyMode = {
     };
     const bq = `(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`;
   setText('baby-question', bq);
-  setTimeout(()=>SoundSystem.speakBaby(qText[this.category]), 400);
-
+    
     // For 0-3 animals: play animal sound FIRST, then voice speaks after sound finishes
     if(S.ageGroup === '0-3' && this.category === 'animals') {
       setTimeout(() => this.playAnimalSound(correct.name), 300);
