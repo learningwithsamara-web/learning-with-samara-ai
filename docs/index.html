@@ -4894,6 +4894,38 @@ const FamilyMode = {
     }
   },
 
+  editChild(id) {
+  const profiles = this.getProfiles();
+  const p = profiles.find(x=>x.id===id);
+  if(!p) return;
+  this.showAddForm();
+  setTimeout(()=>{
+    document.getElementById('new-child-name').value = p.name||'';
+    document.getElementById('new-child-birthday').value = p.birthday||'';
+    document.getElementById('new-child-age').value = p.age||'7-10';
+    document.getElementById('family-add-popup').querySelector('[style*="Add a Child"]').textContent = 'Edit Child';
+    const confirmBtn = document.getElementById('family-add-popup').querySelector('button[onclick*="_confirmAdd"]');
+    if(confirmBtn) confirmBtn.onclick = function(){ FamilyMode._confirmEdit(id); };
+  }, 100);
+},
+
+_confirmEdit(id) {
+  const name = document.getElementById('new-child-name')?.value.trim();
+  const age = document.getElementById('new-child-age')?.value;
+  const avatar = document.getElementById('new-child-avatar')?.value;
+  const color = document.getElementById('new-child-color')?.value;
+  const birthday = document.getElementById('new-child-birthday')?.value||'';
+  if(!name) { App.toast('Please enter a name!'); return; }
+  const profiles = this.getProfiles();
+  const idx = profiles.findIndex(x=>x.id===id);
+  if(idx===-1) return;
+  profiles[idx] = { ...profiles[idx], name, age, avatar, color, birthday };
+  this.saveProfiles(profiles);
+  document.getElementById('family-add-popup')?.remove();
+  this.render();
+  App.toast(name + ' updated!');
+},
+
   showAddForm() {
     const div = document.createElement('div');
     div.id = 'family-add-popup';
