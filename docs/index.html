@@ -2518,35 +2518,46 @@ const SoundSystem = {
   },
 
   // Main speak function — tuned for natural girl child voice
-  async speakGoogle(text, rate=0.9, pitch=2.0) {
+  async speakGoogle(text, rate=0.9, pitch=0) {
     if(!this.enabled || !text) return;
+    const cacheKey = text.slice(0,100);
+    if(!this._audioCache) this._audioCache = {};
     try {
       window.speechSynthesis.cancel();
-console.log('[Google TTS] Requesting:', text.slice(0,50));
-      const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({text:String(text).slice(0,500), rate, pitch})
-      });
-      const data = await res.json();
-      if(data.audioContent) {
-        window.speechSynthesis.cancel();
-        if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
-        const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
-        audio.play();
-        this._currentAudio = audio;
+      if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
+      let audioContent = this._audioCache[cacheKey];
+      if(!audioContent) {
+        const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({text:String(text).slice(0,500), rate, pitch})
+        });
+        const data = await res.json();
+        audioContent = data.audioContent;
+        if(audioContent) this._audioCache[cacheKey] = audioContent;
+      }
+      if(audioContent) {
+        if(!this._iosAudio) this._iosAudio = new Audio();
+        this._iosAudio.src = 'data:audio/mp3;base64,' + audioContent;
+        this._iosAudio.load();
+        const playPromise = this._iosAudio.play();
+        if(playPromise) playPromise.catch(()=>{
+          this._usingBrowserFallback = true;
+          this.speak(text, rate, 0);
+          this._usingBrowserFallback = false;
+        });
+        this._currentAudio = this._iosAudio;
         return;
       }
     } catch(e) {
       console.warn('Google TTS failed, using browser voice:', e);
     }
     this._usingBrowserFallback = true;
-this.speak(text, rate, pitch);
-this._usingBrowserFallback = false;
+    this.speak(text, rate, pitch);
+    this._usingBrowserFallback = false;
   },
-speak(text, rate=0.88, pitch=1.35) {
+  speak(text, rate=0.88, pitch=1.35) {
     if(this.enabled && text && !this._usingBrowserFallback) { this.speakGoogle(String(text).slice(0,500), rate, 0); return; }
-    if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(this._googleTTSActive) return;
     this._speaking = false;
@@ -2558,12 +2569,9 @@ speak(text, rate=0.88, pitch=1.35) {
       .replace(/\*\*/g, '')
       .replace(/\s+/g, ' ')
       .trim();
-
     if(!clean) return;
-
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const maxLen = isMobile ? 170 : 350;
-
     const rawChunks = clean.match(/[^.!?]+[.!?]*/g) || [clean];
     const chunks = [];
     let current = '';
@@ -2578,87 +2586,49 @@ speak(text, rate=0.88, pitch=1.35) {
       }
     }
     if(current.trim()) chunks.push(current.trim());
-
-    // Resume ping — more frequent on mobile (iOS pauses after ~15s)
     const _ri = setInterval(() => {
       if(!this._speaking) { clearInterval(_ri); return; }
       if(window.speechSynthesis.paused) window.speechSynthesis.resume();
     }, isMobile ? 2500 : 7000);
     this._resumeInterval = _ri;
-
     let idx = 0;
     this._speaking = true;
-
     const speakChunk = () => {
       if(!this._speaking || idx >= chunks.length) {
         clearInterval(_ri); this._speaking = false; return;
       }
       const chunk = chunks[idx].trim(); idx++;
       if(!chunk || chunk.length < 2) { setTimeout(speakChunk, 50); return; }
-
       const utt = new SpeechSynthesisUtterance(chunk);
       utt.rate = isMobile ? Math.min(rate, 0.82) : rate;
       utt.pitch = isMobile ? Math.min(pitch, 1.15) : pitch;
       utt.volume = 1.0;
       utt.lang = 'en-US';
-  
       if(!this.selectedVoice) this.selectedVoice = this._pickGirlVoice();
       if(this.selectedVoice) utt.voice = this.selectedVoice;
-
       utt.onend = () => setTimeout(speakChunk, isMobile ? 300 : 170);
       utt.onerror = () => setTimeout(speakChunk, 200);
-
       window.speechSynthesis.speak(utt);
-      // iOS kick — resume immediately after speak call
       if(isMobile) setTimeout(() => { if(window.speechSynthesis.paused) window.speechSynthesis.resume(); }, 400);
     };
-
     setTimeout(speakChunk, isMobile ? 500 : 350);
   },
-
-  // Child-friendly voices — higher pitch, slower rate for babies
-speakBaby(text)   { this.speak(text, 0.72, 1.45); },
-speakPraise(text) { this.speak(text, 0.92, 1.4);  },
-speakHint(text)   { this.speak(text, 0.80, 1.3);  },
-speakLearn(text)  { this.speak(text, 0.82, 1.3);  },
-
+  speakBaby(text)   { this.speak(text, 0.72, 1.45); },
+  speakPraise(text) { this.speak(text, 0.92, 1.4);  },
+  speakHint(text)   { this.speak(text, 0.80, 1.3);  },
+  speakLearn(text)  { this.speak(text, 0.82, 1.3);  },
   speakQuestion(text) {
     if(!this.enabled || !text) return;
     const clean = String(text).replace(/[^\w\s.,!?'\-:()]/g,' ').replace(/\s+/g,' ').trim();
     if(clean) this.speak(clean, 0.84, 1.3);
   },
-
- stop() {
-  this._speaking = false;
-  if(this._resumeInterval) { clearInterval(this._resumeInterval); this._resumeInterval = null; }
-  window.speechSynthesis.cancel();
-  if(this._currentAudio){ this._currentAudio.pause(); this._currentAudio=null; }
+  stop() {
+    this._speaking = false;
+    if(this._resumeInterval) { clearInterval(this._resumeInterval); this._resumeInterval = null; }
+    window.speechSynthesis.cancel();
+    if(this._currentAudio){ this._currentAudio.pause(); this._currentAudio=null; 
+    }
   },
-  playTone(type) {
-    if(!this.enabled)return;
-    try{
-      if(!this._toneCtx||this._toneCtx.state==='closed') this._toneCtx=new(window.AudioContext||window.webkitAudioContext)();
-      if(this._toneCtx.state==='suspended') this._toneCtx.resume();
-      const ctx=this._toneCtx;
-      const osc=ctx.createOscillator();const gain=ctx.createGain();
-      osc.connect(gain);gain.connect(ctx.destination);
-      if(type==='correct'){osc.frequency.setValueAtTime(523,ctx.currentTime);osc.frequency.setValueAtTime(659,ctx.currentTime+0.1);osc.frequency.setValueAtTime(784,ctx.currentTime+0.2);gain.gain.setValueAtTime(0.3,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.5);}
-      else if(type==='wrong'){osc.frequency.setValueAtTime(200,ctx.currentTime);osc.frequency.setValueAtTime(150,ctx.currentTime+0.2);gain.gain.setValueAtTime(0.2,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.4);}
-      else if(type==='celebrate'){[523,659,784,1047].forEach((freq,i)=>{const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=freq;g.gain.setValueAtTime(0.25,ctx.currentTime+i*0.12);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.12+0.3);o.start(ctx.currentTime+i*0.12);o.stop(ctx.currentTime+i*0.12+0.3);});}
-      else if(type==='tap'){osc.frequency.setValueAtTime(800,ctx.currentTime);gain.gain.setValueAtTime(0.15,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.15);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.15);}
-    }catch(e){}
-  },
-  startVoiceInput() {
-    if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){App.toast('Voice input not supported 😔');return;}
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    const r=new SR();r.lang='en-US';r.interimResults=false;
-    const btn=document.getElementById('voice-input-btn');
-    if(btn)btn.classList.add('listening');
-    r.onresult=(e)=>{const txt=e.results[0][0].transcript;const inp=document.getElementById('ai-chat-input');if(inp)inp.value=txt;if(btn)btn.classList.remove('listening');AITutor.sendMessage();};
-    r.onerror=r.onend=()=>{if(btn)btn.classList.remove('listening');};
-    r.start();
-  }
-};
 
 // ── AI TUTOR — fully smart, answers anything ─────────────────
 const AITutor = {
