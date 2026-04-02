@@ -2534,7 +2534,6 @@ const SoundSystem = {
         const data = await res.json();
         audioContent = data.audioContent;
         if(audioContent) this._audioCache[cacheKey] = audioContent;
-        App.toast('Got audio: ' + (audioContent ? 'yes' : 'no'));
       }
       if(audioContent) {
         const audio = new Audio('data:audio/mp3;base64,' + audioContent);
@@ -2551,8 +2550,7 @@ const SoundSystem = {
         return;
       }
     } catch(e) {
-      console.warn('Google TTS failed:', e.message, e);
-      App.toast('TTS error: ' + e.message);
+      console.warn('Google TTS failed, using browser voice:', e);
     }
     this._usingBrowserFallback = true;
     this.speak(text, rate, pitch);
