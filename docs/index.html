@@ -2536,16 +2536,17 @@ const SoundSystem = {
         if(audioContent) this._audioCache[cacheKey] = audioContent;
       }
       if(audioContent) {
-        if(!this._iosAudio) this._iosAudio = new Audio();
-        this._iosAudio.src = 'data:audio/mp3;base64,' + audioContent;
-        this._iosAudio.load();
-        const playPromise = this._iosAudio.play();
-        if(playPromise) playPromise.catch(()=>{
-          this._usingBrowserFallback = true;
-          this.speak(text, rate, 0);
-          this._usingBrowserFallback = false;
-        });
-        this._currentAudio = this._iosAudio;
+        const audio = new Audio('data:audio/mp3;base64,' + audioContent);
+        audio.volume = 1.0;
+        const playPromise = audio.play();
+        if(playPromise !== undefined) {
+          playPromise.then(()=>{ this._currentAudio = audio; }).catch(()=>{
+            this._usingBrowserFallback = true;
+            this.speak(text, rate, 0);
+            this._usingBrowserFallback = false;
+          });
+        }
+        this._currentAudio = audio;
         return;
       }
     } catch(e) {
