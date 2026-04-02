@@ -2452,7 +2452,6 @@ const SoundSystem = {
       }
     });
   },
-
   async _warmupGoogle() {
     try {
       const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
@@ -2467,8 +2466,8 @@ const SoundSystem = {
       }
     } catch(e) {}
   },
-
   _pickGirlVoice() {
+    if(!this.voices.length) return null;
     
     // 1. Best natural girl/child voices by exact name
     const girlNames = [
