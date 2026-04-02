@@ -2517,8 +2517,7 @@ const SoundSystem = {
     if(btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
 
-  // Main speak function — tuned for natural girl child voice
-  async speakGoogle(text, rate=0.9, pitch=0) {
+ async speakGoogle(text, rate=0.9, pitch=0) {
     if(!this.enabled || !text) return;
     const cacheKey = text.slice(0,100);
     if(!this._audioCache) this._audioCache = {};
@@ -2556,6 +2555,7 @@ const SoundSystem = {
     this.speak(text, rate, pitch);
     this._usingBrowserFallback = false;
   },
+  // Main speak function — tuned for natural girl child voice
   speak(text, rate=0.88, pitch=1.35) {
     if(this.enabled && text && !this._usingBrowserFallback) { this.speakGoogle(String(text).slice(0,500), rate, 0); return; }
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
