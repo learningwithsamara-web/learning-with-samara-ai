@@ -2517,36 +2517,47 @@ const SoundSystem = {
     if(btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
 
-  // Main speak function — tuned for natural girl child voice
-  async speakGoogle(text, rate=0.9, pitch=2.0) {
+  async speakGoogle(text, rate=0.9, pitch=0) {
     if(!this.enabled || !text) return;
+    const cacheKey = text.slice(0,100);
+    if(!this._audioCache) this._audioCache = {};
     try {
       window.speechSynthesis.cancel();
-console.log('[Google TTS] Requesting:', text.slice(0,50));
-      const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({text:String(text).slice(0,500), rate, pitch})
-      });
-      const data = await res.json();
-      if(data.audioContent) {
-        window.speechSynthesis.cancel();
-        if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
-        const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
-        audio.play();
-        this._currentAudio = audio;
+      if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
+      let audioContent = this._audioCache[cacheKey];
+      if(!audioContent) {
+        const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({text:String(text).slice(0,500), rate, pitch})
+        });
+        const data = await res.json();
+        audioContent = data.audioContent;
+        if(audioContent) this._audioCache[cacheKey] = audioContent;
+      }
+      if(audioContent) {
+        if(!this._iosAudio) this._iosAudio = new Audio();
+        this._iosAudio.src = 'data:audio/mp3;base64,' + audioContent;
+        this._iosAudio.load();
+        const playPromise = this._iosAudio.play();
+        if(playPromise) playPromise.catch(()=>{
+          this._usingBrowserFallback = true;
+          this.speak(text, rate, 0);
+          this._usingBrowserFallback = false;
+        });
+        this._currentAudio = this._iosAudio;
         return;
       }
     } catch(e) {
       console.warn('Google TTS failed, using browser voice:', e);
     }
     this._usingBrowserFallback = true;
-this.speak(text, rate, pitch);
-this._usingBrowserFallback = false;
+    this.speak(text, rate, pitch);
+    this._usingBrowserFallback = false;
   },
-speak(text, rate=0.88, pitch=1.35) {
+  // Main speak function — tuned for natural girl child voice
+  speak(text, rate=0.88, pitch=1.35) {
     if(this.enabled && text && !this._usingBrowserFallback) { this.speakGoogle(String(text).slice(0,500), rate, 0); return; }
-    if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(this._googleTTSActive) return;
     this._speaking = false;
