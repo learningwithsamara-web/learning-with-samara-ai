@@ -2429,11 +2429,10 @@ const SoundSystem = {
   selectedVoice: null,
   _speaking: false,
 
-  init() {
-     this._audioCache = {};
+ init() {
+    this._audioCache = {};
     this._warmupGoogle();
     if(!('speechSynthesis' in window)) return;
-    // Cancel anything leftover from previous page
     window.speechSynthesis.cancel();
     const load = () => {
       const v = window.speechSynthesis.getVoices();
@@ -2443,7 +2442,17 @@ const SoundSystem = {
         console.log('[Voice] Using:', this.selectedVoice?.name || 'default');
       }
     };
-    async _warmupGoogle() {
+    window.speechSynthesis.onvoiceschanged = load;
+    load();
+    [100, 300, 600, 1000, 2000, 4000].forEach(t => setTimeout(load, t));
+    document.addEventListener('visibilitychange', () => {
+      if(!document.hidden) {
+        window.speechSynthesis.cancel();
+        load();
+      }
+    });
+  },
+  async _warmupGoogle() {
     try {
       const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
         method: 'POST',
@@ -2457,20 +2466,9 @@ const SoundSystem = {
       }
     } catch(e) {}
   },
-    window.speechSynthesis.onvoiceschanged = load;
-    load();
-    [100, 300, 600, 1000, 2000, 4000].forEach(t => setTimeout(load, t));
-    document.addEventListener('visibilitychange', () => {
-      if(!document.hidden) {
-        window.speechSynthesis.cancel();
-        load();
-      }
-    });
-  },
-
   _pickGirlVoice() {
     if(!this.voices.length) return null;
-
+    
     // 1. Best natural girl/child voices by exact name
     const girlNames = [
       'Samantha',           // iPhone/Mac — best natural female
