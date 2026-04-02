@@ -2536,6 +2536,7 @@ const SoundSystem = {
         if(audioContent) this._audioCache[cacheKey] = audioContent;
       }
       if(audioContent) {
+        if(this._currentAudio){ this._currentAudio.pause(); this._currentAudio.src=''; }
         const audio = new Audio('data:audio/mp3;base64,' + audioContent);
         audio.volume = 1.0;
         const playPromise = audio.play();
