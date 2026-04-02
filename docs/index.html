@@ -4253,8 +4253,11 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
   async renderParent(){
     const user=await DB.getUser();if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
     const name=user.user_metadata?.full_name||user.email.split('@')[0];
-    setText('parent-sub', 'Family Learning Report');
-    const recent=await DB.loadScores(50);
+    const activeChild=FamilyMode.getActive();
+    setText('parent-sub', activeChild ? 'Showing progress for ' + activeChild.name : 'Family Learning Report');
+    const allScores=await DB.loadScores(200);
+    const activeChild=FamilyMode.getActive();
+    const recent=activeChild?allScores.filter(s=>s.child_id===activeChild.id):allScores;
     setText('parent-total-quizzes',recent.length);setText('parent-total-pts',recent.reduce((s,r)=>s+r.score,0));
     setText('parent-avg-accuracy',`${recent.length>0?Math.round(recent.reduce((s,r)=>s+(r.accuracy||0),0)/recent.length*100):0}%`);
     setText('parent-streak',App.calcStreak(recent));
@@ -7793,7 +7796,7 @@ list.innerHTML=profiles.map((p,i)=>`
 ${p.birthday?`<div style="color:#FFD93D;font-size:0.78rem;">🎂 Birthday: ${new Date(p.birthday+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div>`:''}
 </div>
 <div style="display:flex;gap:6px;">
-<button onclick="FamilyMode.setActiveByName('${p.name}');App.toast('${p.name} is learning now!');" style="background:rgba(107,203,119,0.2);color:#6BCB77;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:0.75rem;font-family:'Fredoka One',cursive;">Active</button>
+<button onclick="FamilyMode.setActiveByName('${p.name}');App.toast('${p.name} is learning now!');App.renderParent();" style="background:rgba(107,203,119,0.2);color:#6BCB77;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:0.75rem;font-family:'Fredoka One',cursive;">Active</button>
 <button onclick="FamilyProfiles.editChild('${p.id}')" style="background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">✏️</button>
 <button onclick="FamilyProfiles.deleteChild('${p.id}')" style="background:rgba(255,107,107,0.2);color:#FF6B6B;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">🗑️</button>
 </div>
