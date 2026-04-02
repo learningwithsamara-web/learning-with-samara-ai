@@ -4256,7 +4256,6 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
     const activeChild=FamilyMode.getActive();
     setText('parent-sub', activeChild ? 'Showing progress for ' + activeChild.name : 'Family Learning Report');
     const allScores=await DB.loadScores(200);
-    const activeChild=FamilyMode.getActive();
     const recent=activeChild?allScores.filter(s=>s.child_id===activeChild.id):allScores;
     setText('parent-total-quizzes',recent.length);setText('parent-total-pts',recent.reduce((s,r)=>s+r.score,0));
     setText('parent-avg-accuracy',`${recent.length>0?Math.round(recent.reduce((s,r)=>s+(r.accuracy||0),0)/recent.length*100):0}%`);
