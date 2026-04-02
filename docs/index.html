@@ -6807,7 +6807,7 @@ const BabyMode = {
     const labels={animals:'Animals 🐾',colors:'Colors 🎨',shapes:'Shapes 🔷',numbers:'Numbers 🔢'};
     setText('baby-screen-title',labels[cat]);
     SoundSystem.speakBaby(`Let us learn ${cat}! Tap the right one!`);
-    setTimeout(()=>this.nextQuestion(), 1000);
+    setTimeout(()=>this.nextQuestion(), 2500);
   },
 
   nextQuestion(){
