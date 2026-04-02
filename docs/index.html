@@ -2550,7 +2550,8 @@ const SoundSystem = {
         return;
       }
     } catch(e) {
-      console.warn('Google TTS failed, using browser voice:', e);
+      console.warn('Google TTS failed:', e.message, e);
+      App.toast('TTS error: ' + e.message);
     }
     this._usingBrowserFallback = true;
     this.speak(text, rate, pitch);
