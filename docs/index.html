@@ -3651,6 +3651,10 @@ const App = {
     App.renderSubjects();Avatars.loadSaved();
     setTimeout(()=>App.updateSearchSuggestions(),500);
     App.updatePlanUI();
+    App.renderSubjects();Avatars.loadSaved();
+    setTimeout(()=>App.updateSearchSuggestions(),500);
+    App.updatePlanUI();
+    document.addEventListener('touchstart', ()=>{ if(!SoundSystem._iosAudio){ SoundSystem._iosAudio = new Audio(); SoundSystem._iosAudio.play().catch(()=>{}); } }, {once:true});
   },
 
   updatePlanUI() {
