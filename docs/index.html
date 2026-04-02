@@ -2430,6 +2430,8 @@ const SoundSystem = {
   _speaking: false,
 
   init() {
+     this._audioCache = {};
+    this._warmupGoogle();
     if(!('speechSynthesis' in window)) return;
     // Cancel anything leftover from previous page
     window.speechSynthesis.cancel();
@@ -2441,6 +2443,20 @@ const SoundSystem = {
         console.log('[Voice] Using:', this.selectedVoice?.name || 'default');
       }
     };
+    async _warmupGoogle() {
+    try {
+      const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({text:'Hello', rate:0.9, pitch:0})
+      });
+      const data = await res.json();
+      if(data.audioContent) {
+        this._audioCache['Hello'] = data.audioContent;
+        this._googleReady = true;
+      }
+    } catch(e) {}
+  },
     window.speechSynthesis.onvoiceschanged = load;
     load();
     [100, 300, 600, 1000, 2000, 4000].forEach(t => setTimeout(load, t));
