@@ -2529,6 +2529,8 @@ console.log('[Google TTS] Requesting:', text.slice(0,50));
     this.speak(text, rate, pitch);
   },
 speak(text, rate=0.88, pitch=1.35) {
+    if(this.enabled && text && !this._usingBrowserFallback) { this.speakGoogle(String(text).slice(0,500), rate, 2.0); return; }
+    if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(this._googleTTSActive) return;
     this._speaking = false;
