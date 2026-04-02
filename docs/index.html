@@ -4947,7 +4947,8 @@ const FamilyMode = {
     if(limit === 0) { App.requireSignup('Family Mode requires Pro!', 'Family', 'Upgrade to Samara Pro!'); return; }
     if(profiles.length >= limit) { App.toast('Upgrade to add more children!'); return; }
     const id = 'child_' + Date.now();
-    const newChild = { id, name, age: age||'7-10', avatar: avatar||'star', color: color||'#6BCB77', created: new Date().toISOString() };
+    const birthday = document.getElementById('new-child-birthday')?.value||'';
+    const newChild = { id, name, age: age||'7-10', avatar: avatar||'star', color: color||'#6BCB77', birthday, created: new Date().toISOString() };
     profiles.push(newChild);
     this.saveProfiles(profiles);
     document.getElementById('family-add-popup')?.remove();
