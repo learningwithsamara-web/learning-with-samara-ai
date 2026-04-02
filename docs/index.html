@@ -2626,8 +2626,7 @@ const SoundSystem = {
     this._speaking = false;
     if(this._resumeInterval) { clearInterval(this._resumeInterval); this._resumeInterval = null; }
     window.speechSynthesis.cancel();
-    if(this._currentAudio){ this._currentAudio.pause(); this._currentAudio=null; 
-    }
+    if(this._currentAudio){ this._currentAudio.pause(); this._currentAudio=null; }
   },
 
 // ── AI TUTOR — fully smart, answers anything ─────────────────
