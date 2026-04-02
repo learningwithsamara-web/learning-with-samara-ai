@@ -4903,12 +4903,11 @@ const FamilyMode = {
     document.getElementById('new-child-name').value = p.name||'';
     document.getElementById('new-child-birthday').value = p.birthday||'';
     document.getElementById('new-child-age').value = p.age||'7-10';
-    document.getElementById('family-add-popup').querySelector('[style*="Add a Child"]').textContent = 'Edit Child';
-    const confirmBtn = document.getElementById('family-add-popup').querySelector('button[onclick*="_confirmAdd"]');
-    if(confirmBtn) confirmBtn.onclick = function(){ FamilyMode._confirmEdit(id); };
-  }, 100);
+    const btn = document.querySelector('#family-add-popup button[onclick*="_confirmAdd"]');
+    if(btn) btn.setAttribute('onclick', 'FamilyMode._confirmEdit("'+id+'")');
+  }, 150);
 },
-
+  
 _confirmEdit(id) {
   const name = document.getElementById('new-child-name')?.value.trim();
   const age = document.getElementById('new-child-age')?.value;
