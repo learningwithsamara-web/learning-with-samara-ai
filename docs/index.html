@@ -7967,8 +7967,7 @@ MESSAGES:[
 'Happy Birthday! You are so smart, so kind and so loved!',
 ],
 init(){
-const supaProfiles=FamilyProfiles.getProfiles();
-const profiles=supaProfiles.length>0?supaProfiles:FamilyMode.getProfiles();
+const profiles=FamilyMode.getProfiles();
 const today=new Date().toISOString().slice(5,10);
 if(profiles.length>0){
 profiles.forEach(child=>{
