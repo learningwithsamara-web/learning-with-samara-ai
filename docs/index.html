@@ -4250,6 +4250,10 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
     }
   },
 
+  renderParentForChild(name) {
+  FamilyMode.setActiveByName(name);
+  App.renderParent();
+},
   async renderParent(){
     const user=await DB.getUser();if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
     const name=user.user_metadata?.full_name||user.email.split('@')[0];
