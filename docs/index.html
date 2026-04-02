@@ -2466,6 +2466,18 @@ const SoundSystem = {
       }
     } catch(e) {}
   },
+  _unlockAudio() {
+    try {
+      if(!this._unlocked) {
+        const a = new Audio();
+        a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAA';
+        a.volume = 0;
+        a.play().then(()=>{ this._unlocked = true; }).catch(()=>{});
+        if(!this._toneCtx) this._toneCtx = new (window.AudioContext||window.webkitAudioContext)();
+        if(this._toneCtx.state === 'suspended') this._toneCtx.resume();
+      }
+    } catch(e) {}
+  },
   _pickGirlVoice() {
     if(!this.voices.length) return null;
     
