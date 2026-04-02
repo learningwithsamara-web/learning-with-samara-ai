@@ -7796,7 +7796,7 @@ list.innerHTML=profiles.map((p,i)=>`
 ${p.birthday?`<div style="color:#FFD93D;font-size:0.78rem;">🎂 Birthday: ${new Date(p.birthday+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric'})}</div>`:''}
 </div>
 <div style="display:flex;gap:6px;">
-<button onclick="FamilyMode.setActiveByName('${p.name}');App.toast('${p.name} is learning now!');App.renderParent();" style="background:rgba(107,203,119,0.2);color:#6BCB77;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:0.75rem;font-family:'Fredoka One',cursive;">Active</button>
+<button onclick="FamilyMode.setActiveByName('${p.name}');App.toast('${p.name} is learning now!');setTimeout(()=>App.renderParent(),200);" style="background:rgba(107,203,119,0.2);color:#6BCB77;border:none;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:0.75rem;font-family:'Fredoka One',cursive;">Active</button>
 <button onclick="FamilyProfiles.editChild('${p.id}')" style="background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">✏️</button>
 <button onclick="FamilyProfiles.deleteChild('${p.id}')" style="background:rgba(255,107,107,0.2);color:#FF6B6B;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:0.9rem;">🗑️</button>
 </div>
