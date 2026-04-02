@@ -3602,7 +3602,7 @@ const App = {
     }
     this._deviceId = localStorage.getItem('samara_device_id');
     DB.client.auth.onAuthStateChange(async(ev,sess)=>{S.user=sess?.user||null;App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);}});
-    try{S.user=await DB.getUser();App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);}}catch(e){}
+    try{S.user=await DB.getUser();App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);const sessionKey='samara_who_learning_'+new Date().toDateString();if(!localStorage.getItem(sessionKey)){const kids=FamilyMode.getProfiles();if(kids.length>0){localStorage.setItem(sessionKey,'shown');setTimeout(()=>App.showWhoLearning(),1000);}}}}catch(e){}
     App.renderSubjects();Avatars.loadSaved();
     setTimeout(()=>App.updateSearchSuggestions(),500);
     App.updatePlanUI();
