@@ -2527,7 +2527,7 @@ console.log('[Google TTS] Requesting:', text.slice(0,50));
       console.warn('Google TTS failed, using browser voice:', e);
     }
     this._usingBrowserFallback = true;
-this.speak(text, rate, pitch);
+this._browserSpeak(text, rate, pitch);
 this._usingBrowserFallback = false;
   },
 speak(text, rate=0.88, pitch=1.35) {
