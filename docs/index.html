@@ -4253,7 +4253,8 @@ setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 '
   async renderParent(){
     const user=await DB.getUser();if(!user){App.toast('Please log in first!');App.showScreen('screen-auth');return;}
     const name=user.user_metadata?.full_name||user.email.split('@')[0];
-    setText('parent-sub', 'Family Learning Report');
+    const activeChild=FamilyMode.getActive();
+    setText('parent-sub', activeChild ? 'Showing progress for ' + activeChild.name : 'Family Learning Report');
     const allScores=await DB.loadScores(200);
     const activeChild=FamilyMode.getActive();
     const recent=activeChild?allScores.filter(s=>s.child_id===activeChild.id):allScores;
