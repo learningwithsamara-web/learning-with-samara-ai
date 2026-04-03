@@ -3951,10 +3951,13 @@ if(SoundSystem.enabled){
   SoundSystem.stop();
   const doSpeak = () => {
     hideReadBtn();
-    SoundSystem.speak(q.text, rate, pitch);
     const qLen = q.text.length;
-    const optDelay = qLen < 60 ? 6000 : qLen < 120 ? 9000 : 13000;
-    setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 ' + q.answers[1].label + ' Option 3 ' + q.answers[2].label + ' Option 4 ' + q.answers[3].label, rate, pitch), optDelay);
+    const optDelay = qLen < 40 ? 4500 : qLen < 80 ? 7000 : qLen < 120 ? 10000 : 14000;
+    const optText = 'Option 1 ' + q.answers[0].label + ' Option 2 ' + q.answers[1].label + ' Option 3 ' + q.answers[2].label + ' Option 4 ' + q.answers[3].label;
+    SoundSystem.speak(q.text, rate, pitch);
+    setTimeout(()=>{
+      if(!S.answered) SoundSystem.speak(optText, rate, pitch);
+    }, optDelay);
   };
   if(SoundSystem._usingBrowserFallback) {
     setTimeout(doSpeak, 600);
