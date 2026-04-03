@@ -4997,9 +4997,18 @@ _confirmEdit(id) {
   },
   
   init() {
-    const profiles = this.getProfiles();
     if(S.user) {
       document.getElementById('btn-family')?.classList.toggle('hidden', false);
+      const t=JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
+      if(t.user&&t.access_token){
+        fetch(SUPABASE_URL+'/rest/v1/child_profiles?parent_id=eq.'+t.user.id+'&order=created_at.asc',{headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+t.access_token}})
+        .then(r=>r.json()).then(data=>{
+          if(Array.isArray(data)&&data.length>0){
+            const profiles=data.map(p=>({id:p.local_id||p.id,name:p.name,age:p.age_group,avatar:p.avatar,birthday:p.birthday||'',color:'#6BCB77',tutor:p.tutor||'samara',created:p.created_at}));
+            localStorage.setItem('samara_family',JSON.stringify(profiles));
+          }
+        }).catch(()=>{});
+      }
     }
   }
 };
