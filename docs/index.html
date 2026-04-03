@@ -4787,19 +4787,6 @@ const TraceMatch = {
 };
 window.TraceMatch = TraceMatch;
 
-  // Award coins for completing a stage
-  awardStage(accuracy) {
-    const base = 10;
-    const bonus = accuracy >= 1.0 ? 25 : accuracy >= 0.8 ? 15 : 0;
-    const total = base + bonus;
-    this.add(total, `Stage complete${bonus > 0 ? ' (bonus!)' : ''}`);
-    return total;
-  },
-
-  init() { this._updateDisplay(); }
-};
-window.SamaraCoins = SamaraCoins;
-
 // ── FAMILY MODE ───────────────────────────────────────────────
 const FamilyMode = {
   MAX_CHILDREN: 4,
