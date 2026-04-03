@@ -4821,9 +4821,10 @@ const FamilyMode = {
       App.selectAge(profile.age, false);
       App.renderSubjects();
       App.toast(`Switched to ${profile.name}! ${profile.avatar}`);
+      if(profile.supabase_id) SamaraCoins.loadFromSupabase(profile.supabase_id);
     }
   },
-
+  
   setActiveByName(name) {
   const profiles = this.getProfiles();
   const profile = profiles.find(p=>p.name===name);
