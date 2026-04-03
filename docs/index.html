@@ -4991,7 +4991,7 @@ _confirmEdit(id) {
     profiles.push(newChild);
     this.saveProfiles(profiles);
     const t=JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
-    if(t.user&&t.access_token){fetch(SUPABASE_URL+'/rest/v1/child_profiles',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+t.access_token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({parent_id:t.user.id,name:newChild.name,birthday:newChild.birthday||null,age_group:newChild.age,avatar:newChild.avatar,tutor:'samara',local_id:newChild.id})}).catch(()=>{});}
+    if(t.user&&t.access_token){fetch(SUPABASE_URL+'/rest/v1/child_profiles',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+t.access_token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({parent_id:t.user.id,name:newChild.name,birthday:newChild.birthday||null,age_group:newChild.age,avatar:newChild.avatar,tutor:'samara'})}).catch(()=>{});}
     document.getElementById('family-add-popup')?.remove();
     this.render();
     App.toast(name + ' added!'); 
