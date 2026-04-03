@@ -4805,6 +4805,7 @@ const SamaraCoins = {
 window.SamaraCoins = SamaraCoins;
 
 function showReadBtn(onTap) {
+  console.log('showReadBtn called from:', new Error().stack.split('\n')[2]);
   let rb = document.getElementById('global-read-btn');
   if(!rb) {
     rb = document.createElement('button');
