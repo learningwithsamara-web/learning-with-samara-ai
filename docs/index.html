@@ -4812,6 +4812,24 @@ const FamilyMode = {
   saveProfiles(profiles) {
     localStorage.setItem('samara_family', JSON.stringify(profiles));
   },
+  async syncSupabaseIds() {
+    try {
+      const remoteProfiles = await FamilyProfiles.getProfiles();
+      if(!remoteProfiles.length) return;
+      const local = this.getProfiles();
+      let changed = false;
+      local.forEach(lp => {
+        const match = remoteProfiles.find(rp => rp.name === lp.name);
+        if(match && !lp.supabase_id) {
+          lp.supabase_id = match.id;
+          changed = true;
+        }
+      });
+      if(changed) this.saveProfiles(local);
+    } catch(e) {
+      console.warn('syncSupabaseIds failed:', e);
+    }
+  },
   getActive() {
     const id = localStorage.getItem('samara_active_child');
     return this.getProfiles().find(p=>p.id===id) || null;
