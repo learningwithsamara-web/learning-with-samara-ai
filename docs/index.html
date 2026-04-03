@@ -4795,6 +4795,26 @@ const SamaraCoins = {
   init() { this._updateDisplay(); }
 };
 window.SamaraCoins = SamaraCoins;
+
+function showReadBtn(onTap) {
+  let rb = document.getElementById('global-read-btn');
+  if(!rb) {
+    rb = document.createElement('button');
+    rb.id = 'global-read-btn';
+    rb.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:9999;background:linear-gradient(135deg,#FFD93D,#FF9B3F);border:none;border-radius:50px;padding:12px 28px;font-family:Fredoka One,cursive;font-size:1.1rem;color:#fff;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);animation:pulse-read 1s infinite;';
+    rb.innerHTML = '&#128266; Tap to Hear';
+    document.body.appendChild(rb);
+    const style = document.createElement('style');
+    style.textContent = '@keyframes pulse-read{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.08);}}';
+    document.body.appendChild(style);
+  }
+  rb.onclick = () => { rb.style.display='none'; onTap(); };
+  rb.style.display = 'block';
+}
+function hideReadBtn() {
+  const rb = document.getElementById('global-read-btn');
+  if(rb) rb.style.display = 'none';
+}
   
 // ── FAMILY MODE ───────────────────────────────────────────────
 const FamilyMode = {
