@@ -5030,6 +5030,37 @@ _confirmEdit(id) {
     this.render();
     App.toast(name + ' added!'); 
   },
+
+  showQuickSwitch() {
+    const profiles = this.getProfiles();
+    if(profiles.length === 0) { App.showScreen('screen-family'); return; }
+    const activeId = localStorage.getItem('samara_active_child');
+    const existing = document.getElementById('quick-switch-popup');
+    if(existing) { existing.remove(); return; }
+    const div = document.createElement('div');
+    div.id = 'quick-switch-popup';
+    div.style.cssText = 'position:fixed;top:60px;left:16px;background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:18px;padding:14px;z-index:99999;border:2px solid rgba(199,125,255,0.4);min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,0.4);';
+    div.innerHTML = `
+      <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.8rem;margin-bottom:10px;">Who is learning?</div>
+      ${profiles.map(p=>`
+        <div onclick="FamilyMode.setActive('${p.id}');document.getElementById('quick-switch-popup')?.remove();"
+          style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;cursor:pointer;margin-bottom:6px;background:${p.id===activeId?'rgba(255,217,61,0.2)':'rgba(255,255,255,0.06)'};border:1.5px solid ${p.id===activeId?'rgba(255,217,61,0.5)':'transparent'};">
+          <div style="font-size:1.4rem;">${p.avatar}</div>
+          <div>
+            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.9rem;">${p.name}</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;">Age ${p.age}</div>
+          </div>
+          ${p.id===activeId?'<div style="margin-left:auto;color:#FFD93D;font-size:0.75rem;">Active</div>':''}
+        </div>`).join('')}
+      <div onclick="App.showScreen('screen-family');document.getElementById('quick-switch-popup')?.remove();"
+        style="text-align:center;color:rgba(255,255,255,0.5);font-size:0.78rem;margin-top:8px;cursor:pointer;padding-top:8px;border-top:1px solid rgba(255,255,255,0.1);">
+        Manage Family ⚙️
+      </div>`;
+    document.body.appendChild(div);
+    setTimeout(()=>document.addEventListener('click', function h(e){
+      if(!div.contains(e.target)){div.remove();document.removeEventListener('click',h);}
+    }), 100);
+  },
   
   init() {
     if(S.user) {
