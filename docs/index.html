@@ -3945,16 +3945,22 @@ const App = {
     if(fb)fb.className='quiz-feedback hidden';
 
 if(SoundSystem.enabled){
-const isESL = S.subject && S.subject.startsWith('esl');
-const rate = isESL ? 0.68 : 0.80;
-const pitch = isESL ? 1.4 : 1.3;
-SoundSystem.stop();
-setTimeout(()=>{
-SoundSystem.speak(q.text, rate, pitch);
-const qLen = q.text.length;
-const optDelay = qLen < 60 ? 6000 : qLen < 120 ? 9000 : 13000;
-setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 ' + q.answers[1].label + ' Option 3 ' + q.answers[2].label + ' Option 4 ' + q.answers[3].label, rate, pitch), optDelay);
-}, 600);
+  const isESL = S.subject && S.subject.startsWith('esl');
+  const rate = isESL ? 0.68 : 0.80;
+  const pitch = isESL ? 1.4 : 1.3;
+  SoundSystem.stop();
+  const doSpeak = () => {
+    hideReadBtn();
+    SoundSystem.speak(q.text, rate, pitch);
+    const qLen = q.text.length;
+    const optDelay = qLen < 60 ? 6000 : qLen < 120 ? 9000 : 13000;
+    setTimeout(()=>SoundSystem.speak('Option 1 ' + q.answers[0].label + ' Option 2 ' + q.answers[1].label + ' Option 3 ' + q.answers[2].label + ' Option 4 ' + q.answers[3].label, rate, pitch), optDelay);
+  };
+  if(SoundSystem._usingBrowserFallback) {
+    setTimeout(doSpeak, 600);
+  } else {
+    showReadBtn(doSpeak);
+  }
 }
   },
 
