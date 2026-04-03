@@ -3675,6 +3675,8 @@ function makeA(correct,wrongs){const all=[{label:correct,isCorrect:true},...wron
 function el(id){return document.getElementById(id);}
 function setText(id,val){const e=el(id);if(e)e.textContent=val;}
 
+const SUPABASE_URL='https://bfivpvlzehtmksnmgnzb.supabase.co';
+const SUPABASE_ANON='sb_publishable_tYtU2TTBwE3UA_F5Y0rCBw_s493nn-H';  
 const S = {user:null,score:0,progress:[],ageGroup:'7-10',subject:null,worldIndex:null,stageIndex:null,questions:[],qIndex:0,correct:0,answered:false,currentWorld:null};
 
 // ── APP CONTROLLER ──────────────────────────────────────────
