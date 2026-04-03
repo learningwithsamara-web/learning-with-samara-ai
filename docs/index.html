@@ -8934,8 +8934,12 @@ b.textContent=a;
 b.onclick=()=>this.check(a,q.a,b);
 g.appendChild(b);
 });
-SoundSystem.speakQuestion(q.q);
 setTimeout(()=>{document.getElementById('sl-q-overlay').style.display='flex';},300);
+if(SoundSystem._usingBrowserFallback) {
+  SoundSystem.speakQuestion(q.q);
+} else {
+  showReadBtn(()=>SoundSystem.speakQuestion(q.q));
+}
 },
 check(sel,correct,btn){
 document.querySelectorAll('#sl-qg button').forEach(b=>b.onclick=null);
