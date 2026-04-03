@@ -4732,6 +4732,9 @@ const SamaraCoins = {
   canAfford(amount) { return this.get() >= amount; },
   _updateDisplay() {
     const n = this.get();
+    const activeChild = typeof FamilyMode !== 'undefined' ? FamilyMode.getActive() : null;
+    const nameEl = document.getElementById('active-child-name');
+    if(nameEl) nameEl.textContent = activeChild ? activeChild.avatar + ' ' + activeChild.name : '';
     ['coins-count','shop-coins-count'].forEach(id => {
       const el = document.getElementById(id);
       if(el) el.textContent = n;
