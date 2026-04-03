@@ -3991,6 +3991,8 @@ if(SoundSystem.enabled){
   answer(ans, q, btn) {
     if(S.answered) return;
     S.answered = true;
+    SoundSystem.stop();
+    hideReadBtn();
     document.querySelectorAll('.answer-btn').forEach(b => {
       b.disabled = true;
       b.onclick = null;
