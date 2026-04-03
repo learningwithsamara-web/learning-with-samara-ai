@@ -4757,16 +4757,21 @@ const SamaraCoins = {
     this.add(total, `Stage complete${bonus > 0 ? ' (bonus!)' : ''}`);
     return total;
   },
-  _syncToSupabase(amount) {
+ _syncToSupabase(amount) {
     const child = typeof FamilyMode !== 'undefined' ? FamilyMode.getActive() : null;
     if(!child || !child.supabase_id) return;
+    const t=JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
+    const token=t.access_token||SUPABASE_ANON;
     fetch(`${SUPABASE_URL}/rest/v1/child_profiles?id=eq.${child.supabase_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_ANON,
-        'Authorization': `Bearer ${SUPABASE_ANON}`
+        'Authorization': `Bearer ${token}`
       },
+      body: JSON.stringify({ coins: amount })
+    }).catch(e => console.warn('Coins sync failed:', e));
+  },
       body: JSON.stringify({ coins: amount })
     }).catch(e => console.warn('Coins sync failed:', e));
   },
