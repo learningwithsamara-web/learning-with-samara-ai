@@ -4772,9 +4772,6 @@ const SamaraCoins = {
       body: JSON.stringify({ coins: amount })
     }).catch(e => console.warn('Coins sync failed:', e));
   },
-      body: JSON.stringify({ coins: amount })
-    }).catch(e => console.warn('Coins sync failed:', e));
-  },
   async loadFromSupabase(childSupabaseId) {
     if(!childSupabaseId) return;
     try {
