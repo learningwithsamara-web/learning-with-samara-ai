@@ -569,7 +569,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <button id="btn-studyplan" class="btn btn-primary hidden" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);" onclick="PersonalAlgo.openPlan()">🧠 My Plan</button>
     <button class="btn btn-gold" onclick="App.showScreen('screen-pricing')">⭐ Go Pro</button>
     <button id="btn-logout" class="btn btn-danger hidden" onclick="App.logout()">Log Out</button>
-    <div class="coin-display" id="coins-display" style="display:none;"><span class="coin-icon">🪙</span><span id="coins-count">0</span></div>
+    <div class="coin-display" id="coins-display" style="display:none;cursor:pointer;" onclick="FamilyMode.showQuickSwitch()"><span id="active-child-name" style="font-size:0.8rem;margin-right:4px;font-family:'Fredoka One',cursive;"></span><span class="coin-icon">🪙</span><span id="coins-count">0</span></div>
   </div>
 </header>
 <div class="hero">
