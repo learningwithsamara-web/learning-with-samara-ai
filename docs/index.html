@@ -3741,6 +3741,7 @@ const App = {
     el('btn-homework')?.classList.toggle('hidden',!in_);
     const cd=el('coins-display');if(cd)cd.style.display=in_?'inline-flex':'none';
     SamaraCoins._updateDisplay();
+    if(in_) FamilyMode.init();
   },
 
   selectAge(g, toast=true) {
