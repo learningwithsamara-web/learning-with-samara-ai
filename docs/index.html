@@ -4786,45 +4786,6 @@ const TraceMatch = {
   }
 };
 window.TraceMatch = TraceMatch;
-const SamaraCoins = {
-  _key: 'samara_coins',
-  _histKey: 'samara_coins_hist',
-
-  get() { return parseInt(localStorage.getItem(this._key)||'0'); },
-  set(n) { localStorage.setItem(this._key, Math.max(0,n).toString()); this._updateDisplay(); },
-  add(amount, reason) {
-    const prev = this.get();
-    this.set(prev + amount);
-    this._showEarnAnimation(amount, reason);
-    const hist = JSON.parse(localStorage.getItem(this._histKey)||'[]');
-    hist.unshift({amount, reason, date: new Date().toISOString().slice(0,10)});
-    localStorage.setItem(this._histKey, JSON.stringify(hist.slice(0,50)));
-  },
-  spend(amount) {
-    if(this.get() < amount) return false;
-    this.set(this.get() - amount);
-    return true;
-  },
-  canAfford(amount) { return this.get() >= amount; },
-
-  _updateDisplay() {
-    const n = this.get();
-    ['coins-count','shop-coins-count'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.textContent = n;
-    });
-    const disp = document.getElementById('coins-display');
-    if(disp) disp.style.display = S.user ? 'inline-flex' : 'none';
-  },
-
-  _showEarnAnimation(amount, reason) {
-    const div = document.createElement('div');
-    div.className = 'coin-earn';
-    div.textContent = `+${amount} 🪙`;
-    div.style.cssText = `top:${80 + Math.random()*40}px;right:${20 + Math.random()*100}px;`;
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 1600);
-  },
 
   // Award coins for completing a stage
   awardStage(accuracy) {
