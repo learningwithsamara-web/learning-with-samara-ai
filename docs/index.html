@@ -3979,7 +3979,7 @@ if(SoundSystem.enabled){
       <div style="background:rgba(107,203,119,0.25);border-radius:10px;padding:10px 14px;border:1.5px solid rgba(107,203,119,0.5);">
         <div style="font-size:0.8rem;opacity:0.85;margin-bottom:4px;">✅ Correct answer:</div>
         <div style="font-weight:800;font-size:1.1rem;">${this._lastCorrectLabel}</div>
-        ${this._lastHint ? `<div style="font-size:0.8rem;margin-top:6px;opacity:0.9;">💡 ${this._lastHint}</div>` : ''}
+        ${this._lastHint ? '<div style="font-size:0.8rem;margin-top:6px;opacity:0.9;">💡 ' + this._lastHint + '</div>' : ''}
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap;">
         <button onclick="SoundSystem.stop();setTimeout(()=>SoundSystem.speak('The correct answer is ${this._lastCorrectLabel.replace(/'/g,"'")}. ${(this._lastHint||'').replace(/'/g,"'")}',0.82,1.3),150)" style="background:rgba(255,255,255,0.15);color:#fff;font-family:'Fredoka One',cursive;font-size:0.82rem;padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.25);cursor:pointer;">🔊 Hear again</button>
