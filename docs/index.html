@@ -3706,6 +3706,7 @@ const App = {
     const sc=el(id);if(!sc)return;
     sc.classList.add('active');window.scrollTo(0,0);
     SoundSystem.stop(); // stop any speaking when changing screens
+    hideReadBtn();
     if(id==='screen-auth'&&param)App.switchTab(param);
     if(id==='screen-dashboard')App.renderDash();
     if(id==='screen-parent'){App.renderParent();FamilyProfiles.render().catch(e=>console.error('Family profiles error:',e));}
