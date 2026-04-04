@@ -7035,6 +7035,7 @@ const BabyMode = {
       this.questionCount++;
       setText('baby-score',this.score);
       SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
       setTimeout(()=>SoundSystem.speakBaby('Yes! ' + item.name + '! Amazing!'), 200);
       this.celebrate(item);
       setTimeout(()=>this.nextQuestion(), 3800);
