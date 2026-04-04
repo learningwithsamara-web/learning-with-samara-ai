@@ -6913,6 +6913,8 @@ const BabyMode = {
 
   nextQuestion(){
     if(this.questionCount >= this.STAGE_LENGTH){ this.stageComplete(); return; }
+    const grid=el('baby-items-grid'); if(grid) grid.innerHTML='';
+    setText('baby-question','');
     const items=this.content[this.category];
     if(this.usedItems.size >= items.length) this.usedItems=new Set();
     const unused=items.filter(i=>!this.usedItems.has(i.name));
