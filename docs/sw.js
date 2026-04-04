@@ -47,7 +47,12 @@ self.addEventListener('activate', event => {
             return caches.delete(key);
           })
       )
-    ).then(() => self.clients.claim())
+    ).then(() => {
+      self.clients.claim();
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => client.postMessage({type:'SW_UPDATED'}));
+      });
+    })
   );
 });
 
