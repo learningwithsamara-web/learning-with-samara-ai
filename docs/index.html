@@ -4015,6 +4015,7 @@ if(SoundSystem.enabled){
       S.score += 10;
       AITutor.trackCorrect();
       SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
       PersonalAlgo.trackAnswer(S.subject, true);
       const msg = AITutor.tutorMsg('correct', '');
       const fb = el('quiz-feedback');
@@ -4091,6 +4092,7 @@ if(SoundSystem.enabled){
     // Award Samara Coins
     const coinsEarned = SamaraCoins.awardStage(acc);
     if(acc>=0.8){SoundSystem.playTone('celebrate');SoundSystem.speakPraise('Stage complete! Incredible work!');}
+    CoinShop.triggerEffect('complete');
 
     // Save progress — update locally immediately so UI reflects it right away
     const progressEntry = {
