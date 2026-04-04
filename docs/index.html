@@ -5205,8 +5205,8 @@ const CoinShop = {
     if(!effect) return;
     if(when==='correct' && effect==='effect-stars') this._doStars();
     if(when==='correct' && effect==='effect-confetti') this._doConfetti();
-    if(when==='complete' && effect==='effect-fireworks') this._doFireworks();
-    if(when==='complete' && effect==='effect-rainbow') this._doRainbow();
+    if(when==='stage' && effect==='effect-rainbow') this._doRainbow();
+    if(when==='world' && effect==='effect-fireworks') this._doFireworks();
   },
   _doStars() {
     for(let i=0;i<8;i++){
