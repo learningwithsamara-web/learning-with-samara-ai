@@ -5185,14 +5185,15 @@ const CoinShop = {
     this.applyEquipped();
   },
   buy(id, price, category) {
+    if(category === 'avatars') { App.toast('👑 Avatar costumes coming soon! Stay tuned! 🎉'); return; }
     if(this.own(id)) { this.equip(id, category); this.render(); return; }
-    if(!SamaraCoins.canAfford(price)) { App.toast(`Need ${price} coins! Keep learning to earn more! 🪙`); return; }
+    if(!SamaraCoins.canAfford(price)) { App.toast('Need ' + price + ' coins! Keep learning to earn more! 🪙'); return; }
     SamaraCoins.spend(price);
     const owned = this.getOwned();
     owned.push(id);
     localStorage.setItem('samara_owned_items', JSON.stringify(owned));
     this.equip(id, category);
-    App.toast(`Purchased! 🎉`);
+    App.toast('Purchased! 🎉');
     this.render();
   },
   applyEquipped() {
