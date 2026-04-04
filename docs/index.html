@@ -3953,8 +3953,9 @@ if(SoundSystem.enabled){
     hideReadBtn();
     const qLen = q.text.length;
     const optDelay = qLen < 40 ? 4500 : qLen < 80 ? 7000 : qLen < 120 ? 10000 : 14000;
-    const optText = 'Option 1 ' + q.answers[0].label + ' Option 2 ' + q.answers[1].label + ' Option 3 ' + q.answers[2].label + ' Option 4 ' + q.answers[3].label;
-    SoundSystem.speak(q.text, rate, pitch);
+    const cleanText = q.text.replace(/___/g, 'blank').replace(/_/g, 'blank');
+    const optText = 'Option 1. ' + q.answers[0].label + '. Option 2. ' + q.answers[1].label + '. Option 3. ' + q.answers[2].label + '. Option 4. ' + q.answers[3].label;
+    SoundSystem.speak(cleanText, rate, pitch);
     setTimeout(()=>{
       if(!S.answered) SoundSystem.speak(optText, rate, pitch);
     }, optDelay);
