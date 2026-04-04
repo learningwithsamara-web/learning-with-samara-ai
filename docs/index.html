@@ -3926,7 +3926,8 @@ const App = {
       // Attach event directly — avoids all escaping problems
       document.getElementById('repeat-btn').addEventListener('click', () => {
         SoundSystem.stop();
-        setTimeout(() => SoundSystem.speakQuestion(q.text), 150);
+        const cleanRepeat = q.text.replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s*-\s*/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*x\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
+        setTimeout(() => SoundSystem.speakQuestion(cleanRepeat), 150);
       });
     }
 
