@@ -4092,7 +4092,7 @@ if(SoundSystem.enabled){
     // Award Samara Coins
     const coinsEarned = SamaraCoins.awardStage(acc);
     if(acc>=0.8){SoundSystem.playTone('celebrate');SoundSystem.speakPraise('Stage complete! Incredible work!');}
-    CoinShop.triggerEffect('complete');
+    CoinShop.triggerEffect('stage');
 
     // Save progress — update locally immediately so UI reflects it right away
     const progressEntry = {
@@ -4127,6 +4127,7 @@ if(SoundSystem.enabled){
     if(lastStage&&lastWorld){if(nb){nb.textContent='🏆 Subject Complete!';nb._action='done';}}
     else if(lastStage){if(nb){nb.textContent='Next World 🗺️';nb._action='next-world';}}
     else{if(nb){nb.textContent='Next Stage 🚀';nb._action='next-stage';}}
+    if(lastStage&&lastWorld) CoinShop.triggerEffect('world');
     App.showScreen('screen-result');
   },
 
@@ -7050,7 +7051,7 @@ const BabyMode = {
   stageComplete(){
     SoundSystem.stop();
     SoundSystem.playTone('celebrate');
-    CoinShop.triggerEffect('complete');
+    CoinShop.triggerEffect('stage');
     setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 400);
     const cat=this.category;
     const categories = ['animals','colors','shapes','numbers'];
