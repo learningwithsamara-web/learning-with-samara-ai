@@ -5194,9 +5194,80 @@ const CoinShop = {
   },
   applyEquipped() {
     const equipped = this.getEquipped();
-    // Apply theme
     document.body.className = document.body.className.replace(/theme-\w+/g,'').trim();
     if(equipped.themes) document.body.classList.add(equipped.themes);
+  },
+  triggerEffect(when) {
+    const equipped = this.getEquipped();
+    const effect = equipped.effects;
+    if(!effect) return;
+    if(when==='correct' && effect==='effect-stars') this._doStars();
+    if(when==='correct' && effect==='effect-confetti') this._doConfetti();
+    if(when==='complete' && effect==='effect-fireworks') this._doFireworks();
+    if(when==='complete' && effect==='effect-rainbow') this._doRainbow();
+  },
+  _doStars() {
+    for(let i=0;i<8;i++){
+      const s=document.createElement('div');
+      s.textContent='⭐';
+      s.style.cssText='position:fixed;font-size:1.5rem;pointer-events:none;z-index:99999;top:'+(20+Math.random()*60)+'%;left:-5%;animation:flystar 1.2s linear forwards;animation-delay:'+(i*0.1)+'s;';
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(),2000);
+    }
+    if(!document.getElementById('star-style')){
+      const st=document.createElement('style');
+      st.id='star-style';
+      st.textContent='@keyframes flystar{from{transform:translateX(0) rotate(0deg);opacity:1;}to{transform:translateX(110vw) rotate(360deg);opacity:0;}}';
+      document.head.appendChild(st);
+    }
+  },
+  _doConfetti() {
+    const colours=['#FFD93D','#FF6B6B','#6BCB77','#7EC8E3','#C77DFF'];
+    for(let i=0;i<30;i++){
+      const c=document.createElement('div');
+      c.style.cssText='position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:99999;left:'+(Math.random()*100)+'vw;top:-10px;animation:conffall '+(0.8+Math.random()*1.2)+'s linear '+(Math.random()*0.5)+'s forwards;';
+      c.style.background=colours[Math.floor(Math.random()*colours.length)];
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),2500);
+    }
+    if(!document.getElementById('conf-style')){
+      const st=document.createElement('style');
+      st.id='conf-style';
+      st.textContent='@keyframes conffall{from{transform:translateY(0) rotate(0deg);opacity:1;}to{transform:translateY(105vh) rotate(720deg);opacity:0;}}';
+      document.head.appendChild(st);
+    }
+  },
+  _doFireworks() {
+    const colours=['#FFD93D','#FF6B6B','#6BCB77','#C77DFF','#FF9B3F'];
+    for(let i=0;i<25;i++){
+      const p=document.createElement('div');
+      const angle=Math.random()*360;
+      const dist=50+Math.random()*100;
+      p.style.cssText='position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:99999;left:'+(20+Math.random()*60)+'vw;top:'+(20+Math.random()*40)+'vh;animation:fwburst 0.8s ease-out '+(Math.random()*0.3)+'s forwards;';
+      p.style.background=colours[Math.floor(Math.random()*colours.length)];
+      p.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+      p.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),1500);
+    }
+    if(!document.getElementById('fw-style')){
+      const st=document.createElement('style');
+      st.id='fw-style';
+      st.textContent='@keyframes fwburst{from{transform:translate(0,0);opacity:1;}to{transform:translate(var(--dx),var(--dy));opacity:0;}}';
+      document.head.appendChild(st);
+    }
+  },
+  _doRainbow() {
+    const div=document.createElement('div');
+    div.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:99998;animation:rainbowflash 0.8s ease-out forwards;background:linear-gradient(135deg,#FF6B6B,#FFD93D,#6BCB77,#4A90D9,#C77DFF);';
+    document.body.appendChild(div);
+    if(!document.getElementById('rb-style')){
+      const st=document.createElement('style');
+      st.id='rb-style';
+      st.textContent='@keyframes rainbowflash{0%{opacity:0.6;}100%{opacity:0;}}';
+      document.head.appendChild(st);
+    }
+    setTimeout(()=>div.remove(),1000);
   },
   showTab(tab) {
     this.currentTab = tab;
