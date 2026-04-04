@@ -6939,7 +6939,6 @@ const BabyMode = {
       setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 400);
     }
 
-    const grid=el('baby-items-grid'); grid.innerHTML='';
     all.forEach(item=>{
       const btn=document.createElement('button');
       btn.className='baby-item-btn';
