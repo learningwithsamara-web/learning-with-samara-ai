@@ -6903,12 +6903,17 @@ const BabyMode = {
   start(cat){
     this.category=cat; this.score=0; this.usedItems=new Set(); this.questionCount=0;
     setText('baby-score','0');
+    const grid=el('baby-items-grid'); if(grid) grid.innerHTML='';
+    setText('baby-question','');
     el('baby-categories').classList.add('hidden');
     el('baby-activity').classList.remove('hidden');
     const labels={animals:'Animals 🐾',colors:'Colors 🎨',shapes:'Shapes 🔷',numbers:'Numbers 🔢'};
     setText('baby-screen-title',labels[cat]);
-    SoundSystem.speakBaby(`Let us learn ${cat}! Tap the right one!`);
-    setTimeout(()=>this.nextQuestion(), 1000);
+    SoundSystem.stop();
+    setTimeout(()=>{
+      SoundSystem.speakBaby('Let us learn ' + cat + '! Tap the right one!');
+      setTimeout(()=>this.nextQuestion(), 1800);
+    }, 300);
   },
 
   nextQuestion(){
