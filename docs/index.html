@@ -4127,7 +4127,7 @@ if(SoundSystem.enabled){
     if(lastStage&&lastWorld){if(nb){nb.textContent='🏆 Subject Complete!';nb._action='done';}}
     else if(lastStage){if(nb){nb.textContent='Next World 🗺️';nb._action='next-world';}}
     else{if(nb){nb.textContent='Next Stage 🚀';nb._action='next-stage';}}
-    if(lastStage&&lastWorld) CoinShop.triggerEffect('world');
+    if(lastStage) CoinShop.triggerEffect('world');
     App.showScreen('screen-result');
   },
 
