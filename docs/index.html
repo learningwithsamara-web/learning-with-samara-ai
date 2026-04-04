@@ -4807,7 +4807,6 @@ const SamaraCoins = {
 window.SamaraCoins = SamaraCoins;
 
 function showReadBtn(onTap) {
-  function showReadBtn(onTap) {
   let rb = document.getElementById('global-read-btn');
   if(!rb) {
     rb = document.createElement('button');
@@ -4821,10 +4820,6 @@ function showReadBtn(onTap) {
   }
   rb.onclick = () => { rb.style.display='none'; onTap(); };
   rb.style.display = 'block';
-}
-function hideReadBtn() {
-  const rb = document.getElementById('global-read-btn');
-  if(rb) rb.style.display = 'none';
 }
   
 // ── FAMILY MODE ───────────────────────────────────────────────
