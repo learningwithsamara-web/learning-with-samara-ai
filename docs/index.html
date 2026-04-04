@@ -6917,8 +6917,8 @@ const BabyMode = {
     setText('baby-screen-title',labels[cat]);
     SoundSystem.stop();
     setTimeout(()=>{
-      SoundSystem.speakBaby('Let us learn ' + cat + '! Tap the right one!');
-      setTimeout(()=>this.nextQuestion(), 1800);
+      SoundSystem.speakBaby('Let us learn ' + cat + '!');
+      setTimeout(()=>this.nextQuestion(), 2500);
     }, 300);
   },
 
@@ -6963,7 +6963,7 @@ const BabyMode = {
       SoundSystem.playTone('correct');
       setTimeout(()=>SoundSystem.speakBaby('Yes! ' + item.name + '! Amazing!'), 200);
       this.celebrate(item);
-      setTimeout(()=>this.nextQuestion(), 2200);
+      setTimeout(()=>this.nextQuestion(), 3000);
     } else {
       btn.classList.add('wrong-baby');
       SoundSystem.playTone('wrong');
