@@ -6963,13 +6963,7 @@ const BabyMode = {
       this.questionCount++;
       setText('baby-score',this.score);
       SoundSystem.playTone('correct');
-      // Play animal sound on correct for 0-3 — sound first, voice after
-      if(S.ageGroup==='0-3' && this.category==='animals') {
-        setTimeout(()=>this.playAnimalSound(item.name), 200);
-        setTimeout(()=>SoundSystem.speakBaby(`${item.name}! Well done!`), 1100);
-      } else {
-        setTimeout(()=>SoundSystem.speakBaby(`Yes! ${item.name}! Amazing!`), 200);
-      }
+      setTimeout(()=>SoundSystem.speakBaby(`Yes! ${item.name}! Amazing!`), 200);
       this.celebrate(item);
       setTimeout(()=>this.nextQuestion(), 2200);
     } else {
