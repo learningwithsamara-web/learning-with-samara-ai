@@ -4821,6 +4821,10 @@ function showReadBtn(onTap) {
   rb.onclick = () => { rb.style.display='none'; onTap(); };
   rb.style.display = 'block';
 }
+function hideReadBtn() {
+  const rb = document.getElementById('global-read-btn');
+  if(rb) rb.style.display = 'none';
+}
   
 // ── FAMILY MODE ───────────────────────────────────────────────
 const FamilyMode = {
