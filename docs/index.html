@@ -7055,7 +7055,7 @@ const BabyMode = {
     SoundSystem.stop();
     SoundSystem.playTone('celebrate');
     CoinShop.triggerEffect('stage');
-    setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 400);
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 1500);
     const cat=this.category;
     const categories = ['animals','colors','shapes','numbers'];
     const nextCat = categories[(categories.indexOf(cat)+1) % categories.length];
