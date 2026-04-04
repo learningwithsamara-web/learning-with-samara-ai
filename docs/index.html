@@ -6944,7 +6944,12 @@ const BabyMode = {
   setText('baby-question', bq);
     // For 0-3 animals: play animal sound FIRST, then voice speaks after sound finishes
     if(S.ageGroup === '0-3' && this.category === 'animals') {
-    setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 400); 
+      setTimeout(() => this.playAnimalSound(correct.name), 300);
+      setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 1200);
+    } else {
+      setTimeout(() => SoundSystem.speakBaby(`Tap the ${correct.name}!`), 400);
+    }
+
     all.forEach(item=>{
       const btn=document.createElement('button');
       btn.className='baby-item-btn';
@@ -6962,7 +6967,13 @@ const BabyMode = {
       this.questionCount++;
       setText('baby-score',this.score);
       SoundSystem.playTone('correct');
-      setTimeout(()=>SoundSystem.speakBaby(`Yes! ${item.name}! Amazing!`), 200);
+      // Play animal sound on correct for 0-3 — sound first, voice after
+      if(S.ageGroup==='0-3' && this.category==='animals') {
+        setTimeout(()=>this.playAnimalSound(item.name), 200);
+        setTimeout(()=>SoundSystem.speakBaby(`${item.name}! Well done!`), 1100);
+      } else {
+        setTimeout(()=>SoundSystem.speakBaby(`Yes! ${item.name}! Amazing!`), 200);
+      }
       this.celebrate(item);
       setTimeout(()=>this.nextQuestion(), 2200);
     } else {
