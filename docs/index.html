@@ -7050,6 +7050,7 @@ const BabyMode = {
   stageComplete(){
     SoundSystem.stop();
     SoundSystem.playTone('celebrate');
+    CoinShop.triggerEffect('complete');
     setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 400);
     const cat=this.category;
     const categories = ['animals','colors','shapes','numbers'];
