@@ -7320,6 +7320,61 @@ const BabyMode = {
     document.body.appendChild(div);
   },
   startPuzzles() { App.requireSignup('Simple Puzzles', '🧩', 'Coming soon! Upgrade to Pro to unlock Simple Puzzles!'); },
+  WEATHER: [
+    {name:'Sunny',emoji:'☀️',sound:'It is sunny! Wear sunscreen and play outside!'},
+    {name:'Rainy',emoji:'🌧️',sound:'It is raining! Grab your umbrella!'},
+    {name:'Snowy',emoji:'❄️',sound:'It is snowing! Wear your coat and boots!'},
+    {name:'Windy',emoji:'🌬️',sound:'It is windy! Hold on to your hat!'},
+    {name:'Cloudy',emoji:'⛅',sound:'It is cloudy! The sun is hiding!'},
+    {name:'Stormy',emoji:'⛈️',sound:'There is a storm! Stay inside and be safe!'},
+    {name:'Rainbow',emoji:'🌈',sound:'There is a rainbow! It rained and now the sun is back!'},
+    {name:'Hot',emoji:'🌡️',sound:'It is very hot! Drink lots of water!'},
+  ],
+  _weatherScore: 0,
+  _weatherIndex: 0,
+  _weatherCurrent: null,
+
+  _nextWeather() {
+    if(this._weatherIndex >= this.WEATHER.length) { this._weatherComplete(); return; }
+    const w = this.WEATHER[this._weatherIndex];
+    this._weatherCurrent = w;
+    document.getElementById('weather-face').textContent = w.emoji;
+    document.getElementById('weather-feedback').textContent = '';
+    const wrong = this.WEATHER.filter(x=>x.name!==w.name).sort(()=>Math.random()-0.5).slice(0,3);
+    const all = [w,...wrong].sort(()=>Math.random()-0.5);
+    document.getElementById('weather-answers').innerHTML = all.map(a=>'<button onclick="BabyMode._answerWeather(\''+a.name+'\')" style="background:rgba(255,255,255,0.97);border-radius:16px;padding:14px;font-family:\'Fredoka One\',cursive;font-size:1rem;color:#1A1A2E;cursor:pointer;border:4px solid transparent;transition:transform 0.15s;box-shadow:0 5px 16px rgba(0,0,0,0.1);" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">'+a.emoji+' '+a.name+'</button>').join('');
+    setTimeout(()=>SoundSystem.speakBaby('What is the weather like?'), 400);
+  },
+
+  _answerWeather(name) {
+    const w = this._weatherCurrent;
+    const fb = document.getElementById('weather-feedback');
+    document.getElementById('weather-answers').querySelectorAll('button').forEach(b=>b.disabled=true);
+    if(name === w.name) {
+      this._weatherScore += 10;
+      document.getElementById('weather-score').textContent = 'Score: ' + this._weatherScore + ' ⭐';
+      fb.textContent = '🎉 Yes! ' + w.sound;
+      SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
+      setTimeout(()=>SoundSystem.speakBaby(w.sound), 300);
+      this._weatherIndex++;
+      setTimeout(()=>this._nextWeather(), 4000);
+    } else {
+      fb.textContent = 'Try again!';
+      SoundSystem.playTone('wrong');
+      setTimeout(()=>SoundSystem.speakBaby('Try again! What is the weather like?'), 200);
+      setTimeout(()=>{ document.getElementById('weather-answers').querySelectorAll('button').forEach(b=>b.disabled=false); fb.textContent=''; }, 1500);
+    }
+  },
+
+  _weatherComplete() {
+    SoundSystem.playTone('celebrate');
+    CoinShop.triggerEffect('stage');
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You know all the weather! You are a weather expert!'), 1500);
+    const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
+    div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">🌈</span><div class="baby-celebrate-text">Weather Expert! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._weatherScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startWeather()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
+    document.body.appendChild(div);
+  },
   startWeather() {
     if(!Plan.isPro()) { App.requireSignup('Weather & Seasons', '🌦️', 'Upgrade to Pro to unlock Weather & Seasons and more!'); return; }
     this._weatherScore = 0;
