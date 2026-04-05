@@ -7289,6 +7289,10 @@ const BabyMode = {
     div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">📖</span><div class="baby-celebrate-text">Super Reader! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._ssScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startSimpleSentences()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
     document.body.appendChild(div);
   },
+  startPuzzles() { App.requireSignup('Simple Puzzles', '🧩', 'Coming soon! Upgrade to Pro to unlock Simple Puzzles!'); },
+  startWeather() { App.requireSignup('Weather & Seasons', '🌦️', 'Coming soon! Upgrade to Pro to unlock Weather & Seasons!'); },
+  startEmotions() { App.requireSignup('Emotions', '😊', 'Coming soon! Upgrade to Pro to unlock Emotions!'); },
+
   showDiscoveryZone() {
     const div = document.createElement('div');
     div.id = 'discovery-zone-popup';
