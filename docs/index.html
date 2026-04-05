@@ -9659,7 +9659,7 @@ const self=this;
 this.timerInt=setInterval(function(){self.elapsed++;const el=document.getElementById('wp-timer');if(el)el.textContent=self.elapsed+'s';},1000);
 },
 async generateAI(){
-this.useFallback();return;
+if(!Plan.isPro()){this.useFallback();return;}
 const ld=document.getElementById('wp-loading');if(ld)ld.style.display='flex';
 try{
 const ageDesc={'4-6':'ages 4-6 simple 3-4 letter words','7-10':'ages 7-10 simple 4-5 letter words','11-14':'ages 11-14 medium 5-6 letter words','15-17':'ages 15-17 advanced 6-8 letter words'}[this.age];
