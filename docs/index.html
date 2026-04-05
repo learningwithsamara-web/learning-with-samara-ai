@@ -4931,7 +4931,7 @@ const FamilyMode = {
     const plan = localStorage.getItem('samara_plan') || 'monthly';
     if(plan === 'family') return 4;        // $7.99 family plan
     if(Plan.isPro()) return 2;             // $4.99 monthly/annual pro
-    return 0;                              // free — no family mode
+    return 1;                              // free — 1 child for Birthday Shoutout
   },
   AVATARS: ['🦁','🐰','🦊','🐼','🐨','🦋','🐸','⭐','🦄','🐶'],
   COLORS: ['#FF6B6B','#FFD93D','#6BCB77','#7EC8E3','#C77DFF','#FF9B3F','#FF0080','#4A90D9'],
