@@ -7218,6 +7218,79 @@ const BabyMode = {
     div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">🎨</span><div class="baby-celebrate-text">Colour Expert! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._mixScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startColourMix()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
     document.body.appendChild(div);
   },
+  SENTENCES: [
+    {sentence:'The cat is orange',emoji:'🐈',sound:'The cat is orange!',wrong:['🐕','🐸','🍎']},
+    {sentence:'The dog is big',emoji:'🐕',sound:'The dog is big!',wrong:['🐈','🐘','🐭']},
+    {sentence:'The sun is yellow',emoji:'☀️',sound:'The sun is yellow!',wrong:['🌙','🌧️','⭐']},
+    {sentence:'The apple is red',emoji:'🍎',sound:'The apple is red!',wrong:['🍌','🍇','🍊']},
+    {sentence:'The frog is green',emoji:'🐸',sound:'The frog is green!',wrong:['🐈','🐕','🐠']},
+    {sentence:'The blueberry is blue',emoji:'🫐',sound:'The blueberry is blue!',wrong:['🍎','🍌','🍊']},
+    {sentence:'The banana is yellow',emoji:'🍌',sound:'The banana is yellow!',wrong:['🍎','🍇','🐸']},
+    {sentence:'The elephant is grey',emoji:'🐘',sound:'The elephant is grey!',wrong:['🦁','🐕','🐈']},
+  ],
+  _ssScore: 0,
+  _ssIndex: 0,
+  _ssCurrent: null,
+
+  startSimpleSentences() {
+    if(!Plan.isPro()) {
+      App.requireSignup('Simple Sentences', '📖', 'Upgrade to Pro to unlock Simple Sentences and more fun Baby World activities!');
+      return;
+    }
+    this._ssScore = 0;
+    this._ssIndex = 0;
+    App.showScreen('screen-simple-sentences');
+    setTimeout(()=>{
+      SoundSystem.speakBaby('Let us read some sentences!');
+      setTimeout(()=>this._nextSentence(), 1800);
+    }, 300);
+  },
+
+  _nextSentence() {
+    if(this._ssIndex >= this.SENTENCES.length) {
+      this._ssComplete();
+      return;
+    }
+    const s = this.SENTENCES[this._ssIndex];
+    this._ssCurrent = s;
+    document.getElementById('ss-sentence').textContent = s.sentence;
+    document.getElementById('ss-feedback').textContent = '';
+    const all = [s.emoji, ...s.wrong].sort(()=>Math.random()-0.5);
+    const answers = document.getElementById('ss-answers');
+    answers.innerHTML = all.map(a=>'<button onclick="BabyMode._answerSentence(\''+a+'\')" style="background:rgba(255,255,255,0.97);border-radius:20px;padding:20px;font-size:3rem;cursor:pointer;border:4px solid transparent;transition:transform 0.15s;box-shadow:0 6px 20px rgba(0,0,0,0.12);" onmouseover="this.style.transform=\'scale(1.06)\'" onmouseout="this.style.transform=\'scale(1)\'">'+a+'</button>').join('');
+    setTimeout(()=>SoundSystem.speakBaby(s.sentence), 400);
+  },
+
+  _answerSentence(emoji) {
+    const s = this._ssCurrent;
+    const fb = document.getElementById('ss-feedback');
+    const answers = document.getElementById('ss-answers');
+    answers.querySelectorAll('button').forEach(b=>b.disabled=true);
+    if(emoji === s.emoji) {
+      this._ssScore += 10;
+      document.getElementById('ss-score').textContent = 'Score: ' + this._ssScore + ' ⭐';
+      fb.textContent = '🎉 Yes! ' + s.sentence + '!';
+      SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
+      setTimeout(()=>SoundSystem.speakBaby('Yes! ' + s.sentence + '!'), 300);
+      this._ssIndex++;
+      setTimeout(()=>this._nextSentence(), 3500);
+    } else {
+      fb.textContent = 'Try again!';
+      SoundSystem.playTone('wrong');
+      setTimeout(()=>SoundSystem.speakBaby('Try again! ' + s.sentence), 200);
+      setTimeout(()=>{ answers.querySelectorAll('button').forEach(b=>b.disabled=false); fb.textContent=''; }, 1500);
+    }
+  },
+
+  _ssComplete() {
+    SoundSystem.playTone('celebrate');
+    CoinShop.triggerEffect('stage');
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You can read sentences! You are so smart!'), 1500);
+    const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
+    div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">📖</span><div class="baby-celebrate-text">Super Reader! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._ssScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startSimpleSentences()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
+    document.body.appendChild(div);
+  },
 
   backToCategories(){
     el('baby-categories').classList.remove('hidden');
