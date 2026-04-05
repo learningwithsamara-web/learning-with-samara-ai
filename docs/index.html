@@ -7019,7 +7019,10 @@ const BabyMode = {
     const correct=unused[Math.floor(Math.random()*unused.length)];
     this.usedItems.add(correct.name);
     this.current=correct;
-    const others=items.filter(i=>i.name!==correct.name).sort(()=>Math.random()-0.5).slice(0,3);
+    const isPair = this.category === 'sizes';
+    const others = isPair 
+      ? items.filter(i=>i.pair===correct.name.toLowerCase().split(' ')[0]).slice(0,1)
+      : items.filter(i=>i.name!==correct.name).sort(()=>Math.random()-0.5).slice(0,3);
     const all=[correct,...others].sort(()=>Math.random()-0.5);
     const qText={
       animals:'Tap the ' + correct.name.toUpperCase() + '! ' + correct.emoji,
