@@ -7289,6 +7289,26 @@ const BabyMode = {
     div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">📖</span><div class="baby-celebrate-text">Super Reader! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._ssScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startSimpleSentences()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
     document.body.appendChild(div);
   },
+  showDiscoveryZone() {
+    const div = document.createElement('div');
+    div.id = 'discovery-zone-popup';
+    div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    div.innerHTML = '<div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px;padding:28px;max-width:380px;width:100%;border:2px solid rgba(199,125,255,0.4);position:relative;">'
+      + '<button onclick="document.getElementById(\'discovery-zone-popup\').remove()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.15);border:none;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:1rem;">✕</button>'
+      + '<div style="font-family:\'Fredoka One\',cursive;color:#FFD93D;font-size:1.4rem;text-align:center;margin-bottom:20px;">🔭 Discovery Zone</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">'
+      + '<button onclick="document.getElementById(\'discovery-zone-popup\').remove();BabyMode.startPuzzles()" style="background:rgba(255,255,255,0.97);border-radius:20px;padding:20px 14px;text-align:center;cursor:pointer;border:none;position:relative;">'
+      + '<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.55rem;padding:2px 5px;border-radius:50px;">PRO</div>'
+      + '<div style="font-size:2.5rem;margin-bottom:6px;">🧩</div><div style="font-family:\'Fredoka One\',cursive;font-size:0.95rem;color:#1A1A2E;">Puzzles</div></button>'
+      + '<button onclick="document.getElementById(\'discovery-zone-popup\').remove();BabyMode.startWeather()" style="background:rgba(255,255,255,0.97);border-radius:20px;padding:20px 14px;text-align:center;cursor:pointer;border:none;position:relative;">'
+      + '<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.55rem;padding:2px 5px;border-radius:50px;">PRO</div>'
+      + '<div style="font-size:2.5rem;margin-bottom:6px;">🌦️</div><div style="font-family:\'Fredoka One\',cursive;font-size:0.95rem;color:#1A1A2E;">Weather</div></button>'
+      + '<button onclick="document.getElementById(\'discovery-zone-popup\').remove();BabyMode.startEmotions()" style="background:rgba(255,255,255,0.97);border-radius:20px;padding:20px 14px;text-align:center;cursor:pointer;border:none;position:relative;grid-column:1/-1;">'
+      + '<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.55rem;padding:2px 5px;border-radius:50px;">PRO</div>'
+      + '<div style="font-size:2.5rem;margin-bottom:6px;">😊</div><div style="font-family:\'Fredoka One\',cursive;font-size:0.95rem;color:#1A1A2E;">Emotions</div></button>'
+      + '</div></div>';
+    document.body.appendChild(div);
+  },
 
   backToCategories(){
     el('baby-categories').classList.remove('hidden');
