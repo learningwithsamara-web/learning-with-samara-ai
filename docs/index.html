@@ -6840,6 +6840,17 @@ const Playhouse = {
   try { div.remove(); } catch(e){}
   if(this.usedCounts && this.usedCounts.size >= this.COUNTING.length) {
     this.usedCounts = new Set();
+    const c = document.getElementById('playhouse-room-content');
+    c.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="font-size:4rem;margin-bottom:16px;">🏆</div>
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:12px;">Amazing!</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:1.1rem;margin-bottom:24px;">You counted all 10! You are a superstar counter! ⭐</div>
+        <button onclick="Playhouse.renderCountingGarden()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:1.2rem;padding:16px 36px;border-radius:20px;border:none;cursor:pointer;margin-right:12px;">Play Again 🔢</button>
+        <button onclick="Playhouse.backToHub()" style="background:rgba(255,255,255,0.18);color:#fff;font-family:'Fredoka One',cursive;font-size:1.2rem;padding:16px 36px;border-radius:20px;border:2px solid rgba(255,255,255,0.4);cursor:pointer;">Back 🏠</button>
+      </div>`;
+    SoundSystem.speakBaby('Amazing! You counted all ten! You are a superstar!');
+    return;
   }
   this.renderCountingGarden(); 
 }, 2500);
