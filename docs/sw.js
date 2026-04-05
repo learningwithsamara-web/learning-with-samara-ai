@@ -1,6 +1,6 @@
 // ── Samara AI Service Worker ─────────────────────────────────
 // Version — bump this to force cache refresh on update
-const CACHE_VERSION = 'samara-v1.0.195';
+const CACHE_VERSION = 'samara-v1.0.196';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 
@@ -110,7 +110,7 @@ async function cacheFirstWithNetworkUpdate(request, cacheName) {
 async function networkFirstWithCache(request, cacheName) {
   try {
     const response = await fetch(request);
-    if (response && response.status === 200) {
+    if (response && response.status === 200 && request.method === 'GET') {
       const cache = await caches.open(cacheName);
       cache.put(request, response.clone());
     }
