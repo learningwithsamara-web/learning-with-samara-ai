@@ -6597,7 +6597,7 @@ const Playhouse = {
     {num:7, emoji:'🌈', word:'SEVEN', things:'seven rainbow colours'},
     {num:8, emoji:'🎈', word:'EIGHT', things:'eight balloons'},
     {num:9, emoji:'🍦', word:'NINE',  things:'nine ice creams'},
-    {num:10,emoji:'⭐', word:'TEN',   things:'ten golden stars'},
+    {num:10,emoji:'⭐', word:'TEN',   things:'ten golden stars', cols:5},
   ],
 
   enter(room) {
@@ -6791,7 +6791,7 @@ const Playhouse = {
       <!-- Show the items to count -->
       <div style="background:rgba(255,255,255,0.97);border-radius:24px;padding:24px;text-align:center;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,0.12);">
         <div style="font-size:1.1rem;font-weight:800;color:#7A7A9D;margin-bottom:10px;">How many ${item.emoji} can you count?</div>
-        <div style="font-size:3rem;letter-spacing:6px;margin-bottom:10px;">${item.emoji.repeat(item.num)}</div>
+        <div style="font-size:2.4rem;letter-spacing:3px;margin-bottom:10px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:280px;margin-left:auto;margin-right:auto;">${item.emoji.repeat(item.num).split('').map(e=>`<span>${e}</span>`).join('')}</div>
         <div style="font-family:'Fredoka One',cursive;color:#1A1A2E;font-size:1rem;">${item.things}</div>
       </div>
       <!-- Number buttons -->
@@ -6819,7 +6819,7 @@ const Playhouse = {
   checkCount(picked, correct, emoji, word) {
     if(picked === correct) {
       SoundSystem.playTone('celebrate');
-      SoundSystem.speakBaby(`Yes! ${word}! ${correct}! Amazing counting!`);
+      SoundSystem.speakBaby(`Yes! ${correct} ${word}! Amazing counting!`);
       const div = document.createElement('div');
       div.className = 'baby-celebrate';
       div.innerHTML = `<div class="baby-celebrate-inner">
