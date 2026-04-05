@@ -5037,12 +5037,14 @@ const FamilyMode = {
     if(profiles.length === 0) {
       grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:20px;color:rgba(255,255,255,0.6);">No children added yet! Add your first child below 👶</div>`;
     } else {
-      grid.innerHTML = profiles.map(p=>`
-        <div class="child-card ${p.id===activeId?'active-child':''}" onclick="FamilyMode.setActive('${p.id}')">
+      const limit = this.getChildLimit();
+      grid.innerHTML = profiles.map((p,idx)=>`
+        <div class="child-card ${p.id===activeId?'active-child':''} ${idx>=limit?'pro-lock':''}" onclick="${idx>=limit?'App.requireSignup(\'Upgrade Plan\',\'👨‍👩‍👧\',\'Upgrade your plan to access this child profile!\')':'FamilyMode.setActive(\''+p.id+'\')'}">
           <div class="child-avatar" style="background:${p.color};">${p.avatar}</div>
           <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#1A1A2E;">${p.name}</div>
           <div style="font-size:0.75rem;color:#7A7A9D;margin-top:2px;">${p.age} yrs</div>
           ${p.id===activeId?'<div style="margin-top:6px;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.72rem;padding:2px 10px;border-radius:50px;display:inline-block;">Active ✓</div>':''}
+          ${idx>=limit?'<div class="pro-overlay"><div class="pro-overlay-icon">🔒</div><div class="pro-overlay-text">Upgrade to unlock</div></div>':''}
           <button onclick="event.stopPropagation();FamilyMode.removeChild('${p.id}');FamilyMode.render();" style="position:absolute;top:8px;right:8px;background:rgba(255,107,107,0.15);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.7rem;color:#FF6B6B;">✕</button>
 <button onclick="event.stopPropagation();FamilyMode.editChild('${p.id}');" style="position:absolute;top:8px;right:34px;background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.7rem;color:#fff;">✏️</button>
         </div>`).join('');
