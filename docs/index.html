@@ -7291,7 +7291,17 @@ const BabyMode = {
   },
   startPuzzles() { App.requireSignup('Simple Puzzles', '🧩', 'Coming soon! Upgrade to Pro to unlock Simple Puzzles!'); },
   startWeather() { App.requireSignup('Weather & Seasons', '🌦️', 'Coming soon! Upgrade to Pro to unlock Weather & Seasons!'); },
-  startEmotions() { App.requireSignup('Emotions', '😊', 'Coming soon! Upgrade to Pro to unlock Emotions!'); },
+  startEmotions() {
+    if(!Plan.isPro()) { App.requireSignup('Emotions', '😊', 'Upgrade to Pro to unlock Emotions and more!'); return; }
+    this._emoScore = 0;
+    this._emoIndex = 0;
+    document.getElementById('discovery-zone-popup')?.remove();
+    App.showScreen('screen-emotions');
+    setTimeout(()=>{
+      SoundSystem.speakBaby('Let us learn about feelings!');
+      setTimeout(()=>this._nextEmotion(), 1800);
+    }, 300);
+  },
 
   showDiscoveryZone() {
     const div = document.createElement('div');
