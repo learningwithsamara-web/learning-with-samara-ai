@@ -7064,7 +7064,7 @@ const BabyMode = {
     CoinShop.triggerEffect('stage');
     setTimeout(()=>SoundSystem.speakBaby('Amazing! You finished the stage! You are so smart!'), 1500);
     const cat=this.category;
-    const categories = ['animals','colors','shapes','numbers'];
+    const categories = ['animals','colors','shapes','numbers','bodyparts'];
     const nextCat = categories[(categories.indexOf(cat)+1) % categories.length];
     const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
     div.innerHTML=`<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;">
