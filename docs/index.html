@@ -7335,6 +7335,62 @@ const BabyMode = {
     div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">📖</span><div class="baby-celebrate-text">Super Reader! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._ssScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startSimpleSentences()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
     document.body.appendChild(div);
   },
+  PUZZLES: [
+    {main:'🌞',question:'The sun is missing a ray!',missing:'a ray',answer:'✨',wrong:['🌙','⭐','💧'],sound:'The sun needs its ray to shine bright!'},
+    {main:'🏠',question:'The house is missing a door!',missing:'a door',answer:'🚪',wrong:['🪟','🛋️','🌳'],sound:'Every house needs a door to go inside!'},
+    {main:'🐱',question:'The cat is missing its tail!',missing:'a tail',answer:'〰️',wrong:['🐾','👂','👀'],sound:'Cats use their tails to balance!'},
+    {main:'🌳',question:'The tree is missing its leaves!',missing:'leaves',answer:'🍃',wrong:['🌸','⭐','🍎'],sound:'Trees need leaves to make food from sunlight!'},
+    {main:'🚗',question:'The car is missing a wheel!',missing:'a wheel',answer:'⭕',wrong:['🔑','💺','🪟'],sound:'Cars need four wheels to drive!'},
+    {main:'🦋',question:'The butterfly is missing a wing!',missing:'a wing',answer:'🍃',wrong:['🌸','⭐','💧'],sound:'Butterflies need both wings to fly!'},
+    {main:'🌸',question:'The flower is missing a petal!',missing:'a petal',answer:'🌷',wrong:['🍃','⭐','💧'],sound:'Flowers have beautiful petals!'},
+    {main:'⭐',question:'The star is missing a point!',missing:'a point',answer:'✨',wrong:['🌙','☀️','💫'],sound:'Stars twinkle in the night sky!'},
+  ],
+  _puzzleScore: 0,
+  _puzzleIndex: 0,
+  _puzzleCurrent: null,
+
+  _nextPuzzle() {
+    if(this._puzzleIndex >= this.PUZZLES.length) { this._puzzleComplete(); return; }
+    const p = this.PUZZLES[this._puzzleIndex];
+    this._puzzleCurrent = p;
+    document.getElementById('puzzle-main').textContent = p.main;
+    document.getElementById('puzzle-question').textContent = p.question;
+    document.getElementById('puzzle-missing').textContent = 'Find ' + p.missing + '!';
+    document.getElementById('puzzle-feedback').textContent = '';
+    const all = [p.answer, ...p.wrong].sort(()=>Math.random()-0.5);
+    document.getElementById('puzzle-answers').innerHTML = all.map(a=>'<button onclick="BabyMode._answerPuzzle(\''+a+'\')" style="background:rgba(255,255,255,0.97);border-radius:16px;padding:18px;font-size:2.5rem;cursor:pointer;border:4px solid transparent;transition:transform 0.15s;box-shadow:0 5px 16px rgba(0,0,0,0.1);" onmouseover="this.style.transform=\'scale(1.06)\'" onmouseout="this.style.transform=\'scale(1)\'">'+a+'</button>').join('');
+    setTimeout(()=>SoundSystem.speakBaby(p.question + ' Find ' + p.missing), 400);
+  },
+
+  _answerPuzzle(answer) {
+    const p = this._puzzleCurrent;
+    const fb = document.getElementById('puzzle-feedback');
+    document.getElementById('puzzle-answers').querySelectorAll('button').forEach(b=>b.disabled=true);
+    if(answer === p.answer) {
+      this._puzzleScore += 10;
+      document.getElementById('puzzle-score').textContent = 'Score: ' + this._puzzleScore + ' ⭐';
+      fb.textContent = '🎉 ' + p.sound;
+      SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
+      setTimeout(()=>SoundSystem.speakBaby(p.sound), 300);
+      this._puzzleIndex++;
+      setTimeout(()=>this._nextPuzzle(), 4500);
+    } else {
+      fb.textContent = 'Try again! Find ' + p.missing + '!';
+      SoundSystem.playTone('wrong');
+      setTimeout(()=>SoundSystem.speakBaby('Try again! Find ' + p.missing), 200);
+      setTimeout(()=>{ document.getElementById('puzzle-answers').querySelectorAll('button').forEach(b=>b.disabled=false); fb.textContent=''; }, 1500);
+    }
+  },
+
+  _puzzleComplete() {
+    SoundSystem.playTone('celebrate');
+    CoinShop.triggerEffect('stage');
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You completed all the puzzles! You are so clever!'), 1500);
+    const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
+    div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">🧩</span><div class="baby-celebrate-text">Puzzle Master! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._puzzleScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startPuzzles()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
+    document.body.appendChild(div);
+  },
   startPuzzles() {
     if(!Plan.isPro()) { App.requireSignup('Simple Puzzles', '🧩', 'Upgrade to Pro to unlock Simple Puzzles and more!'); return; }
     this._puzzleScore = 0;
