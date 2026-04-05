@@ -6780,6 +6780,7 @@ const Playhouse = {
     if(!this.usedCounts) this.usedCounts = new Set();
     if(this.usedCounts.size >= this.COUNTING.length) this.usedCounts = new Set();
     const unused = this.COUNTING.filter(i=>!this.usedCounts.has(i.num));
+    if(!unused.length) { this.usedCounts = new Set(); this.renderCountingGarden(); return; }
     const item = unused[Math.floor(Math.random()*unused.length)];
     this.usedCounts.add(item.num);
     this.currentCount = item;
@@ -6810,13 +6811,19 @@ const Playhouse = {
 
   getCountOptions(correct) {
     const opts = new Set([correct]);
-    while(opts.size < 4) {
-      const n = Math.max(1, correct + Math.floor(Math.random()*5)-2);
-      if(n !== correct && n > 0) opts.add(n);
+    let attempts = 0;
+    while(opts.size < 4 && attempts < 50) {
+      attempts++;
+      const offset = Math.floor(Math.random()*6)-3;
+      const n = correct + offset;
+      if(n !== correct && n > 0 && n <= 15) opts.add(n);
     }
+    // fill remaining if still not 4
+    let fill = 1;
+    while(opts.size < 4) { if(!opts.has(fill)) opts.add(fill); fill++; }
     return [...opts].sort(()=>Math.random()-0.5);
   },
-
+  
   checkCount(picked, correct, emoji, word) {
     if(picked === correct) {
       SoundSystem.playTone('celebrate');
