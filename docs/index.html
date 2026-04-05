@@ -6820,7 +6820,7 @@ const Playhouse = {
   checkCount(picked, correct, emoji, word) {
     if(picked === correct) {
       SoundSystem.playTone('celebrate');
-      SoundSystem.speakBaby(`Yes! ${correct} ${word}! Amazing counting!`);
+      SoundSystem.speakBaby(`Yes! ${word}! Amazing counting!`);
       const div = document.createElement('div');
       div.className = 'baby-celebrate';
       div.innerHTML = `<div class="baby-celebrate-inner">
