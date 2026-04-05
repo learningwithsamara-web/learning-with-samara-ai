@@ -7387,9 +7387,9 @@ const BabyMode = {
       this._puzzleIndex++;
       setTimeout(()=>this._nextPuzzle(), 4500);
     } else {
-      fb.textContent = 'Try again! Find ' + p.missing + '!';
+      fb.textContent = 'Try again!';
       SoundSystem.playTone('wrong');
-      setTimeout(()=>SoundSystem.speakBaby('Try again! Find ' + p.missing), 200);
+      setTimeout(()=>SoundSystem.speakBaby('Try again! ' + p.question), 200);
       setTimeout(()=>{ document.getElementById('puzzle-answers').querySelectorAll('button').forEach(b=>b.disabled=false); fb.textContent=''; }, 1500);
     }
   },
