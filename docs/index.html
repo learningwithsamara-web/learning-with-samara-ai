@@ -7306,6 +7306,61 @@ const BabyMode = {
   },
   startPuzzles() { App.requireSignup('Simple Puzzles', '🧩', 'Coming soon! Upgrade to Pro to unlock Simple Puzzles!'); },
   startWeather() { App.requireSignup('Weather & Seasons', '🌦️', 'Coming soon! Upgrade to Pro to unlock Weather & Seasons!'); },
+  EMOTIONS: [
+    {name:'Happy',emoji:'😊',sound:'Samara is smiling! She feels happy!'},
+    {name:'Sad',emoji:'😢',sound:'Samara has tears! She feels sad!'},
+    {name:'Angry',emoji:'😠',sound:'Samara is angry! She feels angry!'},
+    {name:'Scared',emoji:'😨',sound:'Samara is shaking! She feels scared!'},
+    {name:'Sleepy',emoji:'😴',sound:'Samara is yawning! She feels sleepy!'},
+    {name:'Excited',emoji:'😄',sound:'Samara is jumping! She feels excited!'},
+    {name:'Sick',emoji:'🤒',sound:'Samara feels unwell! She feels sick!'},
+    {name:'Calm',emoji:'😌',sound:'Samara is relaxed! She feels calm!'},
+  ],
+  _emoScore: 0,
+  _emoIndex: 0,
+  _emoCurrent: null,
+
+  _nextEmotion() {
+    if(this._emoIndex >= this.EMOTIONS.length) { this._emoComplete(); return; }
+    const e = this.EMOTIONS[this._emoIndex];
+    this._emoCurrent = e;
+    document.getElementById('emo-face').textContent = e.emoji;
+    document.getElementById('emo-feedback').textContent = '';
+    const wrong = this.EMOTIONS.filter(x=>x.name!==e.name).sort(()=>Math.random()-0.5).slice(0,3);
+    const all = [e,...wrong].sort(()=>Math.random()-0.5);
+    document.getElementById('emo-answers').innerHTML = all.map(a=>'<button onclick="BabyMode._answerEmotion(\''+a.name+'\')" style="background:rgba(255,255,255,0.97);border-radius:16px;padding:14px;font-family:\'Fredoka One\',cursive;font-size:1rem;color:#1A1A2E;cursor:pointer;border:4px solid transparent;transition:transform 0.15s;box-shadow:0 5px 16px rgba(0,0,0,0.1);" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">'+a.emoji+' '+a.name+'</button>').join('');
+    setTimeout(()=>SoundSystem.speakBaby('How is Samara feeling?'), 400);
+  },
+
+  _answerEmotion(name) {
+    const e = this._emoCurrent;
+    const fb = document.getElementById('emo-feedback');
+    document.getElementById('emo-answers').querySelectorAll('button').forEach(b=>b.disabled=true);
+    if(name === e.name) {
+      this._emoScore += 10;
+      document.getElementById('emo-score').textContent = 'Score: ' + this._emoScore + ' ⭐';
+      fb.textContent = '🎉 Yes! Samara feels ' + e.name + '!';
+      SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
+      setTimeout(()=>SoundSystem.speakBaby('Yes! Samara feels ' + e.name + '!'), 300);
+      this._emoIndex++;
+      setTimeout(()=>this._nextEmotion(), 3500);
+    } else {
+      fb.textContent = 'Try again!';
+      SoundSystem.playTone('wrong');
+      setTimeout(()=>SoundSystem.speakBaby('Try again! How is Samara feeling?'), 200);
+      setTimeout(()=>{ document.getElementById('emo-answers').querySelectorAll('button').forEach(b=>b.disabled=false); fb.textContent=''; }, 1500);
+    }
+  },
+
+  _emoComplete() {
+    SoundSystem.playTone('celebrate');
+    CoinShop.triggerEffect('stage');
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You know all the feelings! You are so smart!'), 1500);
+    const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
+    div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">😊</span><div class="baby-celebrate-text">Feelings Expert! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._emoScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startEmotions()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
+    document.body.appendChild(div);
+  },
   startEmotions() {
     if(!Plan.isPro()) { App.requireSignup('Emotions', '😊', 'Upgrade to Pro to unlock Emotions and more!'); return; }
     this._emoScore = 0;
