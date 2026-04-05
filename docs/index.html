@@ -919,6 +919,27 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
 
 </div>
 </div>
+  <!-- ══ COLOUR MIXING ══ -->
+<div id="screen-colour-mix" class="screen">
+  <div class="stars"></div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-baby')">← Baby World</button>
+    <h2 class="screen-title small">🎨 Colour Mixing</h2>
+  </div>
+  <div style="max-width:480px;margin:0 auto;padding:20px;text-align:center;">
+    <div id="colour-mix-score" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:16px;">⭐ Score: 0</div>
+    <div id="colour-mix-question" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.4rem;margin-bottom:20px;">What colour do they make?</div>
+    <div id="colour-mix-display" style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:28px;">
+      <div id="mix-circle-1" style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.4);"></div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:2rem;">+</div>
+      <div id="mix-circle-2" style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.4);"></div>
+      <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:2rem;">=</div>
+      <div style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:2rem;">❓</div>
+    </div>
+    <div id="colour-mix-answers" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+    <div id="colour-mix-feedback" style="margin-top:16px;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#fff;min-height:40px;"></div>
+  </div>
+</div>
 
 <!-- ══ BABY ══ -->
 <div id="screen-baby" class="screen">
@@ -7109,6 +7130,79 @@ const BabyMode = {
     document.body.appendChild(div);
     SoundSystem.playTone('celebrate');
     setTimeout(()=>div.remove(),1800);
+  },
+  COLOUR_MIXES: [
+    {color1:'Red',hex1:'#FF6B6B',color2:'Blue',hex2:'#4A90D9',result:'Purple',hexR:'#C77DFF',emoji:'🟣'},
+    {color1:'Red',hex1:'#FF6B6B',color2:'Yellow',hex2:'#FFD93D',result:'Orange',hexR:'#FF9B3F',emoji:'🟠'},
+    {color1:'Blue',hex1:'#4A90D9',color2:'Yellow',hex2:'#FFD93D',result:'Green',hexR:'#6BCB77',emoji:'🟢'},
+    {color1:'Red',hex1:'#FF6B6B',color2:'White',hex2:'#FFFFFF',result:'Pink',hexR:'#FF69B4',emoji:'🩷'},
+    {color1:'Black',hex1:'#333333',color2:'White',hex2:'#FFFFFF',result:'Grey',hexR:'#888888',emoji:'🩶'},
+    {color1:'Blue',hex1:'#4A90D9',color2:'Green',hex2:'#6BCB77',result:'Teal',hexR:'#11998e',emoji:'🩵'},
+  ],
+  _mixScore: 0,
+  _mixIndex: 0,
+  _mixCurrent: null,
+
+  startColourMix() {
+    if(!Plan.isPro()) {
+      App.requireSignup('Colour Mixing', '🎨', 'Upgrade to Pro to unlock Colour Mixing and more fun Baby World activities!');
+      return;
+    }
+    this._mixScore = 0;
+    this._mixIndex = 0;
+    App.showScreen('screen-colour-mix');
+    setTimeout(()=>{
+      SoundSystem.speakBaby('Let us mix some colours!');
+      setTimeout(()=>this._nextMix(), 1800);
+    }, 300);
+  },
+
+  _nextMix() {
+    if(this._mixIndex >= this.COLOUR_MIXES.length) {
+      this._mixComplete();
+      return;
+    }
+    const mix = this.COLOUR_MIXES[this._mixIndex];
+    this._mixCurrent = mix;
+    document.getElementById('mix-circle-1').style.background = mix.hex1;
+    document.getElementById('mix-circle-2').style.background = mix.hex2;
+    document.getElementById('colour-mix-question').textContent = 'What colour do ' + mix.color1 + ' and ' + mix.color2 + ' make?';
+    document.getElementById('colour-mix-feedback').textContent = '';
+    const answers = document.getElementById('colour-mix-answers');
+    const wrong = this.COLOUR_MIXES.filter(m=>m.result!==mix.result).sort(()=>Math.random()-0.5).slice(0,3);
+    const all = [mix, ...wrong].sort(()=>Math.random()-0.5);
+    answers.innerHTML = all.map(a=>'<button onclick="BabyMode._answerMix(\''+a.result+'\')" style="background:'+a.hexR+';color:#fff;font-family:\'Fredoka One\',cursive;font-size:1.1rem;padding:16px;border-radius:16px;border:4px solid rgba(255,255,255,0.3);cursor:pointer;transition:transform 0.15s;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">'+a.emoji+' '+a.result+'</button>').join('');
+    SoundSystem.speakBaby('What colour do ' + mix.color1 + ' and ' + mix.color2 + ' make?');
+  },
+
+  _answerMix(result) {
+    const mix = this._mixCurrent;
+    const fb = document.getElementById('colour-mix-feedback');
+    const answers = document.getElementById('colour-mix-answers');
+    answers.querySelectorAll('button').forEach(b=>b.disabled=true);
+    if(result === mix.result) {
+      this._mixScore += 10;
+      document.getElementById('colour-mix-score').textContent = 'Score: ' + this._mixScore + ' ⭐';
+      fb.textContent = '🎉 ' + mix.color1 + ' and ' + mix.color2 + ' make ' + mix.result + '!';
+      SoundSystem.playTone('correct');
+      CoinShop.triggerEffect('correct');
+      setTimeout(()=>SoundSystem.speakBaby(mix.color1 + ' and ' + mix.color2 + ' make ' + mix.result + '!'), 300);
+      this._mixIndex++;
+      setTimeout(()=>this._nextMix(), 3500);
+    } else {
+      fb.textContent = 'Try again! What do ' + mix.color1 + ' and ' + mix.color2 + ' make?';
+      SoundSystem.playTone('wrong');
+      setTimeout(()=>SoundSystem.speakBaby('Try again! What do ' + mix.color1 + ' and ' + mix.color2 + ' make?'), 200);
+      setTimeout(()=>{ answers.querySelectorAll('button').forEach(b=>b.disabled=false); fb.textContent=''; }, 1500);
+    }
+  },
+  _mixComplete() {
+    SoundSystem.playTone('celebrate');
+    CoinShop.triggerEffect('stage');
+    setTimeout(()=>SoundSystem.speakBaby('Amazing! You are a colour mixing superstar!'), 1500);
+    const div=document.createElement('div'); div.className='baby-celebrate'; div.style.zIndex='99999';
+    div.innerHTML='<div class="baby-celebrate-inner" style="padding:36px 28px;max-width:320px;width:90%;"><span class="baby-celebrate-emoji">🎨</span><div class="baby-celebrate-text">Colour Expert! 🎉</div><div style="font-size:1.1rem;color:rgba(255,255,255,0.9);margin:10px 0;">Score: '+this._mixScore+' ⭐</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;"><button onclick="this.closest(\'.baby-celebrate\').remove();BabyMode.startColourMix()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 20px;border-radius:50px;border:none;cursor:pointer;">🔄 Play Again</button><button onclick="this.closest(\'.baby-celebrate\').remove();App.showScreen(\'screen-baby\')" style="background:rgba(255,255,255,0.2);color:#fff;font-family:\'Fredoka One\',cursive;font-size:0.9rem;padding:12px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.35);cursor:pointer;">🏠 Menu</button></div></div>';
+    document.body.appendChild(div);
   },
 
   backToCategories(){
