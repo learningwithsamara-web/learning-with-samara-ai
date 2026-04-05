@@ -919,6 +919,22 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
 
 </div>
 </div>
+  <!-- ══ PUZZLES ══ -->
+<div id="screen-puzzles" class="screen">
+  <div class="stars"></div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="App.showScreen('screen-baby')">← Baby World</button>
+    <h2 class="screen-title small">🧩 Simple Puzzles</h2>
+  </div>
+  <div style="max-width:480px;margin:0 auto;padding:20px;text-align:center;">
+    <div id="puzzle-score" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:16px;">⭐ Score: 0</div>
+    <div id="puzzle-question" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;margin-bottom:16px;"></div>
+    <div id="puzzle-main" style="font-size:6rem;margin-bottom:8px;"></div>
+    <div id="puzzle-missing" style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:1rem;margin-bottom:20px;"></div>
+    <div id="puzzle-answers" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+    <div id="puzzle-feedback" style="margin-top:16px;font-family:'Fredoka One',cursive;font-size:1.1rem;color:#fff;min-height:40px;"></div>
+  </div>
+</div>
   <!-- ══ WEATHER ══ -->
 <div id="screen-weather" class="screen">
   <div class="stars"></div>
