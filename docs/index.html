@@ -5023,7 +5023,15 @@ _confirmEdit(id) {
   const idx = profiles.findIndex(x=>x.id===id);
   if(idx===-1) return;
   profiles[idx] = { ...profiles[idx], name, age, avatar, color, birthday };
-  this.saveProfiles(profiles);
+ this.saveProfiles(profiles);
+  const t=JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
+  if(t.user&&t.access_token&&profiles[idx].supabase_id){
+    fetch(SUPABASE_URL+'/rest/v1/child_profiles?id=eq.'+profiles[idx].supabase_id,{
+      method:'PATCH',
+      headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+t.access_token,'Content-Type':'application/json'},
+      body:JSON.stringify({name,age_group:age,avatar,birthday:birthday||null})
+    }).catch(()=>{});
+  }
   document.getElementById('family-add-popup')?.remove();
   this.render();
   App.toast(name + ' updated!');
