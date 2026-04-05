@@ -7031,7 +7031,7 @@ const BabyMode = {
     };
     const bq = `(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`;
   setText('baby-question', bq);
-    setTimeout(() => SoundSystem.speakBaby('Tap the ' + correct.name + '!'), 400);
+    setTimeout(() => SoundSystem.speakBaby(this.category === 'sizes' ? 'Which one is ' + (correct.name.includes('Big') ? 'big' : 'small') + '?' : 'Tap the ' + correct.name + '!'), 400);
 
     all.forEach(item=>{
       const btn=document.createElement('button');
