@@ -7305,7 +7305,17 @@ const BabyMode = {
     document.body.appendChild(div);
   },
   startPuzzles() { App.requireSignup('Simple Puzzles', '🧩', 'Coming soon! Upgrade to Pro to unlock Simple Puzzles!'); },
-  startWeather() { App.requireSignup('Weather & Seasons', '🌦️', 'Coming soon! Upgrade to Pro to unlock Weather & Seasons!'); },
+  startWeather() {
+    if(!Plan.isPro()) { App.requireSignup('Weather & Seasons', '🌦️', 'Upgrade to Pro to unlock Weather & Seasons and more!'); return; }
+    this._weatherScore = 0;
+    this._weatherIndex = 0;
+    document.getElementById('discovery-zone-popup')?.remove();
+    App.showScreen('screen-weather');
+    setTimeout(()=>{
+      SoundSystem.speakBaby('Let us learn about the weather!');
+      setTimeout(()=>this._nextWeather(), 1800);
+    }, 300);
+  },
   EMOTIONS: [
     {name:'Happy',emoji:'😊',sound:'Samara is smiling! She feels happy!'},
     {name:'Sad',emoji:'😢',sound:'Samara has tears! She feels sad!'},
