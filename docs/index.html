@@ -7019,10 +7019,11 @@ const BabyMode = {
     const others=items.filter(i=>i.name!==correct.name).sort(()=>Math.random()-0.5).slice(0,3);
     const all=[correct,...others].sort(()=>Math.random()-0.5);
     const qText={
-      animals:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
-      colors:`Tap ${correct.name.toUpperCase()}! ${correct.emoji}`,
-      shapes:`Tap the ${correct.name.toUpperCase()}! ${correct.emoji}`,
-      numbers:`Tap number ${correct.name.toUpperCase()}! ${correct.emoji}`
+      animals:'Tap the ' + correct.name.toUpperCase() + '! ' + correct.emoji,
+      colors:'Tap ' + correct.name.toUpperCase() + '! ' + correct.emoji,
+      shapes:'Tap the ' + correct.name.toUpperCase() + '! ' + correct.emoji,
+      numbers:'Tap number ' + correct.name.toUpperCase() + '! ' + correct.emoji,
+      bodyparts:'Tap your ' + correct.name.toUpperCase() + '! ' + correct.emoji
     };
     const bq = `(${this.questionCount+1}/${this.STAGE_LENGTH}) ${qText[this.category]}`;
   setText('baby-question', bq);
