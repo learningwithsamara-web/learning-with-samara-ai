@@ -6790,7 +6790,7 @@ const Playhouse = {
       </div>
       <div style="background:rgba(255,255,255,0.97);border-radius:24px;padding:24px;text-align:center;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,0.12);">
         <div style="font-size:1.1rem;font-weight:800;color:#7A7A9D;margin-bottom:10px;">How many ${item.emoji} can you count?</div>
-        <div style="font-size:2.4rem;letter-spacing:3px;margin-bottom:10px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:280px;margin-left:auto;margin-right:auto;">${item.emoji.repeat(item.num).split('').map(e=>`<span>${e}</span>`).join('')}</div>
+        <div style="font-size:2.4rem;margin-bottom:10px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:300px;margin-left:auto;margin-right:auto;">${[...item.emoji.repeat(item.num)].filter(e=>e.trim()).map(e=>`<span>${e}</span>`).join('')}</div>
         <div style="font-family:'Fredoka One',cursive;color:#1A1A2E;font-size:1rem;">${item.things}</div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
