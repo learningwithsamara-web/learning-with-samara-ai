@@ -5007,8 +5007,8 @@ const FamilyMode = {
     document.getElementById('new-child-name').value = p.name||'';
     document.getElementById('new-child-birthday').value = p.birthday||'';
     document.getElementById('new-child-age').value = p.age||'7-10';
-    const btn = document.querySelector('#family-add-popup button[onclick*="_confirmAdd"]');
-    if(btn) btn.setAttribute('onclick', 'FamilyMode._confirmEdit("'+id+'")');
+   const btn = document.querySelector('#family-add-popup button[onclick*="_confirmAdd"]');
+   if(btn) btn.onclick = function(){ FamilyMode._confirmEdit(id); };
   }, 150);
 },
   
