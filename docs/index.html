@@ -7327,7 +7327,7 @@ const BabyMode = {
     {name:'Windy',emoji:'🌬️',sound:'It is windy! Hold on to your hat!'},
     {name:'Cloudy',emoji:'⛅',sound:'It is cloudy! The sun is hiding!'},
     {name:'Stormy',emoji:'⛈️',sound:'There is a storm! Stay inside and be safe!'},
-    {name:'Rainbow',emoji:'🌈',sound:'There is a rainbow! It rained and now the sun is back!'},
+    {name:'Rainbow',emoji:'🌈',sound:'A rainbow! Rain and sunshine make rainbows!'},
     {name:'Hot',emoji:'🌡️',sound:'It is very hot! Drink lots of water!'},
   ],
   _weatherScore: 0,
@@ -7358,7 +7358,7 @@ const BabyMode = {
       CoinShop.triggerEffect('correct');
       setTimeout(()=>SoundSystem.speakBaby(w.sound), 300);
       this._weatherIndex++;
-      setTimeout(()=>this._nextWeather(), 4000);
+      setTimeout(()=>this._nextWeather(), 5000);
     } else {
       fb.textContent = 'Try again!';
       SoundSystem.playTone('wrong');
