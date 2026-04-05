@@ -7359,7 +7359,7 @@ const BabyMode = {
     document.getElementById('puzzle-feedback').textContent = '';
     const all = [p.answer, ...p.wrong].sort(()=>Math.random()-0.5);
     document.getElementById('puzzle-answers').innerHTML = all.map(a=>'<button onclick="BabyMode._answerPuzzle(\''+a+'\')" style="background:rgba(255,255,255,0.97);border-radius:16px;padding:18px;font-size:2.5rem;cursor:pointer;border:4px solid transparent;transition:transform 0.15s;box-shadow:0 5px 16px rgba(0,0,0,0.1);" onmouseover="this.style.transform=\'scale(1.06)\'" onmouseout="this.style.transform=\'scale(1)\'">'+a+'</button>').join('');
-    setTimeout(()=>SoundSystem.speakBaby(p.question + ' Find ' + p.missing), 400);
+    setTimeout(()=>SoundSystem.speakBaby(p.question), 400);
   },
 
   _answerPuzzle(answer) {
