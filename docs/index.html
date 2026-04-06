@@ -1402,6 +1402,28 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
       <div id="sl-qg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
     </div>
   </div>
+  <!-- Chat Button -->
+<div id="sl-chat-btn" style="display:none;position:fixed;bottom:80px;right:16px;z-index:998;">
+  <button onclick="SLGame.mpChatOpen()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-size:1.5rem;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(199,125,255,0.5);">💬</button>
+</div>
+
+<!-- Chat Picker Overlay -->
+<div id="sl-chat-picker" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1002;align-items:flex-end;justify-content:center;padding:16px;">
+  <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:400px;border:2px solid rgba(199,125,255,0.4);">
+    <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.1rem;text-align:center;margin-bottom:16px;">Send a Message 💬</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      ${['😂 Ha ha!','😤 No fair!','🎉 Well done!','😢 Oopsie!','🔥 I am winning!','⏰ Hurry up!','👍 Good game!','🐍 Watch out!','😜 I guess you did not get that answer right!','🎲 Lucky roll!','😅 So close!','🏆 I am going to win!'].map(m=>`
+      <button onclick="SLGame.mpChatSend('${m}')" style="background:rgba(255,255,255,0.08);color:#fff;font-size:0.8rem;padding:10px 8px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);cursor:pointer;text-align:center;">${m}</button>`).join('')}
+    </div>
+    <button onclick="SLGame.mpChatClose()" style="width:100%;background:rgba(255,71,87,0.2);color:#FF4757;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px;border-radius:12px;border:1px solid rgba(255,71,87,0.3);cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- Incoming Chat Toast -->
+<div id="sl-chat-toast" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:1003;background:linear-gradient(135deg,#1a1a3e,#2d1b69);border:2px solid rgba(199,125,255,0.5);border-radius:16px;padding:12px 20px;text-align:center;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+  <div id="sl-chat-toast-name" style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.8rem;margin-bottom:4px;"></div>
+  <div id="sl-chat-toast-msg" style="color:#fff;font-size:0.9rem;font-weight:700;"></div>
+</div>
   <!-- Multiplayer Menu Overlay -->
 <div id="sl-mp-menu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
   <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(199,125,255,0.5);text-align:center;">
