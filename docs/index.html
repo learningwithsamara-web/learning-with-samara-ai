@@ -9731,6 +9731,7 @@ const r=Math.floor(Math.random()*6)+1;
 d.textContent=this.DF[r-1];
 this.pending=r;
 this.setSt('Player '+(this.turn+1)+' rolled '+r+'! Answer to move!');
+if(this.mpMode && this.turn !== (MultiplayerEngine.playerSlot==='player1'?0:1)) return;
 setTimeout(()=>this.showQ(),500);
 }
 },60);
@@ -9839,6 +9840,130 @@ const wo=document.getElementById('sl-win-overlay');if(wo)wo.style.display='none'
 const qo=document.getElementById('sl-q-overlay');if(qo)qo.style.display='none';
 this.drawBoard();this.updateUI();
 }
+  mpCode: null,
+mpMode: false,
+mpDotsInterval: null,
+
+mpOpen() {
+  document.getElementById('sl-mp-menu').style.display='flex';
+},
+
+mpClose() {
+  document.getElementById('sl-mp-menu').style.display='none';
+  document.getElementById('sl-mp-join').style.display='none';
+  document.getElementById('sl-mp-waiting').style.display='none';
+},
+
+mpShowJoin() {
+  document.getElementById('sl-mp-menu').style.display='none';
+  document.getElementById('sl-mp-join').style.display='flex';
+},
+
+async mpCreate() {
+  document.getElementById('sl-mp-menu').style.display='none';
+  document.getElementById('sl-mp-waiting').style.display='flex';
+  const code = await MultiplayerEngine.createRoom('snake_ladder');
+  if(!code) { this.mpClose(); return; }
+  this.mpCode = code;
+  document.getElementById('sl-mp-code').textContent = code;
+  let d = 0;
+  const dots = ['● ○ ○','○ ● ○','○ ○ ●'];
+  this.mpDotsInterval = setInterval(()=>{
+    document.getElementById('sl-mp-wait-dots').textContent = dots[d%3]; d++;
+  }, 600);
+  MultiplayerEngine.onPlayerJoined((room)=>{
+    clearInterval(this.mpDotsInterval);
+    document.getElementById('sl-mp-waiting').style.display='none';
+    document.getElementById('sl-mp-connected-msg').textContent =
+      room.player2_name + ' joined! You are Player 1 (Purple). Game starting!';
+    document.getElementById('sl-mp-connected').style.display='flex';
+  });
+},
+
+mpCopyCode() {
+  if(this.mpCode) {
+    navigator.clipboard.writeText(this.mpCode).then(()=>{
+      App.toast('Code copied! Share it with your friend!');
+    });
+  }
+},
+
+async mpJoin() {
+  const input = document.getElementById('sl-mp-code-input');
+  const code = (input.value||'').trim();
+  if(code.length !== 6) { App.toast('Please enter a 6-digit code!'); return; }
+  document.getElementById('sl-mp-join').style.display='none';
+  const ok = await MultiplayerEngine.joinRoom(code);
+  if(!ok) { document.getElementById('sl-mp-join').style.display='flex'; return; }
+  const room = MultiplayerEngine.room;
+  document.getElementById('sl-mp-connected-msg').textContent =
+    'Connected to ' + room.player1_name + "'s game! You are Player 2 (Yellow). Game starting!";
+  document.getElementById('sl-mp-connected').style.display='flex';
+},
+
+async mpFindRandom() {
+  document.getElementById('sl-mp-menu').style.display='none';
+  App.toast('Looking for a game...');
+  const result = await MultiplayerEngine.findRandomRoom('snake_ladder');
+  if(!result) { App.toast('Could not find a game. Try again!'); return; }
+  if(MultiplayerEngine.playerSlot === 'player1') {
+    document.getElementById('sl-mp-waiting').style.display='flex';
+    document.getElementById('sl-mp-code').textContent = MultiplayerEngine.room.code;
+    let d = 0;
+    const dots = ['● ○ ○','○ ● ○','○ ○ ●'];
+    this.mpDotsInterval = setInterval(()=>{
+      document.getElementById('sl-mp-wait-dots').textContent = dots[d%3]; d++;
+    }, 600);
+    MultiplayerEngine.onPlayerJoined((room)=>{
+      clearInterval(this.mpDotsInterval);
+      document.getElementById('sl-mp-waiting').style.display='none';
+      document.getElementById('sl-mp-connected-msg').textContent =
+        room.player2_name + ' joined! You are Player 1 (Purple). Game starting!';
+      document.getElementById('sl-mp-connected').style.display='flex';
+    });
+  } else {
+    const room = MultiplayerEngine.room;
+    document.getElementById('sl-mp-connected-msg').textContent =
+      'Connected to ' + room.player1_name + "'s game! You are Player 2 (Yellow). Game starting!";
+    document.getElementById('sl-mp-connected').style.display='flex';
+  }
+},
+
+mpStartGame() {
+  document.getElementById('sl-mp-connected').style.display='none';
+  this.mpMode = true;
+  this.reset();
+  const slot = MultiplayerEngine.playerSlot;
+  this.turn = slot === 'player1' ? 0 : 1;
+  const myName = FamilyMode.getActive()?.name || ('Player ' + (slot==='player1'?1:2));
+  const oppName = slot==='player1' ? MultiplayerEngine.room.player2_name : MultiplayerEngine.room.player1_name;
+  document.getElementById('sl-p0card').querySelector('div:nth-child(2)').textContent = slot==='player1' ? myName : oppName;
+  document.getElementById('sl-p1card').querySelector('div:nth-child(2)').textContent = slot==='player2' ? myName : oppName;
+  this.setSt(slot==='player1' ? 'Your turn! Roll the dice!' : oppName + "'s turn! Waiting...");
+  document.getElementById('sl-rbtn').disabled = slot !== 'player1';
+  MultiplayerEngine.onMove((move)=>{
+    this.mpReceiveMove(move);
+  });
+  MultiplayerEngine.onGameEnd(()=>{
+    this.mpMode = false;
+    this.mpClose();
+  });
+},
+
+mpReceiveMove(move) {
+  const oppSlot = MultiplayerEngine.playerSlot === 'player1' ? 1 : 0;
+  this.pending = move.steps;
+  this.pts[oppSlot] = move.pts;
+  this.turn = oppSlot;
+  this.move(move.steps);
+},
+
+mpCancel() {
+  clearInterval(this.mpDotsInterval);
+  MultiplayerEngine.cleanup();
+  this.mpClose();
+  this.mpMode = false;
+},
 };
 window.SLGame=SLGame;
 
