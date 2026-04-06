@@ -9377,7 +9377,9 @@ const MultiplayerEngine = {
   // Supabase fetch helper
   async _fetch(query='', method='GET', body=null) {
     try {
-      const token = JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}')?.access_token;
+      const authData = JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
+const token = authData?.access_token;
+const ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MDcwMjMsImV4cCI6MjA1OTk4MzAyM30.3ej4UhxiCHKpOJGKBsHsHKAyFhDzq3yCYCFMoVWpFRY';
       const res = await fetch(`https://bfivpvlzehtmksnmgnzb.supabase.co/rest/v1/multiplayer_rooms${query}`, {
         method,
         headers: {
