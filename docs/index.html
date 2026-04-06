@@ -9948,13 +9948,17 @@ async mpFindRandom() {
 mpStartGame() {
   document.getElementById('sl-mp-connected').style.display='none';
   this.mpMode = true;
-  this.reset();
   const slot = MultiplayerEngine.playerSlot;
+  this.pos=[1,1];this.pts=[0,0];this.waiting=false;this.pending=0;this.usedQ=[];
   this.turn = slot === 'player1' ? 0 : 1;
   const myName = FamilyMode.getActive()?.name || ('Player ' + (slot==='player1'?1:2));
   const oppName = slot==='player1' ? MultiplayerEngine.room.player2_name : MultiplayerEngine.room.player1_name;
   document.getElementById('sl-p0card').querySelector('div:nth-child(2)').textContent = slot==='player1' ? myName : oppName;
   document.getElementById('sl-p1card').querySelector('div:nth-child(2)').textContent = slot==='player2' ? myName : oppName;
+  const d=document.getElementById('sl-dice');if(d)d.textContent='🎲';
+  const wo=document.getElementById('sl-win-overlay');if(wo)wo.style.display='none';
+  const qo=document.getElementById('sl-q-overlay');if(qo)qo.style.display='none';
+  this.drawBoard();this.updateUI();
   this.setSt(slot==='player1' ? 'Your turn! Roll the dice!' : oppName + "'s turn! Waiting...");
   document.getElementById('sl-rbtn').disabled = slot !== 'player1';
   MultiplayerEngine.onMove((move)=>{
@@ -9966,6 +9970,16 @@ mpStartGame() {
   });
 },
 
+mpReceiveMove(move) {
+  const oppSlot = MultiplayerEngine.playerSlot === 'player1' ? 1 : 0;
+  this.pending = move.steps;
+  this.pts[oppSlot] = move.pts;
+  this.turn = oppSlot;
+  this.waiting = true;
+  document.getElementById('sl-rbtn').disabled = true;
+  this.move(move.steps);
+},
+
 mpCancel() {
   clearInterval(this.mpDotsInterval);
   MultiplayerEngine.cleanup();
@@ -9974,7 +9988,6 @@ mpCancel() {
 },
 };
 window.SLGame=SLGame;
-
 // ── WORD PUZZLE GAME ─────────────────────────────────────
 const WordPuzzle={
 PUZZLES:{
