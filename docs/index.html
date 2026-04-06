@@ -9967,16 +9967,6 @@ mpStartGame() {
   });
 },
 
-if(this.mpMode) {
-  const mySlot = MultiplayerEngine.playerSlot==='player1' ? 0 : 1;
-  const isMyTurn = this.turn === mySlot;
-  document.getElementById('sl-rbtn').disabled = !isMyTurn;
-  this.setSt(isMyTurn ? 'Your turn! Roll the dice!' : 'Waiting for opponent...');
-} else {
-  document.getElementById('sl-rbtn').disabled=false;
-  this.setSt('Player '+(this.turn+1)+'\'s turn! Roll the dice!');
-}
-},
 mpCancel() {
   clearInterval(this.mpDotsInterval);
   MultiplayerEngine.cleanup();
