@@ -9792,6 +9792,9 @@ setTimeout(()=>{
 document.getElementById('sl-q-overlay').style.display='none';
 hideReadBtn();
 this.setSt('Wrong! Correct: '+correct+'. Player '+(this.turn+1)+' stays at '+this.pos[this.turn]+'.');
+if(this.mpMode){
+  MultiplayerEngine.sendMove({steps: 0, pts: this.pts[this.turn], wrong: true});
+}
 this.nextTurn();
 },1800);
 }
