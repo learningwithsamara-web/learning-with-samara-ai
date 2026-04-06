@@ -1364,7 +1364,10 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <button class="back-btn" style="position:relative;transform:none;top:auto;left:auto;" onclick="App.showScreen('screen-games')">← Back</button>
     <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🐍 Samara's Snake & Ladder Game 🪜</div>
   </div>
-  <div style="padding:8px 16px 4px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.78rem;">Roll · Answer · Win! First to square 100 wins the crown!</div>
+  <div style="padding:8px 16px 4px;display:flex;align-items:center;justify-content:center;gap:12px;">
+  <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;">Roll · Answer · Win! First to square 100 wins the crown!</div>
+  <button onclick="SLGame.mpOpen()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;">🌐 Multiplayer</button>
+</div>
   <div style="display:flex;gap:6px;justify-content:center;padding:6px 16px;flex-wrap:wrap;" id="sl-age-bar">
     <button class="sl-age-btn active" onclick="SLGame.setAge('4-6',this)">🧒 Ages 4-6</button>
     <button class="sl-age-btn" onclick="SLGame.setAge('7-10',this)">📚 Ages 7-10</button>
@@ -1399,6 +1402,56 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
       <div id="sl-qg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
     </div>
   </div>
+  <!-- Multiplayer Menu Overlay -->
+<div id="sl-mp-menu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(199,125,255,0.5);text-align:center;">
+    <div style="font-size:3rem;margin-bottom:8px;">🌐</div>
+    <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.6rem;margin-bottom:6px;">Play Online!</div>
+    <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:24px;">Challenge a friend or find a random opponent!</div>
+    <button onclick="SLGame.mpCreate()" style="width:100%;background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:10px;">🏠 Create a Room</button>
+    <button onclick="SLGame.mpShowJoin()" style="width:100%;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:10px;">🔑 Join with Code</button>
+    <button onclick="SLGame.mpFindRandom()" style="width:100%;background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:18px;">🎲 Find Random Game</button>
+    <button onclick="SLGame.mpClose()" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- Waiting Room Overlay -->
+<div id="sl-mp-waiting" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(107,203,119,0.5);text-align:center;">
+    <div style="font-size:3rem;margin-bottom:8px;">⏳</div>
+    <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.4rem;margin-bottom:6px;">Room Created!</div>
+    <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:16px;">Share this code with your friend:</div>
+    <div id="sl-mp-code" style="font-family:'Fredoka One',cursive;font-size:3rem;color:#FFD93D;letter-spacing:8px;margin-bottom:16px;">------</div>
+    <button onclick="SLGame.mpCopyCode()" style="background:rgba(255,217,61,0.15);color:#FFD93D;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,217,61,0.4);cursor:pointer;margin-bottom:20px;">📋 Copy Code</button>
+    <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">⏳ Waiting for a friend to join...</div>
+    <div id="sl-mp-wait-dots" style="font-size:1.5rem;margin-bottom:20px;">● ○ ○</div>
+    <button onclick="SLGame.mpCancel()" style="background:rgba(255,71,87,0.2);color:#FF4757;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,71,87,0.3);cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- Join Room Overlay -->
+<div id="sl-mp-join" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(255,217,61,0.5);text-align:center;">
+    <div style="font-size:3rem;margin-bottom:8px;">🔑</div>
+    <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.4rem;margin-bottom:6px;">Join a Room</div>
+    <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:16px;">Enter your friend's 6-digit code:</div>
+    <input id="sl-mp-code-input" type="number" maxlength="6" placeholder="------"
+      style="width:100%;background:rgba(255,255,255,0.08);color:#FFD93D;font-family:'Fredoka One',cursive;font-size:2rem;text-align:center;border:2px solid rgba(255,217,61,0.4);border-radius:16px;padding:14px;margin-bottom:20px;letter-spacing:6px;outline:none;box-sizing:border-box;"
+      oninput="if(this.value.length>6)this.value=this.value.slice(0,6)"/>
+    <button onclick="SLGame.mpJoin()" style="width:100%;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:10px;">Join Game!</button>
+    <button onclick="SLGame.mpClose()" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- Multiplayer Connected Overlay -->
+<div id="sl-mp-connected" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(107,203,119,0.5);text-align:center;">
+    <div style="font-size:3rem;margin-bottom:8px;">🎮</div>
+    <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.4rem;margin-bottom:6px;">Game On!</div>
+    <div id="sl-mp-connected-msg" style="color:rgba(255,255,255,0.8);font-size:0.95rem;margin-bottom:24px;line-height:1.6;"></div>
+    <button onclick="SLGame.mpStartGame()" style="width:100%;background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.2rem;padding:16px;border-radius:16px;border:none;cursor:pointer;">Let's Play! 🎲</button>
+  </div>
+</div>
   <div id="sl-win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
     <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;text-align:center;border:3px solid #FFD93D;max-width:360px;width:90%;box-shadow:0 0 60px rgba(255,217,61,0.4);">
       <div style="font-size:4rem;margin-bottom:10px;">🏆</div>
