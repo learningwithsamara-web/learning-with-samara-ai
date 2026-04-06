@@ -9842,6 +9842,9 @@ SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
 },
 setSt(m){const el=document.getElementById('sl-status');if(el)el.textContent=m;},
 reset(){
+this.mpCode=null;
+this.mpMode=false;
+this.mpDotsInterval=null;
 this.pos=[1,1];this.pts=[0,0];this.turn=0;this.waiting=false;this.pending=0;this.usedQ=[];
 const d=document.getElementById('sl-dice');if(d)d.textContent='🎲';
 const r=document.getElementById('sl-rbtn');if(r)r.disabled=false;
