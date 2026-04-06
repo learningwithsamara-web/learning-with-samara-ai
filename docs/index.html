@@ -10025,6 +10025,31 @@ mpReceiveMove(move) {
     this.move(move.steps);
   }
 },
+mpChatOpen() {
+  document.getElementById('sl-chat-picker').style.display='flex';
+},
+
+mpChatClose() {
+  document.getElementById('sl-chat-picker').style.display='none';
+},
+
+async mpChatSend(msg) {
+  document.getElementById('sl-chat-picker').style.display='none';
+  if(!MultiplayerEngine.room) return;
+  await MultiplayerEngine._fetch(`?id=eq.${MultiplayerEngine.room.id}`, 'PATCH', {
+    last_chat: { msg, from: MultiplayerEngine.playerSlot, ts: Date.now() }
+  });
+},
+
+mpChatShow(name, msg) {
+  const toast = document.getElementById('sl-chat-toast');
+  const nameEl = document.getElementById('sl-chat-toast-name');
+  const msgEl = document.getElementById('sl-chat-toast-msg');
+  nameEl.textContent = name + ' says:';
+  msgEl.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(()=>{ toast.style.display='none'; }, 3000);
+},
 
 mpCancel() {
   clearInterval(this.mpDotsInterval);
