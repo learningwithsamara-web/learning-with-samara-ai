@@ -9719,9 +9719,9 @@ init(){
 this.reset();
 },
 roll(){
-if(this.waiting)return;
 if(this.mpMode) {
   const mySlot = MultiplayerEngine.playerSlot==='player1' ? 0 : 1;
+  console.log('[MP] roll check - mySlot:',mySlot,'this.turn:',this.turn,'waiting:',this.waiting);
   if(this.turn !== mySlot) { this.setSt('Wait for your turn!'); return; }
 }
 this.waiting=true;
@@ -9737,7 +9737,6 @@ const r=Math.floor(Math.random()*6)+1;
 d.textContent=this.DF[r-1];
 this.pending=r;
 this.setSt('Player '+(this.turn+1)+' rolled '+r+'! Answer to move!');
-if(this.mpMode && this.turn !== (MultiplayerEngine.playerSlot==='player1'?0:1)) return;
 setTimeout(()=>this.showQ(),500);
 }
 },60);
