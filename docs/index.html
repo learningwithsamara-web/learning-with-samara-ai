@@ -9719,10 +9719,13 @@ init(){
 this.reset();
 },
 roll(){
-if(this.mpMode) {
+if(this.waiting)return;
+if(this.mpMode){
   const mySlot = MultiplayerEngine.playerSlot==='player1' ? 0 : 1;
-  console.log('[MP] roll check - mySlot:',mySlot,'this.turn:',this.turn,'waiting:',this.waiting);
-  if(this.turn !== mySlot) { this.setSt('Wait for your turn!'); return; }
+  if(this.turn !== mySlot){
+    this.setSt('Wait! It is not your turn!');
+    return;
+  }
 }
 this.waiting=true;
 document.getElementById('sl-rbtn').disabled=true;
@@ -9736,7 +9739,7 @@ clearInterval(iv);
 const r=Math.floor(Math.random()*6)+1;
 d.textContent=this.DF[r-1];
 this.pending=r;
-this.setSt('Player '+(this.turn+1)+' rolled '+r+'! Answer to move!');
+this.setSt((this.mpMode?'You':'Player '+(this.turn+1))+' rolled '+r+'! Answer to move!');
 setTimeout(()=>this.showQ(),500);
 }
 },60);
@@ -9948,6 +9951,8 @@ async mpFindRandom() {
 mpStartGame() {
   document.getElementById('sl-mp-connected').style.display='none';
   this.mpMode = true;
+  document.getElementById('sl-age-bar').style.pointerEvents='none';
+  document.getElementById('sl-age-bar').style.opacity='0.4';
   const slot = MultiplayerEngine.playerSlot;
   this.pos=[1,1];this.pts=[0,0];this.waiting=false;this.pending=0;this.usedQ=[];
   this.turn = slot === 'player1' ? 0 : 1;
@@ -9971,12 +9976,11 @@ mpStartGame() {
 },
 
 mpReceiveMove(move) {
-  const oppSlot = MultiplayerEngine.playerSlot === 'player1' ? 1 : 0;
+  const oppSlot = MultiplayerEngine.playerSlot==='player1' ? 1 : 0;
   this.pending = move.steps;
   this.pts[oppSlot] = move.pts;
   this.turn = oppSlot;
-  this.waiting = true;
-  document.getElementById('sl-rbtn').disabled = true;
+  this.waiting = false;
   this.move(move.steps);
 },
 
@@ -9985,6 +9989,8 @@ mpCancel() {
   MultiplayerEngine.cleanup();
   this.mpClose();
   this.mpMode = false;
+  document.getElementById('sl-age-bar').style.pointerEvents='';
+  document.getElementById('sl-age-bar').style.opacity='';
 },
 };
 window.SLGame=SLGame;
