@@ -9893,7 +9893,7 @@ async mpCreate() {
 mpCopyCode() {
   if(this.mpCode) {
     navigator.clipboard.writeText(this.mpCode).then(()=>{
-      App.toast('Code copied! Share it with your friend!');
+      if(window.App) App.toast('Code copied! Share it with your friend!');
     });
   }
 },
@@ -9913,9 +9913,9 @@ async mpJoin() {
 
 async mpFindRandom() {
   document.getElementById('sl-mp-menu').style.display='none';
-  App.toast('Looking for a game...');
+  if(window.App) App.toast('Looking for a game...');
   const result = await MultiplayerEngine.findRandomRoom('snake_ladder');
-  if(!result) { App.toast('Could not find a game. Try again!'); return; }
+  if(!result) { if(window.App) App.toast('Could not find a game. Try again!'); return; }
   if(MultiplayerEngine.playerSlot === 'player1') {
     document.getElementById('sl-mp-waiting').style.display='flex';
     document.getElementById('sl-mp-code').textContent = MultiplayerEngine.room.code;
