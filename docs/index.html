@@ -9384,8 +9384,8 @@ const ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
         method,
         headers: {
           'Content-Type': 'application/json',
-          'apikey': token,
-          'Authorization': `Bearer ${token}`,
+          'apikey': ANON,
+          'Authorization': `Bearer ${token || ANON}`,
           'Prefer': method === 'POST' ? 'return=representation' : ''
         },
         body: body ? JSON.stringify(body) : null
