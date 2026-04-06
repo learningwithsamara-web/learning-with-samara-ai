@@ -9720,6 +9720,10 @@ this.reset();
 },
 roll(){
 if(this.waiting)return;
+if(this.mpMode) {
+  const mySlot = MultiplayerEngine.playerSlot==='player1' ? 0 : 1;
+  if(this.turn !== mySlot) { this.setSt('Wait for your turn!'); return; }
+}
 this.waiting=true;
 document.getElementById('sl-rbtn').disabled=true;
 if(SoundSystem.enabled)SoundSystem.stop();
@@ -9784,6 +9788,7 @@ if(b.textContent===correct){b.style.background='rgba(107,203,119,0.3)';b.style.b
 });
 setTimeout(()=>{
 document.getElementById('sl-q-overlay').style.display='none';
+hideReadBtn();
 this.setSt('Wrong! Correct: '+correct+'. Player '+(this.turn+1)+' stays at '+this.pos[this.turn]+'.');
 this.nextTurn();
 },1800);
