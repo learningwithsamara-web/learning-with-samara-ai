@@ -9174,6 +9174,175 @@ this.board=Array(225).fill(null);this.placed=[];
 };
 window.ScrabbleGame=ScrabbleGame;
 
+// ── MULTIPLAYER ENGINE ─────────────────────────────────────
+const MultiplayerEngine = {
+  room: null,
+  playerSlot: null, // 'player1' or 'player2'
+  pollInterval: null,
+  onMoveCallback: null,
+  onPlayerJoinedCallback: null,
+  onGameEndCallback: null,
+
+  // Generate a unique 6-digit room code
+  async generateCode() {
+    let code, exists = true;
+    while(exists) {
+      code = String(Math.floor(100000 + Math.random() * 900000));
+      const res = await this._fetch(`?select=id&code=eq.${code}&status=eq.waiting`);
+      exists = res.length > 0;
+    }
+    return code;
+  },
+
+  // Create a new room (player1)
+  async createRoom(gameType) {
+    const child = FamilyMode.getActive();
+    if(!child) { alert('Please select a child profile first!'); return null; }
+    const code = await this.generateCode();
+    const body = {
+      code,
+      game_type: gameType,
+      status: 'waiting',
+      player1_id: this._uid(),
+      player1_name: child.name,
+      player1_age_group: child.age_group || child.ageGroup || '4-6',
+      player1_data: {},
+      player2_data: {},
+      current_turn: 'player1'
+    };
+    const res = await this._fetch('', 'POST', body);
+    if(!res) return null;
+    this.room = { ...body, ...res[0] };
+    this.playerSlot = 'player1';
+    this._startPolling();
+    return code;
+  },
+
+  // Join a room by code (player2)
+  async joinRoom(code) {
+    const child = FamilyMode.getActive();
+    if(!child) { alert('Please select a child profile first!'); return false; }
+    const rooms = await this._fetch(`?code=eq.${code}&status=eq.waiting`);
+    if(!rooms.length) { alert('Room not found! Check the code and try again.'); return false; }
+    const room = rooms[0];
+    if(room.player2_id) { alert('This room is already full!'); return false; }
+    const update = {
+      player2_id: this._uid(),
+      player2_name: child.name,
+      player2_age_group: child.age_group || child.ageGroup || '4-6',
+      status: 'active'
+    };
+    await this._fetch(`?id=eq.${room.id}`, 'PATCH', update);
+    this.room = { ...room, ...update };
+    this.playerSlot = 'player2';
+    this._startPolling();
+    return true;
+  },
+
+  // Find a random available room (matchmaking)
+  async findRandomRoom(gameType) {
+    const uid = this._uid();
+    const rooms = await this._fetch(`?game_type=eq.${gameType}&status=eq.waiting&player1_id=neq.${uid}`);
+    if(rooms.length) {
+      return await this.joinRoom(rooms[0].code);
+    }
+    // No room found — create one and wait
+    return await this.createRoom(gameType);
+  },
+
+  // Send a move
+  async sendMove(moveData) {
+    if(!this.room) return;
+    const update = {
+      last_move: { ...moveData, from: this.playerSlot, ts: Date.now() },
+      current_turn: this.playerSlot === 'player1' ? 'player2' : 'player1',
+      [`${this.playerSlot}_data`]: moveData
+    };
+    await this._fetch(`?id=eq.${this.room.id}`, 'PATCH', update);
+    this.room = { ...this.room, ...update };
+  },
+
+  // End the game and delete the room
+  async endGame(winnerId) {
+    if(!this.room) return;
+    if(this.onGameEndCallback) this.onGameEndCallback(winnerId);
+    await this._fetch(`?id=eq.${this.room.id}`, 'DELETE');
+    this.cleanup();
+  },
+
+  // Register callbacks
+  onMove(cb)         { this.onMoveCallback = cb; },
+  onPlayerJoined(cb) { this.onPlayerJoinedCallback = cb; },
+  onGameEnd(cb)      { this.onGameEndCallback = cb; },
+
+  // Poll Supabase every 1.5 seconds for updates
+  _startPolling() {
+    if(this.pollInterval) clearInterval(this.pollInterval);
+    this.pollInterval = setInterval(async () => {
+      if(!this.room) return;
+      const rows = await this._fetch(`?id=eq.${this.room.id}`);
+      if(!rows.length) { this.cleanup(); return; }
+      const fresh = rows[0];
+
+      // Player 2 just joined
+      if(this.playerSlot === 'player1' && fresh.status === 'active' && this.room.status === 'waiting') {
+        this.room = fresh;
+        if(this.onPlayerJoinedCallback) this.onPlayerJoinedCallback(fresh);
+      }
+
+      // New move from opponent
+      const lastMove = fresh.last_move;
+      if(lastMove && lastMove.from !== this.playerSlot && lastMove.ts !== this.room.last_move?.ts) {
+        this.room = fresh;
+        if(this.onMoveCallback) this.onMoveCallback(lastMove);
+      } else {
+        this.room = fresh;
+      }
+    }, 1500);
+  },
+
+  // Clean up
+  cleanup() {
+    if(this.pollInterval) clearInterval(this.pollInterval);
+    this.pollInterval = null;
+    this.room = null;
+    this.playerSlot = null;
+    this.onMoveCallback = null;
+    this.onPlayerJoinedCallback = null;
+    this.onGameEndCallback = null;
+  },
+
+  // Get current user id from localStorage
+  _uid() {
+    try {
+      const raw = localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token');
+      return raw ? JSON.parse(raw).user.id : 'guest-' + Date.now();
+    } catch(e) { return 'guest-' + Date.now(); }
+  },
+
+  // Supabase fetch helper
+  async _fetch(query='', method='GET', body=null) {
+    try {
+      const token = JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}')?.access_token;
+      const res = await fetch(`https://bfivpvlzehtmksnmgnzb.supabase.co/rest/v1/multiplayer_rooms${query}`, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MDcwMjMsImV4cCI6MjA1OTk4MzAyM30.3ej4UhxiCHKpOJGKBsHsHKAyFhDzq3yCYCFMoVWpFRY',
+          'Authorization': `Bearer ${token}`,
+          'Prefer': method === 'POST' ? 'return=representation' : ''
+        },
+        body: body ? JSON.stringify(body) : null
+      });
+      if(method === 'DELETE') return true;
+      return await res.json();
+    } catch(e) {
+      console.error('[Multiplayer] fetch error:', e);
+      return method === 'GET' ? [] : null;
+    }
+  }
+};
+
 // ── SNAKE & LADDER GAME ───────────────────────────────────
 const SLGame={
 SN:{16:6,47:26,49:11,56:53,62:19,64:60,87:24,93:73,95:75,99:78},
