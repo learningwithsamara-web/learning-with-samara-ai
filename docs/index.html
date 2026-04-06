@@ -9902,8 +9902,17 @@ win(){
 document.getElementById('sl-wt').textContent='Player '+(this.turn+1)+' Wins!';
 document.getElementById('sl-wm').textContent='Amazing! Reached square 100 with '+this.pts[this.turn]+' points!';
 document.getElementById('sl-win-overlay').style.display='flex';
-SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
 document.getElementById('sl-chat-btn').style.display='none';
+if(this.mpMode){
+  SamaraCoins.add(50,'🏆 Multiplayer Snake & Ladder winner!');
+  const loserSlot = this.turn===0?1:0;
+  if(MultiplayerEngine.playerSlot===(loserSlot===0?'player1':'player2')){
+    SamaraCoins.add(5,'🎮 Thanks for playing Snake & Ladder!');
+  }
+  MultiplayerEngine.endGame(this.turn);
+}else{
+  SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
+}
 },
 setSt(m){const el=document.getElementById('sl-status');if(el)el.textContent=m;},
 reset(){
