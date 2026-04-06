@@ -9372,8 +9372,14 @@ const MultiplayerEngine = {
         this.room = fresh;
         if(this.onMoveCallback) this.onMoveCallback(lastMove);
       } else {
-        this.room = fresh;
-      }
+  // Check for new chat message
+  const freshChat = fresh.last_chat;
+  if(freshChat && freshChat.from && freshChat.from !== this.playerSlot && freshChat.ts !== this.room.last_chat?.ts) {
+    const senderName = freshChat.from === 'player1' ? fresh.player1_name : fresh.player2_name;
+    if(window.SLGame && SLGame.mpMode) SLGame.mpChatShow(senderName, freshChat.msg);
+  }
+  this.room = fresh;
+}
     }, 1500);
   },
 
@@ -9887,6 +9893,7 @@ document.getElementById('sl-wt').textContent='Player '+(this.turn+1)+' Wins!';
 document.getElementById('sl-wm').textContent='Amazing! Reached square 100 with '+this.pts[this.turn]+' points!';
 document.getElementById('sl-win-overlay').style.display='flex';
 SamaraCoins.add(25,'🎮 Snake & Ladder winner!');
+document.getElementById('sl-chat-btn').style.display='none';
 },
 setSt(m){const el=document.getElementById('sl-status');if(el)el.textContent=m;},
 reset(){
@@ -10004,6 +10011,7 @@ mpStartGame() {
   this.drawBoard();this.updateUI();
   this.setSt(slot==='player1' ? 'Your turn! Roll the dice!' : oppName + "'s turn! Waiting...");
   document.getElementById('sl-rbtn').disabled = slot !== 'player1';
+  document.getElementById('sl-chat-btn').style.display='block';
   MultiplayerEngine.onMove((move)=>{
     this.mpReceiveMove(move);
   });
@@ -10058,6 +10066,7 @@ mpCancel() {
   this.mpMode = false;
   document.getElementById('sl-age-bar').style.pointerEvents='';
   document.getElementById('sl-age-bar').style.opacity='';
+  document.getElementById('sl-chat-btn').style.display='none';
 },
 };
 window.SLGame=SLGame;
