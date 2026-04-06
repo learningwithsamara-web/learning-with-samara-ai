@@ -9822,8 +9822,21 @@ this.drawBoard();this.updateUI();
 setTimeout(()=>this.nextTurn(),1800);
 },600);
 }else{
-this.setSt('Player '+(this.turn+1)+' moves to '+np+'! +10pts');
-setTimeout(()=>this.nextTurn(),900);
+if(this.pending===6){
+  this.setSt((this.mpMode?'You':'Player '+(this.turn+1))+' rolled 6! Roll again! 🎲');
+  setTimeout(()=>{
+    this.waiting=false;
+    if(this.mpMode){
+      const mySlot=MultiplayerEngine.playerSlot==='player1'?0:1;
+      document.getElementById('sl-rbtn').disabled=this.turn!==mySlot;
+    }else{
+      document.getElementById('sl-rbtn').disabled=false;
+    }
+  },900);
+}else{
+  this.setSt('Player '+(this.turn+1)+' moves to '+np+'! +10pts');
+  setTimeout(()=>this.nextTurn(),900);
+}
 }
 },
 nextTurn(){
