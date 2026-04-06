@@ -9769,6 +9769,7 @@ btn.style.background='rgba(107,203,119,0.3)';
 btn.style.borderColor='#6BCB77';
 btn.style.color='#6BCB77';
 document.getElementById('sl-q-overlay').style.display='none';
+hideReadBtn();
 this.pts[this.turn]+=10;
 if(this.mpMode) {
   MultiplayerEngine.sendMove({steps: this.pending, pts: this.pts[this.turn]});
@@ -9961,13 +9962,12 @@ mpStartGame() {
   });
 },
 
-mpReceiveMove(move) {
-  const oppSlot = MultiplayerEngine.playerSlot === 'player1' ? 1 : 0;
-  this.pending = move.steps;
-  this.pts[oppSlot] = move.pts;
-  this.turn = oppSlot;
-  this.move(move.steps);
-},
+if(this.mpMode) {
+  const mySlot = MultiplayerEngine.playerSlot==='player1' ? 0 : 1;
+  const isMyTurn = this.turn === mySlot;
+  document.getElementById('sl-rbtn').disabled = !isMyTurn;
+  this.setSt(isMyTurn ? 'Your turn! Roll the dice!' : 'Waiting for opponent...');
+} else {
 
 mpCancel() {
   clearInterval(this.mpDotsInterval);
