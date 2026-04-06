@@ -9379,13 +9379,12 @@ const MultiplayerEngine = {
     try {
       const authData = JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
 const token = authData?.access_token;
-const ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MDcwMjMsImV4cCI6MjA1OTk4MzAyM30.3ej4UhxiCHKpOJGKBsHsHKAyFhDzq3yCYCFMoVWpFRY';
       const res = await fetch(`https://bfivpvlzehtmksnmgnzb.supabase.co/rest/v1/multiplayer_rooms${query}`, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'apikey': ANON,
-          'Authorization': `Bearer ${token || ANON}`,
+          'apikey': SUPABASE_ANON,
+          'Authorization': `Bearer ${token || SUPABASE_ANON}`,
           'Prefer': method === 'POST' ? 'return=representation' : ''
         },
         body: body ? JSON.stringify(body) : null
