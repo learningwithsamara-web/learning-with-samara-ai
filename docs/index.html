@@ -9984,7 +9984,11 @@ mpReceiveMove(move) {
   this.pts[oppSlot] = move.pts;
   this.turn = oppSlot;
   this.waiting = false;
-  this.move(move.steps);
+  if(move.wrong){
+    this.nextTurn();
+  } else {
+    this.move(move.steps);
+  }
 },
 
 mpCancel() {
