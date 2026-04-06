@@ -9382,7 +9382,7 @@ const MultiplayerEngine = {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmaXZwdmx6ZWh0bWtzbm1nbnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MDcwMjMsImV4cCI6MjA1OTk4MzAyM30.3ej4UhxiCHKpOJGKBsHsHKAyFhDzq3yCYCFMoVWpFRY',
+          'apikey': token,
           'Authorization': `Bearer ${token}`,
           'Prefer': method === 'POST' ? 'return=representation' : ''
         },
