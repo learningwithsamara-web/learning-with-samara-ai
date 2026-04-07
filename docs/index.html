@@ -9529,6 +9529,7 @@ const MultiplayerEngine = {
   if(freshChat && freshChat.from && freshChat.from !== this.playerSlot && freshChat.ts !== this.room.last_chat?.ts) {
     const senderName = freshChat.from === 'player1' ? fresh.player1_name : fresh.player2_name;
     if(window.SLGame && SLGame.mpMode) SLGame.mpChatShow(senderName, freshChat.msg);
+    if(window.RacingGame && RacingGame.mpMode) RacingGame.chatShow(senderName, freshChat.msg);
   }
   this.room = fresh;
 }
