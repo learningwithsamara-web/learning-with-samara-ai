@@ -4053,6 +4053,7 @@ const App = {
     if(id==='screen-scrabble') AITutor.hideFloat();
     if(id==='screen-word-puzzle'){AITutor.hideFloat();setTimeout(()=>WordPuzzle.newGame(),150);}
     if(id==='screen-snake-ladder'){AITutor.hideFloat();SLGame.init();}
+    if(id==='screen-racing'){AITutor.hideFloat();RacingGame.init();}
   },
 
   showProGate(message) {
@@ -10230,6 +10231,434 @@ mpCancel() {
 },
 };
 window.SLGame=SLGame;
+// ── LITTLE JR RACING GAME ─────────────────────────────────
+const RacingGame = {
+  age: '4-6',
+  mpMode: false,
+  mpCode: null,
+  mpDotsInterval: null,
+  myPos: 0,
+  oppPos: 0,
+  myName: 'You',
+  oppName: 'Opponent',
+  timerInt: null,
+  elapsed: 0,
+  animFrame: null,
+  TRACK_LENGTH: 100,
+  roadOffset: 0,
+  questionActive: false,
+
+  // Reuse SLGame question bank
+  QS: null,
+
+  init() {
+    this.QS = SLGame.QS;
+    document.getElementById('racing-mode-select').style.display='block';
+    document.getElementById('racing-game-area').style.display='none';
+  },
+
+  setAge(a, btn) {
+    this.age = a;
+    document.querySelectorAll('#racing-age-bar .sl-age-btn').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+  },
+
+  backToMenu() {
+    this.stopGame();
+    document.getElementById('racing-mode-select').style.display='block';
+    document.getElementById('racing-game-area').style.display='none';
+    document.getElementById('racing-win-overlay').style.display='none';
+  },
+
+  startSolo() {
+    this.mpMode = false;
+    this.myPos = 0;
+    this.oppPos = 0;
+    this.elapsed = 0;
+    this.questionActive = false;
+    this.myName = FamilyMode.getActive()?.name || 'You';
+    this.oppName = 'Samara AI';
+    document.getElementById('racing-mode-select').style.display='none';
+    document.getElementById('racing-game-area').style.display='block';
+    document.getElementById('racing-win-overlay').style.display='none';
+    document.getElementById('racing-chat-btn').style.display='none';
+    document.getElementById('racing-status').textContent='Answer questions to race ahead!';
+    this.startTimer();
+    this.startAI();
+    this.drawTrack();
+    setTimeout(()=>this.showQuestion(), 1500);
+  },
+
+  stopGame() {
+    clearInterval(this.timerInt);
+    clearInterval(this._aiInt);
+    if(this.animFrame) cancelAnimationFrame(this.animFrame);
+  },
+
+  startTimer() {
+    clearInterval(this.timerInt);
+    this.elapsed = 0;
+    this.timerInt = setInterval(()=>{
+      this.elapsed++;
+      const el = document.getElementById('racing-timer');
+      if(el) el.textContent = '⏱ ' + this.elapsed + 's';
+    }, 1000);
+  },
+
+  startAI() {
+    clearInterval(this._aiInt);
+    this._aiInt = setInterval(()=>{
+      if(this.questionActive) return;
+      if(Math.random() < 0.4) {
+        this.oppPos = Math.min(this.oppPos + Math.floor(Math.random()*8)+3, this.TRACK_LENGTH);
+        this.drawTrack();
+        if(this.oppPos >= this.TRACK_LENGTH) {
+          this.endGame(false);
+        }
+      }
+    }, 2000);
+  },
+
+  showQuestion() {
+    if(this.questionActive) return;
+    this.questionActive = true;
+    const qs = this.QS[this.age];
+    const q = qs[Math.floor(Math.random()*qs.length)];
+    const all = [q.a, ...q.w].sort(()=>Math.random()-0.5);
+    document.getElementById('racing-qq').textContent = q.q;
+    const g = document.getElementById('racing-qg');
+    g.innerHTML = '';
+    all.forEach(a=>{
+      const b = document.createElement('button');
+      b.style.cssText='background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:11px 8px;font-size:0.8rem;cursor:pointer;text-align:center;font-weight:700;transition:all 0.2s;';
+      b.textContent = a;
+      b.onclick = ()=>this.checkAnswer(a, q.a, b);
+      g.appendChild(b);
+    });
+    document.getElementById('racing-q-overlay').style.display='flex';
+    if(SoundSystem._usingBrowserFallback) {
+      SoundSystem.speakQuestion(q.q);
+    } else {
+      showReadBtn(()=>SoundSystem.speakQuestion(q.q));
+    }
+  },
+
+  checkAnswer(sel, correct, btn) {
+    document.querySelectorAll('#racing-qg button').forEach(b=>b.onclick=null);
+    if(sel === correct) {
+      btn.style.background='rgba(107,203,119,0.3)';
+      btn.style.borderColor='#6BCB77';
+      btn.style.color='#6BCB77';
+      const advance = Math.floor(Math.random()*8)+5;
+      this.myPos = Math.min(this.myPos + advance, this.TRACK_LENGTH);
+      setTimeout(()=>{
+        document.getElementById('racing-q-overlay').style.display='none';
+        hideReadBtn();
+        this.questionActive = false;
+        this.drawTrack();
+        document.getElementById('racing-status').textContent='Great answer! +'+advance+' meters! 🏎️';
+        if(this.myPos >= this.TRACK_LENGTH) {
+          this.endGame(true);
+          return;
+        }
+        if(this.mpMode) {
+          MultiplayerEngine.sendMove({pos: this.myPos, finished: false});
+        }
+        setTimeout(()=>this.showQuestion(), 2000);
+      }, 800);
+    } else {
+      btn.style.background='rgba(255,71,87,0.3)';
+      btn.style.borderColor='#FF4757';
+      btn.style.color='#FF4757';
+      document.querySelectorAll('#racing-qg button').forEach(b=>{
+        if(b.textContent===correct){b.style.background='rgba(107,203,119,0.3)';b.style.borderColor='#6BCB77';b.style.color='#6BCB77';}
+      });
+      setTimeout(()=>{
+        document.getElementById('racing-q-overlay').style.display='none';
+        hideReadBtn();
+        this.questionActive = false;
+        document.getElementById('racing-status').textContent='Wrong! Correct: '+correct+'. No advance! 😅';
+        if(this.mpMode) {
+          MultiplayerEngine.sendMove({pos: this.myPos, finished: false, wrong: true});
+        }
+        setTimeout(()=>this.showQuestion(), 2000);
+      }, 1800);
+    }
+  },
+
+  drawTrack() {
+    const cv = document.getElementById('racing-canvas');
+    if(!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0,0,W,H);
+
+    // Sky
+    const sky = ctx.createLinearGradient(0,0,0,H*0.4);
+    sky.addColorStop(0,'#0f0c29');
+    sky.addColorStop(1,'#302b63');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0,0,W,H*0.4);
+
+    // Ground
+    const ground = ctx.createLinearGradient(0,H*0.4,0,H);
+    ground.addColorStop(0,'#1a472a');
+    ground.addColorStop(1,'#0d2818');
+    ctx.fillStyle = ground;
+    ctx.fillRect(0,H*0.4,W,H*0.6);
+
+    // Road
+    ctx.fillStyle='#333';
+    ctx.fillRect(W*0.2,H*0.4,W*0.6,H*0.6);
+
+    // Road lines
+    ctx.strokeStyle='#FFD93D';
+    ctx.lineWidth=3;
+    ctx.setLineDash([20,15]);
+    ctx.beginPath();
+    ctx.moveTo(W*0.5,H*0.4);
+    ctx.lineTo(W*0.5,H);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Finish line
+    const finishY = H*0.45;
+    for(let i=0;i<8;i++){
+      ctx.fillStyle = i%2===0?'#fff':'#000';
+      ctx.fillRect(W*0.2+i*(W*0.6/8), finishY, W*0.6/8, 15);
+    }
+    ctx.fillStyle='#FFD93D';
+    ctx.font='bold 14px Nunito';
+    ctx.textAlign='center';
+    ctx.fillText('🏁 FINISH', W*0.5, finishY-5);
+
+    // Progress to Y position (inverted — finish at top)
+    const myY = H*0.9 - (this.myPos/this.TRACK_LENGTH)*(H*0.9-H*0.5);
+    const oppY = H*0.9 - (this.oppPos/this.TRACK_LENGTH)*(H*0.9-H*0.5);
+
+    // Draw opponent car (right side - red)
+    this.drawCar(ctx, W*0.58, oppY, '#FF4757', this.oppName);
+
+    // Draw my car (left side - purple)
+    this.drawCar(ctx, W*0.32, myY, '#C77DFF', this.myName);
+
+    // Progress bars at bottom
+    this.drawProgressBar(ctx, W*0.05, H-40, W*0.4, 16, this.myPos/this.TRACK_LENGTH, '#C77DFF', this.myName);
+    this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, this.oppPos/this.TRACK_LENGTH, '#FF4757', this.oppName);
+  },
+
+  drawCar(ctx, x, y, color, label) {
+    // Car body
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x-18, y-12, 36, 24, 6);
+    ctx.fill();
+    // Car roof
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x-10, y-20, 20, 12, 4);
+    ctx.fill();
+    // Windows
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.beginPath();
+    ctx.roundRect(x-8, y-19, 16, 10, 3);
+    ctx.fill();
+    // Wheels
+    ctx.fillStyle='#1a1a2e';
+    ctx.beginPath(); ctx.arc(x-12, y+12, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+12, y+12, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x-12, y-8, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+12, y-8, 5, 0, Math.PI*2); ctx.fill();
+    // Wheel shine
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    [x-12, x+12].forEach(wx=>{
+      [y+12, y-8].forEach(wy=>{
+        ctx.beginPath(); ctx.arc(wx, wy, 2, 0, Math.PI*2); ctx.fill();
+      });
+    });
+    // Label
+    ctx.fillStyle='#fff';
+    ctx.font='bold 9px Nunito';
+    ctx.textAlign='center';
+    ctx.fillText(label.slice(0,8), x, y+28);
+  },
+
+  drawProgressBar(ctx, x, y, w, h, pct, color, label) {
+    ctx.fillStyle='rgba(255,255,255,0.1)';
+    ctx.beginPath(); ctx.roundRect(x,y,w,h,h/2); ctx.fill();
+    ctx.fillStyle=color;
+    ctx.beginPath(); ctx.roundRect(x,y,w*Math.min(pct,1),h,h/2); ctx.fill();
+    ctx.fillStyle='#fff';
+    ctx.font='9px Nunito';
+    ctx.textAlign='left';
+    ctx.fillText(label.slice(0,8)+' '+Math.round(pct*100)+'%', x, y-3);
+  },
+
+  endGame(iWon) {
+    this.stopGame();
+    document.getElementById('racing-q-overlay').style.display='none';
+    document.getElementById('racing-chat-btn').style.display='none';
+    hideReadBtn();
+    const wt = document.getElementById('racing-wt');
+    const wm = document.getElementById('racing-wm');
+    if(iWon) {
+      wt.textContent='🏆 You Win!';
+      wm.textContent='Amazing race! Finished in '+this.elapsed+' seconds!';
+      if(this.mpMode){
+        SamaraCoins.add(50,'🏎️ Little Jr Racing winner!');
+        MultiplayerEngine.endGame('me');
+      } else {
+        SamaraCoins.add(25,'🏎️ Little Jr Racing winner!');
+      }
+    } else {
+      wt.textContent='🥈 So Close!';
+      wm.textContent='Great effort! Keep practising and you will win next time!';
+      if(this.mpMode) SamaraCoins.add(5,'🏎️ Thanks for racing!');
+    }
+    document.getElementById('racing-win-overlay').style.display='flex';
+    SoundSystem.speakBaby(iWon ? 'You win! Amazing racing!' : 'So close! Try again!');
+  },
+
+  // ── MULTIPLAYER ──────────────────────────────────────────
+  openMultiplayer() {
+    if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('Race a Friend is a Pro feature!');return;}
+    document.getElementById('racing-mp-menu').style.display='flex';
+  },
+
+  mpClose() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    document.getElementById('racing-mp-join').style.display='none';
+    document.getElementById('racing-mp-waiting').style.display='none';
+  },
+
+  mpShowJoin() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    document.getElementById('racing-mp-join').style.display='flex';
+  },
+
+  async mpCreate() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    document.getElementById('racing-mp-waiting').style.display='flex';
+    const code = await MultiplayerEngine.createRoom('racing');
+    if(!code){ this.mpClose(); return; }
+    this.mpCode = code;
+    document.getElementById('racing-mp-code').textContent = code;
+    let d=0;
+    const dots=['● ○ ○','○ ● ○','○ ○ ●'];
+    this.mpDotsInterval = setInterval(()=>{
+      document.getElementById('racing-mp-wait-dots').textContent=dots[d%3]; d++;
+    },600);
+    MultiplayerEngine.onPlayerJoined((room)=>{
+      clearInterval(this.mpDotsInterval);
+      document.getElementById('racing-mp-waiting').style.display='none';
+      document.getElementById('racing-mp-connected-msg').textContent=room.player2_name+' joined! You are the Purple car. Race starting!';
+      document.getElementById('racing-mp-connected').style.display='flex';
+    });
+  },
+
+  mpCopyCode() {
+    if(this.mpCode) navigator.clipboard.writeText(this.mpCode).then(()=>{ if(window.App) App.toast('Code copied!'); });
+  },
+
+  async mpJoin() {
+    const input = document.getElementById('racing-mp-code-input');
+    const code = (input.value||'').trim();
+    if(code.length!==6){ if(window.App) App.toast('Please enter a 6-digit code!'); return; }
+    document.getElementById('racing-mp-join').style.display='none';
+    const ok = await MultiplayerEngine.joinRoom(code);
+    if(!ok){ document.getElementById('racing-mp-join').style.display='flex'; return; }
+    const room = MultiplayerEngine.room;
+    document.getElementById('racing-mp-connected-msg').textContent='Connected to '+room.player1_name+"'s race! You are the Red car. Race starting!";
+    document.getElementById('racing-mp-connected').style.display='flex';
+  },
+
+  async mpFindRandom() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    if(window.App) App.toast('Looking for a race...');
+    const result = await MultiplayerEngine.findRandomRoom('racing');
+    if(!result){ if(window.App) App.toast('Could not find a race. Try again!'); return; }
+    if(MultiplayerEngine.playerSlot==='player1'){
+      document.getElementById('racing-mp-waiting').style.display='flex';
+      document.getElementById('racing-mp-code').textContent=MultiplayerEngine.room.code;
+      let d=0;
+      const dots=['● ○ ○','○ ● ○','○ ○ ●'];
+      this.mpDotsInterval=setInterval(()=>{
+        document.getElementById('racing-mp-wait-dots').textContent=dots[d%3]; d++;
+      },600);
+      MultiplayerEngine.onPlayerJoined((room)=>{
+        clearInterval(this.mpDotsInterval);
+        document.getElementById('racing-mp-waiting').style.display='none';
+        document.getElementById('racing-mp-connected-msg').textContent=room.player2_name+' joined! You are the Purple car. Race starting!';
+        document.getElementById('racing-mp-connected').style.display='flex';
+      });
+    } else {
+      const room=MultiplayerEngine.room;
+      document.getElementById('racing-mp-connected-msg').textContent='Connected to '+room.player1_name+"'s race! You are the Red car. Race starting!";
+      document.getElementById('racing-mp-connected').style.display='flex';
+    }
+  },
+
+  mpStartGame() {
+    document.getElementById('racing-mp-connected').style.display='none';
+    this.mpMode = true;
+    this.myPos = 0;
+    this.oppPos = 0;
+    this.elapsed = 0;
+    this.questionActive = false;
+    const slot = MultiplayerEngine.playerSlot;
+    this.myName = FamilyMode.getActive()?.name || (slot==='player1'?'Player 1':'Player 2');
+    this.oppName = slot==='player1' ? MultiplayerEngine.room.player2_name : MultiplayerEngine.room.player1_name;
+    document.getElementById('racing-mode-select').style.display='none';
+    document.getElementById('racing-game-area').style.display='block';
+    document.getElementById('racing-win-overlay').style.display='none';
+    document.getElementById('racing-chat-btn').style.display='flex';
+    document.getElementById('racing-age-bar').style.pointerEvents='none';
+    document.getElementById('racing-age-bar').style.opacity='0.4';
+    this.startTimer();
+    this.drawTrack();
+    MultiplayerEngine.onMove((move)=>this.mpReceiveMove(move));
+    MultiplayerEngine.onGameEnd(()=>{ this.mpMode=false; this.mpClose(); });
+    setTimeout(()=>this.showQuestion(), 1500);
+  },
+
+  mpReceiveMove(move) {
+    this.oppPos = move.pos || this.oppPos;
+    this.drawTrack();
+    if(move.finished){
+      this.endGame(false);
+    }
+  },
+
+  mpCancel() {
+    clearInterval(this.mpDotsInterval);
+    MultiplayerEngine.cleanup();
+    this.mpClose();
+    this.mpMode = false;
+    document.getElementById('racing-age-bar').style.pointerEvents='';
+    document.getElementById('racing-age-bar').style.opacity='';
+  },
+
+  // ── CHAT ─────────────────────────────────────────────────
+  chatOpen() { document.getElementById('racing-chat-picker').style.display='flex'; },
+  chatClose() { document.getElementById('racing-chat-picker').style.display='none'; },
+
+  async chatSend(msg) {
+    document.getElementById('racing-chat-picker').style.display='none';
+    if(!MultiplayerEngine.room) return;
+    await MultiplayerEngine._fetch(`?id=eq.${MultiplayerEngine.room.id}`,'PATCH',{
+      last_chat:{ msg, from: MultiplayerEngine.playerSlot, ts: Date.now() }
+    });
+  },
+
+  chatShow(name, msg) {
+    const toast=document.getElementById('racing-chat-toast');
+    document.getElementById('racing-chat-toast-name').textContent=name+' says:';
+    document.getElementById('racing-chat-toast-msg').textContent=msg;
+    toast.style.display='block';
+    setTimeout(()=>{ toast.style.display='none'; },3000);
+  },
+};
+window.RacingGame=RacingGame;
 // ── WORD PUZZLE GAME ─────────────────────────────────────
 const WordPuzzle={
 PUZZLES:{
