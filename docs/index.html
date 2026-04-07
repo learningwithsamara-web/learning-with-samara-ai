@@ -1397,7 +1397,8 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-size:4rem;margin-bottom:8px;">🏎️</div>
       <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;">Little Jr Racing!</div>
-      <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:6px;">Choose your race mode!</div>
+<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:6px;">Choose your race mode!</div>
+<button onclick="document.getElementById('racing-rules-overlay').style.display='flex'" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:8px 20px;border-radius:20px;border:1px solid rgba(255,255,255,0.3);cursor:pointer;margin-top:10px;">📋 How to Play</button>
     </div>
     <!-- Age selector -->
     <div style="display:flex;gap:6px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;" id="racing-age-bar">
@@ -10314,6 +10315,7 @@ this.myName = FamilyMode.getActive()?.name || 'You';
     document.getElementById('racing-win-overlay').style.display='none';
     document.getElementById('racing-chat-btn').style.display='none';
     document.getElementById('racing-status').textContent='Answer correctly to race ahead!';
+    document.getElementById('racing-rules-overlay').style.display='flex';
     this.startAI();
     this.drawTrack();
     setTimeout(()=>this.showQuestion(), 1500);
