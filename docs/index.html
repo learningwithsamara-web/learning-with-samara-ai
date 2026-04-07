@@ -10650,10 +10650,11 @@ const slot = MultiplayerEngine.playerSlot;
     this.drawTrack();
     if(move.finished){ 
       this.gameOver = true;
+      clearInterval(this._aiInt);
       document.getElementById('racing-q-overlay').style.display='none';
       document.querySelectorAll('#racing-qg button').forEach(b=>b.onclick=null);
       hideReadBtn();
-      setTimeout(()=>this.endGame(false), 500);
+      setTimeout(()=>this.endGame(false), 300);
     }
   },
   mpCancel() {
