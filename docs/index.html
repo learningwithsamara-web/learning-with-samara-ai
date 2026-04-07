@@ -9512,8 +9512,7 @@ const MultiplayerEngine = {
 
   // Send a move
   async sendMove(moveData) {
-    if(!this.room) { console.log('[MP] sendMove BLOCKED - room is null!'); return; }
-    console.log('[MP] sendMove called:', JSON.stringify(moveData));
+    if(!this.room) return;
     const update = {
       last_move: { ...moveData, from: this.playerSlot, ts: Date.now() },
       current_turn: this.playerSlot === 'player1' ? 'player2' : 'player1',
@@ -10659,11 +10658,9 @@ const slot = MultiplayerEngine.playerSlot;
   },
 
   mpReceiveMove(move) {
-    console.log('[RACE] mpReceiveMove:', JSON.stringify(move), 'gameOver:', this.gameOver);
     if(this.gameOver) return;
     this.oppPos = move.pos || this.oppPos;
-    if(move.finished){ 
-      console.log('[RACE] opponent finished! showing lose screen');
+    if(move.finished){
       this.gameOver = true;
       this.questionActive = true;
       this.oppPos = this.TRACK_LENGTH;
@@ -10676,7 +10673,6 @@ const slot = MultiplayerEngine.playerSlot;
       SamaraCoins.add(5,'🏎️ Thanks for racing!');
       MultiplayerEngine.cleanup();
       setTimeout(()=>{
-        console.log('[RACE] showing lose overlay now');
         document.getElementById('racing-wt').textContent='🥈 So Close!';
         document.getElementById('racing-wm').textContent='Great effort! Keep practising!';
         document.getElementById('racing-my-score').textContent = this.myName+': '+this.myPos+'%';
