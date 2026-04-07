@@ -10318,12 +10318,66 @@ const RacingGame = {
     }, 3000);
   },
 
+  checkAnswer(sel, correct, btn) {
+    document.querySelectorAll('#racing-qg button').forEach(b=>b.onclick=null);
+    if(sel === correct) {
+      btn.style.background='rgba(107,203,119,0.3)';
+      btn.style.borderColor='#6BCB77';
+      btn.style.color='#6BCB77';
+      const advance = Math.floor(Math.random()*6)+8;
+      this.myPos = Math.min(this.myPos + advance, this.TRACK_LENGTH);
+      setTimeout(()=>{
+        document.getElementById('racing-q-overlay').style.display='none';
+        hideReadBtn();
+        this.questionActive = false;
+        this.drawTrack();
+        document.getElementById('racing-status').textContent='Correct! +'+advance+' meters! 🏎️💨';
+        SoundSystem.speakBaby('Correct! Great job!');
+        if(this.myPos >= this.TRACK_LENGTH){
+          this.endGame(true);
+          return;
+        }
+        if(this.mpMode){
+          MultiplayerEngine.sendMove({pos: this.myPos, finished: false});
+        }
+        setTimeout(()=>this.showQuestion(), 2000);
+      }, 800);
+    } else {
+      btn.style.background='rgba(255,71,87,0.3)';
+      btn.style.borderColor='#FF4757';
+      btn.style.color='#FF4757';
+      document.querySelectorAll('#racing-qg button').forEach(b=>{
+        if(b.textContent===correct){
+          b.style.background='rgba(107,203,119,0.3)';
+          b.style.borderColor='#6BCB77';
+          b.style.color='#6BCB77';
+        }
+      });
+      this.oppPos = Math.min(this.oppPos + 6, this.TRACK_LENGTH);
+      this.drawTrack();
+      setTimeout(()=>{
+        document.getElementById('racing-q-overlay').style.display='none';
+        hideReadBtn();
+        this.questionActive = false;
+        document.getElementById('racing-status').textContent='Wrong! Samara AI zooms ahead! 😅';
+        SoundSystem.speakBaby('Oh no! Try the next one!');
+        if(this.oppPos >= this.TRACK_LENGTH){
+          this.endGame(false);
+          return;
+        }
+        if(this.mpMode){
+          MultiplayerEngine.sendMove({pos: this.myPos, finished: false, wrong: true});
+        }
+        setTimeout(()=>this.showQuestion(), 2000);
+      }, 1800);
+    }
+  },
+
   setAge(a, btn) {
     this.age = a;
     document.querySelectorAll('#racing-age-bar .sl-age-btn').forEach(b=>b.classList.remove('active'));
     if(btn) btn.classList.add('active');
   },
-
   backToMenu() {
     this.stopGame() {
   clearInterval(this.timerInt);
