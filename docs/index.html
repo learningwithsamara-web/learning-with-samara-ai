@@ -10286,7 +10286,8 @@ const RacingGame = {
     this.oppPos = 0;
     this.elapsed = 0;
     this.questionActive = false;
-    this.myName = FamilyMode.getActive()?.name || 'You';
+this.gameOver = false;
+this.myName = FamilyMode.getActive()?.name || 'You';
     this.oppName = 'Samara AI';
     document.getElementById('racing-mode-select').style.display='none';
     document.getElementById('racing-game-area').style.display='block';
@@ -10602,7 +10603,8 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
     this.oppPos = 0;
     this.elapsed = 0;
     this.questionActive = false;
-    const slot = MultiplayerEngine.playerSlot;
+this.gameOver = false;
+const slot = MultiplayerEngine.playerSlot;
     this.myName = FamilyMode.getActive()?.name || (slot==='player1'?'Player 1':'Player 2');
     this.oppName = slot==='player1' ? MultiplayerEngine.room.player2_name : MultiplayerEngine.room.player1_name;
     document.getElementById('racing-mode-select').style.display='none';
