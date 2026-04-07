@@ -9512,7 +9512,7 @@ const MultiplayerEngine = {
 
   // Send a move
   async sendMove(moveData) {
-    if(!this.room) return;
+    if(!this.room) { console.log('[MP] sendMove BLOCKED - room is null!'); return; }
     console.log('[MP] sendMove called:', JSON.stringify(moveData));
     const update = {
       last_move: { ...moveData, from: this.playerSlot, ts: Date.now() },
