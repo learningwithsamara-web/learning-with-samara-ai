@@ -10695,7 +10695,11 @@ const slot = MultiplayerEngine.playerSlot;
     this.mpMode = false;
     this._wasMultiplayer = false;
     this.gameOver = false;
-    setTimeout(()=>this.openMultiplayer(), 300);
+    setTimeout(()=>{
+    const input = document.getElementById('racing-mp-code-input');
+    if(input) input.value = '';
+    this.openMultiplayer();
+  }, 300);
   },
   mpCancel() {
     clearInterval(this.mpDotsInterval);
