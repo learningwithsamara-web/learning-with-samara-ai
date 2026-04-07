@@ -10645,9 +10645,11 @@ const slot = MultiplayerEngine.playerSlot;
   },
 
   mpReceiveMove(move) {
+    console.log('[RACE] mpReceiveMove:', JSON.stringify(move), 'gameOver:', this.gameOver);
     if(this.gameOver) return;
     this.oppPos = move.pos || this.oppPos;
     if(move.finished){ 
+      console.log('[RACE] opponent finished! showing lose screen');
       this.gameOver = true;
       this.questionActive = true;
       this.oppPos = this.TRACK_LENGTH;
@@ -10660,6 +10662,7 @@ const slot = MultiplayerEngine.playerSlot;
       SamaraCoins.add(5,'🏎️ Thanks for racing!');
       MultiplayerEngine.cleanup();
       setTimeout(()=>{
+        console.log('[RACE] showing lose overlay now');
         document.getElementById('racing-wt').textContent='🥈 So Close!';
         document.getElementById('racing-wm').textContent='Great effort! '+this.oppName+' finished first! Keep practising!';
         document.getElementById('racing-chat-btn').style.display='none';
@@ -10670,7 +10673,6 @@ const slot = MultiplayerEngine.playerSlot;
       this.drawTrack();
     }
   },
-  mpCancel() {
     clearInterval(this.mpDotsInterval);
     MultiplayerEngine.cleanup();
     this.mpClose();
