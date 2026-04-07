@@ -10503,9 +10503,12 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
         SoundSystem.speakBaby('Correct! Great job!');
         if(this.myPos >= this.TRACK_LENGTH){
           if(this.mpMode){
-            MultiplayerEngine.sendMove({pos: this.myPos, finished: true});
+            MultiplayerEngine.sendMove({pos: this.myPos, finished: true}).then(()=>{
+              this.endGame(true);
+            });
+          } else {
+            this.endGame(true);
           }
-          this.endGame(true);
           return;
         }
         if(this.mpMode){
