@@ -10673,6 +10673,7 @@ const slot = MultiplayerEngine.playerSlot;
       this.drawTrack();
     }
   },
+  mpCancel() {
     clearInterval(this.mpDotsInterval);
     MultiplayerEngine.cleanup();
     this.mpClose();
