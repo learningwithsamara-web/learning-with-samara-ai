@@ -10504,6 +10504,139 @@ const RacingGame = {
       }, 1800);
     }
 },
+  openMultiplayer() {
+    if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('Race a Friend is a Pro feature!');return;}
+    document.getElementById('racing-mp-menu').style.display='flex';
+  },
+
+  mpClose() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    document.getElementById('racing-mp-join').style.display='none';
+    document.getElementById('racing-mp-waiting').style.display='none';
+  },
+
+  mpShowJoin() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    document.getElementById('racing-mp-join').style.display='flex';
+  },
+
+  async mpCreate() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    document.getElementById('racing-mp-waiting').style.display='flex';
+    const code = await MultiplayerEngine.createRoom('racing');
+    if(!code){ this.mpClose(); return; }
+    this.mpCode = code;
+    document.getElementById('racing-mp-code').textContent = code;
+    let d=0;
+    const dots=['● ○ ○','○ ● ○','○ ○ ●'];
+    this.mpDotsInterval = setInterval(()=>{
+      document.getElementById('racing-mp-wait-dots').textContent=dots[d%3]; d++;
+    },600);
+    MultiplayerEngine.onPlayerJoined((room)=>{
+      clearInterval(this.mpDotsInterval);
+      document.getElementById('racing-mp-waiting').style.display='none';
+      document.getElementById('racing-mp-connected-msg').textContent=room.player2_name+' joined! You are the Purple car. Race starting!';
+      document.getElementById('racing-mp-connected').style.display='flex';
+    });
+  },
+
+  mpCopyCode() {
+    if(this.mpCode) navigator.clipboard.writeText(this.mpCode).then(()=>{ if(window.App) App.toast('Code copied!'); });
+  },
+
+  async mpJoin() {
+    const input = document.getElementById('racing-mp-code-input');
+    const code = (input.value||'').trim();
+    if(code.length!==6){ if(window.App) App.toast('Please enter a 6-digit code!'); return; }
+    document.getElementById('racing-mp-join').style.display='none';
+    const ok = await MultiplayerEngine.joinRoom(code);
+    if(!ok){ document.getElementById('racing-mp-join').style.display='flex'; return; }
+    const room = MultiplayerEngine.room;
+    document.getElementById('racing-mp-connected-msg').textContent='Connected to '+room.player1_name+"'s race! You are the Red car. Race starting!";
+    document.getElementById('racing-mp-connected').style.display='flex';
+  },
+
+  async mpFindRandom() {
+    document.getElementById('racing-mp-menu').style.display='none';
+    if(window.App) App.toast('Looking for a race...');
+    const result = await MultiplayerEngine.findRandomRoom('racing');
+    if(!result){ if(window.App) App.toast('Could not find a race. Try again!'); return; }
+    if(MultiplayerEngine.playerSlot==='player1'){
+      document.getElementById('racing-mp-waiting').style.display='flex';
+      document.getElementById('racing-mp-code').textContent=MultiplayerEngine.room.code;
+      let d=0;
+      const dots=['● ○ ○','○ ● ○','○ ○ ●'];
+      this.mpDotsInterval=setInterval(()=>{
+        document.getElementById('racing-mp-wait-dots').textContent=dots[d%3]; d++;
+      },600);
+      MultiplayerEngine.onPlayerJoined((room)=>{
+        clearInterval(this.mpDotsInterval);
+        document.getElementById('racing-mp-waiting').style.display='none';
+        document.getElementById('racing-mp-connected-msg').textContent=room.player2_name+' joined! You are the Purple car. Race starting!';
+        document.getElementById('racing-mp-connected').style.display='flex';
+      });
+    } else {
+      const room=MultiplayerEngine.room;
+      document.getElementById('racing-mp-connected-msg').textContent='Connected to '+room.player1_name+"'s race! You are the Red car. Race starting!";
+      document.getElementById('racing-mp-connected').style.display='flex';
+    }
+  },
+
+  mpStartGame() {
+    document.getElementById('racing-mp-connected').style.display='none';
+    this.mpMode = true;
+    this.myPos = 0;
+    this.oppPos = 0;
+    this.elapsed = 0;
+    this.questionActive = false;
+    const slot = MultiplayerEngine.playerSlot;
+    this.myName = FamilyMode.getActive()?.name || (slot==='player1'?'Player 1':'Player 2');
+    this.oppName = slot==='player1' ? MultiplayerEngine.room.player2_name : MultiplayerEngine.room.player1_name;
+    document.getElementById('racing-mode-select').style.display='none';
+    document.getElementById('racing-game-area').style.display='block';
+    document.getElementById('racing-win-overlay').style.display='none';
+    document.getElementById('racing-chat-btn').style.display='flex';
+    document.getElementById('racing-age-bar').style.pointerEvents='none';
+    document.getElementById('racing-age-bar').style.opacity='0.4';
+    this.drawTrack();
+    MultiplayerEngine.onMove((move)=>this.mpReceiveMove(move));
+    MultiplayerEngine.onGameEnd(()=>{ this.mpMode=false; this.mpClose(); });
+    setTimeout(()=>this.showQuestion(), 1500);
+  },
+
+  mpReceiveMove(move) {
+    this.oppPos = move.pos || this.oppPos;
+    this.drawTrack();
+    if(move.finished){ this.endGame(false); }
+  },
+
+  mpCancel() {
+    clearInterval(this.mpDotsInterval);
+    MultiplayerEngine.cleanup();
+    this.mpClose();
+    this.mpMode = false;
+    document.getElementById('racing-age-bar').style.pointerEvents='';
+    document.getElementById('racing-age-bar').style.opacity='';
+  },
+
+  chatOpen() { document.getElementById('racing-chat-picker').style.display='flex'; },
+  chatClose() { document.getElementById('racing-chat-picker').style.display='none'; },
+
+  async chatSend(msg) {
+    document.getElementById('racing-chat-picker').style.display='none';
+    if(!MultiplayerEngine.room) return;
+    await MultiplayerEngine._fetch(`?id=eq.${MultiplayerEngine.room.id}`,'PATCH',{
+      last_chat:{ msg, from: MultiplayerEngine.playerSlot, ts: Date.now() }
+    });
+  },
+
+  chatShow(name, msg) {
+    const toast=document.getElementById('racing-chat-toast');
+    document.getElementById('racing-chat-toast-name').textContent=name+' says:';
+    document.getElementById('racing-chat-toast-msg').textContent=msg;
+    toast.style.display='block';
+    setTimeout(()=>{ toast.style.display='none'; },3000);
+  },
 };
 window.RacingGame=RacingGame;
 
