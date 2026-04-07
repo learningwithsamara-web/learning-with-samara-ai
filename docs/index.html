@@ -9479,7 +9479,6 @@ const MultiplayerEngine = {
     const child = FamilyMode.getActive();
     if(!child) { alert('Please select a child profile first!'); return false; }
     const rooms = await this._fetch(`?code=eq.${code}&status=eq.waiting`);
-    console.log('[MP] Join lookup result:', JSON.stringify(rooms));
     if(!rooms.length) { alert('Room not found! Check the code and try again.'); return false; }
     const room = rooms[0];
     if(room.player2_id) { alert('This room is already full!'); return false; }
