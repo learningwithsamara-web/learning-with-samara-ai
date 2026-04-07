@@ -10342,6 +10342,8 @@ this.myName = FamilyMode.getActive()?.name || 'You';
     hideReadBtn();
     const wt = document.getElementById('racing-wt');
     const wm = document.getElementById('racing-wm');
+    document.getElementById('racing-my-score').textContent = this.myName+': '+this.myPos+'%';
+    document.getElementById('racing-opp-score').textContent = this.oppName+': '+this.oppPos+'%';
     if(iWon) {
       wt.textContent='🏆 You Win!';
       wm.textContent='Amazing race! Well done!';
