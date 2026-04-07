@@ -10307,6 +10307,8 @@ const RacingGame = {
   },
 
   endGame(iWon) {
+    if(this.gameOver && !iWon) return;
+    this.gameOver = true;
     this.stopGame();
     document.getElementById('racing-q-overlay').style.display='none';
     document.getElementById('racing-chat-btn').style.display='none';
@@ -10616,11 +10618,14 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
   },
 
   mpReceiveMove(move) {
+    if(this.gameOver) return;
     this.oppPos = move.pos || this.oppPos;
     this.drawTrack();
-    if(move.finished){ this.endGame(false); }
+    if(move.finished){ 
+      this.gameOver = true;
+      this.endGame(false); 
+    }
   },
-
   mpCancel() {
     clearInterval(this.mpDotsInterval);
     MultiplayerEngine.cleanup();
