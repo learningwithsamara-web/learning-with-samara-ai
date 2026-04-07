@@ -10510,9 +10510,13 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
         SoundSystem.speakBaby('Correct! Great job!');
         if(this.myPos >= this.TRACK_LENGTH){
           if(this.mpMode){
-            MultiplayerEngine.sendMove({pos: this.myPos, finished: true}).then(()=>{
-              this.endGame(true);
-            });
+            const roomId = MultiplayerEngine.room?.id;
+            const token = JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}')?.access_token;
+            fetch(`https://bfivpvlzehtmksnmgnzb.supabase.co/rest/v1/multiplayer_rooms?id=eq.${roomId}`,{
+              method:'PATCH',
+              headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+token},
+              body:JSON.stringify({last_move:{pos:this.myPos,finished:true,from:MultiplayerEngine.playerSlot,ts:Date.now()}})
+            }).then(()=>this.endGame(true));
           } else {
             this.endGame(true);
           }
