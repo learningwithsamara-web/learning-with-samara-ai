@@ -10390,6 +10390,29 @@ const RacingGame = {
     ctx.fillText(label.slice(0,8)+' '+Math.round(pct*100)+'%', x, y-3);
   },
 
+  showQuestion() {
+    if(this.questionActive) return;
+    this.questionActive = true;
+    const qs = this.QS[this.age];
+    const q = qs[Math.floor(Math.random()*qs.length)];
+    const all = [q.a, ...q.w].sort(()=>Math.random()-0.5);
+    document.getElementById('racing-qq').textContent = q.q;
+    const g = document.getElementById('racing-qg');
+    g.innerHTML = '';
+    all.forEach(a=>{
+      const b = document.createElement('button');
+      b.style.cssText='background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:11px 8px;font-size:0.8rem;cursor:pointer;text-align:center;font-weight:700;transition:all 0.2s;';
+      b.textContent = a;
+      b.onclick = ()=>this.checkAnswer(a, q.a, b);
+      g.appendChild(b);
+    });
+    document.getElementById('racing-q-overlay').style.display='flex';
+    if(SoundSystem._usingBrowserFallback) {
+      SoundSystem.speakQuestion(q.q);
+    } else {
+      showReadBtn(()=>SoundSystem.speakQuestion(q.q));
+    }
+  },
   startAI() {
     clearInterval(this._aiInt);
     this._aiInt = setInterval(()=>{
