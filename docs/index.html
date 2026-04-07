@@ -10429,6 +10429,7 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
     if(this.questionActive) return;
     if(this.gameOver) return;
     this.questionActive = true;
+    this.questionStartTime = Date.now();
     const qs = this.QS[this.age];
     const q = qs[Math.floor(Math.random()*qs.length)];
     const all = [q.a, ...q.w].sort(()=>Math.random()-0.5);
