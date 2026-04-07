@@ -10646,18 +10646,27 @@ const slot = MultiplayerEngine.playerSlot;
   mpReceiveMove(move) {
     if(this.gameOver) return;
     this.oppPos = move.pos || this.oppPos;
-    this.drawTrack();
     if(move.finished){ 
       this.gameOver = true;
       this.questionActive = true;
       this.oppPos = this.TRACK_LENGTH;
       this.drawTrack();
-      MultiplayerEngine.cleanup();
       clearInterval(this._aiInt);
       document.getElementById('racing-q-overlay').style.display='none';
       document.getElementById('racing-qg').innerHTML='';
       hideReadBtn();
-      setTimeout(()=>this.endGame(false), 800);
+      this.mpMode = false;
+      SamaraCoins.add(5,'🏎️ Thanks for racing!');
+      MultiplayerEngine.cleanup();
+      setTimeout(()=>{
+        document.getElementById('racing-wt').textContent='🥈 So Close!';
+        document.getElementById('racing-wm').textContent='Great effort! '+this.oppName+' finished first! Keep practising!';
+        document.getElementById('racing-chat-btn').style.display='none';
+        document.getElementById('racing-win-overlay').style.display='flex';
+        SoundSystem.speakBaby('So close! Try again!');
+      }, 800);
+    } else {
+      this.drawTrack();
     }
   },
   mpCancel() {
