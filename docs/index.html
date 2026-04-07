@@ -1358,6 +1358,147 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     </div>
   </div>
 </div>
+<!-- ══ LITTLE JR RACING GAME ══ -->
+<div id="screen-racing" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e);">
+  <!-- Header -->
+  <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
+    <button class="back-btn" style="position:relative;transform:none;top:auto;left:auto;" onclick="App.showScreen('screen-games')">← Back</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🏎️ Little Jr Racing Game</div>
+  </div>
+  <div style="padding:6px 16px 4px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.78rem;">Answer questions to race ahead! First to the finish wins! 🏁</div>
+
+  <!-- Mode Selection Screen -->
+  <div id="racing-mode-select" style="padding:20px 16px;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:4rem;margin-bottom:8px;">🏎️</div>
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;">Little Jr Racing!</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:6px;">Choose your race mode!</div>
+    </div>
+    <!-- Age selector -->
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;" id="racing-age-bar">
+      <button class="sl-age-btn active" onclick="RacingGame.setAge('4-6',this)">🧒 Ages 4-6</button>
+      <button class="sl-age-btn" onclick="RacingGame.setAge('7-10',this)">📚 Ages 7-10</button>
+      <button class="sl-age-btn" onclick="RacingGame.setAge('11-14',this)">🎓 Ages 11-14</button>
+      <button class="sl-age-btn" onclick="RacingGame.setAge('15-17',this)">🏆 Ages 15-17</button>
+    </div>
+    <!-- Mode cards -->
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:400px;margin:0 auto;">
+      <div onclick="RacingGame.startSolo()" style="background:linear-gradient(135deg,#FF6B6B,#FF4757);border-radius:20px;padding:20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(255,71,87,0.4);border:2px solid rgba(255,255,255,0.2);">
+        <div style="font-size:3rem;">🏁</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;">Solo Race</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.8rem;margin-top:4px;">Race against the clock! Answer questions to speed ahead!</div>
+          <div style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.7rem;padding:3px 10px;border-radius:20px;display:inline-block;margin-top:6px;">FREE ⭐</div>
+        </div>
+      </div>
+      <div onclick="RacingGame.openMultiplayer()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);border-radius:20px;padding:20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(199,125,255,0.4);border:2px solid rgba(255,255,255,0.2);">
+        <div style="font-size:3rem;">👥</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;">Race a Friend</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.8rem;margin-top:4px;">Challenge a friend online! First to finish line wins!</div>
+          <div style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.7rem;padding:3px 10px;border-radius:20px;display:inline-block;margin-top:6px;">PRO 👑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Race Screen -->
+  <div id="racing-game-area" style="display:none;padding:8px 16px;">
+    <!-- Status bar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div id="racing-status" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">Get Ready!</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div id="racing-timer" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:4px 12px;border-radius:20px;">⏱ 0s</div>
+        <button id="racing-chat-btn" onclick="RacingGame.chatOpen()" style="display:none;background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-size:1rem;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;">💬</button>
+      </div>
+    </div>
+    <!-- Canvas -->
+    <canvas id="racing-canvas" width="400" height="500" style="display:block;width:100%;max-width:500px;border-radius:16px;border:3px solid rgba(255,255,255,0.2);box-shadow:0 0 40px rgba(199,125,255,0.3);margin:0 auto;"></canvas>
+    <!-- Question overlay -->
+    <div id="racing-q-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:400px;width:100%;border:2px solid rgba(199,125,255,0.5);">
+        <div id="racing-qp" style="font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:10px;padding:6px 14px;border-radius:50px;display:inline-block;background:linear-gradient(135deg,#FF6B6B,#FF4757);color:#fff;">🏎️ Question!</div>
+        <div id="racing-qq" style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.1rem;margin-bottom:18px;line-height:1.45;"></div>
+        <div id="racing-qg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+      </div>
+    </div>
+    <!-- Win overlay -->
+    <div id="racing-win-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
+      <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;text-align:center;border:3px solid #FFD93D;max-width:360px;width:90%;box-shadow:0 0 60px rgba(255,217,61,0.4);">
+        <div style="font-size:4rem;margin-bottom:10px;">🏆</div>
+        <div id="racing-wt" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:8px;">You Win!</div>
+        <div id="racing-wm" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:22px;line-height:1.6;"></div>
+        <button onclick="RacingGame.backToMenu()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;margin-right:8px;">🏠 Menu</button>
+        <button onclick="RacingGame.startSolo()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">🔄 Race Again!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiplayer overlays (same pattern as Snake & Ladder) -->
+  <div id="racing-mp-menu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(199,125,255,0.5);text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">🏎️</div>
+      <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.6rem;margin-bottom:6px;">Race a Friend!</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:24px;">Challenge a friend or find a random opponent!</div>
+      <button onclick="RacingGame.mpCreate()" style="width:100%;background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:10px;">🏠 Create a Room</button>
+      <button onclick="RacingGame.mpShowJoin()" style="width:100%;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:10px;">🔑 Join with Code</button>
+      <button onclick="RacingGame.mpFindRandom()" style="width:100%;background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:18px;">🎲 Find Random Race</button>
+      <button onclick="RacingGame.mpClose()" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+  <div id="racing-mp-waiting" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(107,203,119,0.5);text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">⏳</div>
+      <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.4rem;margin-bottom:6px;">Room Created!</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:16px;">Share this code with your friend:</div>
+      <div id="racing-mp-code" style="font-family:'Fredoka One',cursive;font-size:3rem;color:#FFD93D;letter-spacing:8px;margin-bottom:16px;">------</div>
+      <button onclick="RacingGame.mpCopyCode()" style="background:rgba(255,217,61,0.15);color:#FFD93D;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,217,61,0.4);cursor:pointer;margin-bottom:20px;">📋 Copy Code</button>
+      <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">⏳ Waiting for a friend to join...</div>
+      <div id="racing-mp-wait-dots" style="font-size:1.5rem;margin-bottom:20px;">● ○ ○</div>
+      <button onclick="RacingGame.mpCancel()" style="background:rgba(255,71,87,0.2);color:#FF4757;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,71,87,0.3);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+  <div id="racing-mp-join" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(255,217,61,0.5);text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">🔑</div>
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.4rem;margin-bottom:6px;">Join a Race</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:16px;">Enter your friend's 6-digit code:</div>
+      <input id="racing-mp-code-input" type="number" placeholder="------" style="width:100%;background:rgba(255,255,255,0.08);color:#FFD93D;font-family:'Fredoka One',cursive;font-size:2rem;text-align:center;border:2px solid rgba(255,217,61,0.4);border-radius:16px;padding:14px;margin-bottom:20px;letter-spacing:6px;outline:none;box-sizing:border-box;" oninput="if(this.value.length>6)this.value=this.value.slice(0,6)"/>
+      <button onclick="RacingGame.mpJoin()" style="width:100%;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;margin-bottom:10px;">Join Race!</button>
+      <button onclick="RacingGame.mpClose()" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+  <div id="racing-mp-connected" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(107,203,119,0.5);text-align:center;">
+      <div style="font-size:3rem;margin-bottom:8px;">🏎️</div>
+      <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.4rem;margin-bottom:6px;">Race On!</div>
+      <div id="racing-mp-connected-msg" style="color:rgba(255,255,255,0.8);font-size:0.95rem;margin-bottom:24px;line-height:1.6;"></div>
+      <button onclick="RacingGame.mpStartGame()" style="width:100%;background:linear-gradient(135deg,#FF6B6B,#FF4757);color:#fff;font-family:'Fredoka One',cursive;font-size:1.2rem;padding:16px;border-radius:16px;border:none;cursor:pointer;">Start Racing! 🏁</button>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div id="racing-chat-picker" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1002;align-items:flex-end;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:24px 24px 0 0;padding:20px;width:100%;max-width:400px;border:2px solid rgba(199,125,255,0.4);">
+      <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.1rem;text-align:center;margin-bottom:16px;">Send a Message 💬</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <button onclick="RacingGame.chatSend('😂 Ha ha!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">😂 Ha ha!</button>
+        <button onclick="RacingGame.chatSend('🔥 I am winning!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">🔥 I am winning!</button>
+        <button onclick="RacingGame.chatSend('⏰ Hurry up!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">⏰ Hurry up!</button>
+        <button onclick="RacingGame.chatSend('👍 Good race!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">👍 Good race!</button>
+        <button onclick="RacingGame.chatSend('😤 No fair!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">😤 No fair!</button>
+        <button onclick="RacingGame.chatSend('🏆 I am going to win!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">🏆 I am going to win!</button>
+        <button onclick="RacingGame.chatSend('😜 Missed that answer!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">😜 Missed that one!</button>
+        <button onclick="RacingGame.chatSend('🎲 Lucky answer!')" style="background:rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;padding:12px 8px;border-radius:12px;border:2px solid rgba(199,125,255,0.5);cursor:pointer;font-weight:700;">🎲 Lucky answer!</button>
+      </div>
+      <button onclick="RacingGame.chatClose()" style="width:100%;background:rgba(255,71,87,0.2);color:#FF4757;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px;border-radius:12px;border:1px solid rgba(255,71,87,0.3);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+  <div id="racing-chat-toast" style="display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:1003;background:linear-gradient(135deg,#1a1a3e,#2d1b69);border:2px solid rgba(199,125,255,0.5);border-radius:16px;padding:12px 20px;text-align:center;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+    <div id="racing-chat-toast-name" style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:0.8rem;margin-bottom:4px;"></div>
+    <div id="racing-chat-toast-msg" style="color:#fff;font-size:0.9rem;font-weight:700;"></div>
+  </div>
+</div>
 <!-- ══ SNAKE & LADDER ══ -->
 <div id="screen-snake-ladder" class="screen" style="padding:0;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
   <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
