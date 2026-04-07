@@ -10378,15 +10378,23 @@ const RacingGame = {
     document.querySelectorAll('#racing-age-bar .sl-age-btn').forEach(b=>b.classList.remove('active'));
     if(btn) btn.classList.add('active');
   },
-  backToMenu() {
-    this.stopGame() {
-  clearInterval(this.timerInt);
-  clearInterval(this._aiInt);
-  this.questionActive = false;
-  document.getElementById('racing-q-overlay').style.display='none';
-  hideReadBtn();
-},
 
+  backToMenu() {
+    this.stopGame();
+    document.getElementById('racing-mode-select').style.display='block';
+    document.getElementById('racing-game-area').style.display='none';
+    document.getElementById('racing-win-overlay').style.display='none';
+    document.getElementById('racing-q-overlay').style.display='none';
+    hideReadBtn();
+  },
+
+  stopGame() {
+    clearInterval(this.timerInt);
+    clearInterval(this._aiInt);
+    this.questionActive = false;
+    document.getElementById('racing-q-overlay').style.display='none';
+    hideReadBtn();
+  },
   startSolo() {
   this.mpMode = false;
   this.myPos = 0;
