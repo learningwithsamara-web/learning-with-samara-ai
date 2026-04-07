@@ -10458,6 +10458,7 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
   },
 
   checkAnswer(sel, correct, btn) {
+    if(this.gameOver) return;
     document.querySelectorAll('#racing-qg button').forEach(b=>b.onclick=null);
     if(sel === correct) {
       btn.style.background='rgba(107,203,119,0.3)';
@@ -10473,6 +10474,9 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
         document.getElementById('racing-status').textContent='Correct! +'+advance+' meters! 🏎️💨';
         SoundSystem.speakBaby('Correct! Great job!');
         if(this.myPos >= this.TRACK_LENGTH){
+          if(this.mpMode){
+            MultiplayerEngine.sendMove({pos: this.myPos, finished: true});
+          }
           this.endGame(true);
           return;
         }
@@ -10510,7 +10514,7 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
         setTimeout(()=>this.showQuestion(), 2000);
       }, 1800);
     }
-},
+  },
   openMultiplayer() {
     if(!Plan.isPro()){App.showScreen('screen-pricing');App.toast('Race a Friend is a Pro feature!');return;}
     document.getElementById('racing-mp-menu').style.display='flex';
