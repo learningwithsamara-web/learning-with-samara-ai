@@ -1456,7 +1456,11 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
       <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:36px;text-align:center;border:3px solid #FFD93D;max-width:360px;width:90%;box-shadow:0 0 60px rgba(255,217,61,0.4);">
         <div style="font-size:4rem;margin-bottom:10px;">🏆</div>
         <div id="racing-wt" style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:8px;">You Win!</div>
-        <div id="racing-wm" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:22px;line-height:1.6;"></div>
+        <div id="racing-wm" style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:12px;line-height:1.6;"></div>
+<div id="racing-scores" style="background:rgba(255,255,255,0.08);border-radius:16px;padding:12px;margin-bottom:16px;">
+  <div id="racing-my-score" style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1rem;margin-bottom:6px;"></div>
+  <div id="racing-opp-score" style="font-family:'Fredoka One',cursive;color:#FF4757;font-size:1rem;"></div>
+</div>
         <button onclick="RacingGame.backToMenu()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;margin-right:8px;">🏠 Menu</button>
         <button onclick="RacingGame.startSolo()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">🔄 Race Again!</button>
       </div>
@@ -10668,7 +10672,9 @@ const slot = MultiplayerEngine.playerSlot;
       setTimeout(()=>{
         console.log('[RACE] showing lose overlay now');
         document.getElementById('racing-wt').textContent='🥈 So Close!';
-        document.getElementById('racing-wm').textContent='Great effort! '+this.oppName+' finished first! Keep practising!';
+        document.getElementById('racing-wm').textContent='Great effort! Keep practising!';
+        document.getElementById('racing-my-score').textContent = this.myName+': '+this.myPos+'%';
+        document.getElementById('racing-opp-score').textContent = this.oppName+': 100%';
         document.getElementById('racing-chat-btn').style.display='none';
         document.getElementById('racing-win-overlay').style.display='flex';
         SoundSystem.speakBaby('So close! Try again!');
