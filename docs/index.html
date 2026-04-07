@@ -10330,7 +10330,7 @@ this.myName = FamilyMode.getActive()?.name || 'You';
   },
 
   endGame(iWon) {
-    if(this.gameOver && !iWon) return;
+    endGame(iWon) {
     this.gameOver = true;
     this.stopGame();
     document.getElementById('racing-q-overlay').style.display='none';
