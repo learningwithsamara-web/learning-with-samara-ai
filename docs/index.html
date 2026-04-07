@@ -10303,9 +10303,9 @@ const RacingGame = {
     document.getElementById('racing-game-area').style.display='none';
     document.getElementById('racing-win-overlay').style.display='none';
     document.getElementById('racing-q-overlay').style.display='none';
+    this._wasMultiplayer = false;
     hideReadBtn();
   },
-
   startSolo() {
     this.mpMode = false;
     this.myPos = 0;
