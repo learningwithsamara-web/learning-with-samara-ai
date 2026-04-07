@@ -9509,6 +9509,7 @@ const MultiplayerEngine = {
   // Send a move
   async sendMove(moveData) {
     if(!this.room) return;
+    console.log('[MP] sendMove called:', JSON.stringify(moveData));
     const update = {
       last_move: { ...moveData, from: this.playerSlot, ts: Date.now() },
       current_turn: this.playerSlot === 'player1' ? 'player2' : 'player1',
