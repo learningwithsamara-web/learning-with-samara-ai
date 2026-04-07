@@ -1371,7 +1371,27 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(135deg,#FFD93D,#FF6B6B,#C77DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">🏎️ Little Jr Racing Game</div>
   </div>
   <div style="padding:6px 16px 4px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.78rem;">Answer questions to race ahead! First to the finish wins! 🏁</div>
-
+<!-- Rules Overlay -->
+<div id="racing-rules-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:28px;max-width:360px;width:100%;border:2px solid rgba(255,217,61,0.5);text-align:center;">
+    <div style="font-size:3rem;margin-bottom:8px;">🏎️</div>
+    <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.4rem;margin-bottom:16px;">How to Race!</div>
+    <div style="text-align:left;margin-bottom:20px;">
+      <div style="color:rgba(255,255,255,0.9);font-size:0.85rem;margin-bottom:10px;line-height:1.6;">Answer questions correctly to move your car forward. The <b>faster</b> you answer, the further you go!</div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:16px;margin-bottom:10px;">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;margin-bottom:10px;">⚡ Speed Bonus!</div>
+        <div style="color:#fff;font-size:0.82rem;margin-bottom:6px;">⚡ Under 2 seconds = <b style="color:#FFD93D;">+15 meters!</b></div>
+        <div style="color:#fff;font-size:0.82rem;margin-bottom:6px;">🔥 Under 4 seconds = <b style="color:#FF9B3F;">+12 meters!</b></div>
+        <div style="color:#fff;font-size:0.82rem;margin-bottom:6px;">✅ Under 6 seconds = <b style="color:#6BCB77;">+10 meters!</b></div>
+        <div style="color:#fff;font-size:0.82rem;margin-bottom:6px;">🐢 Under 9 seconds = <b style="color:#C77DFF;">+7 meters!</b></div>
+        <div style="color:#fff;font-size:0.82rem;">😅 After 9 seconds = <b style="color:rgba(255,255,255,0.6);">+5 meters</b></div>
+      </div>
+      <div style="color:rgba(255,255,255,0.9);font-size:0.85rem;line-height:1.6;">Wrong answer = opponent gets a boost! First car to <b style="color:#FFD93D;">100 meters</b> wins! 🏁</div>
+    </div>
+    <button onclick="document.getElementById('racing-rules-overlay').style.display='none'" style="width:100%;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px;border-radius:16px;border:none;cursor:pointer;">Let's Race! 🏎️</button>
+  </div>
+</div>
+  
   <!-- Mode Selection Screen -->
   <div id="racing-mode-select" style="padding:20px 16px;">
     <div style="text-align:center;margin-bottom:24px;">
