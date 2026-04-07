@@ -10511,7 +10511,7 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
         if(this.mpMode){
           MultiplayerEngine.sendMove({pos: this.myPos, finished: false});
         }
-        setTimeout(()=>this.showQuestion(), 2000);
+        if(!this.gameOver) setTimeout(()=>this.showQuestion(), 2000);
       }, 800);
     } else {
       btn.style.background='rgba(255,71,87,0.3)';
@@ -10539,7 +10539,7 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
         if(this.mpMode){
           MultiplayerEngine.sendMove({pos: this.myPos, finished: false, wrong: true});
         }
-        setTimeout(()=>this.showQuestion(), 2000);
+        if(!this.gameOver) setTimeout(()=>this.showQuestion(), 2000);
       }, 1800);
     }
   },
