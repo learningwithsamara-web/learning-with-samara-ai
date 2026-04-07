@@ -10368,10 +10368,17 @@ const RacingGame = {
     ctx.fillText('FINISH', W*0.5, finishY-5);
     const myY = H*0.9 - (this.myPos/this.TRACK_LENGTH)*(H*0.9-H*0.5);
     const oppY = H*0.9 - (this.oppPos/this.TRACK_LENGTH)*(H*0.9-H*0.5);
-    this.drawCar(ctx, W*0.58, oppY, '#FF4757', this.oppName);
-    this.drawCar(ctx, W*0.32, myY, '#C77DFF', this.myName);
-    this.drawProgressBar(ctx, W*0.05, H-40, W*0.4, 16, this.myPos/this.TRACK_LENGTH, '#C77DFF', this.myName);
-    this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, this.oppPos/this.TRACK_LENGTH, '#FF4757', this.oppName);
+    const isP2 = this.mpMode && MultiplayerEngine.playerSlot === 'player2';
+const leftY = isP2 ? oppY : myY;
+const rightY = isP2 ? myY : oppY;
+const leftName = isP2 ? this.oppName : this.myName;
+const rightName = isP2 ? this.myName : this.oppName;
+const leftColor = isP2 ? '#FF4757' : '#C77DFF';
+const rightColor = isP2 ? '#C77DFF' : '#FF4757';
+this.drawCar(ctx, W*0.32, leftY, leftColor, leftName);
+this.drawCar(ctx, W*0.58, rightY, rightColor, rightName);
+    this.drawProgressBar(ctx, W*0.05, H-40, W*0.4, 16, (isP2?this.oppPos:this.myPos)/this.TRACK_LENGTH, leftColor, leftName);
+this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)/this.TRACK_LENGTH, rightColor, rightName);
   },
 
   drawCar(ctx, x, y, color, label) {
