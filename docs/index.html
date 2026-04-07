@@ -10348,7 +10348,7 @@ this.myName = FamilyMode.getActive()?.name || 'You';
       wm.textContent='Amazing race! Well done!';
       if(this.mpMode){
         SamaraCoins.add(50,'🏎️ Little Jr Racing winner!');
-        setTimeout(()=>MultiplayerEngine.endGame('me'), 3000);
+        setTimeout(()=>MultiplayerEngine._fetch(`?id=eq.${MultiplayerEngine.room?.id}`,'PATCH',{status:'waiting',last_move:{},current_turn:'player1'}), 3000);
       } else {
         SamaraCoins.add(25,'🏎️ Little Jr Racing winner!');
       }
