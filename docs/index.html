@@ -10469,7 +10469,8 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
       btn.style.background='rgba(107,203,119,0.3)';
       btn.style.borderColor='#6BCB77';
       btn.style.color='#6BCB77';
-      const advance = Math.floor(Math.random()*6)+8;
+      const elapsed = (Date.now() - this.questionStartTime) / 1000;
+      const advance = elapsed <= 2 ? 15 : elapsed <= 4 ? 12 : elapsed <= 6 ? 10 : elapsed <= 9 ? 7 : 5;
       this.myPos = Math.min(this.myPos + advance, this.TRACK_LENGTH);
       setTimeout(()=>{
         document.getElementById('racing-q-overlay').style.display='none';
