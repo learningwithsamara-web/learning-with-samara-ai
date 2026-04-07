@@ -10349,7 +10349,7 @@ this.myName = FamilyMode.getActive()?.name || 'You';
       wm.textContent='Amazing race! Well done!';
       if(this.mpMode){
         SamaraCoins.add(50,'🏎️ Little Jr Racing winner!');
-        MultiplayerEngine.endGame('me');
+        setTimeout(()=>MultiplayerEngine.endGame('me'), 3000);
       } else {
         SamaraCoins.add(25,'🏎️ Little Jr Racing winner!');
       }
