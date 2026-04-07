@@ -10674,16 +10674,15 @@ const slot = MultiplayerEngine.playerSlot;
       SamaraCoins.add(5,'🏎️ Thanks for racing!');
       MultiplayerEngine.cleanup();
       setTimeout(()=>{
-        document.getElementById('racing-wt').textContent='🥈 So Close!';
-        document.getElementById('racing-wm').textContent='Great effort! Keep practising!';
-        document.getElementById('racing-my-score').textContent = this.myName+': '+this.myPos+'%';
-        document.getElementById('racing-opp-score').textContent = this.oppName+': 100%';
-        document.getElementById('racing-my-score').textContent = this.myName+': '+this.myPos+'%';
-        document.getElementById('racing-opp-score').textContent = this.oppName+': 100%';
-        document.getElementById('racing-chat-btn').style.display='none';
-        document.getElementById('racing-win-overlay').style.display='flex';
-        SoundSystem.speakBaby('So close! Try again!');
-      }, 800);
+    this._wasMultiplayer = true;
+    document.getElementById('racing-wt').textContent='🥈 So Close!';
+    document.getElementById('racing-wm').textContent='Great effort! Keep practising!';
+    document.getElementById('racing-my-score').textContent = this.myName+': '+this.myPos+'%';
+    document.getElementById('racing-opp-score').textContent = this.oppName+': 100%';
+    document.getElementById('racing-chat-btn').style.display='none';
+    document.getElementById('racing-win-overlay').style.display='flex';
+    SoundSystem.speakBaby('So close! Try again!');
+  }, 800);
     } else {
       this.drawTrack();
     }
