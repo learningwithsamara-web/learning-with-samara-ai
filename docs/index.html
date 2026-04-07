@@ -10652,12 +10652,14 @@ const slot = MultiplayerEngine.playerSlot;
     if(move.finished){ 
       this.gameOver = true;
       this.questionActive = true;
+      this.oppPos = this.TRACK_LENGTH;
+      this.drawTrack();
       MultiplayerEngine.cleanup();
       clearInterval(this._aiInt);
       document.getElementById('racing-q-overlay').style.display='none';
       document.getElementById('racing-qg').innerHTML='';
       hideReadBtn();
-      setTimeout(()=>this.endGame(false), 300);
+      setTimeout(()=>this.endGame(false), 800);
     }
   },
   mpCancel() {
