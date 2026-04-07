@@ -9599,7 +9599,8 @@ const token = authData?.access_token;
         body: body ? JSON.stringify(body) : null
       });
       if(method === 'DELETE') return true;
-      return await res.json();
+     if(method === 'PATCH') return true;
+     return await res.json();
     } catch(e) {
       console.error('[Multiplayer] fetch error:', e);
       return method === 'GET' ? [] : null;
