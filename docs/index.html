@@ -10455,9 +10455,9 @@ this.drawProgressBar(ctx, W*0.55, H-40, W*0.4, 16, (isP2?this.myPos:this.oppPos)
       if(this.questionActive) return;
       this.oppPos = Math.min(this.oppPos + 3, this.TRACK_LENGTH);
       this.drawTrack();
-      if(this.oppPos >= this.TRACK_LENGTH) {
-        this.endGame(false);
-      }
+      if(this.oppPos >= this.TRACK_LENGTH && !this.gameOver) {
+      this.endGame(false);
+    }
     }, 3000);
   },
 
