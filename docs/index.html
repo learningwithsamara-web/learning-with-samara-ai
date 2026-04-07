@@ -10690,18 +10690,13 @@ const slot = MultiplayerEngine.playerSlot;
   },
   mpRematch() {
     document.getElementById('racing-win-overlay').style.display='none';
-    this.mpMode = true;
-    this._wasMultiplayer = true;
-    this.myPos = 0;
-    this.oppPos = 0;
+    document.getElementById('racing-game-area').style.display='none';
+    document.getElementById('racing-mode-select').style.display='block';
+    MultiplayerEngine.cleanup();
+    this.mpMode = false;
+    this._wasMultiplayer = false;
     this.gameOver = false;
-    this.questionActive = false;
-    this.elapsed = 0;
-    document.getElementById('racing-game-area').style.display='block';
-    document.getElementById('racing-chat-btn').style.display='flex';
-    this.drawTrack();
-    MultiplayerEngine.onMove((move)=>this.mpReceiveMove(move));
-    setTimeout(()=>this.showQuestion(), 1500);
+    setTimeout(()=>this.openMultiplayer(), 300);
   },
   mpCancel() {
     clearInterval(this.mpDotsInterval);
