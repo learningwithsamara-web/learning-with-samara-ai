@@ -10306,6 +10306,31 @@ const RacingGame = {
     hideReadBtn();
   },
 
+  endGame(iWon) {
+    this.stopGame();
+    document.getElementById('racing-q-overlay').style.display='none';
+    document.getElementById('racing-chat-btn').style.display='none';
+    hideReadBtn();
+    const wt = document.getElementById('racing-wt');
+    const wm = document.getElementById('racing-wm');
+    if(iWon) {
+      wt.textContent='🏆 You Win!';
+      wm.textContent='Amazing race! Well done!';
+      if(this.mpMode){
+        SamaraCoins.add(50,'🏎️ Little Jr Racing winner!');
+        MultiplayerEngine.endGame('me');
+      } else {
+        SamaraCoins.add(25,'🏎️ Little Jr Racing winner!');
+      }
+      SoundSystem.speakBaby('You win! Amazing racing!');
+    } else {
+      wt.textContent='🥈 So Close!';
+      wm.textContent='Great effort! Keep practising and you will win next time!';
+      if(this.mpMode) SamaraCoins.add(5,'🏎️ Thanks for racing!');
+      SoundSystem.speakBaby('So close! Try again!');
+    }
+    document.getElementById('racing-win-overlay').style.display='flex';
+  },
   drawTrack() {
     const cv = document.getElementById('racing-canvas');
     if(!cv) return;
