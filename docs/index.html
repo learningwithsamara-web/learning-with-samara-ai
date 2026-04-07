@@ -1462,8 +1462,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   <div id="racing-opp-score" style="font-family:'Fredoka One',cursive;color:#FF4757;font-size:1rem;"></div>
 </div>
         <button onclick="RacingGame.backToMenu()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;margin-right:8px;">🏠 Menu</button>
-        <button onclick="RacingGame.backToMenu()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;margin-right:8px;">🏠 Menu</button>
-        <button onclick="RacingGame.mpMode ? RacingGame.mpRematch() : RacingGame.startSolo()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">🔄 Race Again!</button>
+<button onclick="RacingGame._wasMultiplayer ? RacingGame.mpRematch() : RacingGame.startSolo()" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;">🔄 Race Again!</button>
       </div>
     </div>
   </div>
