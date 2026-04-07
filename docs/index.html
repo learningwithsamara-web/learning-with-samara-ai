@@ -10337,6 +10337,7 @@ this.myName = FamilyMode.getActive()?.name || 'You';
   endGame(iWon) {
     this.gameOver = true;
     this.stopGame();
+    this._wasMultiplayer = this.mpMode;
     document.getElementById('racing-q-overlay').style.display='none';
     document.getElementById('racing-chat-btn').style.display='none';
     hideReadBtn();
