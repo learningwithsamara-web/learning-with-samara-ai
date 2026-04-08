@@ -7044,7 +7044,7 @@ bdNextQuestion() {
     const correct = items[Math.floor(Math.random()*items.length)];
     this.bdCorrect = correct.name;
     document.getElementById('bd-q-text').textContent = 'Tap the ' + correct.name + ' car!';
-    SoundSystem.speakBaby('Tap the ' + correct.name + ' car!');
+    setTimeout(()=>SoundSystem.speakBaby('Tap the ' + correct.name + ' car!'), 1200);
     items.forEach((item, i) => {
       this.bdCars.push({
         x: 420 + i * 160,
@@ -7061,7 +7061,7 @@ bdNextQuestion() {
     const correct = items[Math.floor(Math.random()*items.length)];
     this.bdCorrect = correct.name;
     document.getElementById('bd-q-text').textContent = 'Tap the ' + correct.name + ' car!';
-    SoundSystem.speakBaby('Tap the ' + correct.name + '!');
+    setTimeout(()=>SoundSystem.speakBaby('Tap the ' + correct.name + '!'), 1200);
     items.forEach((item, i) => {
       this.bdCars.push({
         x: 420 + i * 160,
@@ -7078,7 +7078,7 @@ bdNextQuestion() {
     const correct = nums[Math.floor(Math.random()*nums.length)];
     this.bdCorrect = correct;
     document.getElementById('bd-q-text').textContent = 'Tap the number ' + correct + ' car!';
-    SoundSystem.speakBaby('Tap the number ' + correct + '!');
+    setTimeout(()=>SoundSystem.speakBaby('Tap the number ' + correct + '!'), 1200);
     nums.forEach((num, i) => {
       this.bdCars.push({
         x: 420 + i * 160,
