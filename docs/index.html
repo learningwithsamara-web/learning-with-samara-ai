@@ -7149,12 +7149,13 @@ bdDraw() {
   this.bdCars = this.bdCars.filter(car => car.x > -80);
   if(this.bdCars.length === 0) {
     setTimeout(()=>{
+      setTimeout(()=>{
       if(window.SoundSystem && SoundSystem._currentAudio){
         SoundSystem._currentAudio.pause();
         SoundSystem._currentAudio = null;
       }
-      setTimeout(()=>SoundSystem.speakBaby('Oops! Try again!'), 300);
-      this.bdNextQuestion();
+      SoundSystem.speakBaby('Oops! Try again!');
+      setTimeout(()=>this.bdNextQuestion(), 1500);
     }, 500);
     return;
   }
