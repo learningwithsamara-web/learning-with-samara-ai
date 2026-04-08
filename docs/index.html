@@ -7218,7 +7218,7 @@ bdTap(tx, ty) {
     SoundSystem.playTone('wrong');
     const msg = this.bdMode === 'numbers' ? 'Oops! Try number ' + this.bdCorrect + '!' : 'Oops! Try the ' + this.bdCorrect + ' one!';
     setTimeout(()=>SoundSystem.speakBaby(msg), 300);
-    setTimeout(()=>this.bdNextQuestion(), 1500);
+    setTimeout(()=>this.bdNextQuestion(), 2000);
   }
 },
 
