@@ -1139,6 +1139,11 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
         <div class="playhouse-room-name">Rainbow World</div>
         <div class="playhouse-room-desc">Shapes & colors!</div>
       </div>
+      <div class="playhouse-room" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);" onclick="Playhouse.enter('babydrive')">
+        <span class="playhouse-room-icon">🚗</span>
+        <div class="playhouse-room-name">Baby Drive</div>
+        <div class="playhouse-room-desc">Drive & learn!</div>
+      </div>
     </div>
   </div>
 
@@ -6873,6 +6878,7 @@ const Playhouse = {
       case 'counting':this.renderCountingGarden(); break;
       case 'music':   this.renderMusicRoom(); break;
       case 'rainbow': this.renderRainbowWorld(); break;
+      case 'babydrive': this.renderBabyDrive(); break;
     }
   },
 
@@ -6939,6 +6945,294 @@ const Playhouse = {
     SoundSystem.playTone('tap');
   },
 
+  // 🚗 BABY DRIVE
+BABY_DRIVE: {
+  COLOURS: [
+    {name:'Red',    color:'#FF4757', emoji:'🔴'},
+    {name:'Blue',   color:'#4A90D9', emoji:'🔵'},
+    {name:'Green',  color:'#6BCB77', emoji:'🟢'},
+    {name:'Yellow', color:'#FFD93D', emoji:'🟡'},
+    {name:'Purple', color:'#C77DFF', emoji:'🟣'},
+    {name:'Orange', color:'#FF9B3F', emoji:'🟠'},
+  ],
+  SHAPES: [
+    {name:'Circle',   emoji:'⭕', draw:(ctx,x,y)=>{ ctx.beginPath(); ctx.arc(x,y,18,0,Math.PI*2); ctx.fill(); }},
+    {name:'Square',   emoji:'⬜', draw:(ctx,x,y)=>{ ctx.fillRect(x-18,y-18,36,36); }},
+    {name:'Triangle', emoji:'🔺', draw:(ctx,x,y)=>{ ctx.beginPath(); ctx.moveTo(x,y-20); ctx.lineTo(x+20,y+15); ctx.lineTo(x-20,y+15); ctx.closePath(); ctx.fill(); }},
+    {name:'Star',     emoji:'⭐', draw:(ctx,x,y)=>{ 
+      for(let i=0;i<5;i++){
+        ctx.lineTo(x+18*Math.cos((i*4*Math.PI/5)-Math.PI/2), y+18*Math.sin((i*4*Math.PI/5)-Math.PI/2));
+        ctx.lineTo(x+8*Math.cos(((i*4+2)*Math.PI/5)-Math.PI/2), y+8*Math.sin(((i*4+2)*Math.PI/5)-Math.PI/2));
+      }
+      ctx.closePath(); ctx.fill();
+    }},
+    {name:'Heart',    emoji:'❤️', draw:(ctx,x,y)=>{ ctx.beginPath(); ctx.moveTo(x,y+10); ctx.bezierCurveTo(x,y,x-20,y-10,x-20,y-5); ctx.bezierCurveTo(x-20,y-20,x,y-15,x,y-5); ctx.bezierCurveTo(x,y-15,x+20,y-20,x+20,y-5); ctx.bezierCurveTo(x+20,y-10,x,y,x,y+10); ctx.fill(); }},
+    {name:'Diamond',  emoji:'💎', draw:(ctx,x,y)=>{ ctx.beginPath(); ctx.moveTo(x,y-20); ctx.lineTo(x+16,y); ctx.lineTo(x,y+20); ctx.lineTo(x-16,y); ctx.closePath(); ctx.fill(); }},
+  ],
+  NUMBERS: [1,2,3,4,5,6,7,8,9,10],
+},
+
+renderBabyDrive() {
+  const c = document.getElementById('playhouse-room-content');
+  c.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-family:'Fredoka One',cursive;color:#FF9B3F;font-size:1.6rem;">🚗 Baby Drive!</div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:4px;">Choose what to learn!</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:360px;margin:0 auto;">
+      <div onclick="Playhouse.startBabyDrive('colours')" style="background:linear-gradient(135deg,#FF4757,#FF9B3F);border-radius:20px;padding:20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(255,71,87,0.4);">
+        <div style="font-size:3rem;">🎨</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;">Colours!</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.8rem;margin-top:4px;">Tap the right colour car!</div>
+        </div>
+      </div>
+      <div onclick="Playhouse.startBabyDrive('shapes')" style="background:linear-gradient(135deg,#C77DFF,#7928CA);border-radius:20px;padding:20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(199,125,255,0.4);">
+        <div style="font-size:3rem;">🔷</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;">Shapes!</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.8rem;margin-top:4px;">Tap the right shape car!</div>
+        </div>
+      </div>
+      <div onclick="Playhouse.startBabyDrive('numbers')" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);border-radius:20px;padding:20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(107,203,119,0.4);">
+        <div style="font-size:3rem;">🔢</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;">Numbers!</div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.8rem;margin-top:4px;">Tap the right number car!</div>
+        </div>
+      </div>
+    </div>`;
+  SoundSystem.speakBaby('Welcome to Baby Drive! Choose what to learn!');
+},
+
+startBabyDrive(mode) {
+  this.bdMode = mode;
+  this.bdScore = 0;
+  this.bdQuestion = 0;
+  this.bdCars = [];
+  this.bdAnimFrame = null;
+  this.bdCorrect = null;
+  const c = document.getElementById('playhouse-room-content');
+  c.innerHTML = `
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-family:'Fredoka One',cursive;color:#FF9B3F;font-size:1.4rem;">🚗 Baby Drive!</div>
+    </div>
+    <div id="bd-question" style="background:rgba(255,255,255,0.97);border-radius:20px;padding:16px;text-align:center;margin-bottom:12px;box-shadow:0 8px 28px rgba(0,0,0,0.12);">
+      <div id="bd-q-text" style="font-family:'Fredoka One',cursive;color:#1A1A2E;font-size:1.4rem;"></div>
+    </div>
+    <canvas id="bd-canvas" width="400" height="200" style="display:block;width:100%;border-radius:16px;background:linear-gradient(180deg,#87CEEB,#87CEEB 60%,#90EE90 60%,#228B22);box-shadow:0 8px 24px rgba(0,0,0,0.2);margin-bottom:12px;cursor:pointer;"></canvas>
+    <div style="text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;">⭐ Score: <span id="bd-score">0</span></div>
+    </div>`;
+  this.bdNextQuestion();
+},
+
+bdNextQuestion() {
+  if(this.bdQuestion >= 10) {
+    this.bdFinish();
+    return;
+  }
+  this.bdQuestion++;
+  this.bdCars = [];
+  if(this.bdAnimFrame) cancelAnimationFrame(this.bdAnimFrame);
+  const cv = document.getElementById('bd-canvas');
+  if(!cv) return;
+  cv.onclick = null;
+
+  if(this.bdMode === 'colours') {
+    const items = [...this.BABY_DRIVE.COLOURS].sort(()=>Math.random()-0.5).slice(0,3);
+    const correct = items[Math.floor(Math.random()*items.length)];
+    this.bdCorrect = correct.name;
+    document.getElementById('bd-q-text').textContent = 'Tap the ' + correct.name + ' car!';
+    SoundSystem.speakBaby('Tap the ' + correct.name + ' car!');
+    items.forEach((item, i) => {
+      this.bdCars.push({
+        x: 420 + i * 160,
+        y: 120 + (Math.random()*20-10),
+        color: item.color,
+        label: item.name,
+        speed: 1.5 + Math.random()*0.5,
+        correct: item.name === correct.name,
+        emoji: item.emoji
+      });
+    });
+  } else if(this.bdMode === 'shapes') {
+    const items = [...this.BABY_DRIVE.SHAPES].sort(()=>Math.random()-0.5).slice(0,3);
+    const correct = items[Math.floor(Math.random()*items.length)];
+    this.bdCorrect = correct.name;
+    document.getElementById('bd-q-text').textContent = 'Tap the ' + correct.name + ' car!';
+    SoundSystem.speakBaby('Tap the ' + correct.name + '!');
+    items.forEach((item, i) => {
+      this.bdCars.push({
+        x: 420 + i * 160,
+        y: 120 + (Math.random()*20-10),
+        color: '#4A90D9',
+        label: item.name,
+        speed: 1.5 + Math.random()*0.5,
+        correct: item.name === correct.name,
+        shape: item.draw
+      });
+    });
+  } else {
+    const nums = [...this.BABY_DRIVE.NUMBERS].sort(()=>Math.random()-0.5).slice(0,3);
+    const correct = nums[Math.floor(Math.random()*nums.length)];
+    this.bdCorrect = correct;
+    document.getElementById('bd-q-text').textContent = 'Tap the number ' + correct + ' car!';
+    SoundSystem.speakBaby('Tap the number ' + correct + '!');
+    nums.forEach((num, i) => {
+      this.bdCars.push({
+        x: 420 + i * 160,
+        y: 120 + (Math.random()*20-10),
+        color: '#6BCB77',
+        label: String(num),
+        speed: 1.5 + Math.random()*0.5,
+        correct: num === correct,
+        number: num
+      });
+    });
+  }
+  this.bdDraw();
+  cv.onclick = (e) => {
+    const rect = cv.getBoundingClientRect();
+    const scaleX = cv.width / rect.width;
+    const scaleY = cv.height / rect.height;
+    const tx = (e.clientX - rect.left) * scaleX;
+    const ty = (e.clientY - rect.top) * scaleY;
+    this.bdTap(tx, ty);
+  };
+},
+
+bdDraw() {
+  const cv = document.getElementById('bd-canvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0,0,W,H);
+
+  // Sky
+  ctx.fillStyle = '#87CEEB';
+  ctx.fillRect(0,0,W,H*0.6);
+
+  // Ground
+  ctx.fillStyle = '#228B22';
+  ctx.fillRect(0,H*0.6,W,H*0.4);
+
+  // Road
+  ctx.fillStyle = '#555';
+  ctx.fillRect(0,H*0.55,W,H*0.3);
+
+  // Road lines
+  ctx.strokeStyle = '#FFD93D';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([20,15]);
+  ctx.beginPath();
+  ctx.moveTo(0, H*0.7);
+  ctx.lineTo(W, H*0.7);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Clouds
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  [[60,30,30],[150,20,25],[280,35,28],[350,25,20]].forEach(([x,y,r])=>{
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+20,y+5,r*0.7,0,Math.PI*2); ctx.fill();
+  });
+
+  // Draw cars
+  this.bdCars.forEach(car => {
+    car.x -= car.speed;
+    this.bdDrawCar(ctx, car);
+  });
+
+  // Remove off-screen cars and check if all gone
+  this.bdCars = this.bdCars.filter(car => car.x > -80);
+  if(this.bdCars.length === 0) {
+    // All cars passed — missed!
+    setTimeout(()=>{
+      SoundSystem.speakBaby('Oops! Try again!');
+      this.bdNextQuestion();
+    }, 500);
+    return;
+  }
+
+  this.bdAnimFrame = requestAnimationFrame(()=>this.bdDraw());
+},
+
+bdDrawCar(ctx, car) {
+  const x = car.x, y = car.y;
+  // Car body
+  ctx.fillStyle = car.color;
+  ctx.beginPath();
+  ctx.roundRect(x-28, y-12, 56, 24, 8);
+  ctx.fill();
+  // Car roof
+  ctx.beginPath();
+  ctx.roundRect(x-16, y-22, 32, 14, 6);
+  ctx.fill();
+  // Windows
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.beginPath();
+  ctx.roundRect(x-13, y-20, 26, 10, 4);
+  ctx.fill();
+  // Wheels
+  ctx.fillStyle = '#1a1a2e';
+  ctx.beginPath(); ctx.arc(x-18, y+13, 7, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x+18, y+13, 7, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#aaa';
+  ctx.beginPath(); ctx.arc(x-18, y+13, 3, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x+18, y+13, 3, 0, Math.PI*2); ctx.fill();
+
+  // Shape or number on car
+  ctx.fillStyle = '#fff';
+  if(car.shape) {
+    car.shape(ctx, x, y-2);
+  } else {
+    ctx.font = 'bold 14px Fredoka One, cursive';
+    ctx.textAlign = 'center';
+    ctx.fillText(car.label, x, y+5);
+  }
+},
+
+bdTap(tx, ty) {
+  const tapped = this.bdCars.find(car =>
+    tx >= car.x-35 && tx <= car.x+35 &&
+    ty >= car.y-30 && ty <= car.y+30
+  );
+  if(!tapped) return;
+  if(this.bdAnimFrame) cancelAnimationFrame(this.bdAnimFrame);
+  const cv = document.getElementById('bd-canvas');
+  if(cv) cv.onclick = null;
+
+  if(tapped.correct) {
+    this.bdScore++;
+    document.getElementById('bd-score').textContent = this.bdScore;
+    SoundSystem.playTone('celebrate');
+    SoundSystem.speakBaby('Yes! Great job!');
+    triggerEffect('correct');
+    setTimeout(()=>this.bdNextQuestion(), 1500);
+  } else {
+    SoundSystem.playTone('wrong');
+    SoundSystem.speakBaby('Oops! Try the ' + this.bdCorrect + ' one!');
+    setTimeout(()=>this.bdNextQuestion(), 1500);
+  }
+},
+
+bdFinish() {
+  if(this.bdAnimFrame) cancelAnimationFrame(this.bdAnimFrame);
+  SamaraCoins.add(10, '🚗 Baby Drive completed!');
+  const c = document.getElementById('playhouse-room-content');
+  c.innerHTML = `
+    <div style="text-align:center;padding:32px 16px;">
+      <div style="font-size:4rem;margin-bottom:12px;">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.8rem;margin-bottom:8px;">Amazing Driver!</div>
+      <div style="color:rgba(255,255,255,0.9);font-size:1rem;margin-bottom:8px;">You scored <b style="color:#FFD93D;">${this.bdScore}</b> out of 10!</div>
+      <div style="font-size:2rem;margin-bottom:24px;">${'⭐'.repeat(Math.min(this.bdScore,10))}</div>
+      <button onclick="Playhouse.startBabyDrive('${this.bdMode}')" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 28px;border-radius:20px;border:none;cursor:pointer;margin-right:8px;">Play Again! 🚗</button>
+      <button onclick="Playhouse.renderBabyDrive()" style="background:rgba(255,255,255,0.18);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 28px;border-radius:20px;border:2px solid rgba(255,255,255,0.4);cursor:pointer;">Choose Mode 🎮</button>
+    </div>`;
+  SoundSystem.speakBaby('Amazing! You are a great driver!');
+},
+  
   // 🐾 ANIMAL PARK
   renderAnimalPark() {
     const c = document.getElementById('playhouse-room-content');
