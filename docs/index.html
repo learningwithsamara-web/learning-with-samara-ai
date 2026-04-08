@@ -7208,7 +7208,6 @@ bdTap(tx, ty) {
     document.getElementById('bd-score').textContent = this.bdScore;
     SoundSystem.playTone('celebrate');
     SoundSystem.speakBaby('Yes! Great job!');
-    triggerEffect('correct');
     setTimeout(()=>this.bdNextQuestion(), 1500);
   } else {
     SoundSystem.playTone('wrong');
