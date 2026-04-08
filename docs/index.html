@@ -7148,8 +7148,11 @@ bdDraw() {
   // Remove off-screen cars and check if all gone
   this.bdCars = this.bdCars.filter(car => car.x > -80);
   if(this.bdCars.length === 0) {
-    // All cars passed — missed!
     setTimeout(()=>{
+      if(window.SoundSystem && SoundSystem._currentAudio){
+        SoundSystem._currentAudio.pause();
+        SoundSystem._currentAudio = null;
+      }
       SoundSystem.speakBaby('Oops! Try again!');
       this.bdNextQuestion();
     }, 500);
@@ -7208,7 +7211,7 @@ bdTap(tx, ty) {
     this.bdScore++;
     document.getElementById('bd-score').textContent = this.bdScore;
     SoundSystem.playTone('celebrate');
-    SoundSystem.speakBaby('Yes! Great job!');
+    SoundSystem.speakBaby('Yes! Amazing!');
     setTimeout(()=>this.bdNextQuestion(), 1500);
   } else {
     SoundSystem.playTone('wrong');
