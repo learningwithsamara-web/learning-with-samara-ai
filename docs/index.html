@@ -7149,7 +7149,6 @@ bdDraw() {
   this.bdCars = this.bdCars.filter(car => car.x > -80);
   if(this.bdCars.length === 0) {
     setTimeout(()=>{
-      setTimeout(()=>{
       if(window.SoundSystem && SoundSystem._currentAudio){
         SoundSystem._currentAudio.pause();
         SoundSystem._currentAudio = null;
@@ -7159,10 +7158,8 @@ bdDraw() {
     }, 500);
     return;
   }
-
   this.bdAnimFrame = requestAnimationFrame(()=>this.bdDraw());
 },
-
 bdDrawCar(ctx, car) {
   const x = car.x, y = car.y;
   // Car body
