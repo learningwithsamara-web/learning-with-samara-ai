@@ -2903,8 +2903,12 @@ console.log('[Google TTS] Requesting:', text.slice(0,50));
         window.speechSynthesis.cancel();
         if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
         const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
-        audio.play();
         this._currentAudio = audio;
+        if(this._onEndedCallback) {
+          audio.onended = this._onEndedCallback;
+          this._onEndedCallback = null;
+        }
+        audio.play();
         return;
       }
     } catch(e) {
