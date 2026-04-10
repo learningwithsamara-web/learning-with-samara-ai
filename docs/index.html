@@ -4342,10 +4342,29 @@ if(SoundSystem.enabled){
     const optDelay = qLen < 40 ? 4500 : qLen < 80 ? 7000 : qLen < 120 ? 10000 : 14000;
     const cleanText = q.text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s*-\s*/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*×\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
     const cleanOpt = (t) => String(t).replace(/\*\*/g,'').replace(/\*/g,'').trim();
-const optText = 'Option 1. ' + cleanOpt(q.answers[0].label) + '. Option 2. ' + cleanOpt(q.answers[1].label) + '. Option 3. ' + cleanOpt(q.answers[2].label) + '. Option 4. ' + cleanOpt(q.answers[3].label);
+    const opt1 = 'Option 1. ' + cleanOpt(q.answers[0].label);
+    const opt2 = 'Option 2. ' + cleanOpt(q.answers[1].label);
+    const opt3 = 'Option 3. ' + cleanOpt(q.answers[2].label);
+    const opt4 = 'Option 4. ' + cleanOpt(q.answers[3].label);
+    const optLen = (t) => t.length < 50 ? 2500 : t.length < 100 ? 4000 : 6000;
     SoundSystem.speak(cleanText, rate, pitch);
     setTimeout(()=>{
-      if(!S.answered) SoundSystem.speak(optText, rate, pitch);
+      if(!S.answered) {
+        SoundSystem.speak(opt1, rate, pitch);
+        setTimeout(()=>{
+          if(!S.answered) {
+            SoundSystem.speak(opt2, rate, pitch);
+            setTimeout(()=>{
+              if(!S.answered) {
+                SoundSystem.speak(opt3, rate, pitch);
+                setTimeout(()=>{
+                  if(!S.answered) SoundSystem.speak(opt4, rate, pitch);
+                }, optLen(opt3));
+              }
+            }, optLen(opt2));
+          }
+        }, optLen(opt1));
+      }
     }, optDelay);
   };
   if(SoundSystem._usingBrowserFallback) {
