@@ -3009,6 +3009,7 @@ speakLearn(text)  {
   },
 
  stop() {
+  this._ttsQueue = Promise.resolve();
   this._speaking = false;
   if(this._resumeInterval) { clearInterval(this._resumeInterval); this._resumeInterval = null; }
   window.speechSynthesis.cancel();
