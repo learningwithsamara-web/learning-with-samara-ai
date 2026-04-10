@@ -2904,11 +2904,12 @@ console.log('[Google TTS] Requesting:', text.slice(0,50));
         if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
         const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
         this._currentAudio = audio;
-        if(this._onEndedCallback) {
-          audio.onended = this._onEndedCallback;
-          this._onEndedCallback = null;
-        }
-        audio.play();
+        const cb = this._onEndedCallback || null;
+        this._onEndedCallback = null;
+        if(cb) audio.onended = cb;
+        audio.play().catch(()=>{
+          if(cb) cb();
+        });
         return;
       }
     } catch(e) {
