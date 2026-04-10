@@ -4711,6 +4711,29 @@ if(SoundSystem.enabled){
   },
   stagesDone(sid,wid){let c=0;for(let s=1;s<=SPW;s++){if(S.progress.find(p=>p.subject===sid&&p.world===wid&&p.stage===s&&p.completed))c++;}return c;},
   updateScores(){['worlds-score','stages-score','quiz-score'].forEach(id=>{const e=el(id);if(e)e.textContent=S.score;});},
+  notifyMe() {
+    const email = document.getElementById('notify-email')?.value?.trim();
+    if(!email || !email.includes('@')) {
+      this.toast('Please enter a valid email address!');
+      return;
+    }
+    const t = JSON.parse(localStorage.getItem('sb-bfivpvlzehtmksnmgnzb-auth-token')||'{}');
+    fetch('https://bfivpvlzehtmksnmgnzb.supabase.co/rest/v1/notify_list', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': 'Bearer ' + (t.access_token || SUPABASE_ANON),
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email, created_at: new Date().toISOString() })
+    }).then(()=>{
+      document.getElementById('notify-success').style.display='block';
+      document.getElementById('notify-email').value='';
+    }).catch(()=>{
+      this.toast('Something went wrong. Please try again!');
+    });
+  },
   toast(msg,dur=2800){const t=el('toast');if(!t)return;t.textContent=msg;t.classList.remove('hidden');t.classList.add('show');clearTimeout(App._tt);App._tt=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.classList.add('hidden'),300);},dur);},
 
   // ── DEVICE SESSION TRACKING (prevents account sharing) ────
