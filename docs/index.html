@@ -2887,12 +2887,12 @@ const SoundSystem = {
     if(btn) btn.textContent = this.enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
   },
 
-  // Main speak function — tuned for natural girl child voice
+ // Main speak function — tuned for natural girl child voice
   async speakGoogle(text, rate=0.9, pitch=2.0) {
     if(!this.enabled || !text) return;
     try {
       window.speechSynthesis.cancel();
-console.log('[Google TTS] Requesting:', text.slice(0,50));
+      console.log('[Google TTS] Requesting:', text.slice(0,50));
       const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
@@ -2904,25 +2904,26 @@ console.log('[Google TTS] Requesting:', text.slice(0,50));
         if(this._currentAudio){this._currentAudio.pause();this._currentAudio=null;}
         const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
         this._currentAudio = audio;
-        const cb = this._onEndedCallback || null;
-        this._onEndedCallback = null;
-        if(cb) audio.onended = cb;
-        audio.play().catch(()=>{
-          if(cb) cb();
+        await new Promise((resolve)=>{
+          audio.onended = resolve;
+          audio.onerror = resolve;
+          audio.play().catch(resolve);
         });
         return;
       }
     } catch(e) {
       console.warn('Google TTS failed, using browser voice:', e);
     }
-this._usingBrowserFallback = true;
-this._browserSpeak(text, rate, pitch);
-this._usingBrowserFallback = false;
+    this._usingBrowserFallback = true;
+    this._browserSpeak(text, rate, pitch);
+    this._usingBrowserFallback = false;
   },
-speak(text, rate=0.88, pitch=1.35) {
-    if(this.enabled && text && !this._usingBrowserFallback) { this.speakGoogle(String(text).slice(0,500), rate, pitch); return; }
-    if(!this.enabled || !('speechSynthesis' in window) || !text) return;
-    if(!this.enabled || !('speechSynthesis' in window) || !text) return;
+  speak(text, rate=0.88, pitch=1.35) {
+    if(this.enabled && text && !this._usingBrowserFallback) {
+      this._ttsQueue = this._ttsQueue || Promise.resolve();
+      this._ttsQueue = this._ttsQueue.then(()=>this.speakGoogle(String(text).slice(0,500), rate, pitch));
+      return;
+    }
     if(!this.enabled || !('speechSynthesis' in window) || !text) return;
     if(this._googleTTSActive) return;
     this._speaking = false;
@@ -2934,12 +2935,9 @@ speak(text, rate=0.88, pitch=1.35) {
       .replace(/\*\*/g, '')
       .replace(/\s+/g, ' ')
       .trim();
-
     if(!clean) return;
-
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const maxLen = isMobile ? 170 : 350;
-
     const rawChunks = clean.match(/[^.!?]+[.!?]*/g) || [clean];
     const chunks = [];
     let current = '';
