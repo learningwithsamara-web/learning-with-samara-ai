@@ -4339,7 +4339,7 @@ if(SoundSystem.enabled){
   const doSpeak = () => {
     hideReadBtn();
     const qLen = q.text.length;
-    const optDelay = qLen < 40 ? 4500 : qLen < 80 ? 7000 : qLen < 120 ? 10000 : 14000;
+    const optDelay = qLen < 40 ? 5000 : qLen < 80 ? 9000 : qLen < 120 ? 13000 : qLen < 160 ? 17000 : 22000;
     const cleanText = q.text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s*-\s*/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*×\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
     const cleanOpt = (t) => String(t).replace(/\*\*/g,'').replace(/\*/g,'').trim();
     const opt1 = 'Option 1. ' + cleanOpt(q.answers[0].label);
