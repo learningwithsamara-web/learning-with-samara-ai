@@ -4352,8 +4352,10 @@ if(SoundSystem.enabled){
     const opt4 = 'Option 4. ' + cleanOpt(q.answers[3].label);
     const optLen = (t) => t.length < 30 ? 3500 : t.length < 60 ? 5000 : t.length < 100 ? 7000 : 10000;
     SoundSystem.speak(cleanText, rate, pitch);
-    setTimeout(()=>{
+   setTimeout(()=>{
+      console.log('[TTS] optDelay fired, S.answered:', S.answered);
       if(!S.answered) {
+        console.log('[TTS] speaking opt1:', opt1);
         SoundSystem.speak(opt1, rate, pitch);
         setTimeout(()=>{
           if(!S.answered) {
