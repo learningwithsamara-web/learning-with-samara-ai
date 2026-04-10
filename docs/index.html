@@ -2250,7 +2250,26 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
         style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(255,155,63,0.4);">
         📤 Share the App Link
       </button>
-      <div style="margin-top:14px;color:rgba(255,255,255,0.45);font-size:0.78rem;">Only available at ai.learningwithsamara.com · Not on App Store or Google Play</div>
+      <div style="margin-top:14px;color:rgba(255,255,255,0.45);font-size:0.78rem;">Currently available as a free install · App Store &amp; Google Play coming soon!</div>
+
+<!-- Android Install Button -->
+<div id="android-install-section" style="display:none;margin-top:20px;">
+  <button id="android-install-btn" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:14px 32px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(107,203,119,0.4);width:100%;max-width:320px;">
+    📲 Install App on Android
+  </button>
+</div>
+
+<!-- Coming Soon notification -->
+<div style="background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:20px;padding:24px;margin-top:24px;border:1.5px solid rgba(199,125,255,0.3);text-align:center;">
+  <div style="font-size:2.5rem;margin-bottom:8px;">🔔</div>
+  <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.2rem;margin-bottom:6px;">Coming to App Store &amp; Google Play!</div>
+  <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:16px;line-height:1.6;">We are working hard to bring Learning With Samara to the App Store and Google Play Store. Enter your email to be notified the moment it launches!</div>
+  <div style="display:flex;gap:8px;max-width:400px;margin:0 auto;flex-wrap:wrap;">
+    <input id="notify-email" type="email" placeholder="Your email address" style="flex:1;min-width:200px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(199,125,255,0.4);border-radius:50px;padding:12px 20px;color:#fff;font-family:'Nunito',sans-serif;font-size:0.9rem;outline:none;"/>
+    <button onclick="App.notifyMe()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;white-space:nowrap;">Notify Me! 🚀</button>
+  </div>
+  <div id="notify-success" style="display:none;color:#6BCB77;font-family:'Fredoka One',cursive;font-size:0.95rem;margin-top:12px;">✅ You're on the list! We'll notify you when we launch!</div>
+</div>
     </div>
 
   </div>
@@ -11487,6 +11506,25 @@ const SearchDB=[
   {k:['baby','toddler','infant'],s:'baby',label:'Baby World',icon:'🍼'},
 ];
 
+// PWA Install prompt
+let _pwaPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _pwaPrompt = e;
+  const section = document.getElementById('android-install-section');
+  if(section) section.style.display='block';
+});
+
+document.getElementById('android-install-btn')?.addEventListener('click', async () => {
+  if(!_pwaPrompt) return;
+  _pwaPrompt.prompt();
+  const result = await _pwaPrompt.userChoice;
+  if(result.outcome === 'accepted') {
+    App.toast('Installing Samara AI! 🎉');
+    document.getElementById('android-install-section').style.display='none';
+  }
+});
+  
 // ── BOOT ─────────────────────────────────────────────────────
 window.App=App;window.AITutor=AITutor;window.Avatars=Avatars;
 window.BabyMode=BabyMode;window.PEP=PEP;window.SoundSystem=SoundSystem;
