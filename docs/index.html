@@ -4346,7 +4346,7 @@ if(SoundSystem.enabled){
     const opt2 = 'Option 2. ' + cleanOpt(q.answers[1].label);
     const opt3 = 'Option 3. ' + cleanOpt(q.answers[2].label);
     const opt4 = 'Option 4. ' + cleanOpt(q.answers[3].label);
-    const optLen = (t) => t.length < 50 ? 2500 : t.length < 100 ? 4000 : 6000;
+    const optLen = (t) => t.length < 30 ? 3500 : t.length < 60 ? 5000 : t.length < 100 ? 7000 : 10000;
     SoundSystem.speak(cleanText, rate, pitch);
     setTimeout(()=>{
       if(!S.answered) {
