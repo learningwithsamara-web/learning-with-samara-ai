@@ -4370,12 +4370,17 @@ if(SoundSystem.enabled){
               if(!S.answered) {
                 SoundSystem.speak(opt3, rate, pitch);
                 setTimeout(()=>{
-                  if(!S.answered) SoundSystem.speak(opt4, rate, pitch);
-                }, optLen(opt3));
-              }
-            }, optLen(opt2));
-          }
-        }, optLen(opt1));
+      if(!S.answered){
+        const opts = [opt1, opt2, opt3, opt4];
+        let i = 0;
+        const speakNext = () => {
+          if(S.answered || i >= opts.length) return;
+          const current = opts[i++];
+          SoundSystem._ttsQueue = (SoundSystem._ttsQueue || Promise.resolve())
+            .then(()=> S.answered ? null : SoundSystem.speakGoogle(current, rate, pitch))
+            .then(()=> { if(!S.answered) speakNext(); });
+        };
+        speakNext();
       }
     }, optDelay);
   };
