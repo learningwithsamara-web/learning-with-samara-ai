@@ -2892,14 +2892,6 @@ const SoundSystem = {
     if(!this.enabled || !text) return;
     try {
       window.speechSynthesis.cancel();
-      text = String(text).replace(/\b(?:in|since|from|year|born|founded|independence|until|by|before|after|during|around|circa)\s+(1[0-9]{3}|20[0-9]{2})\b/gi, (match, y) => {
-        const century = y.slice(0,2);
-        const rest = y.slice(2);
-        const centuryWord = {'19':'nineteen','20':'twenty','18':'eighteen','17':'seventeen','16':'sixteen'}[century] || century;
-        const restNum = parseInt(rest);
-        const restWord = restNum === 0 ? 'hundred' : restNum < 10 ? 'oh ' + restNum : String(restNum);
-        return match.replace(y, centuryWord + ' ' + restWord);
-      });
       console.log('[Google TTS] Requesting:', text.slice(0,50));
       const res = await fetch('https://samara-proxy.learningwithsamara.workers.dev?tts=1', {
         method: 'POST',
