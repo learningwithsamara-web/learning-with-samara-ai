@@ -4077,6 +4077,7 @@ const App = {
   },
 
   showScreen(id, param) {
+    hideReadBtn();
     // ── SIGNUP GATES — prompt login for protected features ──
     const gates = {
       'screen-research':  ['🔭 Research Anything', '🔭', 'Ask Samara to explain any topic — black holes, history, science and more. Save your progress and access your research history.'],
