@@ -4323,7 +4323,7 @@ const App = {
       // Attach event directly — avoids all escaping problems
       document.getElementById('repeat-btn').addEventListener('click', () => {
         SoundSystem.stop();
-        const cleanRepeat = q.text.replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s*-\s*/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*x\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
+        const cleanRepeat = q.text.replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s+-\s+/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*x\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
         setTimeout(() => SoundSystem.speakQuestion(cleanRepeat), 150);
       });
     }
@@ -4349,7 +4349,7 @@ if(SoundSystem.enabled){
   SoundSystem.stop();
   const doSpeak = () => {
     hideReadBtn();
-    const cleanText = q.text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s*-\s*/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*×\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
+    const cleanText = q.text.replace(/\*\*/g, '').replace(/\*/g, '').replace(/___/g, 'blank').replace(/_/g, 'blank').replace(/\s+-\s+/g, ' minus ').replace(/\s*\+\s*/g, ' plus ').replace(/\s*×\s*/g, ' times ').replace(/\s*÷\s*/g, ' divided by ').replace(/\s*=\s*/g, ' equals ');
     const cleanOpt = (t) => String(t).replace(/\*\*/g,'').replace(/\*/g,'').trim();
     const opt1 = 'Option 1. ' + cleanOpt(q.answers[0].label);
     const opt2 = 'Option 2. ' + cleanOpt(q.answers[1].label);
