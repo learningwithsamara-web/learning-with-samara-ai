@@ -4358,12 +4358,11 @@ if(SoundSystem.enabled){
     const opts = [opt1, opt2, opt3, opt4];
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     let i = 0;
-    const speakNext = () => {
-      if(S.answered || i >= opts.length) return;
-      const current = opts[i++];
-      SoundSystem._ttsQueue = (SoundSystem._ttsQueue || Promise.resolve())
-        .then(()=> S.answered ? null : SoundSystem.speakGoogle(current, rate, pitch))
-        .then(()=> { if(!S.answered) speakNext(); });
+    const speakNext = async () => {
+      for(; i < opts.length; i++) {
+        if(S.answered) break;
+        await SoundSystem.speakGoogle(opts[i], rate, pitch);
+      }
     };
     if(isIOS) {
       SoundSystem._ttsQueue = (SoundSystem._ttsQueue || Promise.resolve())
