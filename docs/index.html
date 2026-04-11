@@ -8423,9 +8423,10 @@ Return ONLY valid JSON array (no markdown):
     };
     const bank = banks[subject] || banks['social'];
     return bank.map(q=>({text:q.q,answers:makeA(q.c,q.w),correctValue:q.c,hint:q.h}));
-  }
+  },
+
   // ── MATHS LEARNING ZONE ──────────────────────────────────
-LEARN_TOPICS: {
+  LEARN_TOPICS: {
   grade4: [
     { id:'place-value', icon:'🔢', title:'Place Value', desc:'Ones, Tens, Hundreds & Thousands', free:true,
       concept:'Place value tells us what each digit in a number is worth based on its position.',
