@@ -4356,6 +4356,7 @@ if(SoundSystem.enabled){
     const opt3 = 'Option 3. ' + cleanOpt(q.answers[2].label);
     const opt4 = 'Option 4. ' + cleanOpt(q.answers[3].label);
     const opts = [opt1, opt2, opt3, opt4];
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     let i = 0;
     const speakNext = () => {
       if(S.answered || i >= opts.length) return;
@@ -4364,11 +4365,23 @@ if(SoundSystem.enabled){
         .then(()=> S.answered ? null : SoundSystem.speakGoogle(current, rate, pitch))
         .then(()=> { if(!S.answered) speakNext(); });
     };
-    SoundSystem._ttsQueue = (SoundSystem._ttsQueue || Promise.resolve())
-      .then(()=> SoundSystem.speakGoogle(cleanText, rate, pitch))
-      .then(()=>{ 
-        if(!S.answered) setTimeout(speakNext, 500);
-      });
+    if(isIOS) {
+      SoundSystem._ttsQueue = (SoundSystem._ttsQueue || Promise.resolve())
+        .then(()=> SoundSystem.speakGoogle(cleanText, rate, pitch))
+        .then(()=>{
+          if(!S.answered) {
+            showReadBtn(()=>{ i = 0; speakNext(); });
+            const rb = document.getElementById('global-read-btn');
+            if(rb) rb.innerHTML = '&#128266; Tap to Hear Options';
+          }
+        });
+    } else {
+      SoundSystem._ttsQueue = (SoundSystem._ttsQueue || Promise.resolve())
+        .then(()=> SoundSystem.speakGoogle(cleanText, rate, pitch))
+        .then(()=>{ 
+          if(!S.answered) setTimeout(speakNext, 500);
+        });
+    }
   };
   if(SoundSystem._usingBrowserFallback) {
     setTimeout(doSpeak, 600);
