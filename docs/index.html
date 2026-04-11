@@ -5268,6 +5268,7 @@ function showReadBtn(onTap) {
     style.textContent = '@keyframes pulse-read{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.08);}}';
     document.body.appendChild(style);
   }
+  rb.innerHTML = '&#128266; Tap to Hear';
   rb.onclick = () => { rb.style.display='none'; onTap(); };
   rb.style.display = 'block';
 }
