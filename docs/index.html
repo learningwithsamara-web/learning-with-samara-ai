@@ -8423,6 +8423,216 @@ Return ONLY valid JSON array (no markdown):
     const bank = banks[subject] || banks['social'];
     return bank.map(q=>({text:q.q,answers:makeA(q.c,q.w),correctValue:q.c,hint:q.h}));
   }
+  // ── MATHS LEARNING ZONE ──────────────────────────────────
+LEARN_TOPICS: {
+  grade4: [
+    { id:'place-value', icon:'🔢', title:'Place Value', desc:'Ones, Tens, Hundreds & Thousands', free:true,
+      concept:'Place value tells us what each digit in a number is worth based on its position.',
+      trick:'Remember: Please Excuse My Dear Aunt Sally — but for place value think: Thousands Hundreds Tens Ones = THTO!',
+      example:'In the number 3,456 — the 3 is worth 3,000, the 4 is worth 400, the 5 is worth 50, and the 6 is worth 6!',
+      reallife:'If you have $3,456 — the 3 means 3 thousand dollar bills!'
+    },
+    { id:'addition', icon:'➕', title:'Addition & Subtraction', desc:'Adding and taking away numbers', free:true,
+      concept:'Addition means putting numbers together. Subtraction means taking away.',
+      trick:'For adding big numbers — line them up by place value and always start from the ONES column on the right!',
+      example:'456 + 237: Start from ones: 6+7=13, write 3 carry 1. Tens: 5+3+1=9. Hundreds: 4+2=6. Answer: 693!',
+      reallife:'If you have $456 and earn $237 more — you now have $693!'
+    },
+    { id:'multiplication', icon:'✖️', title:'Multiplication & Division', desc:'Times tables and sharing equally', free:true,
+      concept:'Multiplication is fast addition of equal groups. Division is sharing equally.',
+      trick:'Times tables trick — 9 times table: hold up 10 fingers, fold down the finger for the number you multiply by, fingers on left = tens, fingers on right = ones!',
+      example:'9 × 4: fold down 4th finger → 3 fingers left, 6 fingers right = 36!',
+      reallife:'If 4 friends share 36 mangoes equally — each gets 36 ÷ 4 = 9 mangoes!'
+    },
+    { id:'fractions', icon:'🍕', title:'Fractions', desc:'Parts of a whole', free:true,
+      concept:'A fraction shows part of a whole. The bottom number (denominator) shows how many equal parts. The top number (numerator) shows how many parts you have.',
+      trick:'Remember: Denominator = Down below! Numerator = Number on top!',
+      example:'If a pizza has 8 slices and you eat 3 slices — you ate 3/8 of the pizza!',
+      reallife:'When you share a cake into 4 equal pieces and take 1 piece — you have 1/4 of the cake!'
+    },
+    { id:'measurement', icon:'📏', title:'Measurement', desc:'Length, Mass and Capacity', free:true,
+      concept:'We measure length in cm and m, mass in g and kg, and capacity in ml and L.',
+      trick:'King Henry Died By Drinking Cold Milk = Kilo Hecto Deca Base Deci Centi Milli — the metric prefixes in order!',
+      example:'100 cm = 1 m. 1000 g = 1 kg. 1000 ml = 1 L',
+      reallife:'A bottle of water is usually 500 ml — you need 2 bottles to make 1 litre!'
+    },
+    { id:'geometry', icon:'🔷', title:'Shapes & Geometry', desc:'2D and 3D shapes', free:true,
+      concept:'2D shapes are flat like a square or circle. 3D shapes are solid like a cube or sphere.',
+      trick:'Count the sides to name 2D shapes: 3=Triangle, 4=Quadrilateral, 5=Pentagon, 6=Hexagon, 8=Octagon!',
+      example:'A triangle has 3 sides and 3 angles that always add up to 180 degrees!',
+      reallife:'A juice box is a rectangular prism — 6 faces, 12 edges, 8 corners!'
+    },
+    { id:'data', icon:'📊', title:'Data & Statistics', desc:'Charts, graphs and tables', free:true,
+      concept:'Data is information we collect. We can show data using bar graphs, pictographs and tables.',
+      trick:'When reading a bar graph — always check the scale on the side first before reading the bars!',
+      example:'If a pictograph uses 🍎 = 5 apples and shows 3 apples for Monday — that means 15 apples on Monday!',
+      reallife:'Your school uses data to track how many students pass each subject every year!'
+    },
+  ],
+  grade5: [
+    { id:'decimals', icon:'🔢', title:'Decimals', desc:'Tenths, Hundredths and Thousandths', free:false,
+      concept:'Decimals are numbers with a dot that show values less than 1. Each place after the dot is 10 times smaller.',
+      trick:'Think of money! $3.45 means 3 whole dollars and 45 cents — the cents are the decimal part!',
+      example:'0.5 = 5/10 = half. 0.25 = 25/100 = quarter. 0.75 = 75/100 = three quarters!',
+      reallife:'Prices at the shop use decimals every day — $125.99 means 99 cents after the dollar!'
+    },
+    { id:'percentages', icon:'💯', title:'Percentages', desc:'Parts out of 100', free:false,
+      concept:'Percent means out of 100. 50% means 50 out of every 100.',
+      trick:'To find 10% — just divide by 10! To find 5% — divide by 20! To find 25% — divide by 4!',
+      example:'25% of $80: divide 80 by 4 = $20!',
+      reallife:'When a shop says 20% off — that means you save 20 cents for every dollar!'
+    },
+    { id:'ratios', icon:'⚖️', title:'Ratio & Proportion', desc:'Comparing quantities', free:false,
+      concept:'A ratio compares two quantities. If there are 3 boys and 5 girls, the ratio is 3:5.',
+      trick:'Always simplify ratios like fractions — divide both numbers by their highest common factor!',
+      example:'Ratio 6:10 — both divisible by 2 — simplifies to 3:5!',
+      reallife:'A recipe uses ratio — 2 cups flour to 1 cup sugar means double the flour always!'
+    },
+    { id:'algebra-basics', icon:'🔣', title:'Algebra Basics', desc:'Letters standing for numbers', free:false,
+      concept:'In algebra we use letters to represent unknown numbers. We solve equations to find what the letter equals.',
+      trick:'Think of the letter as a mystery box — what number goes in the box to make the equation true?',
+      example:'x + 5 = 12 — what goes in the box? 12 minus 5 = 7, so x = 7!',
+      reallife:'If you have some marbles and add 5 more to get 12 total — algebra helps find the unknown!'
+    },
+    { id:'area-perimeter', icon:'📐', title:'Area & Perimeter', desc:'Measuring space and boundaries', free:false,
+      concept:'Perimeter is the distance around a shape. Area is the space inside a shape.',
+      trick:'P for Perimeter = Path around the outside! A for Area = Amount of space inside!',
+      example:'Rectangle 6m × 4m: Perimeter = 6+4+6+4 = 20m. Area = 6×4 = 24m²!',
+      reallife:'A farmer needs perimeter to fence his land and area to know how much to plant!'
+    },
+    { id:'averages', icon:'📊', title:'Mean, Mode & Median', desc:'Types of averages', free:false,
+      concept:'Mean is the average — add all numbers and divide by how many there are. Mode is the most common. Median is the middle value.',
+      trick:'Mean=Maths (add and divide). Mode=Most common. Median=Middle!',
+      example:'Numbers: 3,5,5,7,10. Mean=(3+5+5+7+10)÷5=6. Mode=5. Median=5!',
+      reallife:'Your school uses mean to calculate your end of term average grade!'
+    },
+  ],
+  grade6: [
+    { id:'advanced-fractions', icon:'🍕', title:'Advanced Fractions', desc:'Adding, subtracting, multiplying fractions', free:false,
+      concept:'To add or subtract fractions — get the same denominator first. To multiply — multiply tops and bottoms. To divide — flip and multiply!',
+      trick:'Keep Change Flip for dividing fractions! Keep the first fraction, Change ÷ to ×, Flip the second fraction!',
+      example:'½ ÷ ¼ = ½ × 4/1 = 4/2 = 2!',
+      reallife:'If you have half a pizza and want to share it in quarter pieces — how many pieces? 2!'
+    },
+    { id:'indices', icon:'🔢', title:'Indices & Powers', desc:'Squares, cubes and roots', free:false,
+      concept:'An index tells you how many times to multiply a number by itself. 3² means 3×3=9.',
+      trick:'Square numbers make perfect squares — 1,4,9,16,25,36,49,64,81,100. Learn these!',
+      example:'4² = 16 (four squared). 2³ = 8 (two cubed). √25 = 5 (square root of 25)!',
+      reallife:'Area of a square field with side 7m = 7² = 49 square metres!'
+    },
+    { id:'consumer-arithmetic', icon:'💰', title:'Consumer Arithmetic', desc:'Profit, loss, discount and tax', free:false,
+      concept:'Profit = Selling Price minus Cost Price. Loss = Cost Price minus Selling Price. Discount = reduction from original price.',
+      trick:'If Selling Price is MORE than Cost Price = PROFIT. If LESS = LOSS. Simple!',
+      example:'Buy for $400, sell for $500 = Profit of $100. Buy for $400, sell for $350 = Loss of $50!',
+      reallife:'Every shop owner uses profit and loss to know if their business is making money!'
+    },
+    { id:'geometry-advanced', icon:'🔷', title:'Advanced Geometry', desc:'Angles, triangles and circles', free:false,
+      concept:'Angles in a triangle always add to 180°. Angles on a straight line add to 180°. Angles around a point add to 360°.',
+      trick:'Triangle = 180. Straight line = 180. Full turn = 360. Remember: 1-8-0, 1-8-0, 3-6-0!',
+      example:'If a triangle has angles 60° and 70° — the third angle = 180-60-70 = 50°!',
+      reallife:'Architects use angles to design buildings and bridges safely!'
+    },
+    { id:'statistics-advanced', icon:'📊', title:'Advanced Statistics', desc:'Probability and data analysis', free:false,
+      concept:'Probability is the chance of something happening. It is always between 0 (impossible) and 1 (certain).',
+      trick:'Probability = Number of ways it can happen ÷ Total number of outcomes. Always a fraction between 0 and 1!',
+      example:'Probability of rolling a 3 on a dice = 1/6 because there is 1 three and 6 possible outcomes!',
+      reallife:'Weather forecasters use probability — 70% chance of rain means 7 out of 10 similar days had rain!'
+    },
+  ]
+},
+
+showLearnZone(grade, btn) {
+  if((grade === 'grade5' || grade === 'grade6') && !Plan.isPro()) {
+    App.requireSignup('Maths Learning Zone Grade '+(grade==='grade5'?'5':'6'),'📐','Upgrade to Pro to unlock Grade 5 and Grade 6 Maths Learning Zone!');
+    return;
+  }
+  // Update tab buttons
+  ['grade4','grade5','grade6'].forEach(g => {
+    const b = document.getElementById('lz-'+g.replace('grade','g')+'-btn');
+    if(b) {
+      if(g === grade) {
+        b.style.background = 'linear-gradient(135deg,#C77DFF,#7928CA)';
+        b.style.color = '#fff';
+        b.style.border = 'none';
+      } else {
+        b.style.background = 'rgba(255,255,255,0.1)';
+        b.style.color = 'rgba(255,255,255,0.6)';
+        b.style.border = '1px solid rgba(255,255,255,0.2)';
+      }
+    }
+  });
+  const topics = this.LEARN_TOPICS[grade];
+  const container = document.getElementById('lz-topics');
+  if(!container) return;
+  container.innerHTML = topics.map(t => `
+    <div onclick="PEP.openLearnTopic('${grade}','${t.id}')" style="background:rgba(255,255,255,0.06);border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border:1.5px solid rgba(255,255,255,0.1);transition:all 0.2s;"
+      onmouseover="this.style.background='rgba(199,125,255,0.15)';this.style.borderColor='rgba(199,125,255,0.4)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.1)'">
+      <div style="font-size:2rem;">${t.icon}</div>
+      <div style="flex:1;">
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${t.title}</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-top:2px;">${t.desc}</div>
+      </div>
+      <div style="color:rgba(255,255,255,0.4);font-size:1.2rem;">▶</div>
+    </div>
+  `).join('');
+  SoundSystem.speakBaby('Pick a topic to learn!');
+},
+
+openLearnTopic(grade, topicId) {
+  const topic = this.LEARN_TOPICS[grade].find(t => t.id === topicId);
+  if(!topic) return;
+  // Create full screen overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'lz-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f0c29,#302b63);z-index:2000;overflow-y:auto;padding:20px 16px;';
+  overlay.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;">
+      <button onclick="document.getElementById('lz-overlay').remove();SoundSystem.stop();" style="background:rgba(255,255,255,0.1);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 20px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;margin-bottom:20px;">← Back</button>
+      
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:4rem;margin-bottom:8px;">${topic.icon}</div>
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.8rem;margin-bottom:4px;">${topic.title}</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:0.85rem;">${topic.desc}</div>
+      </div>
+
+      <!-- Learn It -->
+      <div style="background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;margin-bottom:16px;border:1.5px solid rgba(107,203,119,0.3);">
+        <div style="font-family:'Fredoka One',cursive;color:#6BCB77;font-size:1.1rem;margin-bottom:10px;">🎬 Learn It!</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.9rem;line-height:1.7;">${topic.concept}</div>
+        <button onclick="SoundSystem.stop();setTimeout(()=>SoundSystem.speak('${topic.concept.replace(/'/g,' ')}',0.82,1.3),200)" style="margin-top:12px;background:rgba(107,203,119,0.2);color:#6BCB77;font-family:'Fredoka One',cursive;font-size:0.8rem;padding:6px 16px;border-radius:20px;border:1px solid rgba(107,203,119,0.4);cursor:pointer;">🔊 Read to me</button>
+      </div>
+
+      <!-- Remember It -->
+      <div style="background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;margin-bottom:16px;border:1.5px solid rgba(255,217,61,0.3);">
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:10px;">💡 Remember It!</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.9rem;line-height:1.7;">${topic.trick}</div>
+        <button onclick="SoundSystem.stop();setTimeout(()=>SoundSystem.speak('${topic.trick.replace(/'/g,' ')}',0.82,1.3),200)" style="margin-top:12px;background:rgba(255,217,61,0.2);color:#FFD93D;font-family:'Fredoka One',cursive;font-size:0.8rem;padding:6px 16px;border-radius:20px;border:1px solid rgba(255,217,61,0.4);cursor:pointer;">🔊 Read to me</button>
+      </div>
+
+      <!-- Example -->
+      <div style="background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;margin-bottom:16px;border:1.5px solid rgba(199,125,255,0.3);">
+        <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1.1rem;margin-bottom:10px;">✏️ Example!</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.9rem;line-height:1.7;">${topic.example}</div>
+        <button onclick="SoundSystem.stop();setTimeout(()=>SoundSystem.speak('${topic.example.replace(/'/g,' ')}',0.82,1.3),200)" style="margin-top:12px;background:rgba(199,125,255,0.2);color:#C77DFF;font-family:'Fredoka One',cursive;font-size:0.8rem;padding:6px 16px;border-radius:20px;border:1px solid rgba(199,125,255,0.4);cursor:pointer;">🔊 Read to me</button>
+      </div>
+
+      <!-- Real Life -->
+      <div style="background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;margin-bottom:24px;border:1.5px solid rgba(255,107,107,0.3);">
+        <div style="font-family:'Fredoka One',cursive;color:#FF6B6B;font-size:1.1rem;margin-bottom:10px;">🌍 Real Life!</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:0.9rem;line-height:1.7;">${topic.reallife}</div>
+        <button onclick="SoundSystem.stop();setTimeout(()=>SoundSystem.speak('${topic.reallife.replace(/'/g,' ')}',0.82,1.3),200)" style="margin-top:12px;background:rgba(255,107,107,0.2);color:#FF6B6B;font-family:'Fredoka One',cursive;font-size:0.8rem;padding:6px 16px;border-radius:20px;border:1px solid rgba(255,107,107,0.4);cursor:pointer;">🔊 Read to me</button>
+      </div>
+
+      <!-- Practice button -->
+      <button onclick="document.getElementById('lz-overlay').remove();SoundSystem.stop();PEP.openSubject('math');" style="width:100%;background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:16px;border-radius:20px;border:none;cursor:pointer;margin-bottom:12px;">✏️ Now Practice Questions!</button>
+      <button onclick="document.getElementById('lz-overlay').remove();SoundSystem.stop();" style="width:100%;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-family:'Fredoka One',cursive;font-size:1rem;padding:14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">← Back to Topics</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  SoundSystem.stop();
+  setTimeout(()=>SoundSystem.speak(topic.concept, 0.82, 1.3), 500);
+},
 };
 
 // ── RESEARCH MODULE ──────────────────────────────────────────
