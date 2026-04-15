@@ -11900,7 +11900,8 @@ const LearnZone = {
     const container = document.getElementById('lz-screen-topics');
     if(!container) return;
     const key = this.currentSubject + '_' + this.currentGrade;
-    const topics = PEP.LEARN_TOPICS[this.currentGrade] || [];
+    const mathSubjects = ['math'];
+const topics = mathSubjects.includes(this.currentSubject) ? (PEP.LEARN_TOPICS[this.currentGrade] || []) : [];
     const isProSubject = (this.currentSubject === 'science' || this.currentSubject === 'social') && !Plan.isPro();
     
     if(isProSubject) {
