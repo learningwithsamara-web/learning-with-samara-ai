@@ -11835,6 +11835,76 @@ document.getElementById('android-install-btn')?.addEventListener('click', async 
   }
 });
   
+// ── LEARN ZONE ───────────────────────────────────────────────
+const LearnZone = {
+  currentSubject: 'math',
+  currentGrade: 'grade4',
+
+  init() {
+    this.currentSubject = 'math';
+    this.currentGrade = 'grade4';
+    document.querySelectorAll('.lz-subject-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+    document.querySelectorAll('.lz-grade-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+    this.renderTopics();
+  },
+
+  setSubject(subject, btn) {
+    this.currentSubject = subject;
+    document.querySelectorAll('.lz-subject-btn').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    this.renderTopics();
+  },
+
+  setGrade(grade, btn) {
+    if((grade==='grade5'||grade==='grade6') && !Plan.isPro()) {
+      App.requireSignup('Learning Zone '+grade,'📐','Upgrade to Pro to unlock Grade 5 and Grade 6 content!');
+      return;
+    }
+    this.currentGrade = grade;
+    document.querySelectorAll('.lz-grade-btn').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    this.renderTopics();
+  },
+
+  renderTopics() {
+    const container = document.getElementById('lz-screen-topics');
+    if(!container) return;
+    const key = this.currentSubject + '_' + this.currentGrade;
+    const topics = PEP.LEARN_TOPICS[this.currentGrade] || [];
+    const isProSubject = (this.currentSubject === 'science' || this.currentSubject === 'social') && !Plan.isPro();
+    
+    if(isProSubject) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;">
+          <div style="font-size:3rem;margin-bottom:12px;">👑</div>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.2rem;margin-bottom:8px;">Pro Feature</div>
+          <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:20px;">Upgrade to Pro to unlock Science and Social Studies Learning Zone!</div>
+          <button onclick="Payments.checkout('monthly')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade Now</button>
+        </div>`;
+      return;
+    }
+
+    if(!topics.length) {
+      container.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.5);font-family:'Fredoka One',cursive;">Coming Soon! 🚀</div>`;
+      return;
+    }
+
+    container.innerHTML = topics.map(t => `
+      <div onclick="PEP.openLearnTopic('${this.currentGrade}','${t.id}')" style="background:rgba(255,255,255,0.06);border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border:1.5px solid rgba(255,255,255,0.1);"
+        onmouseover="this.style.background='rgba(199,125,255,0.15)';this.style.borderColor='rgba(199,125,255,0.4)'"
+        onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:2rem;">${t.icon}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${t.title}</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;margin-top:2px;">${t.desc}</div>
+        </div>
+        <div style="color:rgba(255,255,255,0.4);font-size:1.2rem;">▶</div>
+      </div>
+    `).join('');
+  },
+};
+window.LearnZone = LearnZone;
+  
 // ── BOOT ─────────────────────────────────────────────────────
 window.App=App;window.AITutor=AITutor;window.Avatars=Avatars;
 window.BabyMode=BabyMode;window.PEP=PEP;window.SoundSystem=SoundSystem;
