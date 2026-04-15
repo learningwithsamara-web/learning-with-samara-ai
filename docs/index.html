@@ -1166,19 +1166,20 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <div class="pep-info-icon">💡</div>
     <div class="pep-info-text">Fresh AI-generated PEP questions every time! Samara explains every answer. 🌟</div>
   </div>
-  <!-- Learn Zone Section -->
-  <div style="padding:0 16px;margin-bottom:20px;">
-    <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.2rem;margin-bottom:12px;text-align:center;">📐 Maths Learning Zone</div>
-    <div style="color:rgba(255,255,255,0.7);font-size:0.82rem;text-align:center;margin-bottom:14px;">Learn concepts the fun way before you practice! 🌟</div>
-    <!-- Grade tabs -->
-    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;">
-      <button id="lz-g4-btn" onclick="PEP.showLearnZone('grade4',this)" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 20px;border-radius:50px;border:none;cursor:pointer;">Grade 4 ⭐ Free</button>
-      <button id="lz-g5-btn" onclick="PEP.showLearnZone('grade5',this)" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 20px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Grade 5 👑</button>
-      <button id="lz-g6-btn" onclick="PEP.showLearnZone('grade6',this)" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 20px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;">Grade 6 👑</button>
+<!-- Learn Zone Card -->
+<div style="padding:0 16px;margin-bottom:20px;">
+  <div onclick="App.showScreen('screen-learnzone')" style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:20px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;border:1.5px solid rgba(255,217,61,0.4);box-shadow:0 8px 24px rgba(0,0,0,0.3);"
+    onmouseover="this.style.borderColor='rgba(255,217,61,0.8)'"
+    onmouseout="this.style.borderColor='rgba(255,217,61,0.4)'">
+    <div style="font-size:2.8rem;">📐</div>
+    <div style="flex:1;">
+      <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;">Maths Learning Zone</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:3px;">Learn concepts the fun way before you practice!</div>
+      <div style="background:rgba(107,203,119,0.2);color:#6BCB77;font-size:0.7rem;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:6px;border:1px solid rgba(107,203,119,0.3);">Grade 4 Free ⭐</div>
     </div>
-    <!-- Topics container -->
-    <div id="lz-topics" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <div style="color:#FFD93D;font-size:1.5rem;">▶</div>
   </div>
+</div>
   <div class="pep-subjects-grid">
     <div class="pep-subject-card" data-pep="math" onclick="PEP.openSubject('math')"><div class="pep-subject-icon">🔢</div><div class="pep-subject-name">Mathematics</div><div class="pep-subject-count">Numbers, Fractions, Geometry</div></div>
     <div class="pep-subject-card" data-pep="language" onclick="PEP.openSubject('language')"><div class="pep-subject-icon">📚</div><div class="pep-subject-name">Language Arts</div><div class="pep-subject-count">Reading, Writing, Grammar</div></div>
