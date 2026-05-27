@@ -2506,6 +2506,81 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
 <script>
 'use strict';
   
+// ── GOOGLE PLAY BILLING DETECTION ────────────────────────
+const IS_TWA = document.referrer.startsWith('android-app://') || 
+               (window.matchMedia('(display-mode: standalone)').matches && 
+               /Android/i.test(navigator.userAgent));
+
+const GooglePlayBilling = {
+  supported: false,
+  service: null,
+
+  SKUS: {
+    monthly: 'pro_monthly',
+    annual: 'pro_annual',
+    family: 'pro_family'
+  },
+
+  async init() {
+    if(!IS_TWA) return;
+    if(!('getDigitalGoodsService' in window)) return;
+    try {
+      this.service = await window.getDigitalGoodsService('https://play.google.com/billing');
+      this.supported = true;
+      console.log('[GPB] Google Play Billing ready!');
+    } catch(e) {
+      console.log('[GPB] Google Play Billing not available:', e);
+    }
+  },
+
+  async purchase(sku) {
+    if(!this.supported) return false;
+    try {
+      const details = await this.service.getDetails([sku]);
+      if(!details.length) { console.error('[GPB] SKU not found:', sku); return false; }
+      const item = details[0];
+      const request = new PaymentRequest([{
+        supportedMethods: 'https://play.google.com/billing',
+        data: { sku: item.itemId }
+      }], {
+        total: { label: item.title, amount: { currency: 'USD', value: '0' }}
+      });
+      const response = await request.show();
+      await response.complete('success');
+      await this.verifyPurchase(response.details.purchaseToken, sku);
+      return true;
+    } catch(e) {
+      console.error('[GPB] Purchase failed:', e);
+      return false;
+    }
+  },
+
+  async verifyPurchase(token, sku) {
+    try {
+      const planMap = {
+        'pro_monthly': 'monthly',
+        'pro_annual': 'annual',
+        'pro_family': 'family'
+      };
+      const plan = planMap[sku] || 'monthly';
+      Plan.activate(plan);
+      localStorage.setItem('samara_play_token', token);
+      localStorage.setItem('samara_play_sku', sku);
+      fetch('https://samara-proxy.learningwithsamara.workers.dev?gpb=1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, sku, userId: S.user?.id })
+      }).catch(e => console.warn('[GPB] Server verify failed:', e));
+      App.toast('🎉 Welcome to Pro! Enjoy Learning With Samara!');
+      setTimeout(()=> App.showScreen('screen-home'), 1500);
+    } catch(e) {
+      console.error('[GPB] Verify failed:', e);
+      App.toast('Purchase successful! Restart the app if Pro is not active.');
+    }
+  },
+};
+window.GooglePlayBilling = GooglePlayBilling;
+
 // ── CONFIG ──────────────────────────────────────────────────
 const SUPABASE_URL='https://bfivpvlzehtmksnmgnzb.supabase.co';
 const SUPABASE_ANON='sb_publishable_tYtU2TTBwE3UA_F5Y0rCBw_s493nn-H';
