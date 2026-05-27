@@ -11941,6 +11941,15 @@ const topics = mathSubjects.includes(this.currentSubject) ? (PEP.LEARN_TOPICS[th
   },
 };
 window.LearnZone = LearnZone;
+
+// Initialize Google Play Billing
+GooglePlayBilling.init().then(()=>{
+  if(IS_TWA && GooglePlayBilling.supported) {
+    console.log('[TWA] Running in Play Store — Google Play Billing active');
+  } else if(IS_TWA) {
+    console.log('[TWA] Running in Play Store — Billing not yet available');
+  }
+});
   
 // ── BOOT ─────────────────────────────────────────────────────
 window.App=App;window.AITutor=AITutor;window.Avatars=Avatars;
