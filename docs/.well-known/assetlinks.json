@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.learningwithsamara.ai.twa",
+        "sha256_cert_fingerprints": ["9F:40:40:64:0C:55:32:67:D1:A2:34:C5:F7:7A:19:C9:38:DF:2B:D1:31:08:31:3D:00:7F:F3:D2:EE:7D:40:B0"]
+      }
+    }]
