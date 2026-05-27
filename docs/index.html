@@ -2687,10 +2687,32 @@ const Payments = {
     family:  'Up to 4 child profiles · All Pro features · One parent dashboard · $7.99/month total',
   },
 
-  checkout(plan) {
+  async checkout(plan) {
+    // TWA — Google Play Billing only
+    if(IS_TWA) {
+      if(GooglePlayBilling.supported) {
+        const sku = GooglePlayBilling.SKUS[plan];
+        if(sku) {
+          await GooglePlayBilling.purchase(sku);
+          return;
+        }
+      } else {
+        const div = document.createElement('div');
+        div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+        div.innerHTML = `
+          <div style="background:linear-gradient(135deg,#1a1a3e,#2d1b69);border-radius:28px;padding:32px;max-width:360px;width:100%;text-align:center;border:2px solid rgba(199,125,255,0.4);">
+            <div style="font-size:3rem;margin-bottom:12px;">⭐</div>
+            <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.3rem;margin-bottom:8px;">Upgrade to Pro!</div>
+            <div style="color:rgba(255,255,255,0.75);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">To subscribe visit us at:<br><b style="color:#FFD93D;">learningwithsamara.com</b><br><br>Your account works on both the app and website!</div>
+            <button onclick="this.closest('[style]').remove()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;width:100%;margin-bottom:8px;">Got it! 👍</button>
+          </div>`;
+        document.body.appendChild(div);
+        return;
+      }
+    }
+    // Web — use Shopify as normal
     const link = this.LINKS[plan];
     if(link && link.startsWith('http')) {
-      // Opens PayPal or Shopify checkout — same tab so return URL works
       window.location.href = link;
       return;
     }
