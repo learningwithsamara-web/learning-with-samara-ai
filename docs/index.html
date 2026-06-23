@@ -2636,6 +2636,22 @@ const Plan = {
     localStorage.setItem('samara_pro', 'true');
     localStorage.setItem('samara_plan', plan);
     localStorage.setItem('samara_pro_since', new Date().toISOString());
+    // Sync to Supabase so Pro persists across devices
+    if(S.user) {
+      fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${S.user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON,
+          'Authorization': `Bearer ${S.session?.access_token}`
+        },
+        body: JSON.stringify({ 
+          is_pro: true,
+          plan: plan,
+          pro_since: new Date().toISOString()
+        })
+      }).catch(e => console.warn('Pro sync failed:', e));
+    }
   },
   deactivate() { localStorage.removeItem('samara_pro'); },
 
