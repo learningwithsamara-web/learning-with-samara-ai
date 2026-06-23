@@ -4266,6 +4266,18 @@ const App = {
     PersonalAlgo.load();
     const total = Object.values(PersonalAlgo.data).reduce((s,d)=>s+(d.correct||0)+(d.wrong||0),0);
     if (total >= 5 || isPro) document.getElementById('btn-studyplan')?.classList.remove('hidden');
+    // Update current plan button on pricing screen
+    const planBtn = document.getElementById('current-plan-btn');
+    if(planBtn) {
+      planBtn.textContent = isPro ? `✅ ${Plan.getPlanLabel()}` : 'Current Plan (Free)';
+    }
+    // Update homework screen visibility
+    if(isPro) {
+      const gate = document.getElementById('homework-pro-gate');
+      const main = document.getElementById('homework-main');
+      if(gate) gate.classList.add('hidden');
+      if(main) main.style.display = 'block';
+    }
   },
 
   _showTrialExpiredPopup() {
