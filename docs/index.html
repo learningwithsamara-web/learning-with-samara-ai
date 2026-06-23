@@ -4323,6 +4323,28 @@ const App = {
     setTimeout(()=>App.showScreen('screen-pricing'),600);
   },
 
+  async restoreProFromSupabase() {
+    if(!S.user || !S.session) return;
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${S.user.id}&select=is_pro,plan,pro_since,promo_used`, {
+        headers: {
+          'apikey': SUPABASE_ANON,
+          'Authorization': `Bearer ${S.session.access_token}`
+        }
+      });
+      const data = await res.json();
+      if(data && data.length > 0 && data[0].is_pro) {
+        localStorage.setItem('samara_pro', 'true');
+        localStorage.setItem('samara_plan', data[0].plan || 'monthly');
+        if(data[0].pro_since) localStorage.setItem('samara_pro_since', data[0].pro_since);
+        if(data[0].promo_used) localStorage.setItem('samara_promo_used', data[0].promo_used);
+        console.log('[Pro] Restored from Supabase ✅');
+      }
+    } catch(e) {
+      console.warn('[Pro] Could not restore from Supabase:', e);
+    }
+  },
+  
   updateAuth() {
     const in_=!!S.user;
     el('btn-login')?.classList.toggle('hidden',in_);el('btn-signup')?.classList.toggle('hidden',in_);
