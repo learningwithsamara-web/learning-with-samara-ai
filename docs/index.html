@@ -4356,6 +4356,7 @@ const App = {
         if(data[0].pro_since) localStorage.setItem('samara_pro_since', data[0].pro_since);
         if(data[0].promo_used) localStorage.setItem('samara_promo_used', data[0].promo_used);
         console.log('[Pro] Restored from Supabase ✅');
+        App.updatePlanUI();
       }
     } catch(e) {
       console.warn('[Pro] Could not restore from Supabase:', e);
