@@ -2630,6 +2630,23 @@ const Plan = {
     localStorage.setItem('samara_plan', 'family');
     localStorage.setItem('samara_pro_since', new Date().toISOString());
     localStorage.setItem('samara_promo_used', code.toUpperCase());
+    // Sync to Supabase
+    if(S.user && S.session) {
+      fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${S.user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON,
+          'Authorization': `Bearer ${S.session.access_token}`
+        },
+        body: JSON.stringify({ 
+          is_pro: true,
+          plan: 'family',
+          pro_since: new Date().toISOString(),
+          promo_used: code.toUpperCase()
+        })
+      }).catch(e => console.warn('Promo sync failed:', e));
+    }
     return { ok:true, label:match };
   },
   activate(plan) {
