@@ -4208,7 +4208,7 @@ const App = {
       localStorage.setItem('samara_device_id', 'dev_' + Date.now() + '_' + Math.random().toString(36).slice(2,9));
     }
     this._deviceId = localStorage.getItem('samara_device_id');
-    DB.client.auth.onAuthStateChange(async(ev,sess)=>{S.user=sess?.user||null;App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);}});
+    DB.client.auth.onAuthStateChange(async(ev,sess)=>{S.user=sess?.user||null;S.session=sess;App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);await App.restoreProFromSupabase();}});
     try{S.user=await DB.getUser();App.updateAuth();if(S.user){S.progress=await DB.loadProgress();const ag=S.user.user_metadata?.age_group;if(ag)App.selectAge(ag,false);const sessionKey='samara_who_learning_'+new Date().toDateString();if(!localStorage.getItem(sessionKey)){const kids=FamilyMode.getProfiles();if(kids.length>0){localStorage.setItem(sessionKey,'shown');setTimeout(()=>App.showWhoLearning(),1000);}}}}catch(e){}
     App.renderSubjects();Avatars.loadSaved();
     setTimeout(()=>App.updateSearchSuggestions(),500);
