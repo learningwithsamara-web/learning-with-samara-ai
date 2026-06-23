@@ -4324,7 +4324,7 @@ const App = {
     if(id==='screen-trace'){ AITutor.hideFloat(); document.getElementById('trace-hub').style.display='block'; document.getElementById('trace-activity').style.display='none'; }
     if(id==='screen-family'){ AITutor.hideFloat(); FamilyMode.render(); }
     if(id==='screen-coinshop'){ AITutor.hideFloat(); CoinShop.render(); }
-    if(id==='screen-homework'){ AITutor.hideFloat(); HomeworkHelper.init(); }
+    if(id==='screen-homework'){ AITutor.hideFloat(); setTimeout(()=>HomeworkHelper.init(), 500); }
     if(id==='screen-speaking'){AITutor.hideFloat();SpeakingCoach.init();}
     if(id==='screen-games') AITutor.hideFloat();
     if(id==='screen-scrabble') AITutor.hideFloat();
