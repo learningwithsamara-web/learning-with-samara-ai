@@ -1,8 +1,11 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.learningwithsamara.app",
-        "sha256_cert_fingerprints": ["8D:6C:F8:29:B4:17:D7:39:CC:B9:46:06:35:18:1B:F2:04:48:BA:4E:CB:CE:80:AD:8B:60:CF:43:E6:6A:4E:8A"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.learningwithsamara.app",
+    "sha256_cert_fingerprints": [
+      "8D:6C:F8:29:B4:17:D7:39:CC:B9:46:06:35:18:1B:F2:04:48:BA:4E:CB:CE:80:AD:8B:60:CF:43:E6:6A:4E:8A",
+      "8D:62:0A:47:74:78:0B:74:73:3F:E3:74:26:58:4F:D5:CD:EE:0A:1C:90:BB:99:9A:F1:54:B1:CB:AA:62:5F:85"
+    ]
+  }
+}]
