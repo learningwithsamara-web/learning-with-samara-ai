@@ -722,6 +722,10 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   <h2 class="screen-title small">⭐ Samara Pro Plans</h2>
 </div>
 <div class="pricing-wrap">
+  <div id="pro-status-banner" style="display:none;background:linear-gradient(135deg,#6BCB77,#3DAA45);border-radius:16px;padding:16px 20px;margin-bottom:20px;text-align:center;border:2px solid rgba(107,203,119,0.5);">
+    <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;" id="pro-status-text">✅ You are on Pro Monthly</div>
+    <div style="color:rgba(255,255,255,0.9);font-size:0.85rem;margin-top:4px;">Enjoy unlimited learning! 🎉</div>
+  </div>
   <h2 class="pricing-title">Unlock Full Learning Power 🚀</h2>
   <p class="pricing-sub">Join thousands of families growing smarter every day</p>
   <div class="pricing-grid">
@@ -753,7 +757,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
         <li class="locked-feature"><span class="cross">✗</span> Unlimited quizzes & AI</li>
         <li class="locked-feature"><span class="cross">✗</span> Coin Shop themes & effects</li>
       </ul>
-      <button class="btn btn-outline" id="current-plan-btn" style="width:100%;color:#333;border-color:#ccc;" disabled>Current Plan</button>
+      <button class="btn btn-outline" style="width:100%;color:#333;border-color:#ccc;" disabled>Free Plan</button>
     </div>
     <!-- PRO PLAN -->
     <div class="plan-card featured">
@@ -779,7 +783,7 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
         <li><span class="check">✓</span> Priority support</li>
         <li><span class="check">✓</span> 7-day free trial — no payment needed</li>
       </ul>
-      <button class="btn btn-gold big" style="width:100%;" onclick="Payments.checkout('monthly')">Start Free Trial 🚀</button>
+      <button class="btn btn-gold big" id="current-plan-btn" style="width:100%;" onclick="Plan.isPro()?null:Payments.checkout('monthly')">Start Free Trial 🚀</button>
       <div class="trial-note">✅ 7 days full Pro access free · No payment needed to start · Subscribe after to keep access</div>
     </div>
   </div>
@@ -4272,9 +4276,27 @@ const App = {
     const total = Object.values(PersonalAlgo.data).reduce((s,d)=>s+(d.correct||0)+(d.wrong||0),0);
     if (total >= 5 || isPro) document.getElementById('btn-studyplan')?.classList.remove('hidden');
     // Update current plan button on pricing screen
+    // Update pro status banner
+    const banner = document.getElementById('pro-status-banner');
+    const statusText = document.getElementById('pro-status-text');
+    if(banner) banner.style.display = isPro ? 'block' : 'none';
+    if(statusText) statusText.textContent = `✅ You are on ${Plan.getPlanLabel()}`;
+    // Update plan button
     const planBtn = document.getElementById('current-plan-btn');
     if(planBtn) {
-      planBtn.textContent = isPro ? `✅ ${Plan.getPlanLabel()}` : 'Current Plan (Free)';
+      if(isPro) {
+        planBtn.textContent = `✅ ${Plan.getPlanLabel()}`;
+        planBtn.onclick = null;
+        planBtn.disabled = true;
+        planBtn.style.background = 'linear-gradient(135deg,#6BCB77,#3DAA45)';
+        planBtn.style.color = '#fff';
+        planBtn.style.border = 'none';
+      } else {
+        planBtn.textContent = 'Start Free Trial 🚀';
+        planBtn.disabled = false;
+        planBtn.style.background = '';
+        planBtn.style.color = '';
+      }
     }
     // Update homework screen visibility
     if(isPro) {
