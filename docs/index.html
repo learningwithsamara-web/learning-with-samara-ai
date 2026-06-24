@@ -4341,19 +4341,22 @@ const App = {
     if(id==='screen-trace'){ AITutor.hideFloat(); document.getElementById('trace-hub').style.display='block'; document.getElementById('trace-activity').style.display='none'; }
     if(id==='screen-family'){ AITutor.hideFloat(); FamilyMode.render(); }
     if(id==='screen-coinshop'){ AITutor.hideFloat(); CoinShop.render(); }
-    if(id==='screen-homework'){ 
+ if(id==='screen-homework'){ 
   AITutor.hideFloat();
-  setTimeout(()=>{
-    const hw = document.getElementById('screen-homework');
-    if(hw) {
-      hw.style.position = 'fixed';
-      hw.style.inset = '0';
-      hw.style.zIndex = '100';
-      hw.style.overflowY = 'auto';
-      hw.style.background = 'linear-gradient(135deg,#0f0c29,#302b63)';
-    }
-    HomeworkHelper.init();
-  }, 300);
+  // Move homework screen to body level to fix nesting issue
+  const hw = document.getElementById('screen-homework');
+  if(hw && hw.parentElement.id !== 'app-wrapper') {
+    document.body.appendChild(hw);
+  }
+  if(hw) {
+    hw.style.position = 'fixed';
+    hw.style.inset = '0';
+    hw.style.zIndex = '100';
+    hw.style.overflowY = 'auto';
+    hw.style.background = 'linear-gradient(135deg,#0f0c29,#302b63)';
+    hw.classList.add('active');
+  }
+  setTimeout(()=>HomeworkHelper.init(), 300);
 }
     if(id==='screen-speaking'){AITutor.hideFloat();SpeakingCoach.init();}
     if(id==='screen-games') AITutor.hideFloat();
