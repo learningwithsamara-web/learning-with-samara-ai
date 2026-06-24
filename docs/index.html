@@ -2653,8 +2653,13 @@ const Plan = {
     localStorage.setItem('samara_pro', 'true');
     localStorage.setItem('samara_plan', plan);
     localStorage.setItem('samara_pro_since', new Date().toISOString());
+    // Show welcome message
+    const planName = plan === 'family' ? '👨‍👩‍👧 Family Pro' : plan === 'annual' ? '⭐ Pro Annual' : '⭐ Pro Monthly';
+    setTimeout(()=>App.toast(`🎉 Welcome to ${planName}! Enjoy unlimited learning!`, 4000), 500);
+    // Update UI immediately
+    setTimeout(()=>App.updatePlanUI(), 600);
     // Sync to Supabase so Pro persists across devices
-    if(S.user) {
+    if(S.user && S.session) {
       fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${S.user.id}`, {
         method: 'PATCH',
         headers: {
