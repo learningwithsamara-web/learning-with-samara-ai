@@ -6217,14 +6217,13 @@ const Emotions = {
       </div>`;
   },
 
-childRespond(response, samaraMsg) {
-    if(!response || !response.trim()) return;
+childRespond(feelingIndex, optionIndex) {
+    const feeling = this.FEELINGS[feelingIndex];
+    const opt = feeling.tapOptions[optionIndex];
+    const msg = opt ? opt.samara : 'That is so lovely! Thank you for sharing!';
+    const cleanMsg = msg.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim();
     const overlay = document.getElementById('emotions-overlay');
     if(!overlay) return;
-
-    const msg = samaraMsg || 'That is so lovely! Thank you for sharing that with me! You are amazing!';
-    const cleanMsg = msg.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim();
-
     const responseDiv = document.createElement('div');
     responseDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:24px;padding:24px;max-width:380px;width:90%;z-index:100000;text-align:center;border:2px solid rgba(199,125,255,0.4);box-shadow:0 20px 60px rgba(0,0,0,0.5);';
     responseDiv.innerHTML = `
@@ -6233,7 +6232,7 @@ childRespond(response, samaraMsg) {
       </div>
       <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:8px;">Samara says:</div>
       <div style="color:rgba(255,255,255,0.9);font-size:0.95rem;line-height:1.6;margin-bottom:16px;">${msg}</div>
-      <button onclick="this.closest('div[style]').remove();document.getElementById('emotions-overlay').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">Let us go! 🚀</button>
+      <button onclick="this.closest('div[style]').remove();document.getElementById('emotions-overlay').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">Let us go!</button>
     `;
     document.body.appendChild(responseDiv);
     SoundSystem.speak(cleanMsg);
