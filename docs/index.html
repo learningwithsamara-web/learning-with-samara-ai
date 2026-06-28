@@ -12383,6 +12383,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     BirthdayShoutout.init();
     CoinShop.init();
     FamilyMode.init();
+    DailyChallenge.renderBanner();
     // Load reviews on boot so they always show
     setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },800);
   }catch(e){console.error('Boot error:',e);}
