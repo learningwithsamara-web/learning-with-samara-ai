@@ -1,6 +1,6 @@
 // ── Samara AI Service Worker ─────────────────────────────────
 // Version — bump this to force cache refresh on update
-const CACHE_VERSION = 'samara-v1.0.318';
+const CACHE_VERSION = 'samara-v1.0.319';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 
@@ -58,6 +58,10 @@ self.addEventListener('activate', event => {
 
 // ── FETCH — smart caching strategy ──────────────────────────
 self.addEventListener('fetch', event => {
+// Never cache Supabase auth requests
+  if(event.request.url.includes('supabase.co/auth')) {
+    return;
+  }
   const url = event.request.url;
 
   // Network-only: AI, auth, payments — always fresh
