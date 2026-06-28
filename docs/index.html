@@ -1095,6 +1095,10 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <button onclick="App.showScreen('screen-playhouse')" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 8px 24px rgba(255,155,63,0.5);animation:pulse-av 2s ease-in-out infinite;">
       🏠 Samara's Playhouse ✨
     </button>
+    <!-- Daily Life with Samara -->
+    <button onclick="DailyLife.showHub()" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 8px 24px rgba(255,107,107,0.5);animation:pulse-av 2s ease-in-out infinite;">
+      🛁 Daily Life with Samara ✨
+    </button>
     <button onclick="App.showScreen('screen-trace')" style="background:linear-gradient(135deg,#7EC8E3,#4A90D9);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 8px 24px rgba(74,144,217,0.5);">
       ✏️ Trace & Match
     </button>
@@ -6021,6 +6025,228 @@ const CoinShop = {
 };
 window.CoinShop = CoinShop;
 
+// ── DAILY LIFE WITH SAMARA ─────────────────────────────────
+const DailyLife = {
+
+  ROUTINES: {
+    bath: {
+      title: 'Bath Time!',
+      emoji: '🛁',
+      color: 'linear-gradient(135deg,#7EC8E3,#4A90D9)',
+      intro: "Let's take a bath and get squeaky clean!",
+      steps: [
+        { instruction: "Turn on the water! Tap the tap! 🚿", scene: '🚿', tapTarget: '🚿', effect: '💧💧💧', praise: 'Yay! The water is on!' },
+        { instruction: "Pour in the bubble bath! Tap the bottle! 🧴", scene: '🧴', tapTarget: '🧴', effect: '🫧🫧🫧', praise: 'Look at all the bubbles!' },
+        { instruction: "Wash your hair! Tap your head! 🧖", scene: '🧖', tapTarget: '🧖', effect: '✨✨✨', praise: 'Your hair is so clean!' },
+        { instruction: "Scrub your body! Tap the soap! 🧼", scene: '🧼', tapTarget: '🧼', effect: '🫧✨🫧', praise: 'Squeaky clean!' },
+        { instruction: "Rinse off! Tap the shower! 🚿", scene: '🚿', tapTarget: '🚿', effect: '💧💧💧', praise: 'All rinsed off!' },
+        { instruction: "Dry yourself! Tap the towel! 🏳️", scene: '🛁', tapTarget: '🛁', effect: '✨🌟✨', praise: 'All done! You are so clean!' }
+      ],
+      coins: 10,
+      completion: "You are squeaky clean! Great job! 🛁✨"
+    },
+    teeth: {
+      title: 'Brush Your Teeth!',
+      emoji: '🦷',
+      color: 'linear-gradient(135deg,#6BCB77,#3DAA45)',
+      intro: "Let's brush our teeth and make them sparkle!",
+      steps: [
+        { instruction: "Pick up your toothbrush! Tap it! 🪥", scene: '🪥', tapTarget: '🪥', effect: '✨✨✨', praise: 'Got your toothbrush!' },
+        { instruction: "Put on the toothpaste! Tap it! 🦷", scene: '🦷', tapTarget: '🦷', effect: '💚💚💚', praise: 'Perfect amount!' },
+        { instruction: "Brush the top teeth! Tap them! 😁", scene: '😁', tapTarget: '😁', effect: '✨🫧✨', praise: 'Top teeth done!' },
+        { instruction: "Brush the bottom teeth! Tap them! 😬", scene: '😬', tapTarget: '😬', effect: '✨🫧✨', praise: 'Bottom teeth done!' },
+        { instruction: "Spit and rinse! Tap the cup! 🥛", scene: '🥛', tapTarget: '🥛', effect: '💧💧💧', praise: 'Good rinsing!' },
+        { instruction: "Look at that smile! Tap the mirror! 🪞", scene: '🪞', tapTarget: '🪞', effect: '⭐🌟⭐', praise: 'What a beautiful smile!' }
+      ],
+      coins: 10,
+      completion: "Your teeth are sparkling clean! 🦷✨"
+    },
+    bedtime: {
+      title: 'Bedtime Story!',
+      emoji: '🌙',
+      color: 'linear-gradient(135deg,#302b63,#7928CA)',
+      intro: "Time for a cozy bedtime story with Samara!",
+      steps: [
+        { instruction: "Put on your pyjamas! Tap them! 👕", scene: '👕', tapTarget: '👕', effect: '😴✨😴', praise: 'So cozy!' },
+        { instruction: "Brush your teeth! Tap the toothbrush! 🪥", scene: '🪥', tapTarget: '🪥', effect: '✨🦷✨', praise: 'Clean teeth!' },
+        { instruction: "Get into bed! Tap the bed! 🛏️", scene: '🛏️', tapTarget: '🛏️', effect: '😴💤😴', praise: 'So comfy!' },
+        { instruction: "Turn off the light! Tap it! 💡", scene: '💡', tapTarget: '💡', effect: '🌙⭐🌙', praise: 'Goodnight light!' },
+        { instruction: "Look at the stars! Tap them! ⭐", scene: '⭐', tapTarget: '⭐', effect: '🌟✨🌟', praise: 'Beautiful stars!' },
+        { instruction: "Close your eyes! Tap Samara! 😴", scene: '😴', tapTarget: '😴', effect: '💤💤💤', praise: 'Sweet dreams! Goodnight! 🌙' }
+      ],
+      coins: 10,
+      completion: "Sweet dreams! Sleep tight! 🌙⭐"
+    },
+    eating: {
+      title: 'Healthy Eating!',
+      emoji: '🍎',
+      color: 'linear-gradient(135deg,#6BCB77,#FFD93D)',
+      intro: "Let's eat healthy food to grow big and strong!",
+      steps: [
+        { instruction: "Wash your hands first! Tap the soap! 🧼", scene: '🧼', tapTarget: '🧼', effect: '💧✨💧', praise: 'Clean hands!' },
+        { instruction: "Pick a yummy fruit! Tap the apple! 🍎", scene: '🍎', tapTarget: '🍎', effect: '😋✨😋', praise: 'Great choice!' },
+        { instruction: "Eat your vegetables! Tap the broccoli! 🥦", scene: '🥦', tapTarget: '🥦', effect: '💪✨💪', praise: 'So healthy!' },
+        { instruction: "Drink your water! Tap the glass! 💧", scene: '💧', tapTarget: '💧', effect: '😊💧😊', praise: 'Stay hydrated!' },
+        { instruction: "Eat slowly and chew! Tap the food! 🍽️", scene: '🍽️', tapTarget: '🍽️', effect: '😋😋😋', praise: 'Good chewing!' },
+        { instruction: "All done! Say thank you! Tap the heart! ❤️", scene: '❤️', tapTarget: '❤️', effect: '🌟💪🌟', praise: 'You are so healthy and strong!' }
+      ],
+      coins: 10,
+      completion: "You ate so well! Growing big and strong! 💪🌟"
+    },
+    morning: {
+      title: 'Good Morning!',
+      emoji: '🌅',
+      color: 'linear-gradient(135deg,#FFD93D,#FF9B3F)',
+      intro: "Good morning! Let's start the day the right way!",
+      steps: [
+        { instruction: "Wake up and stretch! Tap the sun! ☀️", scene: '☀️', tapTarget: '☀️', effect: '🌟✨🌟', praise: 'Good morning sunshine!' },
+        { instruction: "Make your bed! Tap it! 🛏️", scene: '🛏️', tapTarget: '🛏️', effect: '✨✨✨', praise: 'Neat and tidy!' },
+        { instruction: "Wash your face! Tap the water! 💧", scene: '💧', tapTarget: '💧', effect: '✨😊✨', praise: 'Fresh face!' },
+        { instruction: "Get dressed! Tap your clothes! 👗", scene: '👗', tapTarget: '👗', effect: '⭐✨⭐', praise: 'Looking great!' },
+        { instruction: "Eat breakfast! Tap the bowl! 🥣", scene: '🥣', tapTarget: '🥣', effect: '😋💪😋', praise: 'Brain food!' },
+        { instruction: "Ready for the day! Tap the star! ⭐", scene: '⭐', tapTarget: '⭐', effect: '🌟🎉🌟', praise: 'You are ready to have an amazing day!' }
+      ],
+      coins: 10,
+      completion: "Amazing morning routine! You are ready! ⭐🌟"
+    }
+  },
+
+  showHub() {
+    const overlay = document.createElement('div');
+    overlay.id = 'daily-life-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f0c29,#302b63);z-index:99999;overflow-y:auto;';
+    overlay.innerHTML = `
+      <div style="max-width:600px;margin:0 auto;padding:24px 20px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+          <button onclick="document.getElementById('daily-life-overlay').remove()" style="background:rgba(255,255,255,0.1);border:none;color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 16px;border-radius:50px;cursor:pointer;">← Back</button>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.4rem;">🌟 Daily Life with Samara</div>
+        </div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;text-align:center;margin-bottom:24px;">Learn healthy daily habits with Samara! 💛</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          ${Object.entries(this.ROUTINES).map(([key, r]) => `
+            <div onclick="DailyLife.startRoutine('${key}')" style="background:${r.color};border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:transform 0.2s;box-shadow:0 8px 24px rgba(0,0,0,0.3);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+              <div style="font-size:3rem;margin-bottom:8px;">${r.emoji}</div>
+              <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1rem;">${r.title}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+  },
+
+  startRoutine(key) {
+    const routine = this.ROUTINES[key];
+    if(!routine) return;
+    let step = 0;
+
+    const overlay = document.getElementById('daily-life-overlay');
+    if(overlay) overlay.remove();
+
+    const screen = document.createElement('div');
+    screen.id = 'daily-life-screen';
+    screen.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f0c29,#302b63);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;';
+
+    const render = () => {
+      if(step >= routine.steps.length) {
+        this._showCompletion(screen, routine);
+        return;
+      }
+
+      const s = routine.steps[step];
+
+      // Speak instruction
+      SoundSystem.speak(s.instruction.replace(/[^\w\s!?.,'-]/g, '').trim());
+
+      screen.innerHTML = `
+        <button onclick="document.getElementById('daily-life-screen').remove();DailyLife.showHub();" style="position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.1);border:none;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;padding:8px 16px;border-radius:50px;cursor:pointer;">← Back</button>
+        
+        <!-- Progress -->
+        <div style="position:absolute;top:20px;right:20px;font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.6);font-size:0.85rem;">${step + 1} / ${routine.steps.length}</div>
+        
+        <!-- Progress bar -->
+        <div style="position:absolute;top:0;left:0;right:0;height:6px;background:rgba(255,255,255,0.1);">
+          <div style="height:100%;width:${((step)/routine.steps.length)*100}%;background:linear-gradient(90deg,#FFD93D,#FF9B3F);transition:width 0.5s;"></div>
+        </div>
+
+        <!-- Title -->
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.2rem;margin-bottom:20px;">${routine.emoji} ${routine.title}</div>
+
+        <!-- Instruction -->
+        <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.3rem;text-align:center;margin-bottom:32px;line-height:1.4;max-width:400px;">${s.instruction}</div>
+
+        <!-- Big tap target -->
+        <div id="tap-target" onclick="DailyLife._handleTap()" style="font-size:8rem;cursor:pointer;animation:bounce 1s ease-in-out infinite;user-select:none;filter:drop-shadow(0 8px 24px rgba(255,217,61,0.4));transition:transform 0.1s;">
+          ${s.scene}
+        </div>
+
+        <!-- Tap hint -->
+        <div style="margin-top:24px;color:rgba(255,255,255,0.5);font-size:0.85rem;font-family:'Fredoka One',cursive;">👆 Tap me!</div>
+
+        <!-- Samara character -->
+        <div style="position:absolute;bottom:24px;right:24px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,217,61,0.5);">
+            <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
+          </div>
+          <span style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.6);font-size:0.7rem;">Samara</span>
+        </div>
+      `;
+    };
+
+    this._handleTap = () => {
+      const target = document.getElementById('tap-target');
+      if(!target) return;
+
+      const s = routine.steps[step];
+
+      // Celebration effect
+      target.style.transform = 'scale(1.3)';
+      target.innerHTML = routine.steps[step].effect;
+      setTimeout(() => { target.style.transform = 'scale(1)'; }, 300);
+
+      // Speak praise
+      SoundSystem.speak(s.praise);
+
+      // Show praise message
+      const praise = document.createElement('div');
+      praise.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:\'Fredoka One\',cursive;font-size:1.3rem;padding:16px 28px;border-radius:20px;z-index:100000;text-align:center;box-shadow:0 8px 24px rgba(107,203,119,0.5);';
+      praise.textContent = s.praise;
+      document.body.appendChild(praise);
+
+      setTimeout(() => {
+        praise.remove();
+        step++;
+        render();
+      }, 1500);
+    };
+
+    document.body.appendChild(screen);
+
+    // Speak intro first
+    SoundSystem.speak(routine.intro);
+    setTimeout(() => render(), 1500);
+  },
+
+  _showCompletion(screen, routine) {
+    SamaraCoins.add(routine.coins);
+    SoundSystem.speak(routine.completion);
+
+    screen.innerHTML = `
+      <div style="text-align:center;max-width:400px;">
+        <div style="font-size:5rem;margin-bottom:16px;animation:bounce 1s ease-in-out infinite;">${routine.emoji}</div>
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:2rem;margin-bottom:8px;">Well Done!</div>
+        <div style="color:rgba(255,255,255,0.85);font-size:1rem;margin-bottom:20px;line-height:1.6;">${routine.completion}</div>
+        <div style="background:rgba(255,217,61,0.15);border-radius:14px;padding:14px;margin-bottom:24px;border:1px solid rgba(255,217,61,0.3);">
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;">🪙 +${routine.coins} Coins Earned!</div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="DailyLife.startRoutine('${Object.keys(this.ROUTINES).find(k => this.ROUTINES[k].title === routine.title)}')" style="background:linear-gradient(135deg,#7928CA,#FF0080);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;">Do it Again! 🔄</button>
+          <button onclick="document.getElementById('daily-life-screen').remove();DailyLife.showHub();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;">More Routines! 🌟</button>
+        </div>
+      </div>`;
+  }
+};
+window.DailyLife = DailyLife;
+      
 // ── DAILY CHALLENGE ────────────────────────────────────────
 const DailyChallenge = {
   QUESTIONS: {
