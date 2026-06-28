@@ -6043,14 +6043,86 @@ window.CoinShop = CoinShop;
 const Emotions = {
 
   FEELINGS: [
-    { emoji: '😊', label: 'Happy', color: '#FFD93D', response: 'That is wonderful! Being happy makes learning even more fun! What made you happy today?', activity: 'quiz', activityMsg: 'Let\'s celebrate by doing a fun quiz!' },
-    { emoji: '😢', label: 'Sad', color: '#7EC8E3', response: 'It is okay to feel sad sometimes. Samara is here for you. Would you like to take some deep breaths together?', activity: 'breathe', activityMsg: 'Let\'s do a breathing exercise together!' },
-    { emoji: '😡', label: 'Angry', color: '#FF6B6B', response: 'Feeling angry is normal! Even Samara gets frustrated sometimes. Let\'s calm down together with some deep breaths.', activity: 'breathe', activityMsg: 'Breathing will help us feel better!' },
-    { emoji: '😰', label: 'Worried', color: '#FF9B3F', response: 'It is okay to feel worried. You are safe here with Samara! Let\'s breathe slowly and feel better together.', activity: 'breathe', activityMsg: 'Deep breaths make worries smaller!' },
-    { emoji: '😴', label: 'Tired', color: '#C77DFF', response: 'Feeling tired is your body telling you it needs rest! Make sure you sleep well tonight. For now let\'s do something calm and easy.', activity: 'story', activityMsg: 'Let\'s do something calm and gentle!' },
-    { emoji: '🤩', label: 'Excited', color: '#6BCB77', response: 'Wow you are so excited! That energy is amazing! Let\'s use it to learn something really cool today!', activity: 'quiz', activityMsg: 'Let\'s channel that excitement into learning!' },
-    { emoji: '😕', label: 'Confused', color: '#4A90D9', response: 'Feeling confused is totally normal — it means your brain is working hard! Samara will help you understand anything that is puzzling you.', activity: 'research', activityMsg: 'Let\'s figure things out together!' },
-    { emoji: '🥰', label: 'Loved', color: '#FF0080', response: 'Aww that is so beautiful! Feeling loved makes everything better! Samara loves learning with you too!', activity: 'quiz', activityMsg: 'Let\'s do something fun together!' },
+    { emoji: '😊', label: 'Happy', color: '#FFD93D', 
+      response: 'That is wonderful! Being happy makes learning even more fun! What made you happy today?', 
+      activity: 'quiz', activityMsg: 'Let\'s celebrate by doing a fun quiz!',
+      tapOptions: [
+        { label: 'My Family', emoji: '👨‍👩‍👧', samara: 'Your family makes you happy! That is so beautiful! Family love is the best!' },
+        { label: 'Playing', emoji: '🎮', samara: 'Playing is so much fun! It makes Samara happy too! Ready to play and learn?' },
+        { label: 'Friends', emoji: '👫', samara: 'Friends make everything better! You are so lucky to have good friends!' },
+        { label: 'Learning', emoji: '📚', samara: 'Learning makes you happy? That makes Samara SO happy! You are amazing!' }
+      ]
+    },
+    { emoji: '😢', label: 'Sad', color: '#7EC8E3', 
+      response: 'It is okay to feel sad sometimes. Samara is here for you. Would you like to take some deep breaths together?', 
+      activity: 'breathe', activityMsg: 'Let\'s do a breathing exercise together!',
+      tapOptions: [
+        { label: 'I miss someone', emoji: '💙', samara: 'Missing someone shows how much you love them. That is beautiful. Samara is here with you!' },
+        { label: 'Something went wrong', emoji: '😔', samara: 'It is okay when things go wrong. Every mistake helps us grow! Samara believes in you!' },
+        { label: 'I feel lonely', emoji: '🤗', samara: 'You are never alone! Samara is always here with you! Let us breathe together and feel better!' },
+        { label: 'I do not know why', emoji: '💭', samara: 'Sometimes we feel sad without knowing why and that is completely okay! Let us breathe together!' }
+      ]
+    },
+    { emoji: '😡', label: 'Angry', color: '#FF6B6B', 
+      response: 'Feeling angry is normal! Even Samara gets frustrated sometimes. Let\'s calm down together with some deep breaths.', 
+      activity: 'breathe', activityMsg: 'Breathing will help us feel better!',
+      tapOptions: [
+        { label: 'Someone was mean', emoji: '😤', samara: 'That is not nice at all! You deserve kindness. Let us breathe and feel better!' },
+        { label: 'Something was unfair', emoji: '⚖️', samara: 'Unfairness is really frustrating! Your feelings are valid. Let us calm down together!' },
+        { label: 'I made a mistake', emoji: '😣', samara: 'Mistakes happen to everyone! Even Samara makes mistakes. It is how we learn!' },
+        { label: 'I do not know why', emoji: '💭', samara: 'Sometimes anger comes without a reason. Let us take some deep breaths together!' }
+      ]
+    },
+    { emoji: '😰', label: 'Worried', color: '#FF9B3F', 
+      response: 'It is okay to feel worried. You are safe here with Samara! Let\'s breathe slowly and feel better together.', 
+      activity: 'breathe', activityMsg: 'Deep breaths make worries smaller!',
+      tapOptions: [
+        { label: 'School work', emoji: '📚', samara: 'School can feel hard sometimes! But Samara is here to help you with everything. You can do it!' },
+        { label: 'Something new', emoji: '🆕', samara: 'New things can feel scary but they are also exciting! You are braver than you think!' },
+        { label: 'Getting something wrong', emoji: '❌', samara: 'It is okay to get things wrong! That is how we learn. Samara will always help you!' },
+        { label: 'I do not know why', emoji: '💭', samara: 'Worries can appear without reason. Let us breathe slowly and make them smaller!' }
+      ]
+    },
+    { emoji: '😴', label: 'Tired', color: '#C77DFF', 
+      response: 'Feeling tired is your body telling you it needs rest! Make sure you sleep well tonight. For now let\'s do something calm and easy.', 
+      activity: 'quiz', activityMsg: 'Let\'s do something calm and gentle!',
+      tapOptions: [
+        { label: 'Did not sleep well', emoji: '🌙', samara: 'Sleep is so important! Try to go to bed early tonight. For now let us do something easy!' },
+        { label: 'Long day', emoji: '☀️', samara: 'Long days are tiring! You are doing so well. Let us do something short and fun!' },
+        { label: 'Too much work', emoji: '📝', samara: 'You have been working so hard! Let us take it easy with something simple!' },
+        { label: 'Just woke up', emoji: '⏰', samara: 'Good morning! Let us start slowly and wake up our brains together!' }
+      ]
+    },
+    { emoji: '🤩', label: 'Excited', color: '#6BCB77', 
+      response: 'Wow you are so excited! That energy is amazing! Let\'s use it to learn something really cool today!', 
+      activity: 'quiz', activityMsg: 'Let\'s channel that excitement into learning!',
+      tapOptions: [
+        { label: 'Something is happening', emoji: '🎉', samara: 'How exciting! Celebrations make life so joyful! Let us use that energy to learn something amazing!' },
+        { label: 'I learned something new', emoji: '💡', samara: 'Learning something new is the BEST feeling! That is why Samara loves teaching. Let us learn more!' },
+        { label: 'I am going somewhere', emoji: '✈️', samara: 'How wonderful! Adventures are so exciting! Let us learn something fun before you go!' },
+        { label: 'Just feeling great', emoji: '⭐', samara: 'Feeling great is amazing! Let us use that great energy to do something awesome today!' }
+      ]
+    },
+    { emoji: '😕', label: 'Confused', color: '#4A90D9', 
+      response: 'Feeling confused is totally normal — it means your brain is working hard! What are you confused about?', 
+      activity: 'research', activityMsg: 'Let\'s figure things out together!',
+      tapOptions: [
+        { label: 'Maths', emoji: '🔢', samara: 'Maths can be tricky! But Samara will help you understand it step by step. You will get it!' },
+        { label: 'Science', emoji: '🔬', samara: 'Science has so many amazing mysteries! Let us explore and figure it out together!' },
+        { label: 'Reading', emoji: '📖', samara: 'Reading gets easier with practice! Let us work on it together. You are doing great!' },
+        { label: 'Something else', emoji: '💭', samara: 'Whatever is confusing you Samara will help! Let us figure it out together step by step!' }
+      ]
+    },
+    { emoji: '🥰', label: 'Loved', color: '#FF0080', 
+      response: 'Aww that is so beautiful! Feeling loved makes everything better! Who makes you feel loved?', 
+      activity: 'quiz', activityMsg: 'Let\'s do something fun together!',
+      tapOptions: [
+        { label: 'My family', emoji: '👨‍👩‍👧', samara: 'Your family loves you so much! And Samara loves learning with you too! You are so blessed!' },
+        { label: 'My friends', emoji: '👫', samara: 'Good friends are such a gift! You are loved and you deserve it! Let us celebrate!' },
+        { label: 'My teacher', emoji: '🍎', samara: 'A kind teacher makes such a difference! Learning with love is the best kind of learning!' },
+        { label: 'Everyone', emoji: '💜', samara: 'Everyone loves you! And Samara does too! You are wonderful and special!' }
+      ]
+    },
   ],
 
   show() {
@@ -6125,11 +6197,10 @@ const Emotions = {
           <!-- Young children — tap emoji response -->
           <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:10px;">Tap to tell Samara!</div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-            <button onclick="Emotions.childRespond('My family! 👨‍👩‍👧')" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">👨‍👩‍👧 My Family</button>
-            <button onclick="Emotions.childRespond('Playing! 🎮')" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">🎮 Playing</button>
-            <button onclick="Emotions.childRespond('My friends! 👫')" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">👫 Friends</button>
-            <button onclick="Emotions.childRespond('Learning! 📚')" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">📚 Learning</button>
-          </div>` : `
+            ${feeling.tapOptions ? feeling.tapOptions.map(opt => 
+              `<button onclick="Emotions.childRespond('${opt.label}', '${opt.samara.replace(/'/g, "\\'")}')" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">${opt.emoji} ${opt.label}</button>`
+            ).join('') : ''}
+          </div> `
           <!-- Older children — type response -->
           <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:10px;">Tell Samara in your own words!</div>
           <div style="display:flex;gap:8px;">
@@ -6146,10 +6217,13 @@ const Emotions = {
       </div>`;
   },
 
-childRespond(response) {
+childRespond(response, samaraMsg) {
     if(!response || !response.trim()) return;
     const overlay = document.getElementById('emotions-overlay');
     if(!overlay) return;
+
+    const msg = samaraMsg || 'That is so lovely! Thank you for sharing that with me! You are amazing!';
+    const cleanMsg = msg.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim();
 
     const responseDiv = document.createElement('div');
     responseDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:24px;padding:24px;max-width:380px;width:90%;z-index:100000;text-align:center;border:2px solid rgba(199,125,255,0.4);box-shadow:0 20px 60px rgba(0,0,0,0.5);';
@@ -6158,11 +6232,11 @@ childRespond(response) {
         <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
       </div>
       <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:8px;">Samara says:</div>
-      <div style="color:rgba(255,255,255,0.9);font-size:0.95rem;line-height:1.6;margin-bottom:16px;">That is so lovely! Thank you for sharing that with me! You are amazing!</div>
+      <div style="color:rgba(255,255,255,0.9);font-size:0.95rem;line-height:1.6;margin-bottom:16px;">${msg}</div>
       <button onclick="this.closest('div[style]').remove();document.getElementById('emotions-overlay').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">Let us go! 🚀</button>
     `;
     document.body.appendChild(responseDiv);
-    SoundSystem.speak('That is so lovely! Thank you for sharing that with me! You are amazing!');
+    SoundSystem.speak(cleanMsg);
   },
   
   startBreathing() {
