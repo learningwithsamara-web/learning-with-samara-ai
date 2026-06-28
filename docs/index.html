@@ -6242,20 +6242,22 @@ async childRespondText(text) {
     // Check AI limit
     const canUse = Plan.canUseAIChat();
     if(!canUse.ok) {
-      App.toast('You have used your free AI responses today! Upgrade to Pro for unlimited 💜');
-      const msg = 'Thank you for sharing that with me! You are so brave for expressing your feelings! Samara is always here for you!';
-      const responseDiv = document.createElement('div');
-      responseDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:24px;padding:24px;max-width:380px;width:90%;z-index:100000;text-align:center;border:2px solid rgba(199,125,255,0.4);';
-      responseDiv.innerHTML = `
+      const limitDiv = document.createElement('div');
+      limitDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:24px;padding:28px;max-width:380px;width:90%;z-index:100000;text-align:center;border:2px solid rgba(199,125,255,0.4);box-shadow:0 20px 60px rgba(0,0,0,0.5);';
+      limitDiv.innerHTML = `
         <div style="width:60px;height:60px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,217,61,0.4);margin:0 auto 12px;">
           <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
         </div>
-        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:8px;">Samara says:</div>
-        <div style="color:rgba(255,255,255,0.9);font-size:0.95rem;line-height:1.6;margin-bottom:16px;">${msg}</div>
-        <button onclick="this.closest('div[style]').remove();document.getElementById('emotions-overlay').remove();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 24px;border-radius:50px;border:none;cursor:pointer;">Let us go!</button>
+        <div style="font-size:2rem;margin-bottom:8px;">💜</div>
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:10px;">Samara wants to respond!</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;line-height:1.6;margin-bottom:20px;">You have had your free chat with Samara today. Come back tomorrow or upgrade to Pro so Samara can always respond to you!</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button onclick="this.closest('div[style]').remove();document.getElementById('emotions-overlay').remove();App.showScreen('screen-pricing');" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;">⭐ Upgrade to Pro</button>
+          <button onclick="this.closest('div[style]').remove();document.getElementById('emotions-overlay').remove();" style="background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px;border-radius:50px;cursor:pointer;">Maybe Tomorrow 💜</button>
+        </div>
       `;
-      document.body.appendChild(responseDiv);
-      SoundSystem.speak(msg);
+      document.body.appendChild(limitDiv);
+      SoundSystem.speak('Samara wants to respond! Come back tomorrow or upgrade to Pro!');
       return;
     }
     Plan.useAIChat();
