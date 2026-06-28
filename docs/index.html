@@ -643,6 +643,16 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     </div>
   </div>
 </div>
+<!-- ══ HOW ARE YOU FEELING ══ -->
+<div style="max-width:860px;margin:0 auto 16px;padding:0 22px;">
+  <button onclick="Emotions.show()" style="width:100%;background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;padding:16px 24px;border-radius:20px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(199,125,255,0.3);display:flex;align-items:center;justify-content:center;gap:12px;">
+    <span style="font-size:1.8rem;">😊</span>
+    <div style="text-align:left;">
+      <div>How Are You Feeling Today?</div>
+      <div style="font-size:0.78rem;opacity:0.85;font-family:'Nunito',sans-serif;font-weight:700;">Tell Samara how you feel 💜</div>
+    </div>
+  </button>
+</div>
 <div class="age-select-wrap">
   <p class="age-select-title">👋 Who is learning today?</p>
   <div class="age-grid">
@@ -1094,6 +1104,10 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
     <!-- Playhouse button -->
     <button onclick="App.showScreen('screen-playhouse')" style="background:linear-gradient(135deg,#FF9B3F,#FFD93D);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 8px 24px rgba(255,155,63,0.5);animation:pulse-av 2s ease-in-out infinite;">
       🏠 Samara's Playhouse ✨
+    </button>
+    <!-- How Are You Feeling -->
+    <button onclick="Emotions.show()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 8px 24px rgba(199,125,255,0.5);">
+      😊 How Are You Feeling? 💜
     </button>
     <!-- Daily Life with Samara -->
     <button onclick="DailyLife.showHub()" style="background:linear-gradient(135deg,#FF9B3F,#FF6B6B);color:#fff;font-family:'Fredoka One',cursive;font-size:1.15rem;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;margin-top:8px;box-shadow:0 8px 24px rgba(255,107,107,0.5);animation:pulse-av 2s ease-in-out infinite;">
@@ -6025,6 +6039,127 @@ const CoinShop = {
 };
 window.CoinShop = CoinShop;
 
+// ── EMOTIONAL INTELLIGENCE ─────────────────────────────────
+const Emotions = {
+
+  FEELINGS: [
+    { emoji: '😊', label: 'Happy', color: '#FFD93D', response: 'That is wonderful! Being happy makes learning even more fun! What made you happy today?', activity: 'quiz', activityMsg: 'Let\'s celebrate by doing a fun quiz!' },
+    { emoji: '😢', label: 'Sad', color: '#7EC8E3', response: 'It is okay to feel sad sometimes. Samara is here for you. Would you like to take some deep breaths together?', activity: 'breathe', activityMsg: 'Let\'s do a breathing exercise together!' },
+    { emoji: '😡', label: 'Angry', color: '#FF6B6B', response: 'Feeling angry is normal! Even Samara gets frustrated sometimes. Let\'s calm down together with some deep breaths.', activity: 'breathe', activityMsg: 'Breathing will help us feel better!' },
+    { emoji: '😰', label: 'Worried', color: '#FF9B3F', response: 'It is okay to feel worried. You are safe here with Samara! Let\'s breathe slowly and feel better together.', activity: 'breathe', activityMsg: 'Deep breaths make worries smaller!' },
+    { emoji: '😴', label: 'Tired', color: '#C77DFF', response: 'Feeling tired is your body telling you it needs rest! Make sure you sleep well tonight. For now let\'s do something calm and easy.', activity: 'story', activityMsg: 'Let\'s do something calm and gentle!' },
+    { emoji: '🤩', label: 'Excited', color: '#6BCB77', response: 'Wow you are so excited! That energy is amazing! Let\'s use it to learn something really cool today!', activity: 'quiz', activityMsg: 'Let\'s channel that excitement into learning!' },
+    { emoji: '😕', label: 'Confused', color: '#4A90D9', response: 'Feeling confused is totally normal — it means your brain is working hard! Samara will help you understand anything that is puzzling you.', activity: 'research', activityMsg: 'Let\'s figure things out together!' },
+    { emoji: '🥰', label: 'Loved', color: '#FF0080', response: 'Aww that is so beautiful! Feeling loved makes everything better! Samara loves learning with you too!', activity: 'quiz', activityMsg: 'Let\'s do something fun together!' },
+  ],
+
+  show() {
+    const overlay = document.createElement('div');
+    overlay.id = 'emotions-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:linear-gradient(135deg,#0f0c29,#302b63);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;';
+
+    overlay.innerHTML = `
+      <div style="max-width:500px;width:100%;text-align:center;">
+        <!-- Samara -->
+        <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid rgba(199,125,255,0.5);margin:0 auto 16px;">
+          <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
+        </div>
+        <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.5rem;margin-bottom:6px;">How Are You Feeling?</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:28px;">Tell Samara how you feel today 💜</div>
+        
+        <!-- Emotion grid -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+          ${this.FEELINGS.map((f, i) => `
+            <div onclick="Emotions.select(${i})" style="background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:14px 8px;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.08)';this.style.borderColor='${f.color}'" onmouseout="this.style.transform='scale(1)';this.style.borderColor='rgba(255,255,255,0.1)'">
+              <div style="font-size:2.5rem;margin-bottom:6px;">${f.emoji}</div>
+              <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:0.8rem;">${f.label}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <button onclick="document.getElementById('emotions-overlay').remove()" style="background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 24px;border-radius:50px;cursor:pointer;">Maybe Later</button>
+      </div>`;
+
+    document.body.appendChild(overlay);
+    SoundSystem.speak('How are you feeling today?');
+  },
+
+  select(index) {
+    const feeling = this.FEELINGS[index];
+    const overlay = document.getElementById('emotions-overlay');
+    if(!overlay) return;
+
+    SoundSystem.speak(feeling.response.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim());
+
+    overlay.innerHTML = `
+      <div style="max-width:480px;width:100%;text-align:center;">
+        <!-- Big emotion -->
+        <div style="font-size:5rem;margin-bottom:16px;animation:bounce 1s ease-in-out infinite;">${feeling.emoji}</div>
+        <div style="font-family:'Fredoka One',cursive;color:${feeling.color};font-size:1.4rem;margin-bottom:16px;">You feel ${feeling.label}!</div>
+        
+        <!-- Samara response bubble -->
+        <div style="background:rgba(255,255,255,0.08);border-radius:20px;padding:20px;margin-bottom:24px;border:1.5px solid rgba(255,255,255,0.12);text-align:left;position:relative;">
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,217,61,0.4);">
+              <img src="samara.png.jpeg" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='👧'"/>
+            </div>
+            <div>
+              <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.85rem;margin-bottom:6px;">Samara says:</div>
+              <div style="color:rgba(255,255,255,0.9);font-size:0.92rem;line-height:1.6;">${feeling.response}</div>
+            </div>
+          </div>
+        </div>
+
+        ${feeling.activity === 'breathe' ? `
+        <!-- Breathing exercise -->
+        <div style="background:rgba(199,125,255,0.15);border-radius:16px;padding:16px;margin-bottom:20px;border:1px solid rgba(199,125,255,0.3);">
+          <div style="font-family:'Fredoka One',cursive;color:#C77DFF;font-size:1rem;margin-bottom:8px;">🌬️ Let\'s Breathe Together!</div>
+          <div id="breath-circle" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#C77DFF,#7928CA);margin:12px auto;transition:transform 4s ease-in-out;box-shadow:0 0 20px rgba(199,125,255,0.4);"></div>
+          <div id="breath-text" style="color:rgba(255,255,255,0.8);font-family:'Fredoka One',cursive;font-size:0.9rem;">Breathe in slowly...</div>
+          <button onclick="Emotions.startBreathing()" style="background:linear-gradient(135deg,#C77DFF,#7928CA);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:8px 20px;border-radius:50px;border:none;cursor:pointer;margin-top:10px;">Start Breathing 🌬️</button>
+        </div>` : ''}
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="document.getElementById('emotions-overlay').remove();App.showScreen('screen-quiz')" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 20px;border-radius:50px;border:none;cursor:pointer;">${feeling.activityMsg} ⚡</button>
+          <button onclick="document.getElementById('emotions-overlay').remove()" style="background:rgba(255,255,255,0.1);border:none;color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.9rem;padding:10px 20px;border-radius:50px;cursor:pointer;">Back to Learning</button>
+        </div>
+      </div>`;
+  },
+
+  startBreathing() {
+    const circle = document.getElementById('breath-circle');
+    const text = document.getElementById('breath-text');
+    if(!circle || !text) return;
+
+    let cycles = 0;
+    const maxCycles = 3;
+
+    const breathIn = () => {
+      if(cycles >= maxCycles) {
+        text.textContent = 'Great job! You feel better now!';
+        SoundSystem.speak('Great job! You feel better now!');
+        return;
+      }
+      text.textContent = 'Breathe in slowly...';
+      SoundSystem.speak('Breathe in slowly');
+      circle.style.transform = 'scale(1.6)';
+      setTimeout(breathOut, 4000);
+    };
+
+    const breathOut = () => {
+      text.textContent = 'Now breathe out slowly...';
+      SoundSystem.speak('Now breathe out slowly');
+      circle.style.transform = 'scale(1)';
+      cycles++;
+      setTimeout(breathIn, 4000);
+    };
+
+    breathIn();
+  }
+};
+window.Emotions = Emotions;
+  
 // ── DAILY LIFE WITH SAMARA ─────────────────────────────────
 const DailyLife = {
 
