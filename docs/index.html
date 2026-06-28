@@ -6192,9 +6192,12 @@ const DailyLife = {
       `;
     };
 
+    this._tapLocked = false;
     this._handleTap = () => {
       const target = document.getElementById('tap-target');
       if(!target) return;
+      if(this._tapLocked) return; // Block tapping during delay
+      this._tapLocked = true; // Lock immediately on tap
 
       const s = routine.steps[step];
 
@@ -6215,15 +6218,20 @@ const DailyLife = {
       setTimeout(() => {
         praise.remove();
         step++;
+        this._tapLocked = false; // Unlock after praise shown
         render();
       }, 1500);
     };
 
     document.body.appendChild(screen);
 
-    // Speak intro first
+    // Speak intro first — lock tapping during intro
+    this._tapLocked = true;
     SoundSystem.speak(routine.intro);
-    setTimeout(() => render(), 1500);
+    setTimeout(() => { 
+      this._tapLocked = false;
+      render(); 
+    }, 1500);
   },
 
   _showCompletion(screen, routine) {
