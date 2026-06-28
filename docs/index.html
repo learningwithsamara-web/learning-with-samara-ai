@@ -6196,8 +6196,9 @@ const DailyLife = {
     this._handleTap = () => {
       const target = document.getElementById('tap-target');
       if(!target) return;
-      if(this._tapLocked) return; // Block tapping during delay
-      this._tapLocked = true; // Lock immediately on tap
+      if(this._tapLocked) return;
+      this._tapLocked = true;
+      SoundSystem.stop(); // Stop any current speech immediately
 
       const s = routine.steps[step];
 
@@ -6207,7 +6208,7 @@ const DailyLife = {
       setTimeout(() => { target.style.transform = 'scale(1)'; }, 300);
 
       // Speak praise
-      SoundSystem.speak(s.praise);
+      SoundSystem.speak(s.praise.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim());
 
       // Show praise message
       const praise = document.createElement('div');
@@ -6227,7 +6228,7 @@ const DailyLife = {
 
     // Speak intro first — lock tapping during intro
     this._tapLocked = true;
-    SoundSystem.speak(routine.intro);
+    SoundSystem.speak(routine.intro.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim());
     setTimeout(() => { 
       this._tapLocked = false;
       render(); 
@@ -6236,7 +6237,7 @@ const DailyLife = {
 
   _showCompletion(screen, routine) {
     SamaraCoins.add(routine.coins);
-    SoundSystem.speak(routine.completion);
+    SoundSystem.speak(routine.completion.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[\u2600-\u27FF]/g, '').trim());
 
     screen.innerHTML = `
       <div style="text-align:center;max-width:400px;">
