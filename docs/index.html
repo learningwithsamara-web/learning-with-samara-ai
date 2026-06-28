@@ -6197,8 +6197,8 @@ const Emotions = {
           <!-- Young children — tap emoji response -->
           <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:10px;">Tap to tell Samara!</div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-            ${feeling.tapOptions ? feeling.tapOptions.map(opt => 
-              `<button onclick="Emotions.childRespond('${opt.label}', '${opt.samara.replace(/'/g, "\\'")}')" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">${opt.emoji} ${opt.label}</button>`
+            ${feeling.tapOptions ? feeling.tapOptions.map((opt, oi) => 
+              `<button onclick="Emotions.childRespond(${index}, ${oi})" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 16px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;">${opt.emoji} ${opt.label}</button>`
             ).join('') : ''}
           </div> `
           <!-- Older children — type response -->
