@@ -617,6 +617,32 @@ body.theme-candy{background:linear-gradient(135deg,#3d0a4f,#7b1fa2,#e91e8c)!impo
   </div>
   <button class="btn btn-gold" style="flex-shrink:0;">Upgrade</button>
 </div>
+<!-- ══ DAILY CHALLENGE BANNER ══ -->
+<div id="daily-challenge-wrap" style="max-width:860px;margin:0 auto 16px;padding:0 22px;">
+  <div id="daily-challenge-card" style="background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:20px;padding:18px 22px;border:2px solid rgba(255,217,61,0.4);position:relative;overflow:hidden;">
+    <!-- Background glow -->
+    <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:rgba(255,217,61,0.08);border-radius:50%;pointer-events:none;"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="font-size:2.2rem;">⚡</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.05rem;margin-bottom:2px;">Today's Challenge!</div>
+          <div id="challenge-streak-display" style="color:rgba(255,255,255,0.7);font-size:0.82rem;">🔥 Start your streak today!</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="challenge-status-badge" style="background:rgba(107,203,119,0.2);border:1px solid rgba(107,203,119,0.4);border-radius:50px;padding:4px 12px;color:#6BCB77;font-size:0.78rem;font-weight:800;display:none;">✅ Done!</div>
+        <button id="challenge-btn" onclick="DailyChallenge.start()" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 4px 15px rgba(255,155,63,0.4);white-space:nowrap;">Start Challenge ⚡</button>
+      </div>
+    </div>
+    <!-- Streak bar -->
+    <div style="margin-top:12px;display:flex;gap:6px;align-items:center;">
+      <span style="color:rgba(255,255,255,0.5);font-size:0.74rem;">Streak:</span>
+      <div id="streak-dots" style="display:flex;gap:4px;"></div>
+      <span id="streak-count" style="color:#FFD93D;font-family:'Fredoka One',cursive;font-size:0.82rem;margin-left:4px;"></span>
+    </div>
+  </div>
+</div>
 <div class="age-select-wrap">
   <p class="age-select-title">👋 Who is learning today?</p>
   <div class="age-grid">
@@ -4302,7 +4328,7 @@ const App = {
     },100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos') Videos.init();
-    if(id==='screen-home') setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },500);
+    if(id==='screen-home'){ setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },500); DailyChallenge.renderBanner(); }
     if(id==='screen-learn'){if(!Plan.isPro()){App.requireSignup('📚 Learn Library','📚','The full Learn Library with lessons, memory tricks and mini quizzes is a Pro feature — upgrade to unlock!');App.showScreen('screen-home');return;}setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);} setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
@@ -5995,6 +6021,234 @@ const CoinShop = {
 };
 window.CoinShop = CoinShop;
 
+// ── DAILY CHALLENGE ────────────────────────────────────────
+const DailyChallenge = {
+  QUESTIONS: {
+    '0-3': [
+      { q: 'What colour is the sky?', opts: ['Blue', 'Red', 'Green', 'Yellow'], ans: 0 },
+      { q: 'How many eyes do you have?', opts: ['1', '2', '3', '4'], ans: 1 },
+      { q: 'What sound does a dog make?', opts: ['Moo', 'Woof', 'Meow', 'Quack'], ans: 1 },
+      { q: 'What shape is a ball?', opts: ['Square', 'Triangle', 'Circle', 'Star'], ans: 2 },
+      { q: 'Which one is a fruit?', opts: ['Carrot', 'Apple', 'Potato', 'Bread'], ans: 1 },
+      { q: 'How many legs does a cat have?', opts: ['2', '6', '4', '8'], ans: 2 },
+      { q: 'What colour is grass?', opts: ['Blue', 'Red', 'Purple', 'Green'], ans: 3 },
+    ],
+    '4-6': [
+      { q: 'What is 2 + 3?', opts: ['4', '5', '6', '7'], ans: 1 },
+      { q: 'Which letter comes after B?', opts: ['A', 'D', 'C', 'E'], ans: 2 },
+      { q: 'How many days are in a week?', opts: ['5', '6', '7', '8'], ans: 2 },
+      { q: 'What is the opposite of big?', opts: ['Tall', 'Small', 'Fast', 'Heavy'], ans: 1 },
+      { q: 'Which animal lives in water?', opts: ['Dog', 'Cat', 'Fish', 'Bird'], ans: 2 },
+      { q: 'What is 10 - 4?', opts: ['5', '7', '6', '8'], ans: 2 },
+      { q: 'How many sides does a triangle have?', opts: ['2', '4', '3', '5'], ans: 2 },
+    ],
+    '7-10': [
+      { q: 'What is 7 x 8?', opts: ['54', '56', '58', '64'], ans: 1 },
+      { q: 'What is the capital of Jamaica?', opts: ['Montego Bay', 'Kingston', 'Ocho Rios', 'Portmore'], ans: 1 },
+      { q: 'What planet is closest to the sun?', opts: ['Venus', 'Earth', 'Mercury', 'Mars'], ans: 2 },
+      { q: 'What is 144 divided by 12?', opts: ['11', '13', '12', '14'], ans: 2 },
+      { q: 'How many continents are there?', opts: ['5', '6', '7', '8'], ans: 2 },
+      { q: 'What is the largest ocean?', opts: ['Atlantic', 'Indian', 'Arctic', 'Pacific'], ans: 3 },
+      { q: 'What gas do plants absorb?', opts: ['Oxygen', 'Nitrogen', 'Carbon Dioxide', 'Hydrogen'], ans: 2 },
+    ],
+    '11-14': [
+      { q: 'What is the square root of 144?', opts: ['11', '14', '12', '13'], ans: 2 },
+      { q: 'In which year did Jamaica gain independence?', opts: ['1960', '1962', '1964', '1966'], ans: 1 },
+      { q: 'What is the chemical symbol for water?', opts: ['WA', 'HO', 'H2O', 'W2O'], ans: 2 },
+      { q: 'What is the value of pi (to 2 decimal places)?', opts: ['3.12', '3.16', '3.41', '3.14'], ans: 3 },
+      { q: 'Who wrote Romeo and Juliet?', opts: ['Dickens', 'Shakespeare', 'Austen', 'Hemingway'], ans: 1 },
+      { q: 'What is 15% of 200?', opts: ['25', '35', '30', '20'], ans: 2 },
+      { q: 'What is the powerhouse of the cell?', opts: ['Nucleus', 'Ribosome', 'Mitochondria', 'Vacuole'], ans: 2 },
+    ],
+    '15-17': [
+      { q: 'What is the derivative of x²?', opts: ['x', '2x', 'x²', '2x²'], ans: 1 },
+      { q: 'Which country has the largest population?', opts: ['USA', 'Russia', 'India', 'China'], ans: 3 },
+      { q: 'What does DNA stand for?', opts: ['Deoxyribonucleic Acid', 'Dynamic Nucleic Acid', 'Digital Network Array', 'Dual Nitrogen Atom'], ans: 0 },
+      { q: 'What is the speed of light?', opts: ['200,000 km/s', '300,000 km/s', '400,000 km/s', '150,000 km/s'], ans: 1 },
+      { q: 'Who developed the theory of relativity?', opts: ['Newton', 'Darwin', 'Einstein', 'Hawking'], ans: 2 },
+      { q: 'What is the powerhouse of a country\'s economy?', opts: ['Agriculture', 'GDP', 'Military', 'Tourism'], ans: 1 },
+      { q: 'What is the atomic number of carbon?', opts: ['4', '8', '6', '12'], ans: 2 },
+    ]
+  },
+
+  FACTS: {
+    '0-3': ['🐘 Elephants are the biggest land animals!', '🌈 Rainbows have 7 colours!', '🦋 Butterflies taste with their feet!', '🐠 Fish breathe underwater through gills!'],
+    '4-6': ['🌍 Earth is the third planet from the sun!', '🦁 A group of lions is called a pride!', '🍯 Honey never goes bad — ever!', '🐙 An octopus has three hearts!'],
+    '7-10': ['🧠 Your brain uses 20% of your body\'s energy!', '⚡ Lightning strikes Earth 100 times every second!', '🌊 The ocean covers 71% of Earth\'s surface!', '🦴 Babies are born with 300 bones — adults have 206!'],
+    '11-14': ['🚀 A day on Venus is longer than its year!', '🧬 Humans share 60% of DNA with bananas!', '⚛️ There are more atoms in a grain of sand than grains of sand on Earth!', '🌌 The Milky Way has over 200 billion stars!'],
+    '15-17': ['🤯 There are more possible chess games than atoms in the universe!', '💡 The human brain has about 86 billion neurons!', '🌍 The Great Wall of China is NOT visible from space with naked eye!', '⚡ A bolt of lightning is 5 times hotter than the sun\'s surface!']
+  },
+
+  _getDay() { return new Date().toISOString().slice(0, 10); },
+
+  getStreak() {
+    try { return JSON.parse(localStorage.getItem('samara_streak') || '{"count":0,"lastDay":""}'); }
+    catch(e) { return { count: 0, lastDay: '' }; }
+  },
+
+  saveStreak(s) { localStorage.setItem('samara_streak', JSON.stringify(s)); },
+
+  isDoneToday() {
+    const s = this.getStreak();
+    return s.lastDay === this._getDay();
+  },
+
+  updateStreak() {
+    const s = this.getStreak();
+    const today = this._getDay();
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if(s.lastDay === today) return s;
+    if(s.lastDay === yesterday) {
+      s.count += 1;
+    } else {
+      s.count = 1;
+    }
+    s.lastDay = today;
+    this.saveStreak(s);
+    return s;
+  },
+
+  renderBanner() {
+    const s = this.getStreak();
+    const done = this.isDoneToday();
+    const streakDisplay = document.getElementById('challenge-streak-display');
+    const streakDots = document.getElementById('streak-dots');
+    const streakCount = document.getElementById('streak-count');
+    const statusBadge = document.getElementById('challenge-status-badge');
+    const challengeBtn = document.getElementById('challenge-btn');
+
+    if(!streakDisplay) return;
+
+    // Streak message
+    if(s.count === 0) {
+      streakDisplay.textContent = '🔥 Start your streak today!';
+    } else if(s.count === 1) {
+      streakDisplay.textContent = done ? '🔥 1 day streak — come back tomorrow!' : '🔥 1 day streak — keep it going!';
+    } else {
+      streakDisplay.textContent = done ? `🔥 ${s.count} day streak — amazing!` : `🔥 ${s.count} day streak — don't break it!`;
+    }
+
+    // Streak dots (show last 7 days)
+    if(streakDots) {
+      const dots = [];
+      for(let i = 0; i < 7; i++) {
+        const filled = i < Math.min(s.count, 7);
+        dots.push(`<div style="width:10px;height:10px;border-radius:50%;background:${filled ? 'linear-gradient(135deg,#FFD93D,#FF9B3F)' : 'rgba(255,255,255,0.15)'};"></div>`);
+      }
+      streakDots.innerHTML = dots.join('');
+    }
+
+    if(streakCount) streakCount.textContent = s.count > 0 ? `${s.count} day${s.count === 1 ? '' : 's'}` : '';
+
+    // Done state
+    if(done) {
+      if(statusBadge) statusBadge.style.display = 'block';
+      if(challengeBtn) {
+        challengeBtn.textContent = '✅ Completed!';
+        challengeBtn.style.background = 'linear-gradient(135deg,#6BCB77,#3DAA45)';
+        challengeBtn.disabled = true;
+      }
+    }
+  },
+
+  start() {
+    if(this.isDoneToday()) {
+      App.toast('You already completed today\'s challenge! Come back tomorrow 🔥');
+      return;
+    }
+
+    const age = S.ageGroup || '7-10';
+    const questions = this.QUESTIONS[age] || this.QUESTIONS['7-10'];
+    const facts = this.FACTS[age] || this.FACTS['7-10'];
+
+    // Pick 3 random questions
+    const shuffled = [...questions].sort(() => Math.random() - 0.5).slice(0, 3);
+    const fact = facts[Math.floor(Math.random() * facts.length)];
+
+    this._showChallenge(shuffled, fact, age);
+  },
+
+  _showChallenge(questions, fact, age) {
+    let current = 0;
+    let score = 0;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'challenge-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+
+    const render = () => {
+      if(current < questions.length) {
+        const q = questions[current];
+        overlay.innerHTML = `
+          <div style="background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:28px;padding:28px;max-width:480px;width:100%;border:2px solid rgba(255,217,61,0.4);text-align:center;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+              <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:0.9rem;">⚡ Daily Challenge</div>
+              <div style="font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.6);font-size:0.85rem;">Question ${current + 1} of 3</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:4px;margin-bottom:6px;">
+              <div style="height:6px;background:linear-gradient(90deg,#FFD93D,#FF9B3F);border-radius:50px;width:${((current)/3)*100}%;transition:width 0.3s;"></div>
+            </div>
+            <div style="font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;margin:20px 0 24px;line-height:1.4;">${q.q}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              ${q.opts.map((opt, i) => `
+                <button onclick="DailyChallenge._answer(${i}, ${q.ans})" style="background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:14px;color:#fff;font-family:'Fredoka One',cursive;font-size:0.95rem;cursor:pointer;">${opt}</button>
+              `).join('')}
+            </div>
+          </div>`;
+      } else {
+        // Show fact then result
+        overlay.innerHTML = `
+          <div style="background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:28px;padding:28px;max-width:480px;width:100%;border:2px solid rgba(107,203,119,0.4);text-align:center;">
+            <div style="font-size:3rem;margin-bottom:12px;">🧠</div>
+            <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.1rem;margin-bottom:8px;">Did You Know?</div>
+            <div style="color:rgba(255,255,255,0.85);font-size:0.95rem;line-height:1.6;margin-bottom:20px;">${fact}</div>
+            <button onclick="DailyChallenge._finish(${score})" style="background:linear-gradient(135deg,#6BCB77,#3DAA45);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;">See My Result 🎉</button>
+          </div>`;
+      }
+    };
+
+    this._answer = (chosen, correct) => {
+      if(chosen === correct) score++;
+      current++;
+      render();
+    };
+
+    this._finish = (finalScore) => {
+      const streak = this.updateStreak();
+      const coins = finalScore === 3 ? 20 : finalScore === 2 ? 15 : 10;
+      SamaraCoins.add(coins);
+
+      overlay.innerHTML = `
+        <div style="background:linear-gradient(135deg,#1a1a3e,#302b63);border-radius:28px;padding:32px;max-width:480px;width:100%;border:2px solid rgba(255,217,61,0.5);text-align:center;">
+          <div style="font-size:3.5rem;margin-bottom:12px;">${finalScore === 3 ? '🏆' : finalScore === 2 ? '⭐' : '💪'}</div>
+          <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1.6rem;margin-bottom:8px;">
+            ${finalScore === 3 ? 'Perfect Score!' : finalScore === 2 ? 'Great Job!' : 'Good Effort!'}
+          </div>
+          <div style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:16px;">
+            You got ${finalScore} out of 3 correct!
+          </div>
+          <div style="background:rgba(255,217,61,0.1);border-radius:14px;padding:14px;margin-bottom:16px;">
+            <div style="font-family:'Fredoka One',cursive;color:#FFD93D;font-size:1rem;">🔥 ${streak.count} Day Streak!</div>
+            <div style="color:rgba(255,255,255,0.65);font-size:0.82rem;margin-top:4px;">+${coins} coins earned</div>
+          </div>
+          ${streak.count === 3 ? '<div style="background:rgba(107,203,119,0.15);border-radius:12px;padding:10px;margin-bottom:14px;color:#6BCB77;font-family:\'Fredoka One\',cursive;font-size:0.9rem;">🎉 3 Day Streak Bonus — +10 extra coins!</div>' : ''}
+          ${streak.count === 7 ? '<div style="background:rgba(199,125,255,0.15);border-radius:12px;padding:10px;margin-bottom:14px;color:#C77DFF;font-family:\'Fredoka One\',cursive;font-size:0.9rem;">🌟 7 Day Streak — Amazing! +25 bonus coins!</div>' : ''}
+          <button onclick="document.getElementById('challenge-overlay').remove();DailyChallenge.renderBanner();" style="background:linear-gradient(135deg,#FFD93D,#FF9B3F);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;padding:12px 32px;border-radius:50px;border:none;cursor:pointer;">Awesome! 🚀</button>
+        </div>`;
+
+      // Bonus coins for streaks
+      if(streak.count === 3) SamaraCoins.add(10);
+      if(streak.count === 7) SamaraCoins.add(25);
+      if(streak.count === 14) SamaraCoins.add(50);
+      if(streak.count === 30) SamaraCoins.add(100);
+    };
+
+    document.body.appendChild(overlay);
+    render();
+  }
+};
+window.DailyChallenge = DailyChallenge;
+  
 // ── HOMEWORK HELPER ───────────────────────────────────────────
 const HomeworkHelper = {
   photoData: null,
