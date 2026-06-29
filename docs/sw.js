@@ -58,7 +58,7 @@ self.addEventListener('activate', event => {
 
 // ── FETCH — smart caching strategy ──────────────────────────
 self.addEventListener('fetch', event => {
-// Never cache Supabase auth requests
+  // Never cache Supabase auth requests
   if(event.request.url.includes('supabase.co/auth')) {
     return;
   }
