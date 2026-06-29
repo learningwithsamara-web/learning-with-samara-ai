@@ -4346,7 +4346,7 @@ const App = {
     },100);
     if(id==='screen-studyplan')setTimeout(()=>PersonalAlgo.render(),100);
     if(id==='screen-videos') Videos.init();
-    if(id==='screen-home'){ setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },500); DailyChallenge.renderBanner(); }
+    if(id==='screen-home'){ hideReadBtn(); setTimeout(()=>{ try{ReviewSystem.loadReviews();}catch(e){} },500); DailyChallenge.renderBanner(); }
     if(id==='screen-learn'){if(!Plan.isPro()){App.requireSignup('📚 Learn Library','📚','The full Learn Library with lessons, memory tricks and mini quizzes is a Pro feature — upgrade to unlock!');App.showScreen('screen-home');return;}setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);} setTimeout(()=>{try{LearnDB.init();}catch(e){console.error('Learn init error:',e);}},100);
     if(id==='screen-babytv') AITutor.hideFloat();
     if(id==='screen-shop') AITutor.hideFloat();
@@ -4373,6 +4373,7 @@ const App = {
   setTimeout(()=>HomeworkHelper.init(), 300);
 }
     if(id==='screen-speaking'){AITutor.hideFloat();SpeakingCoach.init();}
+    if(id==='screen-esl'){AITutor.hideFloat();hideReadBtn();}
     if(id==='screen-games') AITutor.hideFloat();
     if(id==='screen-scrabble') AITutor.hideFloat();
     if(id==='screen-word-puzzle'){AITutor.hideFloat();setTimeout(()=>WordPuzzle.newGame(),150);}
